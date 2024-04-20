@@ -36,7 +36,7 @@ function parse_command_line_arguments() {
         ;;
 
       ( * )
-        log 'error' "Unknown argument '${1:-}'"
+        echo "Unknown argument '${1:-}'" >&2
         exit 1
         ;;
     esac
@@ -128,14 +128,6 @@ function root_setup() {
 }
 
 function main() {
-  preflight_checks
-
-  # shellcheck source=/dev/null
-  source <(curl -qsSfL https://raw.githubusercontent.com/georglauterbach/libbash/main/load) \
-    --version '6.1.1' --online 'log' 'errors'
-
-  source /etc/os-release
-
   SCRIPT_DIR="$(realpath -eL "$(dirname "${BASH_SOURCE[0]}")")"
   GITHUB_RAW_URI='https://raw.githubusercontent.com/georglauterbach/hermes/main'
   readonly SCRIPT_DIR GITHUB_RAW_URI
@@ -144,8 +136,22 @@ function main() {
   GUI=0
   LOCAL_INSTALLATION=0
 
-  log 'trace' "Starting"
+  source /etc/os-release
+
+  preflight_checks
   parse_command_line_arguments "${@}"
+
+  if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
+    # shellcheck source=/dev/null
+    source <(curl -qsSfL https://raw.githubusercontent.com/georglauterbach/libbash/main/load) \
+      --version '6.1.1' --online 'log' 'errors'
+  else
+    function log() {
+      echo "$(date --iso-8601=seconds)  ${1^^}  ${SCRIPT:-${0}}  --  ${2}"
+    }
+  fi
+
+  log 'trace' "Starting"
 
   log 'info' "Ubuntu version is '${VERSION_ID}'"
 

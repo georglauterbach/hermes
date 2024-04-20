@@ -6,7 +6,7 @@ _Hermes_ configures _Ubuntu_ by installing various packages and placing (new) co
 
 > [!NOTE]
 >
-> We do not support platforms apart from `amd64` because messing with APT sources is difficult and can easily brick your system.
+> We do not support platforms apart from `amd64` because differentiating platforms involves a complexity explosion for this project.
 
 ## :rocket: Usage
 
@@ -19,6 +19,8 @@ $ bash setup.sh
 ```
 
 If you want to configure your graphical user interface too, you can use the `--gui` flag. With this flag, additional programs are installed that are only necessary when you have a GUI.
+
+You may also use the `--local` flag when you cloned this repository. This flag will causes the setup to be completely local, without requiring an internet connection. Only this repository has to be cloned in its entirety.
 
 ## :mega: Supplementary Projects
 
