@@ -43,26 +43,6 @@ function parse_command_line_arguments() {
   done
 }
 
-function user_setup() {
-  log 'info' 'Starting user setup'
-
-  # Place configuration files
-  local CONFIG
-  for CONFIG in "${!USER_CONFIGS[@]}"; do
-    local DESTINATION="${USER_CONFIGS[${CONFIG}]}"
-    su -s /usr/bin/bash "${USER}" -c "mkdir -p '$(dirname "${DESTINATION}")'"
-
-    if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
-      log 'trace' "Installing configuration file '${DESTINATION}' from '${GITHUB_RAW_URI}/${CONFIG}'"
-      su -s /usr/bin/bash "${USER}" -c \
-        "curl -sSfL -o '${DESTINATION}' '${GITHUB_RAW_URI}/${CONFIG}'"
-    else
-      log 'trace' "Installing configuration file '${DESTINATION}' from local source '${CONFIG}'"
-      su -s /usr/bin/bash "${USER}" -c "cp '${SCRIPT_DIR}/${CONFIG}' '${DESTINATION}'"
-    fi
-  done
-}
-
 function root_setup() {
   log 'info' 'Starting root setup'
 
@@ -116,15 +96,36 @@ function root_setup() {
   log 'debug' 'To install ble.sh, visit https://github.com/akinomyoga/ble.sh'
   log 'debug' 'Installing Starship prompt'
   wget -q -O- 'https://starship.rs/install.sh' | sh -s -- --force >/dev/null
-  log 'debug' 'Installing fzf'
-  (
-    git clone --depth 1 'https://github.com/junegunn/fzf.git' "${HOME}/.fzf"
-    cd "${HOME}"
-    bash '.fzf/install' --key-bindings --completion --no-update-rc --no-zsh --no-fish >/dev/null
-  )
   log 'debug' 'Installing gitui'
   curl -sSfL 'https://github.com/extrawurst/gitui/releases/download/v0.26.1/gitui-linux-x86_64.tar.gz' \
     | tar -xz -C /usr/local/bin
+}
+
+function user_setup() {
+  log 'info' 'Starting user setup'
+
+  # Place configuration files
+  local CONFIG
+  for CONFIG in "${!USER_CONFIGS[@]}"; do
+    local DESTINATION="${USER_CONFIGS[${CONFIG}]}"
+    su -s /usr/bin/bash "${USER}" -c "mkdir -p '$(dirname "${DESTINATION}")'"
+
+    if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
+      log 'trace' "Installing configuration file '${DESTINATION}' from '${GITHUB_RAW_URI}/${CONFIG}'"
+      su -s /usr/bin/bash "${USER}" -c \
+        "curl -sSfL -o '${DESTINATION}' '${GITHUB_RAW_URI}/${CONFIG}'"
+    else
+      log 'trace' "Installing configuration file '${DESTINATION}' from local source '${CONFIG}'"
+      su -s /usr/bin/bash "${USER}" -c "cp '${SCRIPT_DIR}/${CONFIG}' '${DESTINATION}'"
+    fi
+  done
+
+  log 'debug' 'Installing fzf'
+  (
+    git clone --quiet --depth 1 'https://github.com/junegunn/fzf.git' "${HOME}/.fzf"
+    cd "${HOME}"
+    bash '.fzf/install' --key-bindings --completion --no-update-rc --no-zsh --no-fish &>/dev/null
+  )
 }
 
 function main() {
@@ -180,8 +181,8 @@ function main() {
     done < <(/usr/bin/grep -E -v "^\s*$|^\s*#" "${LOCATION}/index.txt")
   done
 
-  user_setup || return ${?}
   root_setup || return ${?}
+  user_setup || return ${?}
 
   if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
     # shellcheck source=/dev/null
