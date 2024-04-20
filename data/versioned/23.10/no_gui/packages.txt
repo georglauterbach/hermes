@@ -1,0 +1,15 @@
+bash-completion
+bat
+btop
+build-essential
+doas
+eza
+git
+git-lfs
+gnupg2
+nala
+neovim
+python3-neovim
+ripgrep
+wget
+xz-utils

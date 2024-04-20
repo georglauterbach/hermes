@@ -1,0 +1,7 @@
+shell=bash
+enable=all
+color=auto
+severity=style
+external-sources=true
+check-sourced=true
+wiki-link-count=5

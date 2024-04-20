@@ -1,0 +1,7 @@
+# Default APT sources
+data/versioned/23.10/no_gui/data/other/apt/sources.list            /etc/apt/sources.list
+
+# Custom PPAs
+data/versioned/23.10/no_gui/data/other/apt/eza.sources             /etc/apt/sources.list.d/eza.sources
+data/versioned/23.10/no_gui/data/other/apt/git-core.sources        /etc/apt/sources.list.d/git-core.sources
+data/versioned/23.10/no_gui/data/other/apt/neovim-unstable.sources /etc/apt/sources.list.d/neovim-unstable.sources
