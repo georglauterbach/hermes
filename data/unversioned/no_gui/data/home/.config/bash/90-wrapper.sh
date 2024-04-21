@@ -9,7 +9,7 @@ function ls() {
   if __command_exists 'eza'; then
     eza --header --long --binary --group --classify --git --extended --group-directories-first "${@}"
   else
-    __uds__execute_real_command 'ls' "${@}"
+    __hermes__execute_real_command 'ls' "${@}"
   fi
 }
 
@@ -17,7 +17,7 @@ function cat() {
   if __command_exists 'batcat'; then
     batcat --theme="gruvbox-dark" --paging=never --italic-text=always "${@}"
   else
-    __uds__execute_real_command 'cat' "${@}"
+    __hermes__execute_real_command 'cat' "${@}"
   fi
 }
 
@@ -25,7 +25,7 @@ function grep() {
   if __command_exists 'rg'; then
     rg -N "${@}"
   else
-    __uds__execute_real_command 'grep' "${@}"
+    __hermes__execute_real_command 'grep' "${@}"
   fi
 }
 
@@ -36,7 +36,7 @@ function git() {
       git pull
       git submodule update --recursive
       ;;
-    ( * ) __uds__execute_real_command git "${@}" ;;
+    ( * ) __hermes__execute_real_command git "${@}" ;;
   esac
 }
 
@@ -46,7 +46,7 @@ function apt() {
 
   if [[ ${1:-} =~ ^show|search$ ]]
   then
-    __uds__execute_real_command "${PROGRAM}" "${@}"
+    __hermes__execute_real_command "${PROGRAM}" "${@}"
   else
     do_as_root "${PROGRAM}" "${@}"
   fi

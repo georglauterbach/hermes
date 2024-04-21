@@ -13,7 +13,7 @@ _Hermes_ configures _Ubuntu_ by installing various packages and placing (new) co
 The installation script can be downloaded and executed in the terminal.
 
 ```console
-$ wget https://raw.githubusercontent.com/georglauterbach/uds/main/setup.sh
+$ wget https://raw.githubusercontent.com/georglauterbach/hermes/main/setup.sh
 $ bash setup.sh
 ...
 ```

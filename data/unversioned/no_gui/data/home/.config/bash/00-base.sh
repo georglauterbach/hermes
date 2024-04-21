@@ -17,14 +17,14 @@ function __is_bash_function() {
   [[ $(type -t "${1:?Name of type to check is required}" || :) == 'function' ]]
 }
 
-function __uds__declare_helpers() {
+function __hermes__declare_helpers() {
   declare -f do_as_root          \
-    __uds__execute_real_command  \
+    __hermes__execute_real_command  \
     __command_exists             \
     __is_bash_function
 }
 
-function __uds__execute_real_command() {
+function __hermes__execute_real_command() {
   local COMMAND DIR FULL_COMMAND
   COMMAND=${1:?Command name required}
   shift 1
@@ -51,7 +51,7 @@ function do_as_root() {
   fi
 
   if __is_bash_function "${1:?Command is required}"; then
-    ${SU_COMMAND} bash -c "$(__uds__declare_helpers || :) ; ${*}"
+    ${SU_COMMAND} bash -c "$(__hermes__declare_helpers || :) ; ${*}"
   else
     ${SU_COMMAND} "${@}"
   fi
