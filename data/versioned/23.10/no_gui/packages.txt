@@ -6,6 +6,7 @@ eza
 git
 git-lfs
 gnupg2
+less
 neovim
 ripgrep
 wget
