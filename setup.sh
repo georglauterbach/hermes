@@ -86,11 +86,11 @@ function root_setup() {
   fi
 
   log 'debug' "Installing non-GUI packages (${PACKAGES[*]})"
-  apt-get -qq install "${PACKAGES[@]}"
+  apt-get -qq install --no-install-recommends --no-install-suggests "${PACKAGES[@]}"
 
   if [[ ${GUI} -eq 1 ]]; then
     log 'debug' "Installing GUI packages (${GUI_PACKAGES[*]})"
-    apt-get -qq install "${GUI_PACKAGES[@]}"
+    apt-get -qq install --no-install-recommends --no-install-suggests "${GUI_PACKAGES[@]}"
   fi
 
   log 'debug' 'To install ble.sh, visit https://github.com/akinomyoga/ble.sh'
