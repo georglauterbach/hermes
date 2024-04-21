@@ -2,7 +2,7 @@
 
 ## :mailbox: About
 
-_Hermes_ configures _Ubuntu_ by installing various packages and placing (new) configuration files. The configuration enhances the out-of-the-box experience of Ubuntu. It will automatically detect the installed version (sarting from _Ubuntu_ 23.10 "_Mantic Minotaur_"). You can also optionally install and configure the GUI.
+_Hermes_ configures _Ubuntu_ by installing various packages and placing (new) configuration files. The configuration enhances the out-of-the-box experience of Ubuntu. It will automatically detect the installed version (starting from _Ubuntu_ 23.10 "_Mantic Minotaur_"). You can also optionally install and configure the GUI.
 
 > [!NOTE]
 >

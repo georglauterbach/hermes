@@ -133,7 +133,6 @@ function main() {
   GITHUB_RAW_URI='https://raw.githubusercontent.com/georglauterbach/hermes/main'
   readonly SCRIPT_DIR GITHUB_RAW_URI
 
-  SCRIPT='hermes'
   GUI=0
   LOCAL_INSTALLATION=0
 
@@ -152,6 +151,7 @@ function main() {
       echo "$(date --iso-8601=seconds)  ${1^^}  ${SCRIPT:-${0}}  --  ${2}"
     }
   fi
+  export SCRIPT='hermes'
 
   log 'trace' "Starting"
   log 'info' "Ubuntu version is '${VERSION_ID}'"
