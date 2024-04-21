@@ -171,14 +171,16 @@ function main() {
     local SOURCE DESTINATION INDEX_FILE_CONTENT
 
     if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
-      INDEX_FILE_CONTENT=$(curl -qsSfL "${GITHUB_RAW_URI}/${LOCATION}/index.txt")
+      INDEX_FILE_CONTENT=$(curl -qsSfL "${GITHUB_RAW_URI}/${LOCATION}/index.txt" | grep -E -v "^\s*$|^\s*#")
     else
-      INDEX_FILE_CONTENT=$(/usr/bin/grep -E -v "^\s*$|^\s*#" "${LOCATION}/index.txt")
+      INDEX_FILE_CONTENT=$(grep -E -v "^\s*$|^\s*#" "${LOCATION}/index.txt")
     fi
 
     while read -r SOURCE DESTINATION; do
       local EXPANDED_DESTINATION
       EXPANDED_DESTINATION=$(eval "echo \"${DESTINATION}\"")
+
+      echo "${SOURCE} & ${DESTINATION}"
       # shellcheck disable=SC2016
       if [[ ${DESTINATION} == '${HOME}/'* ]]; then
         USER_CONFIGS[${SOURCE}]=${EXPANDED_DESTINATION}
@@ -187,6 +189,8 @@ function main() {
       fi
     done <<< "${INDEX_FILE_CONTENT}"
   done
+
+  exit 0
 
   root_setup || return ${?}
   user_setup || return ${?}
