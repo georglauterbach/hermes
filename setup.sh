@@ -141,6 +141,7 @@ function main() {
 
   preflight_checks
   parse_command_line_arguments "${@}"
+  readonly GUI LOCAL_INSTALLATION
 
   if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
     # shellcheck source=/dev/null
@@ -153,7 +154,6 @@ function main() {
   fi
 
   log 'trace' "Starting"
-
   log 'info' "Ubuntu version is '${VERSION_ID}'"
 
   local LOCATIONS=('data/unversioned/no_gui' "data/versioned/${VERSION_ID}/no_gui")
