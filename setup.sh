@@ -190,8 +190,6 @@ function main() {
     done <<< "${INDEX_FILE_CONTENT}"
   done
 
-  exit 0
-
   root_setup || return ${?}
   user_setup || return ${?}
 
