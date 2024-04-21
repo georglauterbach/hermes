@@ -7,7 +7,6 @@ git
 git-lfs
 gnupg2
 neovim
-python3-neovim
 ripgrep
 wget
 xz-utils
