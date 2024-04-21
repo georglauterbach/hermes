@@ -2,7 +2,7 @@
 
 # shellcheck disable=SC2034
 
-set -eu
+set -eE -u
 
 if [[ ${EUID} -ne 0 ]]; then
   # shellcheck disable=SC2312
