@@ -168,7 +168,14 @@ function main() {
   declare -A USER_CONFIGS ROOT_CONFIGS
   local LOCATION
   for LOCATION in "${LOCATIONS[@]}"; do
-    local SOURCE DESTINATION
+    local SOURCE DESTINATION INDEX_FILE_CONTENT
+
+    if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
+      INDEX_FILE_CONTENT=$(curl -qsSfL "${GITHUB_RAW_URI}/${LOCATION}/index.txt")
+    else
+      INDEX_FILE_CONTENT=$(/usr/bin/grep -E -v "^\s*$|^\s*#" "${LOCATION}/index.txt")
+    fi
+
     while read -r SOURCE DESTINATION; do
       local EXPANDED_DESTINATION
       EXPANDED_DESTINATION=$(eval "echo \"${DESTINATION}\"")
@@ -178,7 +185,7 @@ function main() {
       else
         ROOT_CONFIGS[${SOURCE}]=${EXPANDED_DESTINATION}
       fi
-    done < <(/usr/bin/grep -E -v "^\s*$|^\s*#" "${LOCATION}/index.txt")
+    done <<< "${INDEX_FILE_CONTENT}"
   done
 
   root_setup || return ${?}
