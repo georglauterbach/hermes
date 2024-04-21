@@ -11,6 +11,7 @@ gnome-calculator
 gnome-screenshot
 gnome-terminal
 gnome-tweaks
+nala
 nautilus
 neofetch
 nextcloud-desktop
