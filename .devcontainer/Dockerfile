@@ -1,4 +1,4 @@
-FROM docker.io/ubuntu:23.10
+FROM docker.io/ubuntu:24.04
 
 SHELL [ "/usr/bin/env", "bash", "-eE", "-u", "-o", "pipefail", "-c" ]
 
@@ -6,8 +6,8 @@ RUN <<EOM
   export DEBIAN_FRONTEND=noninteractive
   export DEBCONF_NONINTERACTIVE_SEEN=true
   apt-get --yes update
-  apt-get --yes upgrade
-  apt-get --yes install curl doas
+  # we require git and gnupg2 to make the Dev Container work properly
+  apt-get --yes install curl doas git gnupg2
 EOM
 
 RUN <<EOM
