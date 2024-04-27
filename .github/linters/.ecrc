@@ -5,7 +5,7 @@
   "SpacesAftertabs": true,
   "NoColor": false,
   "Exclude": [
-    "^\\.sources$"
+    "\\.sources$"
   ],
   "AllowedContentTypes": [],
   "PassedFiles": [],
