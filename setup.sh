@@ -6,18 +6,29 @@ set -eE -u
 
 if [[ ${EUID} -ne 0 ]]; then
   # shellcheck disable=SC2312
-  sudo env -                 \
-    USER="${USER}"           \
-    HOME="${HOME}"           \
-    LOG_LEVEL="${LOG_LEVEL:-trace}" \
-    bash "$(realpath -eL "${BASH_SOURCE[0]}")" "${@}"
+  sudo env -                        \
+    USER="${USER}"                  \
+    HOME="${HOME}"                  \
+    PATH="${PATH}"                  \
+    LOG_LEVEL="${LOG_LEVEL:-info}"  \
+    bash "$(realpath -eL "${BASH_SOURCE[0]}")" --assume-correct-incovation "${@}"
 
-  exit
+  exit ${?}
+fi
+
+if [[ ${*} != *--assume-correct-incovation* ]]; then
+  echo 'ERROR: Do not start this script as root yourself' >&2
+  exit 1
 fi
 
 function preflight_checks() {
-  if ! command -v curl &>/dev/null; then
-    echo "The command 'curl' is not installed but required" >&2
+  if ! command -v 'curl' &>/dev/null; then
+    log 'error' "The command 'curl' is not installed but required for installation type 'remote'"
+    exit 1
+  fi
+
+  if [[ ! ${VERSION_ID} =~ ^(23.10|24.04)$ ]]; then
+    log 'error' "Ubuntu version '${VERSION}' is not supported" >&2
     exit 1
   fi
 }
@@ -25,21 +36,18 @@ function preflight_checks() {
 function parse_command_line_arguments() {
   while [[ ${#} -gt 0 ]]; do
     case ${1:-} in
-      ( '--gui' )
-        GUI=1
-        shift 1
-        ;;
-
-      ( '--local' )
-        LOCAL_INSTALLATION=1
-        shift 1
-        ;;
+      ( '--gui' | '-g' )                     GUI=1                    ;;
+      ( '--local-installation' | '-l' )      LOCAL_INSTALLATION=1     ;;
+      ( '--assume-data-is-correct'  | '-a' ) ASSUME_DATA_IS_CORRECT=1 ;;
+      ( '--assume-correct-incovation' )                               ;;
 
       ( * )
-        echo "Unknown argument '${1:-}'" >&2
+        echo "ERROR: Unknown argument '${1:-}'" >&2
         exit 1
         ;;
     esac
+
+    shift 1
   done
 }
 
@@ -92,13 +100,6 @@ function root_setup() {
     log 'debug' "Installing GUI packages (${GUI_PACKAGES[*]})"
     apt-get -qq install --no-install-recommends --no-install-suggests "${GUI_PACKAGES[@]}"
   fi
-
-  log 'debug' 'To install ble.sh, visit https://github.com/akinomyoga/ble.sh'
-  log 'debug' 'Installing Starship prompt'
-  wget -q -O- 'https://starship.rs/install.sh' | sh -s -- --force >/dev/null
-  log 'debug' 'Installing gitui'
-  curl -sSfL 'https://github.com/extrawurst/gitui/releases/download/v0.26.1/gitui-linux-x86_64.tar.gz' \
-    | tar -xz -C /usr/local/bin
 }
 
 function user_setup() {
@@ -108,24 +109,58 @@ function user_setup() {
   local CONFIG
   for CONFIG in "${!USER_CONFIGS[@]}"; do
     local DESTINATION="${USER_CONFIGS[${CONFIG}]}"
-    su -s /usr/bin/bash "${USER}" -c "mkdir -p '$(dirname "${DESTINATION}")'"
+    mkdir -p "$(dirname "${DESTINATION}")"
 
     if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
       log 'trace' "Installing configuration file '${DESTINATION}' from '${GITHUB_RAW_URI}/${CONFIG}'"
-      su -s /usr/bin/bash "${USER}" -c \
-        "curl -sSfL -o '${DESTINATION}' '${GITHUB_RAW_URI}/${CONFIG}'"
+      curl -sSfL -o "${DESTINATION}" "${GITHUB_RAW_URI}/${CONFIG}"
     else
       log 'trace' "Installing configuration file '${DESTINATION}' from local source '${CONFIG}'"
-      su -s /usr/bin/bash "${USER}" -c "cp '${SCRIPT_DIR}/${CONFIG}' '${DESTINATION}'"
+      cp "${SCRIPT_DIR}/${CONFIG}" "${DESTINATION}"
     fi
   done
 
-  log 'debug' 'Installing fzf'
-  (
-    git clone --quiet --depth 1 'https://github.com/junegunn/fzf.git' "${HOME}/.fzf"
-    cd "${HOME}"
-    bash '.fzf/install' --key-bindings --completion --no-update-rc --no-zsh --no-fish &>/dev/null
-  )
+  mkdir -p "${HOME}/.local/bin"
+  [[ ${PATH} == *${HOME}/.local/bin* ]] || export PATH="${HOME}/.local/bin:${PATH}"
+  [[ ${PATH} == *${HOME}/.fzf/bin* ]] || export PATH="${HOME}/.fzf/bin:${PATH}"
+
+  if command -v 'fzf' &>/dev/null; then
+    log 'debug' "fzf seems to be installed already"
+  else
+    log 'debug' 'Installing fzf'
+    (
+      git clone --quiet --depth 1 'https://github.com/junegunn/fzf.git' "${HOME}/.fzf"
+      cd "${HOME}"
+      bash '.fzf/install' --key-bindings --completion --no-update-rc --no-zsh --no-fish &>/dev/null
+    )
+  fi
+
+  if command -v 'zoxide' &>/dev/null; then
+    log 'debug' "zoxide seems to be installed already"
+  else
+    log 'debug' 'Installing zoxide'
+    curl -sSfL 'https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh' | bash
+  fi
+
+  if command -v 'gitui' &>/dev/null; then
+    log 'debug' "gitui seems to be installed already"
+  else
+    log 'debug' 'Installing gitui'
+    curl -sSfL 'https://github.com/extrawurst/gitui/releases/download/v0.26.1/gitui-linux-x86_64.tar.gz' \
+      | tar -xz -C "${HOME}/.local/bin"
+  fi
+
+  if command -v 'starship' &>/dev/null; then
+    log 'debug' "Starship seems to be installed already"
+  else
+    log 'debug' 'Installing Starship'
+    curl -sSfL 'https://starship.rs/install.sh' \
+      | sh -s -- --bin-dir="${HOME}/.local/bin" --force >/dev/null
+  fi
+
+  chown -R "${USER}:$(id -g "${USER}")" "${HOME}"
+
+  log 'debug' 'To install ble.sh, visit https://github.com/akinomyoga/ble.sh'
 }
 
 function main() {
@@ -135,33 +170,54 @@ function main() {
 
   GUI=0
   LOCAL_INSTALLATION=0
+  ASSUME_DATA_IS_CORRECT=0
 
   source /etc/os-release
+  readonly VERSION VERSION_ID
 
-  preflight_checks
   parse_command_line_arguments "${@}"
   readonly GUI LOCAL_INSTALLATION
 
   if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
     # shellcheck source=/dev/null
     source <(curl -qsSfL https://raw.githubusercontent.com/georglauterbach/libbash/main/load) \
-      --version '6.1.1' --online 'log' 'errors'
+      --online --version '6.1.1' 'log' 'errors'
   else
     function log() {
-      echo "$(date --iso-8601=seconds)  ${1^^}  ${SCRIPT:-${0}}  --  ${2}"
+      printf "%s  %-5s  %s  --  %s\n" \
+        "$(date --iso-8601=seconds)" "${1^^}" "${SCRIPT:-${0}}" "${2}"
     }
   fi
   export SCRIPT='hermes'
 
   log 'trace' "Starting"
-  log 'info' "Ubuntu version is '${VERSION_ID}'"
+  log 'info' "Ubuntu version is '${VERSION}'"
+
+  if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
+    log 'info' "Installation type is: remote (default)"
+  else
+    log 'info' "Installation type is: local"
+  fi
+
+  if [[ ${GUI} -eq 0 ]]; then
+    log 'info' 'GUI will not be installed (default)'
+  else
+    log 'info' 'GUI will be installed'
+  fi
+
+  preflight_checks
+
+  if [[ ${ASSUME_DATA_IS_CORRECT} -eq 0 ]]; then
+    read -r -p "Does the information printed above look correct? [Y/n] " IS_CORRECT
+    if [[ ! ${IS_CORRECT} =~ ^(y|yes|)$ ]]; then
+      log 'error' 'Aborted due to user input'
+      exit 1
+    fi
+  fi
 
   local LOCATIONS=('data/unversioned/no_gui' "data/versioned/${VERSION_ID}/no_gui")
   if [[ ${GUI} -eq 1 ]]; then
-    log 'info' 'GUI will be installed too'
     LOCATIONS+=('data/unversioned/gui' "data/versioned/${VERSION_ID}/gui")
-  else
-    log 'info' 'GUI will not be installed'
   fi
 
   # We parse all index files into associative arrays so we can handle them later.
@@ -180,7 +236,6 @@ function main() {
       local EXPANDED_DESTINATION
       EXPANDED_DESTINATION=$(eval "echo \"${DESTINATION}\"")
 
-      echo "${SOURCE} & ${DESTINATION}"
       # shellcheck disable=SC2016
       if [[ ${DESTINATION} == '${HOME}/'* ]]; then
         USER_CONFIGS[${SOURCE}]=${EXPANDED_DESTINATION}
