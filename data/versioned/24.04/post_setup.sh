@@ -6,8 +6,8 @@ readonly DOAS_CONFIG_FILE='/etc/doas.conf'
 if [[ ! -e ${DOAS_CONFIG_FILE} ]]; then
   log 'debug' "Setting up 'doas'"
   echo "permit persist ${USER}" >"${DOAS_CONFIG_FILE}"
-  chown -c root:root "${DOAS_CONFIG_FILE}"
-  chmod -c 0400 "${DOAS_CONFIG_FILE}"
+  chown root:root "${DOAS_CONFIG_FILE}"
+  chmod 0400 "${DOAS_CONFIG_FILE}"
 
   if doas -C "${DOAS_CONFIG_FILE}"; then
     log 'trace' 'Configuration for doas looks good'
