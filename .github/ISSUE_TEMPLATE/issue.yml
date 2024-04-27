@@ -1,0 +1,25 @@
+---
+name: Generic Issue
+description: Generic Issue
+#title: ''
+#labels:
+
+body:
+  - type: dropdown
+    id: subject
+    attributes:
+      label: Subject
+      options:
+        - I would like to report an issue
+        - I would like to contribute to the project
+        - I would like to state a question
+        - Something else that requires developers attention
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    validations:
+      required: true
+    attributes:
+      label: Description
+      value: Describe your issue here
