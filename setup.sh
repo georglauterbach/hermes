@@ -31,6 +31,11 @@ function preflight_checks() {
     log 'error' "Ubuntu version '${VERSION}' is not supported" >&2
     exit 1
   fi
+
+  if [[ $(uname -m) != 'x86_64' ]]; then
+    log 'error' "The only supported architecture is x86_64 (yours is '$(uname -m)')"
+    exit 1
+  fi
 }
 
 function parse_command_line_arguments() {
