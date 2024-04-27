@@ -1,0 +1,15 @@
+#############################################################################
+#
+# Ubuntu 24.04 (Noble Numbat)
+# /etc/apt/sources.list
+#
+# main       => officially supported open-source software
+# restricted => officially supported closed-source software
+# universe   => community-maintained open-source software
+# multiverse => unsupported closed-source and patent-encumbered software
+#
+#############################################################################
+
+deb [arch=amd64] http://de.archive.ubuntu.com/ubuntu/ noble          main restricted universe multiverse
+deb [arch=amd64] http://de.archive.ubuntu.com/ubuntu/ noble-updates  main restricted universe multiverse
+deb [arch=amd64] http://de.archive.ubuntu.com/ubuntu/ noble-security main restricted universe multiverse

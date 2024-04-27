@@ -1,0 +1,14 @@
+bash-completion
+bat
+btop
+doas
+eza
+git
+git-lfs
+gnupg2
+less
+neovim
+openssh-client
+ripgrep
+wget
+xz-utils
