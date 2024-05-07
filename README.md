@@ -6,7 +6,7 @@ _Hermes_ configures _Ubuntu_ by installing various packages and placing (new) co
 
 > [!NOTE]
 >
-> We do not support platforms apart from `amd64` because differentiating platforms involves a complexity explosion for this project.
+> We do not support platforms apart from `x86_64` (full support) and `aarch64` (only non-GUI), because differentiating between platforms involves a complexity explosion.
 
 ## :rocket: Usage
 

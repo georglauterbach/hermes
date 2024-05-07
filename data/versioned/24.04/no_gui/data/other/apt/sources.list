@@ -13,3 +13,7 @@
 deb [arch=amd64] http://de.archive.ubuntu.com/ubuntu/ noble          main restricted universe multiverse
 deb [arch=amd64] http://de.archive.ubuntu.com/ubuntu/ noble-updates  main restricted universe multiverse
 deb [arch=amd64] http://de.archive.ubuntu.com/ubuntu/ noble-security main restricted universe multiverse
+
+deb [arch=arm64] http://ports.ubuntu.com/             noble          main multiverse universe multiverse
+deb [arch=arm64] http://ports.ubuntu.com/             noble-security main multiverse universe multiverse
+deb [arch=arm64] http://ports.ubuntu.com/             noble-updates  main multiverse universe multiverse

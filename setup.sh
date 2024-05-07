@@ -33,8 +33,15 @@ function preflight_checks() {
   fi
 
   if [[ $(uname -m) != 'x86_64' ]]; then
-    log 'error' "The only supported architecture is x86_64 (yours is '$(uname -m)')"
-    exit 1
+    if [[ $(uname -m) =~ ^a(arch|rm)64$ ]]; then
+      if [[ ${GUI} -eq 1 ]]; then
+        log 'error' "The architecture 'arm64' only supports non-GUI mode"
+        exit 1
+      fi
+    else
+      log 'error' "The only supported architectures are x86_64 and arm64 (yours is '$(uname -m)')"
+      exit 1
+    fi
   fi
 }
 
@@ -151,7 +158,7 @@ function user_setup() {
     log 'debug' "gitui seems to be installed already"
   else
     log 'debug' 'Installing gitui'
-    curl -sSfL 'https://github.com/extrawurst/gitui/releases/download/v0.26.1/gitui-linux-x86_64.tar.gz' \
+    curl -sSfL "https://github.com/extrawurst/gitui/releases/download/v0.26.1/gitui-linux-$(uname -m).tar.gz" \
       | tar -xz -C "${HOME}/.local/bin"
   fi
 
@@ -197,11 +204,12 @@ function main() {
 
   log 'trace' "Starting"
   log 'info' "Ubuntu version is '${VERSION}'"
+  log 'info' "Architecture is '$(uname -m)'"
 
   if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
-    log 'info' "Installation type is: remote (default)"
+    log 'info' "Installation type is 'remote' (default)"
   else
-    log 'info' "Installation type is: local"
+    log 'info' "Installation type is 'local'"
   fi
 
   if [[ ${GUI} -eq 0 ]]; then

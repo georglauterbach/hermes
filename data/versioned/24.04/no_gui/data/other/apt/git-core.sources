@@ -3,7 +3,7 @@ Types: deb
 URIs: http://ppa.launchpad.net/git-core/ppa/ubuntu/
 Suites: noble
 Components: main
-Architectures: amd64
+Architectures: amd64,arm64
 Signed-By:
  -----BEGIN PGP PUBLIC KEY BLOCK-----
  .
