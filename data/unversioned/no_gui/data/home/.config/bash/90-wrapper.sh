@@ -7,7 +7,7 @@
 
 function ls() {
   if __command_exists 'eza'; then
-    eza --header --long --binary --group --classify --git --extended --group-directories-first "${@}"
+    eza --header --long --binary --group --classify --extended --group-directories-first "${@}"
   else
     __hermes__execute_real_command 'ls' "${@}"
   fi
