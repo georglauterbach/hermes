@@ -9,6 +9,7 @@ gnupg2
 less
 neovim
 openssh-client
+pinentry-curses
 ripgrep
 wget
 xz-utils

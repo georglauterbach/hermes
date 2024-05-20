@@ -16,6 +16,12 @@ if [[ ! -e ${DOAS_CONFIG_FILE} ]]; then
   fi
 fi
 
+mkdir -p "${HOME}/.gnupg"
+touch "${HOME}/.gnupg/gpg-agent.conf"
+if grep -v -q 'pinentry-program' "${HOME}/.gnupg/gpg-agent.conf"; then
+  echo 'pinentry-program /usr/bin/pinentry-curses' "${HOME}/.gnupg/gpg-agent.conf"
+fi
+
 # shellcheck disable=SC2154
 if [[ ${GUI} -eq 1 ]]; then
   log 'debug' 'To change the bookmarks in Nautilus, edit ~/.config/user-firs.dirs, ~/.config/gtk-3.0/bookmarks, and /etc/xdg/user-dirs.defaults'
