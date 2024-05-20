@@ -1,7 +1,5 @@
 #! /usr/bin/env bash
 
-log 'info' 'Running post-setup commands'
-
 readonly DOAS_CONFIG_FILE='/etc/doas.conf'
 if [[ ! -e ${DOAS_CONFIG_FILE} ]]; then
   log 'debug' "Setting up 'doas'"

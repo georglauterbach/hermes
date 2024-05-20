@@ -1,7 +1,5 @@
 #! /usr/bin/env bash
 
-log 'info' 'Running post-setup commands'
-
 readonly DOAS_CONFIG_FILE='/etc/doas.conf'
 if [[ ! -e ${DOAS_CONFIG_FILE} ]]; then
   log 'debug' "Setting up 'doas'"
@@ -20,6 +18,7 @@ mkdir -p "${HOME}/.gnupg"
 touch "${HOME}/.gnupg/gpg-agent.conf"
 if grep -v -q 'pinentry-program' "${HOME}/.gnupg/gpg-agent.conf"; then
   echo 'pinentry-program /usr/bin/pinentry-curses' >>"${HOME}/.gnupg/gpg-agent.conf"
+  gpg-connect-agent reloadagent /bye
 fi
 
 # shellcheck disable=SC2154
