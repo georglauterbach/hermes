@@ -1,0 +1,10 @@
+# Custom PPAs
+data/versioned/24.04/gui/data/other/apt/alacritty.sources    /etc/apt/sources.list.d/alacritty.sources
+data/versioned/24.04/gui/data/other/apt/cryptomator.sources  /etc/apt/sources.list.d/cryptomator.sources
+data/versioned/24.04/gui/data/other/apt/mozillateam.sources  /etc/apt/sources.list.d/mozillateam.sources
+data/versioned/24.04/gui/data/other/apt/regolith.sources     /etc/apt/sources.list.d/regolith.sources
+data/versioned/24.04/gui/data/other/apt/vscode.sources       /etc/apt/sources.list.d/vscode.sources
+
+# Firefox (fixes to not install Snap and then Firefox with Snap)
+data/versioned/24.04/gui/data/other/snap/unattended-upgrades-mozilla-firefox /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+data/versioned/24.04/gui/data/other/snap/apt-mozilla-firefox /etc/apt/preferences.d/mozilla-firefox

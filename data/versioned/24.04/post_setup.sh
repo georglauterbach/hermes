@@ -19,7 +19,7 @@ fi
 mkdir -p "${HOME}/.gnupg"
 touch "${HOME}/.gnupg/gpg-agent.conf"
 if grep -v -q 'pinentry-program' "${HOME}/.gnupg/gpg-agent.conf"; then
-  echo 'pinentry-program /usr/bin/pinentry-curses' "${HOME}/.gnupg/gpg-agent.conf"
+  echo 'pinentry-program /usr/bin/pinentry-curses' >>"${HOME}/.gnupg/gpg-agent.conf"
 fi
 
 # shellcheck disable=SC2154
