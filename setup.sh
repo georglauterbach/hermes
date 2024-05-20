@@ -3,6 +3,7 @@
 # shellcheck disable=SC2034
 
 set -eE -u
+shopt -s inherit_errexit
 
 if [[ ${EUID} -ne 0 ]]; then
   # shellcheck disable=SC2312
@@ -20,6 +21,17 @@ if [[ ${*} != *--assume-correct-incovation* ]]; then
   echo 'ERROR: Do not start this script as root yourself' >&2
   exit 1
 fi
+
+function parse_file() {
+  if [[ ${1:?Remote or local is required} == 'remote' ]]; then
+    curl -sSfL "${2:?This is a bug! URI to download is required}" | grep -E -v "^\s*$|^\s*#" || :
+  elif [[ ${1} == 'local' ]]; then
+    grep -E -v "^\s*$|^\s*#" "${2:?This is a bug! File path to search for is required}" || :
+  else
+    log 'error' "This is a bug! Location '${2:-}' is not supported (use 'remote' or 'local')"
+    exit 1
+  fi
+}
 
 function preflight_checks() {
   if ! command -v 'curl' &>/dev/null; then
@@ -98,11 +110,11 @@ function root_setup() {
 
   # Install packages
   if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
-    readarray -t PACKAGES < <(curl -sSfL "${GITHUB_RAW_URI}/data/versioned/${VERSION_ID}/no_gui/packages.txt")
-    readarray -t GUI_PACKAGES < <(curl -sSfL "${GITHUB_RAW_URI}/data/versioned/${VERSION_ID}/gui/packages.txt")
+    readarray -t PACKAGES < <(parse_file 'remote' "${GITHUB_RAW_URI}/data/versioned/${VERSION_ID}/no_gui/packages.txt")
+    readarray -t GUI_PACKAGES < <(parse_file 'remote' "${GITHUB_RAW_URI}/data/versioned/${VERSION_ID}/gui/packages.txt")
   else
-    readarray -t PACKAGES < "${SCRIPT_DIR}/data/versioned/${VERSION_ID}/no_gui/packages.txt"
-    readarray -t GUI_PACKAGES < "${SCRIPT_DIR}/data/versioned/${VERSION_ID}/gui/packages.txt"
+    readarray -t PACKAGES < <(parse_file 'local' "${SCRIPT_DIR}/data/versioned/${VERSION_ID}/no_gui/packages.txt")
+    readarray -t GUI_PACKAGES < <(parse_file 'local' "${SCRIPT_DIR}/data/versioned/${VERSION_ID}/gui/packages.txt")
   fi
 
   log 'debug' "Installing non-GUI packages (${PACKAGES[*]})"
@@ -176,6 +188,9 @@ function user_setup() {
 }
 
 function main() {
+  # in case `grep` is aliased to `rg`
+  unset grep
+
   SCRIPT_DIR="$(realpath -eL "$(dirname "${BASH_SOURCE[0]}")")"
   GITHUB_RAW_URI='https://raw.githubusercontent.com/georglauterbach/hermes/main'
   readonly SCRIPT_DIR GITHUB_RAW_URI
@@ -228,6 +243,8 @@ function main() {
     fi
   fi
 
+  # set -x
+
   local LOCATIONS=('data/unversioned/no_gui' "data/versioned/${VERSION_ID}/no_gui")
   if [[ ${GUI} -eq 1 ]]; then
     LOCATIONS+=('data/unversioned/gui' "data/versioned/${VERSION_ID}/gui")
@@ -240,10 +257,12 @@ function main() {
     local SOURCE DESTINATION INDEX_FILE_CONTENT
 
     if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
-      INDEX_FILE_CONTENT=$(curl -qsSfL "${GITHUB_RAW_URI}/${LOCATION}/index.txt" | grep -E -v "^\s*$|^\s*#")
+      INDEX_FILE_CONTENT=$(parse_file 'remote' "${GITHUB_RAW_URI}/${LOCATION}/index.txt")
     else
-      INDEX_FILE_CONTENT=$(grep -E -v "^\s*$|^\s*#" "${LOCATION}/index.txt")
+      INDEX_FILE_CONTENT=$(parse_file 'local' "${LOCATION}/index.txt")
     fi
+
+    [[ -n ${INDEX_FILE_CONTENT} ]] || continue
 
     while read -r SOURCE DESTINATION; do
       local EXPANDED_DESTINATION
@@ -261,6 +280,7 @@ function main() {
   root_setup || return ${?}
   user_setup || return ${?}
 
+  log 'info' 'Running post-setup commands'
   if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
     # shellcheck source=/dev/null
     source <(curl -qsSfL "${GITHUB_RAW_URI}/data/versioned/${VERSION_ID}/post_setup.sh")
@@ -268,6 +288,7 @@ function main() {
     # shellcheck source=/dev/null
     source "${SCRIPT_DIR}/data/versioned/${VERSION_ID}/post_setup.sh"
   fi
+  log 'trace' 'Finished post-setup commands'
 
   log 'info' 'Finished'
 }
