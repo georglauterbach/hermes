@@ -8,3 +8,10 @@ data/versioned/24.04/gui/data/other/apt/vscode.sources       /etc/apt/sources.li
 # Firefox (fixes to not install Snap and then Firefox with Snap)
 data/versioned/24.04/gui/data/other/snap/unattended-upgrades-mozilla-firefox /etc/apt/apt.conf.d/51unattended-upgrades-firefox
 data/versioned/24.04/gui/data/other/snap/apt-mozilla-firefox /etc/apt/preferences.d/mozilla-firefox
+
+# Alacritty
+data/versioned/24.04/gui/data/home/.config/alacritty/alacritty.toml    ${HOME}/.config/alacritty/alacritty.toml
+data/versioned/24.04/gui/data/home/.config/alacritty/10-general.toml   ${HOME}/.config/alacritty/10-general.toml
+data/versioned/24.04/gui/data/home/.config/alacritty/20-font.toml      ${HOME}/.config/alacritty/20-font.toml
+data/versioned/24.04/gui/data/home/.config/alacritty/30-colors.toml    ${HOME}/.config/alacritty/30-colors.toml
+data/versioned/24.04/gui/data/home/.config/alacritty/40-bindings.toml  ${HOME}/.config/alacritty/40-bindings.toml
