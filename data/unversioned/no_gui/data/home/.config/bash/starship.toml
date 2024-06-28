@@ -1,7 +1,7 @@
 # StarShip -- a cross-platform prompt (https://starship.rs)
 # For symbols, see https://www.nerdfonts.com/cheat-sheet
 
-format='$username$hostname$git_branch$directory$rust$character'
+format='$username$hostname$git_branch$directory$rust$python$character'
 add_newline = false
 scan_timeout = 10
 command_timeout = 100
@@ -85,6 +85,9 @@ symbol = ''
 [rust]
 format = ' [\[$symbol $version\]](red)'
 symbol = '🦀'
+
+[python]
+format = ' [\[$symbol$version( in $virtualenv)\]](yellow)'
 
 [directory]
 disabled = false
