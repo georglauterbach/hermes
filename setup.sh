@@ -208,7 +208,7 @@ function main() {
   if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
     # shellcheck source=/dev/null
     source <(curl -qsSfL https://raw.githubusercontent.com/georglauterbach/libbash/main/load) \
-      --online --version '6.1.1' 'log' 'errors'
+      --online '7.0.0' 'log' 'errors'
   else
     function log() {
       printf "%s  %-5s  %s  --  %s\n" \
