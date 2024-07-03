@@ -1,10 +1,15 @@
 #! /usr/bin/env bash
 
-# version       0.2.0
+# version       0.3.0
 # sourced by    ${HOME}/.bashrc
 # task          set up functions required during setup
 
-if ! type -t '__command_exists' &>/dev/null; then
+function __is_bash_function() {
+  [[ $(type -t "${1:?Name of type to check is required}" || :) == 'function' ]]
+}
+export -f __is_bash_function
+
+if ! __is_bash_function '__command_exists'; then
   function __command_exists() {
     command -v "${1:?Command name is required}" &>/dev/null
   }
@@ -12,17 +17,6 @@ if ! type -t '__command_exists' &>/dev/null; then
   readonly -f __command_exists
   export -f __command_exists
 fi
-
-function __is_bash_function() {
-  [[ $(type -t "${1:?Name of type to check is required}" || :) == 'function' ]]
-}
-
-function __hermes__declare_helpers() {
-  declare -f do_as_root          \
-    __hermes__execute_real_command  \
-    __command_exists             \
-    __is_bash_function
-}
 
 function __hermes__execute_real_command() {
   local COMMAND DIR FULL_COMMAND
@@ -37,11 +31,22 @@ function __hermes__execute_real_command() {
   echo "Command '${COMMAND}' not found" >&2
   return 1
 }
+export -f __hermes__execute_real_command
+
+# shellcheck disable=SC2120
+function __hermes__declare_helpers() {
+  local FUNCTIONS=('do_as_root' '__command_exists' '__is_bash_function' '__hermes__execute_real_command')
+  [[ ${#} -gt 0 ]] && FUNCTIONS+=("${@}")
+  declare -f "${FUNCTIONS[@]}"
+}
+export -f __hermes__declare_helpers
 
 function do_as_root() {
-  local SU_COMMAND
+  local SU_COMMAND=${SU_COMMAND:-}
 
-  if __command_exists 'doas'; then
+  if [[ -n ${SU_COMMAND} ]]; then
+    :
+  elif __command_exists 'doas'; then
     SU_COMMAND='doas'
   elif __command_exists 'sudo'; then
     SU_COMMAND='sudo'
