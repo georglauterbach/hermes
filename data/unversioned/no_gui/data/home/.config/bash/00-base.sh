@@ -36,7 +36,7 @@ export -f __hermes__execute_real_command
 # shellcheck disable=SC2120
 function __hermes__declare_helpers() {
   local FUNCTIONS=('do_as_root' '__command_exists' '__is_bash_function' '__hermes__execute_real_command')
-  [[ -n ${1:-} ]] && FUNCTIONS+=("${@}")
+  [[ ${#} -gt 0 ]] && FUNCTIONS+=("${@}")
   declare -f "${FUNCTIONS[@]}"
 }
 export -f __hermes__declare_helpers
