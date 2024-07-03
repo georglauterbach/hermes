@@ -7,6 +7,7 @@
 function __is_bash_function() {
   [[ $(type -t "${1:?Name of type to check is required}" || :) == 'function' ]]
 }
+export -f __is_bash_function
 
 if ! __is_bash_function '__command_exists'; then
   function __command_exists() {
@@ -30,12 +31,15 @@ function __hermes__execute_real_command() {
   echo "Command '${COMMAND}' not found" >&2
   return 1
 }
+export -f __hermes__execute_real_command
 
+# shellcheck disable=SC2120
 function __hermes__declare_helpers() {
   local FUNCTIONS=('do_as_root' '__command_exists' '__is_bash_function' '__hermes__execute_real_command')
   [[ -n ${1:-} ]] && FUNCTIONS+=("${@}")
   declare -f "${FUNCTIONS[@]}"
 }
+export -f __hermes__declare_helpers
 
 function do_as_root() {
   local SU_COMMAND=${SU_COMMAND:-}
