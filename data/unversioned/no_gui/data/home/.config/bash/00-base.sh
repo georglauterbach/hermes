@@ -33,7 +33,7 @@ function __hermes__execute_real_command() {
 
 function __hermes__declare_helpers() {
   local FUNCTIONS=('do_as_root' '__command_exists' '__is_bash_function' '__hermes__execute_real_command')
-  [[ -n ${1:-} ]] && FUNCTIONS+=("${1}")
+  [[ -n ${1:-} ]] && FUNCTIONS+=("${@}")
   declare -f "${FUNCTIONS[@]}"
 }
 
@@ -52,7 +52,7 @@ function do_as_root() {
   fi
 
   if __is_bash_function "${1:?Command is required}"; then
-    ${SU_COMMAND} bash -c "$(__hermes__declare_helpers "${1}" || :) ; ${*}"
+    ${SU_COMMAND} bash -c "$(__hermes__declare_helpers || :) ; ${*}"
   else
     ${SU_COMMAND} "${@}"
   fi
