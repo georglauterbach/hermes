@@ -211,7 +211,7 @@ function main() {
       --online '7.0.0' 'log' 'errors'
   else
     function log() {
-      printf "%s  %-5s  %s  --  %s\n" \
+      printf "%s %-5s %s: %s\n" \
         "$(date --iso-8601=seconds)" "${1^^}" "${SCRIPT:-${0}}" "${2}"
     }
   fi
