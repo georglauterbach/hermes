@@ -12,12 +12,12 @@ if [[ ${EUID} -ne 0 ]]; then
     HOME="${HOME}"                  \
     PATH="${PATH}"                  \
     LOG_LEVEL="${LOG_LEVEL:-info}"  \
-    bash "$(realpath -eL "${BASH_SOURCE[0]}")" --assume-correct-incovation "${@}"
+    bash "$(realpath -eL "${BASH_SOURCE[0]}")" --assume-correct-invocation "${@}"
 
   exit ${?}
 fi
 
-if [[ ${*} != *--assume-correct-incovation* ]]; then
+if [[ ${*} != *--assume-correct-invocation* ]]; then
   echo 'ERROR: Do not start this script as root yourself' >&2
   exit 1
 fi
@@ -63,7 +63,7 @@ function parse_command_line_arguments() {
       ( '--gui' | '-g' )                     GUI=1                    ;;
       ( '--local-installation' | '-l' )      LOCAL_INSTALLATION=1     ;;
       ( '--assume-data-is-correct'  | '-a' ) ASSUME_DATA_IS_CORRECT=1 ;;
-      ( '--assume-correct-incovation' )                               ;;
+      ( '--assume-correct-invocation' )                               ;;
 
       ( * )
         echo "ERROR: Unknown argument '${1:-}'" >&2
