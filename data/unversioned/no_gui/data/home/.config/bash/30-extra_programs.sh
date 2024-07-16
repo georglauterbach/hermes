@@ -48,7 +48,7 @@ function setup_misc_programs() {
 function setup_ble() {
   local BLE_SOURCE="${HOME}/.local/share/blesh/ble.sh"
   if [[ -e ${BLE_SOURCE} ]]; then
-    local BLE_CONFIG_FILE="${HOME}/.config/bash/ble.conf"
+    local BLE_CONFIG_FILE="${HOME}/.config/bash/ble.sh"
     if [[ -e ${BLE_CONFIG_FILE} ]]; then
       # shellcheck source=/dev/null
       source "${BLE_SOURCE}" --attach=none --rcfile "${BLE_CONFIG_FILE}"
