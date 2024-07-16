@@ -34,38 +34,45 @@ bg_orange='#E16F23'
 
 # actual ble.sh options
 
-bleopt accept_line_threshold=-1
-
 # Make CTRL+BACKSPACE delete a whole word (in Alacritty)
 ble-bind -f 'M-C-?' kill-backward-cword
 
+# syntax highlighting
 bleopt highlight_syntax=true
 bleopt highlight_filename=true
 bleopt highlight_variable=true
 
+# transient prompt
+bleopt prompt_ps1_final='$(starship module character)'
+
+# completion
 bleopt complete_auto_complete=true
 bleopt complete_auto_history=true
 bleopt complete_ambiguous=true
 bleopt complete_menu_complete=true
 bleopt complete_menu_filter=true
-
 bleopt complete_menu_style=align-nowrap
-bleopt menu_align_max=20
 bleopt complete_menu_maxlines=3
 
+# line & history lenght limits
+bleopt line_limit_length=10000
+bleopt history_limit_length=10000
+
+# markings & bells
 bleopt prompt_eol_mark=
 bleopt exec_errexit_mark=
 bleopt exec_elapsed_mark=
-
-bleopt char_width_mode='west'
-bleopt input_encoding='UTF-8'
 bleopt edit_abell=
-
-bleopt history_share=true
 bleopt edit_vbell=
 
-bleopt line_limit_length=10000
-bleopt history_limit_length=10000
+# charsets & encoding
+bleopt char_width_mode='west'
+bleopt input_encoding='UTF-8'
+
+# miscellaneous
+bleopt history_share=true
+bleopt menu_align_max=20
+bleopt accept_line_threshold=-1
 
 # line coloring
 

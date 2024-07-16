@@ -1,8 +1,9 @@
 # StarShip -- a cross-platform prompt (https://starship.rs)
 # For symbols, see https://www.nerdfonts.com/cheat-sheet
 
-format='$username$hostname$git_branch$directory$rust$python$character'
-add_newline = false
+format='''$username@[tower](purple) $directory $git_branch$rust$python
+$character'''
+add_newline = true
 scan_timeout = 10
 command_timeout = 100
 palette = 'gruvbox-material'
@@ -69,8 +70,8 @@ bg_orange = '#E16F23'
 disabled = false
 show_always = false
 format = '[$user]($style)'
-style_user = 'yellow'
-style_root = 'yellow bold'
+style_user = 'aqua'
+style_root = 'aqua bold'
 
 [hostname]
 disabled = false
@@ -79,15 +80,16 @@ ssh_only = true
 ssh_symbol = "SSH"
 
 [git_branch]
-format = '[\[$symbol $branch\]](blue) '
+format = '[\[$symbol $branch\]](yellow)'
 symbol = ''
 
 [rust]
 format = ' [\[$symbol $version\]](red)'
-symbol = '🦀'
+symbol = ''
 
 [python]
-format = ' [\[$symbol$version( in $virtualenv)\]](yellow)'
+format = ' [\[$symbol $version( in $virtualenv)\]](yellow)'
+symbol = ''
 
 [directory]
 disabled = false
@@ -100,10 +102,10 @@ truncate_to_repo = true
 read_only_style = 'red bold'
 read_only = ' '
 
-repo_root_format = '[$read_only]($read_only_style)[$repo_root]($repo_root_style)[$path](blue)'
+repo_root_format = '[$read_only]($read_only_style)[ $repo_root]($repo_root_style)[$path](blue)'
 repo_root_style = 'blue bold'
 
 [character]
 disabled = false
-success_symbol = ' [➜](green)'
-error_symbol   = ' [➜](red)'
+success_symbol = '[➜](green)'
+error_symbol   = '[➜](red)'
