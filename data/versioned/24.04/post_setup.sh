@@ -23,7 +23,7 @@ function setup_gnupg() {
   touch "${GNUPG_HOME_DIR}/gpg-agent.conf"
   if ! grep -q 'pinentry-program' "${GNUPG_HOME_DIR}/gpg-agent.conf"; then
     echo 'pinentry-program /usr/bin/pinentry-curses' >>"${GNUPG_HOME_DIR}/gpg-agent.conf"
-    gpg-connect-agent reloadagent /bye || :
+    gpg-connect-agent reloadagent /bye &>/dev/null || :
   fi
   chown -R "${USER}:${USER}" "${GNUPG_HOME_DIR}"
 }
