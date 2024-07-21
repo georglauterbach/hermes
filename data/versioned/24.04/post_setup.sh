@@ -20,13 +20,6 @@ function setup_doas() {
 function setup_gnupg() {
   local GNUPG_HOME_DIR="${HOME}/.gnupg"
   mkdir -p "${GNUPG_HOME_DIR}"
-  touch "${GNUPG_HOME_DIR}/gpg-agent.conf"
-
-  if ! grep -q 'pinentry-program' "${GNUPG_HOME_DIR}/gpg-agent.conf"; then
-    echo 'pinentry-program /usr/bin/pinentry-curses' >>"${GNUPG_HOME_DIR}/gpg-agent.conf"
-    gpg-connect-agent reloadagent /bye &>/dev/null || :
-  fi
-
   chown -R "${USER}:${USER}" "${GNUPG_HOME_DIR}"
   find "${GNUPG_HOME_DIR}" -type f -exec chmod 600 {} \;
   find "${GNUPG_HOME_DIR}" -type d -exec chmod 700 {} \;
