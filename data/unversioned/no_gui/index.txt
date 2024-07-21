@@ -1,7 +1,7 @@
 # All files related to Bash
 data/unversioned/no_gui/data/home/.bashrc                           ${HOME}/.bashrc
 data/unversioned/no_gui/data/home/.config/bash/starship.toml        ${HOME}/.config/bash/starship.toml
-data/unversioned/no_gui/data/home/.config/bash/ble.conf             ${HOME}/.config/bash/ble.conf
+data/unversioned/no_gui/data/home/.config/bash/ble.sh               ${HOME}/.config/bash/ble.sh
 data/unversioned/no_gui/data/home/.config/bash/80-aliases.sh        ${HOME}/.config/bash/80-aliases.sh
 data/unversioned/no_gui/data/home/.config/bash/90-wrapper.sh        ${HOME}/.config/bash/90-wrapper.sh
 data/unversioned/no_gui/data/home/.config/bash/30-extra_programs.sh ${HOME}/.config/bash/30-extra_programs.sh
