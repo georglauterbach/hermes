@@ -2,6 +2,8 @@
 # sourced by    ${HOME}/.bashrc
 # task          setup for ble.sh (https://github.com/akinomyoga/ble.sh)
 
+# shellcheck disable=SC2016,SC2034
+
 # color theme
 
 # background
@@ -76,41 +78,41 @@ bleopt accept_line_threshold=-1
 
 # line coloring
 
-ble-face syntax_default=fg=${fg1}              # default color
-ble-face disabled=fg=${bg3}                    # not executed command
-ble-face syntax_comment=fg=${bg3}              # comment
-ble-face auto_complete=fg=${grey1}             # auto-completion
-ble-face region_insert=fg=${bg1},bg=${yellow}  # when tabbing through options
+ble-face "syntax_default=fg=${fg1}"              # default color
+ble-face "disabled=fg=${bg3}"                    # not executed command
+ble-face "syntax_comment=fg=${bg3}"              # comment
+ble-face "auto_complete=fg=${grey1}"             # auto-completion
+ble-face "region_insert=fg=${bg1},bg=${yellow}"  # when tabbing through options
 
-ble-face syntax_quotation=fg=${purple}         # quotes
-ble-face syntax_quoted=fg=${aqua}              # quoted content
+ble-face "syntax_quotation=fg=${purple}"         # quotes
+ble-face "syntax_quoted=fg=${aqua}"              # quoted content
 
-ble-face varname_unset=fg=#076678              # declare variable
-ble-face varname_empty=fg=#076678              # empty vars
-ble-face syntax_varname=fg=#458588             # use non-exported variable
-ble-face varname_array=fg=#458588,bold         # array
-ble-face varname_export=fg=#83a598,bold        # exported variable
-ble-face varname_readonly=fg=#83a598,bold      # readonly variables
-ble-face syntax_param_expansion=fg=#d79921     # dollar sign and curly braces
-ble-face syntax_expr=fg=#b57614                # [@], [*], etc.
+ble-face 'varname_unset=fg=#076678'              # declare variable
+ble-face 'varname_empty=fg=#076678'              # empty vars
+ble-face 'syntax_varname=fg=#458588'             # use non-exported variable
+ble-face 'varname_array=fg=#458588,bold'         # array
+ble-face 'varname_export=fg=#83a598,bold'        # exported variable
+ble-face 'varname_readonly=fg=#83a598,bold'      # readonly variables
+ble-face 'syntax_param_expansion=fg=#d79921'     # dollar sign and curly braces
+ble-face 'syntax_expr=fg=#b57614'                # [@], [*], etc.
 
-ble-face command_function=fg=${green}          # valid command
-ble-face syntax_function_name=fg=${green}      # function name
-ble-face command_alias=fg=${green}             # alias
-ble-face syntax_error=bg=${red},fg=${fg1}      # invalid command
-ble-face command_builtin=fg=${green}           # builtins
-ble-face command_builtin_dot=fg=${green}       # :
-ble-face argument_option=fg=${yellow}          # flags
-ble-face command_keyword=fg=${orange}          # function, while, for, do, etc.
-ble-face syntax_delimiter=fg=${orange}         # ;, (), etc.
-ble-face syntax_history_expansion=fg=${orange} # !!
+ble-face "command_function=fg=${green}"          # valid command
+ble-face "syntax_function_name=fg=${green}"      # function name
+ble-face "command_alias=fg=${green}"             # alias
+ble-face "syntax_error=bg=${red},fg=${fg1}"      # invalid command
+ble-face "command_builtin=fg=${green}"           # builtins
+ble-face "command_builtin_dot=fg=${green}"       # :
+ble-face "argument_option=fg=${yellow}"          # flags
+ble-face "command_keyword=fg=${orange}"          # function, while, for, do, etc.
+ble-face "syntax_delimiter=fg=${orange}"         # ;, (), etc.
+ble-face "syntax_history_expansion=fg=${orange}" # !!
 
-ble-face filename_character=fg=${fg1}          # normal file names
-ble-face filename_ls_colors=fg=${fg1}          # normal file names
-ble-face filename_other=fg=${fg1}              # normal file names
-ble-face filename_warning=fg=${red}            # warning on overwrite
+ble-face "filename_character=fg=${fg1}"          # normal file names
+ble-face "filename_ls_colors=fg=${fg1}"          # normal file names
+ble-face "filename_other=fg=${fg1}"              # normal file names
+ble-face "filename_warning=fg=${red}"            # warning on overwrite
 
-ble-face filename_directory=fg=${blue},bold    # valid directory names
-ble-face command_directory=fg=${blue},bold
-ble-face filename_link=fg=${aqua},bold,underline
-ble-face filename_directory_sticky=fg=${blue},bg=${fg1},bold
+ble-face "filename_directory=fg=${blue},bold"    # valid directory names
+ble-face "command_directory=fg=${blue},bold"
+ble-face "filename_link=fg=${aqua},bold,underline"
+ble-face "filename_directory_sticky=fg=${blue},bg=${fg1},bold"
