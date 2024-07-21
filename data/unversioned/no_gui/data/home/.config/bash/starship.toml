@@ -1,41 +1,12 @@
 # StarShip -- a cross-platform prompt (https://starship.rs)
 # For symbols, see https://www.nerdfonts.com/cheat-sheet
 
-format='''$username@[tower](purple) $directory $git_branch$rust$python
+format='''$username$hostname $directory $git_branch$rust$python
 $character'''
 add_newline = true
 scan_timeout = 10
 command_timeout = 100
 palette = 'gruvbox-material'
-
-[palettes.gruvbox]
-# background
-bg_dim = '#1D2021'
-bg0 = '#282828'
-bg1 = '#3C3836'
-bg3 = '#665C54'
-# middleground
-gray0 = '#928374'
-gray1 = 'A89984'
-# foreground
-fg0 = '#D5C4A1'
-fg1 = '#FBF1C7'
-# normal colors
-red = '#FB4934'
-green = '#B8BB26'
-yellow = '#FABD2F'
-blue = '#83A598'
-purple = '#D3869B'
-aqua = '#8EC07C'
-orange = 'FE8019'
-# dim colors
-bg_red = '#CC241D'
-bg_green = '#98971A'
-bg_yellow = '#D79921'
-bg_blue = '#458588'
-bg_purple = '#B16286'
-bg_aqua = '#689D6A'
-bg_orange = 'D65D0E'
 
 [palettes.gruvbox-material]
 # background
@@ -68,28 +39,16 @@ bg_orange = '#E16F23'
 
 [username]
 disabled = false
-show_always = false
+show_always = true
 format = '[$user]($style)'
 style_user = 'aqua'
 style_root = 'aqua bold'
 
 [hostname]
 disabled = false
-format =  '[@](fg)[$hostname](purple) '
-ssh_only = true
+format =  '[@](fg0)[$hostname](purple)'
+ssh_only = false
 ssh_symbol = "SSH"
-
-[git_branch]
-format = '[\[$symbol $branch\]](yellow)'
-symbol = ''
-
-[rust]
-format = ' [\[$symbol $version\]](red)'
-symbol = ''
-
-[python]
-format = ' [\[$symbol $version( in $virtualenv)\]](yellow)'
-symbol = ''
 
 [directory]
 disabled = false
@@ -104,6 +63,18 @@ read_only = ' '
 
 repo_root_format = '[$read_only]($read_only_style)[ $repo_root]($repo_root_style)[$path](blue)'
 repo_root_style = 'blue bold'
+
+[git_branch]
+format = '[\[$symbol $branch\]](yellow)'
+symbol = ''
+
+[rust]
+format = ' [\[$symbol $version\]](red)'
+symbol = ''
+
+[python]
+format = ' [\[$symbol $version( in $virtualenv)\]](yellow)'
+symbol = ''
 
 [character]
 disabled = false
