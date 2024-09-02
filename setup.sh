@@ -158,28 +158,16 @@ function user_setup() {
     )
   fi
 
-  if command -v 'zoxide' &>/dev/null; then
-    log 'debug' "zoxide seems to be installed already"
-  else
-    log 'debug' 'Installing zoxide'
-    curl -sSfL 'https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh' | bash
-  fi
+  log 'debug' 'Installing zoxide'
+  curl -sSfL 'https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh' | bash
 
-  if command -v 'gitui' &>/dev/null; then
-    log 'debug' "gitui seems to be installed already"
-  else
-    log 'debug' 'Installing gitui'
-    curl -sSfL "https://github.com/extrawurst/gitui/releases/download/v0.26.1/gitui-linux-$(uname -m).tar.gz" \
-      | tar -xz -C "${HOME}/.local/bin"
-  fi
+  log 'debug' 'Installing gitui'
+  curl -sSfL "https://github.com/extrawurst/gitui/releases/download/v0.26.1/gitui-linux-$(uname -m).tar.gz" \
+    | tar -xz -C "${HOME}/.local/bin"
 
-  if command -v 'starship' &>/dev/null; then
-    log 'debug' "Starship seems to be installed already"
-  else
-    log 'debug' 'Installing Starship'
-    curl -sSfL 'https://starship.rs/install.sh' \
-      | sh -s -- --bin-dir="${HOME}/.local/bin" --force >/dev/null
-  fi
+  log 'debug' 'Installing Starship'
+  curl -sSfL 'https://starship.rs/install.sh' \
+    | sh -s -- --bin-dir="${HOME}/.local/bin" --force >/dev/null
 
   chown -R "${USER}:$(id -g "${USER}")" "${HOME}"
 
