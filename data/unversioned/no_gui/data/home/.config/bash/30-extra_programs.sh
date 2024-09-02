@@ -14,12 +14,12 @@ function setup_fzf() {
 }
 
 function setup_rust() {
-  __command_exists sccache && export RUSTC_WRAPPER='sccache'
+  __hermes__command_exists sccache && export RUSTC_WRAPPER='sccache'
 }
 
 function setup_misc_programs() {
   local BAT_NAME='batcat' # use 'bat' on older distributions
-  if __command_exists "${BAT_NAME}"; then
+  if __hermes__command_exists "${BAT_NAME}"; then
     export MANPAGER="bash -c 'col -bx | ${BAT_NAME} -l man --style=plain --theme=gruvbox-dark'"
     export MANROFFOPT='-c'
     # `PAGER` is set in `10-setup.sh`
@@ -30,12 +30,12 @@ function setup_misc_programs() {
     alias less="${BAT_NAME} --style=plain --paging=always --color=always --theme=gruvbox-dark"
   fi
 
-  if __command_exists zoxide; then
+  if __hermes__command_exists zoxide; then
     eval "$(zoxide init bash)"
     alias cd='z'
   fi
 
-  if __command_exists 'starship'; then
+  if __hermes__command_exists 'starship'; then
     STARSHIP_CONFIG="${HOME}/.config/bash/starship.toml"
     if [[ -f ${STARSHIP_CONFIG} ]] && [[ -r ${STARSHIP_CONFIG} ]]; then
       export STARSHIP_CONFIG
@@ -57,12 +57,12 @@ function setup_ble() {
       source "${BLE_SOURCE}" --attach=none
     fi
 
-    if __command_exists 'fzf'; then
+    if __hermes__command_exists 'fzf'; then
       ble-import -d integration/fzf-completion
       ble-import -d integration/fzf-key-bindings
     fi
 
-    if __command_exists 'zoxide'; then
+    if __hermes__command_exists 'zoxide'; then
       ble-import -f integration/zoxide
     fi
   fi

@@ -4,18 +4,18 @@
 # sourced by    ${HOME}/.bashrc
 # task          set up functions required during setup
 
-function __is_bash_function() {
+function __hermes__is_bash_function() {
   [[ $(type -t "${1:?Name of type to check is required}" || :) == 'function' ]]
 }
-export -f __is_bash_function
+export -f __hermes__is_bash_function
 
-if ! __is_bash_function '__command_exists'; then
-  function __command_exists() {
+if ! __hermes__is_bash_function '__hermes__command_exists'; then
+  function __hermes__command_exists() {
     command -v "${1:?Command name is required}" &>/dev/null
   }
 
-  readonly -f __command_exists
-  export -f __command_exists
+  readonly -f __hermes__command_exists
+  export -f __hermes__command_exists
 fi
 
 function __hermes__execute_real_command() {
@@ -35,30 +35,30 @@ export -f __hermes__execute_real_command
 
 # shellcheck disable=SC2120
 function __hermes__declare_helpers() {
-  local FUNCTIONS=('do_as_root' '__command_exists' '__is_bash_function' '__hermes__execute_real_command')
+  local FUNCTIONS=('__hermes__do_as_root' '__hermes__command_exists' '__hermes__is_bash_function' '__hermes__execute_real_command')
   [[ ${#} -gt 0 ]] && FUNCTIONS+=("${@}")
   declare -f "${FUNCTIONS[@]}"
 }
 export -f __hermes__declare_helpers
 
-function do_as_root() {
+function __hermes__do_as_root() {
   local SU_COMMAND=${SU_COMMAND:-}
 
   if [[ -n ${SU_COMMAND} ]]; then
     :
-  elif __command_exists 'doas'; then
+  elif __hermes__command_exists 'doas'; then
     SU_COMMAND='doas'
-  elif __command_exists 'sudo'; then
+  elif __hermes__command_exists 'sudo'; then
     SU_COMMAND='sudo'
   else
     echo 'Could not find program to execute command as root'
     return 1
   fi
 
-  if __is_bash_function "${1:?Command is required}"; then
+  if __hermes__is_bash_function "${1:?Command is required}"; then
     ${SU_COMMAND} bash -c "$(__hermes__declare_helpers || :) ; ${*}"
   else
     ${SU_COMMAND} "${@}"
   fi
 }
-export -f do_as_root
+export -f __hermes__do_as_root

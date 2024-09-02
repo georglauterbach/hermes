@@ -6,7 +6,7 @@
 #               for common tasks and commands
 
 function ls() {
-  if __command_exists 'eza'; then
+  if __hermes__command_exists 'eza'; then
     eza --header --long --binary --group --classify --extended --group-directories-first "${@}"
   else
     __hermes__execute_real_command 'ls' "${@}"
@@ -14,7 +14,7 @@ function ls() {
 }
 
 function cat() {
-  if __command_exists 'batcat'; then
+  if __hermes__command_exists 'batcat'; then
     batcat --theme="gruvbox-dark" --paging=never --italic-text=always "${@}"
   else
     __hermes__execute_real_command 'cat' "${@}"
@@ -22,7 +22,7 @@ function cat() {
 }
 
 function grep() {
-  if __command_exists 'rg'; then
+  if __hermes__command_exists 'rg'; then
     rg -N "${@}"
   else
     __hermes__execute_real_command 'grep' "${@}"
@@ -42,13 +42,13 @@ function git() {
 
 function apt() {
   local PROGRAM='apt'
-  __command_exists 'nala' && PROGRAM='nala'
+  __hermes__command_exists 'nala' && PROGRAM='nala'
 
   if [[ ${1:-} =~ ^show|search$ ]]
   then
     __hermes__execute_real_command "${PROGRAM}" "${@}"
   else
-    do_as_root "${PROGRAM}" "${@}"
+    __hermes__do_as_root "${PROGRAM}" "${@}"
   fi
 }
 

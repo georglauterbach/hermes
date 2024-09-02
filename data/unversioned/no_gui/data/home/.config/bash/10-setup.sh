@@ -35,9 +35,9 @@ function setup_path() {
 
 function setup_variables() {
   VISUAL='nano'
-  __command_exists 'vi' && VISUAL='vi'
-  __command_exists 'vim' && VISUAL='vim'
-  __command_exists 'nvim' && VISUAL='nvim'
+  __hermes__command_exists 'vi' && VISUAL='vi'
+  __hermes__command_exists 'vim' && VISUAL='vim'
+  __hermes__command_exists 'nvim' && VISUAL='nvim'
 
   EDITOR=${VISUAL}
   PAGER="$(command -v less) -R"
@@ -45,7 +45,7 @@ function setup_variables() {
 
   export VISUAL EDITOR PAGER GPG_TTY
 
-  if ! __command_exists 'ble'; then
+  if ! __hermes__command_exists 'ble'; then
     export HISTCONTROL='ignoreboth'
     export HISTSIZE=10000
     export HISTFILESIZE=10000
@@ -62,7 +62,7 @@ function setup_completion() {
       source /etc/bash_completion
     fi
 
-    if __command_exists 'doas'; then
+    if __hermes__command_exists 'doas'; then
       complete -cf doas
       alias sudo='doas'
     fi
@@ -78,7 +78,7 @@ function setup_prompt() {
   PS2=''  # continuation shell prompt
   PS4='> ' # `set -x` tracing prompt
 
-  if ! __command_exists 'starship' && [[ -v debian_chroot ]] && [[ -r /etc/debian_chroot ]]; then
+  if ! __hermes__command_exists 'starship' && [[ -v debian_chroot ]] && [[ -r /etc/debian_chroot ]]; then
     # shellcheck disable=SC2155
     export debian_chroot=$(</etc/debian_chroot)
   fi

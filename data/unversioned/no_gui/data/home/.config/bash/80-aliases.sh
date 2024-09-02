@@ -23,27 +23,27 @@ alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 alias .......='cd ../../../../../..'
 
-if __command_exists 'gitui'; then
+if __hermes__command_exists 'gitui'; then
   alias g='gitui'
-elif __command_exists 'lazygit'; then
+elif __hermes__command_exists 'lazygit'; then
   alias g='lazygit'
 else
   alias g='git diff'
 fi
 
-if __command_exists 'polybar'; then
+if __hermes__command_exists 'polybar'; then
   alias rp='killall polybar && ${HOME}/.config/polybar/launch.sh'
 fi
 
-if __command_exists 'btop'; then
+if __hermes__command_exists 'btop'; then
   alias htop='btop'
 fi
 
-if __command_exists 'kubectl'; then
+if __hermes__command_exists 'kubectl'; then
   alias k='kubectl'
   complete -o default -F __start_kubectl k
 fi
 
-if __command_exists 'zellij'; then
+if __hermes__command_exists 'zellij'; then
   alias tmux='zellij'
 fi
