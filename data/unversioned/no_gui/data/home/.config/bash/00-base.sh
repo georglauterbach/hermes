@@ -61,7 +61,7 @@ function __hermes__do_as_root() {
 }
 export -f __hermes__do_as_root
 
-function setup_path() {
+function __hermes__setup_path() {
   local ADDITIONAL_PATH_ENTRIES=(
     "${HOME}/bin"
     "${HOME}/.local/bin"
@@ -90,5 +90,5 @@ function setup_path() {
   return 0
 }
 
-setup_path
-unset setup_path
+__hermes__setup_path
+unset __hermes__setup_path

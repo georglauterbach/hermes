@@ -4,11 +4,11 @@
 # sourced by    ${HOME}/.bashrc
 # task          provide miscellaneous main setup
 
-function setup_shopt() {
+function __hermes__setup_shopt() {
   shopt -s checkwinsize globstar autocd
 }
 
-function setup_variables() {
+function __hermes__setup_variables() {
   VISUAL='nano'
   __hermes__command_exists 'vi' && VISUAL='vi'
   __hermes__command_exists 'vim' && VISUAL='vim'
@@ -21,7 +21,7 @@ function setup_variables() {
   export VISUAL EDITOR PAGER GPG_TTY
 }
 
-function setup_completion() {
+function __hermes__setup_completion() {
   if ! shopt -oq posix; then
     if [[ -f /usr/share/bash-completion/bash_completion ]]; then
       # shellcheck source=/dev/null
@@ -43,7 +43,7 @@ function setup_completion() {
   fi
 }
 
-function setup_basic_prompt() {
+function __hermes__setup_basic_prompt() {
   export PROMPT_DIRTRIM=4
 
   # disable blinking cursor (e.g., in TMUX)
@@ -61,6 +61,6 @@ function setup_basic_prompt() {
 }
 
 for __FUNCTION in 'shopt' 'variables' 'completion' 'basic_prompt'; do
-  "setup_${__FUNCTION}"
-  unset "setup_${__FUNCTION}"
+  "__hermes__setup_${__FUNCTION}"
+  unset "__hermes__setup_${__FUNCTION}"
 done

@@ -4,7 +4,7 @@
 # sourced by    ${HOME}/.bashrc
 # task          setup up miscellaneous programs when they are installed
 
-function setup_ble() {
+function __hermes__setup_ble() {
   local BLE_SOURCE="${HOME}/.local/share/blesh/ble.sh"
   if [[ -e ${BLE_SOURCE} ]]; then
     local BLE_CONFIG_FILE="${HOME}/.config/bash/ble.sh"
@@ -18,7 +18,7 @@ function setup_ble() {
   fi
 }
 
-function setup_fzf() {
+function __hermes__setup_fzf() {
   if __hermes__command_exists 'fzf'; then
     # shellcheck source=/dev/null
     source "${HOME}/.fzf/shell/completion.bash" 2>/dev/null
@@ -30,7 +30,7 @@ function setup_fzf() {
   fi
 }
 
-function setup_history() {
+function __hermes__setup_history() {
   if __hermes__command_exists 'atuin'; then
     # Atuin automatically hooks into ble.sh if ble.sh has been initialized before!
     # https://docs.atuin.sh/guide/installation/#installing-the-shell-plugin
@@ -44,11 +44,11 @@ function setup_history() {
   fi
 }
 
-function setup_rust() {
+function __hermes__setup_rust() {
   __hermes__command_exists sccache && export RUSTC_WRAPPER='sccache'
 }
 
-function setup_bat() {
+function __hermes__setup_bat() {
   local BAT_NAME='batcat' # use 'bat' on older distributions
   if __hermes__command_exists "${BAT_NAME}"; then
     export MANPAGER="bash -c 'col -bx | ${BAT_NAME} -l man --style=plain --theme=gruvbox-dark'"
@@ -62,7 +62,7 @@ function setup_bat() {
   fi
 }
 
-function setup_zoxide() {
+function __hermes__setup_zoxide() {
   if __hermes__command_exists 'zoxide'; then
     eval "$(zoxide init bash || :)"
     alias cd='z'
@@ -70,7 +70,7 @@ function setup_zoxide() {
   fi
 }
 
-function setup_starship() {
+function __hermes__setup_starship() {
   if __hermes__command_exists 'starship'; then
     STARSHIP_CONFIG="${HOME}/.config/bash/starship.toml"
     if [[ -f ${STARSHIP_CONFIG} ]] && [[ -r ${STARSHIP_CONFIG} ]]; then
@@ -86,6 +86,6 @@ function setup_starship() {
 # The order of initialization is important: the setup for ble has to run
 # before fzf and Atuin
 for __FUNCTION in 'ble' 'fzf' 'history' 'rust' 'bat' 'zoxide' 'starship'; do
-  "setup_${__FUNCTION}"
-  unset "setup_${__FUNCTION}"
+  "__hermes__setup_${__FUNCTION}"
+  unset "__hermes__setup_${__FUNCTION}"
 done
