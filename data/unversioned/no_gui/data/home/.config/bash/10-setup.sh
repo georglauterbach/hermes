@@ -19,12 +19,6 @@ function setup_variables() {
   GPG_TTY=$(tty)
 
   export VISUAL EDITOR PAGER GPG_TTY
-
-  if ! __hermes__command_exists 'ble'; then
-    export HISTCONTROL='ignoreboth'
-    export HISTSIZE=10000
-    export HISTFILESIZE=10000
-  fi
 }
 
 function setup_completion() {

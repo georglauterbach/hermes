@@ -67,6 +67,20 @@ function setup_starship() {
   fi
 }
 
+function setup_history() {
+  if __hermes__command_exists 'atuin'; then
+    # Atuin automatically hooks into ble.sh if ble.sh has been initialized before!
+    # https://docs.atuin.sh/guide/installation/#installing-the-shell-plugin
+    eval "$(atuin init bash || :)"
+  elif __hermes__command_exists 'fzf'; then
+    # shellcheck source=/dev/null
+    source "${HOME}/.fzf/shell/key-bindings.bash"
+    ble-import -d integration/fzf-key-bindings
+  else
+    shopt -s histappend
+    export HISTCONTROL='ignoreboth'
+    export HISTSIZE=10000
+    export HISTFILESIZE=10000
   fi
 }
 
