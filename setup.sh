@@ -153,18 +153,18 @@ function user_setup() {
   fi
   bash "${HOME}/.fzf/install" --key-bindings --completion --no-update-rc --no-zsh --no-fish >/dev/null
 
-  log 'debug' 'Installing zoxide'
-  curl -sSfL 'https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh' | bash
+  log 'debug' 'Installing / updating zoxide'
+  curl -sSfL 'https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh' | bash >/dev/null
 
-  log 'debug' 'Installing gitui'
+  log 'debug' 'Installing / updating gitui'
   curl -sSfL "https://github.com/extrawurst/gitui/releases/download/v0.26.1/gitui-linux-$(uname -m).tar.gz" \
     | tar -xz -C "${HOME}/.local/bin"
 
-  log 'debug' 'Installing Starship'
+  log 'debug' 'Installing / updating Starship'
   curl -sSfL 'https://starship.rs/install.sh' \
     | sh -s -- --bin-dir="${HOME}/.local/bin" --force >/dev/null
 
-  log 'debug' 'Installing Atuin'
+  log 'debug' 'Installing / updating Atuin'
   curl --proto '=https' --tlsv1.2 -LsSf 'https://github.com/atuinsh/atuin/releases/latest/download/atuin-installer.sh' \
     | sh -s -- --quiet --no-modify-path
 
