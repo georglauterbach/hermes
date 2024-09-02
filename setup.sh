@@ -169,6 +169,10 @@ function user_setup() {
   curl -sSfL 'https://starship.rs/install.sh' \
     | sh -s -- --bin-dir="${HOME}/.local/bin" --force >/dev/null
 
+  log 'debug' 'Installing Atuin'
+  curl --proto '=https' --tlsv1.2 -LsSf 'https://github.com/atuinsh/atuin/releases/latest/download/atuin-installer.sh' \
+    | sh -s -- --quiet --no-modify-path
+
   chown -R "${USER}:$(id -g "${USER}")" "${HOME}"
 
   log 'debug' 'To install ble.sh, visit https://github.com/akinomyoga/ble.sh'
