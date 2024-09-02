@@ -39,11 +39,6 @@ if __hermes__command_exists 'btop'; then
   alias htop='btop'
 fi
 
-if __hermes__command_exists 'kubectl'; then
-  alias k='kubectl'
-  complete -o default -F __start_kubectl k
-fi
-
 if __hermes__command_exists 'zellij'; then
   alias tmux='zellij'
 fi

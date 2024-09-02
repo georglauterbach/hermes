@@ -4,8 +4,8 @@
 # sourced by    ${HOME}/.bashrc
 # task          provide Bash's main setup
 
-function setup_misc() {
-  shopt -s histappend checkwinsize globstar autocd
+function setup_shopt() {
+  shopt -s checkwinsize globstar autocd
 }
 
 function setup_variables() {
@@ -41,25 +41,32 @@ function setup_completion() {
       complete -cf doas
       alias sudo='doas'
     fi
+
+    if __hermes__command_exists 'kubectl'; then
+      complete -o default -F __start_kubectl k
+      alias k='kubectl'
+    fi
   fi
 }
 
-function setup_prompt() {
+function setup_basic_prompt() {
   export PROMPT_DIRTRIM=4
 
   # disable blinking cursor (e.g., in TMUX)
   printf '\033[2 q'
 
-  PS2=''  # continuation shell prompt
-  PS4='> ' # `set -x` tracing prompt
+  if ! __hermes__command_exists 'starship'; then
+    PS2=''   # continuation shell prompt
+    PS4='> ' # `set -x` tracing prompt
 
-  if ! __hermes__command_exists 'starship' && [[ -v debian_chroot ]] && [[ -r /etc/debian_chroot ]]; then
-    # shellcheck disable=SC2155
-    export debian_chroot=$(</etc/debian_chroot)
+    if [[ -v debian_chroot ]] && [[ -r /etc/debian_chroot ]]; then
+      # shellcheck disable=SC2155
+      export debian_chroot=$(</etc/debian_chroot)
+    fi
   fi
 }
 
-for __FUNCTION in 'misc' 'path' 'variables' 'completion' 'prompt'; do
+for __FUNCTION in 'shopt' 'variables' 'completion' 'basic_prompt'; do
   "setup_${__FUNCTION}"
   unset "setup_${__FUNCTION}"
 done
