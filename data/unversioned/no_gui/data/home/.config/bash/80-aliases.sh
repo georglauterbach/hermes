@@ -31,10 +31,6 @@ else
   alias g='git diff'
 fi
 
-if __hermes__command_exists 'polybar'; then
-  alias rp='killall polybar && ${HOME}/.config/polybar/launch.sh'
-fi
-
 if __hermes__command_exists 'btop'; then
   alias htop='btop'
 fi
