@@ -65,6 +65,8 @@ function setup_path() {
   local ADDITIONAL_PATH_ENTRIES=(
     "${HOME}/bin"
     "${HOME}/.local/bin"
+    "${HOME}/.atuin/bin"
+    "${HOME}/.fzf/bin"
   )
 
   for ADDITIONAL_PATH_ENTRY in "${ADDITIONAL_PATH_ENTRIES[@]}"; do

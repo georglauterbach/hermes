@@ -19,12 +19,27 @@ function setup_ble() {
 }
 
 function setup_fzf() {
-  if [[ -d ${HOME}/.fzf ]]; then
-    export PATH="${HOME}/.fzf:${PATH}"
-
+  if __hermes__command_exists 'fzf'; then
     # shellcheck source=/dev/null
     source "${HOME}/.fzf/shell/completion.bash" 2>/dev/null
-    [[ -v BLE_VERSION ]] && ble-import -d integration/fzf-completion
+    [[ -v BLE_VERSION ]] && ble-import -d 'integration/fzf-completion'
+  fi
+}
+
+function setup_history() {
+  if __hermes__command_exists 'atuin'; then
+    # Atuin automatically hooks into ble.sh if ble.sh has been initialized before!
+    # https://docs.atuin.sh/guide/installation/#installing-the-shell-plugin
+    eval "$(atuin init bash || :)"
+  elif __hermes__command_exists 'fzf'; then
+    # shellcheck source=/dev/null
+    source "${HOME}/.fzf/shell/key-bindings.bash"
+    ble-import -d integration/fzf-key-bindings
+  else
+    shopt -s histappend
+    export HISTCONTROL='ignoreboth'
+    export HISTSIZE=10000
+    export HISTFILESIZE=10000
   fi
 }
 
@@ -50,7 +65,7 @@ function setup_zoxide() {
   if __hermes__command_exists 'zoxide'; then
     eval "$(zoxide init bash || :)"
     alias cd='z'
-    [[ -v BLE_VERSION ]] && ble-import -f integration/zoxide
+    [[ -v BLE_VERSION ]] && ble-import -f 'integration/zoxide'
   fi
 }
 
@@ -67,24 +82,7 @@ function setup_starship() {
   fi
 }
 
-function setup_history() {
-  if __hermes__command_exists 'atuin'; then
-    # Atuin automatically hooks into ble.sh if ble.sh has been initialized before!
-    # https://docs.atuin.sh/guide/installation/#installing-the-shell-plugin
-    eval "$(atuin init bash || :)"
-  elif __hermes__command_exists 'fzf'; then
-    # shellcheck source=/dev/null
-    source "${HOME}/.fzf/shell/key-bindings.bash"
-    ble-import -d integration/fzf-key-bindings
-  else
-    shopt -s histappend
-    export HISTCONTROL='ignoreboth'
-    export HISTSIZE=10000
-    export HISTFILESIZE=10000
-  fi
-}
-
-for __FUNCTION in 'ble' 'fzf' 'rust' 'bat' 'zoxide' 'starship' 'history'; do
+for __FUNCTION in 'ble' 'fzf' 'history' 'rust' 'bat' 'zoxide' 'starship'; do
   "setup_${__FUNCTION}"
   unset "setup_${__FUNCTION}"
 done
