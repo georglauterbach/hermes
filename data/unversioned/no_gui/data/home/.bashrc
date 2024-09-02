@@ -31,11 +31,6 @@ function bash_setup() {
   load_helper '90-wrapper.sh'
   load_helper '99-custom.sh'
 
-  if __hermes__command_exists 'starship'; then
-    export STARSHIP_CONFIG="${HOME}/.config/bash/starship.toml"
-    eval "$(starship init bash || :)"
-  fi
-
   [[ -v BLE_VERSION ]] && ble-attach
 }
 
