@@ -83,6 +83,8 @@ function setup_starship() {
   fi
 }
 
+# The order of initialization is important: the setup for ble has to run
+# before fzf and Atuin
 for __FUNCTION in 'ble' 'fzf' 'history' 'rust' 'bat' 'zoxide' 'starship'; do
   "setup_${__FUNCTION}"
   unset "setup_${__FUNCTION}"
