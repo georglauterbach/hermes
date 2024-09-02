@@ -27,8 +27,8 @@ function bash_setup() {
   # if not running interactively, don't do anything
   [[ ${-} != *i* ]] && return 0
 
-  load_helper '10-extra_programs.sh'
-  load_helper '30-misc.sh'
+  load_helper '10-misc.sh'
+  load_helper '30-extra_programs.sh'
   load_helper '80-aliases.sh'
   load_helper '90-wrapper.sh'
   load_helper '99-custom.sh'
