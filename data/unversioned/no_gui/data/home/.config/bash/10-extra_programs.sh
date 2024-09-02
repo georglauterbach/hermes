@@ -23,6 +23,10 @@ function setup_fzf() {
     # shellcheck source=/dev/null
     source "${HOME}/.fzf/shell/completion.bash" 2>/dev/null
     [[ -v BLE_VERSION ]] && ble-import -d 'integration/fzf-completion'
+
+    # shellcheck source=/dev/null
+    source "${HOME}/.fzf/shell/key-bindings.bash"
+    ble-import -d integration/fzf-key-bindings
   fi
 }
 
@@ -30,11 +34,8 @@ function setup_history() {
   if __hermes__command_exists 'atuin'; then
     # Atuin automatically hooks into ble.sh if ble.sh has been initialized before!
     # https://docs.atuin.sh/guide/installation/#installing-the-shell-plugin
-    eval "$(atuin init bash || :)"
-  elif __hermes__command_exists 'fzf'; then
-    # shellcheck source=/dev/null
-    source "${HOME}/.fzf/shell/key-bindings.bash"
-    ble-import -d integration/fzf-key-bindings
+    eval "$(atuin init bash --disable-up-arrow --disable-ctrl-r  || :)"
+    bind -x '"\C-e": __atuin_history'
   else
     shopt -s histappend
     export HISTCONTROL='ignoreboth'
