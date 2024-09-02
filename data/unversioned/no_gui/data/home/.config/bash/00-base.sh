@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# version       1.0.0
+# version       1.1.0
 # sourced by    ${HOME}/.bashrc or manually
 # task          this file should be usable even when not
 #               running interactively to provide very basic

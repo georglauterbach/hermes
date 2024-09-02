@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
 
-# version       0.5.0
+# version       1.0.0
 # sourced by    ${HOME}/.bashrc
-# task          provide Bash's main setup
+# task          provide miscellaneous main setup
 
 function setup_shopt() {
   shopt -s checkwinsize globstar autocd

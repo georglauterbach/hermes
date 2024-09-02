@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
 
-# version       0.3.0
+# version       1.0.0
 # sourced by    ${HOME}/.bashrc
-# task          setup up miscellaneous programs if they are installed
+# task          setup up miscellaneous programs when they are installed
 
 function setup_ble() {
   local BLE_SOURCE="${HOME}/.local/share/blesh/ble.sh"
