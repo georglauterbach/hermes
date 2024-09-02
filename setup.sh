@@ -144,19 +144,14 @@ function user_setup() {
   done
 
   mkdir -p "${HOME}/.local/bin"
-  [[ ${PATH} == *${HOME}/.local/bin* ]] || export PATH="${HOME}/.local/bin:${PATH}"
-  [[ ${PATH} == *${HOME}/.fzf/bin* ]] || export PATH="${HOME}/.fzf/bin:${PATH}"
 
-  if command -v 'fzf' &>/dev/null; then
-    log 'debug' "fzf seems to be installed already"
+  log 'debug' 'Installing / updating fzf'
+  if [[ -d ${HOME}/.fzf ]]; then
+    ( cd "${HOME}/.fzf" && git config --global --add safe.directory "${HOME}/.fzf" && git pull --quiet )
   else
-    log 'debug' 'Installing fzf'
-    (
-      git clone --quiet --depth 1 'https://github.com/junegunn/fzf.git' "${HOME}/.fzf"
-      cd "${HOME}"
-      bash '.fzf/install' --key-bindings --completion --no-update-rc --no-zsh --no-fish &>/dev/null
-    )
+    git clone --quiet --depth 1 'https://github.com/junegunn/fzf.git' "${HOME}/.fzf"
   fi
+  bash "${HOME}/.fzf/install" --key-bindings --completion --no-update-rc --no-zsh --no-fish >/dev/null
 
   log 'debug' 'Installing zoxide'
   curl -sSfL 'https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh' | bash
