@@ -8,31 +8,6 @@ function setup_misc() {
   shopt -s histappend checkwinsize globstar autocd
 }
 
-function setup_path() {
-  local PATHS=(
-    "${HOME}/bin"
-    "${HOME}/.local/bin"
-    "${HOME}/.fzf/bin"
-  )
-
-  for LOCAL_PATH in "${PATHS[@]}"; do
-    if [[ -d ${LOCAL_PATH} ]] && [[ ${PATH} != *${LOCAL_PATH}* ]]; then
-      export PATH="${LOCAL_PATH}${PATH:+:${PATH}}"
-    fi
-  done
-
-  local SOURCE_PATHS=(
-    "${HOME}/.cargo/env"
-  )
-
-  for LOCAL_PATH in "${SOURCE_PATHS[@]}"; do
-    # shellcheck source=/dev/null
-    [[ -e ${LOCAL_PATH} ]] && [[ -r ${LOCAL_PATH} ]] && source "${LOCAL_PATH}"
-  done
-
-  return 0
-}
-
 function setup_variables() {
   VISUAL='nano'
   __hermes__command_exists 'vi' && VISUAL='vi'

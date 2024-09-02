@@ -1,22 +1,20 @@
 #! /usr/bin/env bash
 
-# version       0.3.0
-# sourced by    ${HOME}/.bashrc
-# task          set up functions required during setup
+# version       1.0.0
+# sourced by    ${HOME}/.bashrc or manually
+# task          this file should be usable even when not
+#               running interactively to provide very basic
+#               functionality and initialization
 
 function __hermes__is_bash_function() {
   [[ $(type -t "${1:?Name of type to check is required}" || :) == 'function' ]]
 }
 export -f __hermes__is_bash_function
 
-if ! __hermes__is_bash_function '__hermes__command_exists'; then
-  function __hermes__command_exists() {
-    command -v "${1:?Command name is required}" &>/dev/null
-  }
-
-  readonly -f __hermes__command_exists
-  export -f __hermes__command_exists
-fi
+function __hermes__command_exists() {
+  command -v "${1:?Command name is required}" &>/dev/null
+}
+export -f __hermes__command_exists
 
 function __hermes__execute_real_command() {
   local COMMAND DIR FULL_COMMAND
@@ -62,3 +60,33 @@ function __hermes__do_as_root() {
   fi
 }
 export -f __hermes__do_as_root
+
+function setup_path() {
+  local ADDITIONAL_PATH_ENTRIES=(
+    "${HOME}/bin"
+    "${HOME}/.local/bin"
+  )
+
+  for ADDITIONAL_PATH_ENTRY in "${ADDITIONAL_PATH_ENTRIES[@]}"; do
+    if [[ -d ${ADDITIONAL_PATH_ENTRY} ]] && [[ ${PATH} != *${ADDITIONAL_PATH_ENTRY}* ]]; then
+      export PATH="${ADDITIONAL_PATH_ENTRY}${PATH:+:${PATH}}"
+    fi
+  done
+
+  local ADDITIONAL_SOURCE_PATHS=(
+    "${HOME}/.cargo/env"
+    "${HOME}/.atuin/env"
+  )
+
+  for ADDITIONAL_SOURCE_PATH in "${ADDITIONAL_SOURCE_PATHS[@]}"; do
+    if [[ -e ${ADDITIONAL_SOURCE_PATH} ]] && [[ -r ${ADDITIONAL_SOURCE_PATH} ]]; then
+      # shellcheck source=/dev/null
+      source "${ADDITIONAL_SOURCE_PATH}"
+    fi
+  done
+
+  return 0
+}
+
+setup_path
+unset setup_path
