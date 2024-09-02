@@ -1,12 +1,11 @@
 #! /usr/bin/env bash
 
-# shellcheck disable=SC2034
+# shellcheck disable=SC2034,SC2312
 
-set -eE -u
+set -eE -u -o pipefail
 shopt -s inherit_errexit
 
 if [[ ${EUID} -ne 0 ]]; then
-  # shellcheck disable=SC2312
   sudo env -                        \
     USER="${USER}"                  \
     HOME="${HOME}"                  \
