@@ -3,6 +3,7 @@ bat
 btop
 doas
 eza
+gawk
 git
 git-lfs
 gnupg2
