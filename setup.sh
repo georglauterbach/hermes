@@ -6,11 +6,9 @@ set -eE -u -o pipefail
 shopt -s inherit_errexit
 
 if [[ ${EUID} -ne 0 ]]; then
-  sudo env -                        \
-    USER="${USER}"                  \
-    HOME="${HOME}"                  \
-    PATH="${PATH}"                  \
-    LOG_LEVEL="${LOG_LEVEL:-info}"  \
+  sudo env -                                                                             \
+    "USER=${USER:?}" "HOME=${HOME:?}" "PATH=${PATH:?}" "LOG_LEVEL=${LOG_LEVEL:-info}"    \
+    "http_proxy=${http_proxy:-}" "https_proxy=${https_proxy:-}" "no_proxy=${no_proxy:-}" \
     bash "$(realpath -eL "${BASH_SOURCE[0]}")" --assume-correct-invocation "${@}"
 
   exit ${?}
