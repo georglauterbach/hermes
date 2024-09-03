@@ -20,6 +20,7 @@
     "vscode": {
       "extensions": [
         "aaron-bond.better-comments",
+        "asciidoctor.asciidoctor-vscode",
         "bierner.markdown-emoji",
         "bierner.markdown-preview-github-styles",
         "DavidAnson.vscode-markdownlint",
@@ -29,7 +30,10 @@
         "usernamehw.errorlens",
         "xshrim.txt-syntax",
         "yzhang.markdown-all-in-one"
-      ]
+      ],
+      "settings": {
+        "asciidoc.antora.enableAntoraSupport": false
+      }
     }
   }
 }
