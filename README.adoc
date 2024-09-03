@@ -19,6 +19,10 @@ If you want to configure your graphical user interface too, you can use the `--g
 
 You may also use the `--local-installation` flag when you cloned this repository. This flag will causes the setup to be completely local, without requiring an internet connection. Only this repository has to be cloned in its entirety.
 
+== Supplementary Setup Scripts
+
+Under the link:./misc/[`./misc/` directory], you can find additional setup scripts that aid in setting up machines.
+
 == Supplementary Projects
 
 You might want to take a look at the following outstanding projects. Their installation does not yet come with _Hermes_.
