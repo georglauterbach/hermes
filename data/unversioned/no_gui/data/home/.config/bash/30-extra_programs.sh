@@ -31,9 +31,13 @@ function __hermes__setup_fzf() {
 }
 
 function __hermes__setup_history() {
-  if __hermes__command_exists 'atuin'; then
-    # Atuin automatically hooks into ble.sh if ble.sh has been initialized before!
-    # https://docs.atuin.sh/guide/installation/#installing-the-shell-plugin
+  # Using Atuin only works with Bash preexec.sh or ble.sh. When ble.sh has
+  # been initialized before, Atuin will hook into ble.sh. One must not enable
+  # Atuin, though, if ble.sh is not configured (because this may break other
+  # programs, like StarShip).
+  #
+  # ref: https://docs.atuin.sh/guide/installation/#installing-the-shell-plugin
+  if __hermes__command_exists 'atuin' && [[ -n ${BLE_VERSION} ]]; then
     eval "$(atuin init bash --disable-up-arrow --disable-ctrl-r  || :)"
     bind -x '"\C-e": __atuin_history'
   else
