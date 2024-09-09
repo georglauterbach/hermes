@@ -26,7 +26,7 @@ function __hermes__setup_fzf() {
 
     # shellcheck source=/dev/null
     source "${HOME}/.fzf/shell/key-bindings.bash"
-    ble-import -d integration/fzf-key-bindings
+    [[ -v BLE_VERSION ]] && ble-import -d integration/fzf-key-bindings
   fi
 }
 
