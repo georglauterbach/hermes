@@ -42,7 +42,7 @@ done
 unset __LOCALE
 
 echo "INFO  Generating new locales"
-locale-gen
+locale-gen --purge
 
 echo "INFO  Updating new locales"
 update-locale "${NEW_LOCALES[@]}"
