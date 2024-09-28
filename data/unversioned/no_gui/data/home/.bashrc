@@ -28,10 +28,13 @@ function bash_setup() {
   [[ ${-} != *i* ]] && return 0
 
   load_helper '10-misc.sh'
-  load_helper '99-custom.sh'
+  load_helper '20-custom_early.sh'
+
   [[ -v HERMES_LOAD_EXTRA_PROGRAMS ]] && load_helper '30-extra_programs.sh'
   [[ -v HERMES_LOAD_ALIASES ]]        && load_helper '80-aliases.sh'
   [[ -v HERMES_LOAD_WRAPPER ]]        && load_helper '90-wrapper.sh'
+
+  load_helper '99-custom_late.sh'
 
   [[ -v BLE_VERSION ]] && ble-attach
 }

@@ -21,6 +21,16 @@ You may also use the `--local-installation` flag when you cloned this repository
 
 == Additional Optional Setup
 
+[[subsection::custom-console-initialization]]
+=== Custom Console Initialization
+
+This project provides two "hooks" that you may use to adjust the configuration of the console. These hooks are files that are sourced if they exist:
+
+. `${HOME}/.config/bash/20-custom_early.sh`: used for early initialization, when you need to change the configuration that this project loads itself
+. `${HOME}/.config/bash/90-custom_late.sh`: used for custom configurations that you want to supply on top of this project
+
+We recommend using the latter, and only fall back to the former in case you need to adjust the configuration that this project loads.
+
 === Loading the Full Console Configuration
 
 By default, this project does not load the full configuration of the shell. You can individually add more configuration by setting the following environment variables:
