@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# version       1.0.0
+# version       1.1.0
 # sourced by    ${HOME}/.bashrc
 # task          provide miscellaneous main setup
 
@@ -17,8 +17,9 @@ function __hermes__setup_variables() {
   EDITOR=${VISUAL}
   PAGER="$(command -v less) -R"
   GPG_TTY=$(tty)
+  HERMES_LOADED=true
 
-  export VISUAL EDITOR PAGER GPG_TTY
+  export VISUAL EDITOR PAGER GPG_TTY HERMES_LOADED
 }
 
 function __hermes__setup_completion() {
