@@ -26,12 +26,12 @@ Additonally, you can specify a version with `--version <GIT TAG>` to download an
 [[subsection::custom-console-initialization]]
 === Custom Console Initialization
 
-This project provides two "hooks" that you may use to adjust the configuration of the console. These hooks are files that are sourced if they exist:
+This project provides two "hooks" that you may use to adjust the configuration of the console. These hooks are files that are sourced during the setup process in `${HOME}/.bashrc`. You have two ways of running these hook.
 
-. `${HOME}/.config/bash/20-custom_early.sh`: used for early initialization, when you need to change the configuration that this project loads itself
-. `${HOME}/.config/bash/90-custom_late.sh`: used for custom configurations that you want to supply on top of this project
+. You can either define the environment variables `HERMES_CUSTOM_EARLY_SCRIPT` and `HERMES_CUSTOM_LATE_SCRIPT` that contain the path to the files you want to source.
+. You can use `${HOME}/.config/bash/20-custom_early.sh` and `${HOME}/.config/bash/99-custom_late.sh` as these paths are the default paths.
 
-We recommend using the latter, and only fall back to the former in case you need to adjust the configuration that this project loads.
+You should only use the early initialization when you need to change the configuration that this project loads itself. The late configuration is recommended and used when you want to supply configuration on top of this project.
 
 === Loading the Full Console Configuration
 
