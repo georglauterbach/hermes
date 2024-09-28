@@ -19,6 +19,29 @@ if [[ ${*} != *--assume-correct-invocation* ]]; then
   exit 1
 fi
 
+function parse_command_line_arguments() {
+  while [[ ${#} -gt 0 ]]; do
+    case ${1:-} in
+      ( '--gui' | '-g' )                     GUI=1                    ;;
+      ( '--local-installation' | '-l' )      LOCAL_INSTALLATION=1     ;;
+      ( '--assume-data-is-correct'  | '-a' ) ASSUME_DATA_IS_CORRECT=1 ;;
+      ( '--assume-correct-invocation' )                               ;;
+
+      ( '--version' | '-v' )
+        export HERMES_VERSION=${2:?Version is required when using --version}
+        shift 1
+        ;;
+
+      ( * )
+        echo "ERROR: Unknown argument '${1:-}'" >&2
+        exit 1
+        ;;
+    esac
+
+    shift 1
+  done
+}
+
 function parse_file() {
   local GREP_PATTERN='^\s*$|^\s*#'
   if [[ ${1:?Remote or local is required} == 'remote' ]]; then
@@ -53,25 +76,13 @@ function preflight_checks() {
       exit 1
     fi
   fi
+
+  if [[ ${HERMES_VERSION} != 'main' ]] && [[ ${LOCAL_INSTALLATION} -eq 1 ]]; then
+    log 'error' "Specifying a version and local installation does not make sense - aborting"
+    exit 1
+  fi
 }
 
-function parse_command_line_arguments() {
-  while [[ ${#} -gt 0 ]]; do
-    case ${1:-} in
-      ( '--gui' | '-g' )                     GUI=1                    ;;
-      ( '--local-installation' | '-l' )      LOCAL_INSTALLATION=1     ;;
-      ( '--assume-data-is-correct'  | '-a' ) ASSUME_DATA_IS_CORRECT=1 ;;
-      ( '--assume-correct-invocation' )                               ;;
-
-      ( * )
-        echo "ERROR: Unknown argument '${1:-}'" >&2
-        exit 1
-        ;;
-    esac
-
-    shift 1
-  done
-}
 
 function root_setup() {
   log 'info' 'Starting root setup'
@@ -173,22 +184,26 @@ function user_setup() {
 }
 
 function main() {
-  # in case `grep` is aliased to `rg`
-  unset grep
-
   SCRIPT_DIR="$(realpath -eL "$(dirname "${BASH_SOURCE[0]}")")"
-  GITHUB_RAW_URI='https://raw.githubusercontent.com/georglauterbach/hermes/main'
-  readonly SCRIPT_DIR GITHUB_RAW_URI
+  GITHUB_RAW_URI='https://raw.githubusercontent.com/georglauterbach/hermes'
 
   GUI=0
   LOCAL_INSTALLATION=0
   ASSUME_DATA_IS_CORRECT=0
+  HERMES_VERSION=main
+  unset grep || : # in case `grep` is aliased to `rg`
+  parse_command_line_arguments "${@}"
+
+  if [[ ${HERMES_VERSION} == 'main' ]]; then
+    GITHUB_RAW_URI+='/main'
+  else
+    GITHUB_RAW_URI+='/refs/tags/2.0.0'
+  fi
+
+  readonly SCRIPT_DIR GITHUB_RAW_URI GUI LOCAL_INSTALLATION SCRIPT_DIR
 
   source /etc/os-release
   readonly VERSION VERSION_ID
-
-  parse_command_line_arguments "${@}"
-  readonly GUI LOCAL_INSTALLATION
 
   if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
     # shellcheck source=/dev/null
