@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# version       0.3.0
+# version       0.3.1
 # sourced by    ${HOME}/.bashrc
 # task          configure Bash aliases
 
@@ -12,9 +12,9 @@ alias gcs='git commit'
 
 # `EDITOR` is defined in `10-setup.sh`
 # shellcheck disable=SC2139,SC2154
-alias v="${EDITOR}"
+alias v="${EDITOR:-vi}"
 # shellcheck disable=SC2139
-alias sv="sudo ${EDITOR}"
+alias sv="sudo ${EDITOR:-vi}"
 
 alias ..='cd ..'
 alias ...='cd ../..'
