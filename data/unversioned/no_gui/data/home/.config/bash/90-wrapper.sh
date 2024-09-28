@@ -15,7 +15,7 @@ function ls() {
 
 function cat() {
   if __hermes__command_exists 'batcat'; then
-    batcat --theme="gruvbox-dark" --paging=never --italic-text=always "${@}"
+    batcat --theme="gruvbox-dark" --paging=never --style=plain --italic-text=always "${@}"
   else
     __hermes__execute_real_command 'cat' "${@}"
   fi
