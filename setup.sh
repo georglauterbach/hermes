@@ -20,10 +20,11 @@ if [[ ${*} != *--assume-correct-invocation* ]]; then
 fi
 
 function parse_file() {
+  local GREP_PATTERN='^\s*$|^\s*#'
   if [[ ${1:?Remote or local is required} == 'remote' ]]; then
-    curl -sSfL "${2:?This is a bug! URI to download is required}" | grep -E -v "^\s*$|^\s*#" || :
+    curl -sSfL "${2:?This is a bug! URI to download is required}" | grep -E -v "${GREP_PATTERN}" || :
   elif [[ ${1} == 'local' ]]; then
-    grep -E -v "^\s*$|^\s*#" "${2:?This is a bug! File path to search for is required}" || :
+    grep -E -v "${GREP_PATTERN}" "${2:?This is a bug! File path to search for is required}" || :
   else
     log 'error' "This is a bug! Location '${2:-}' is not supported (use 'remote' or 'local')"
     exit 1
