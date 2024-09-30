@@ -18,14 +18,15 @@ function bash_setup() {
   local SETUP_FILE_PREFIX="${HOME}/.config/bash"
 
   function load_script() {
+    local SCRIPT_FILE=${1:?Path to script to load is required}
     # shellcheck source=/dev/null
-    source "${1:?Path to script to load is required}"
+    [[ -e ${SCRIPT_FILE} ]] && [[ -r ${SCRIPT_FILE} ]] && source "${SCRIPT_FILE}"
+    return 0
   }
 
   function load_helper() {
-    local SETUP_FILE="${SETUP_FILE_PREFIX}/${1}"
-    [[ -e ${SETUP_FILE} ]] && [[ -r ${SETUP_FILE} ]] && load_script "${SETUP_FILE}"
-    return 0
+    local HELPER_SCRIPT_FILE="${SETUP_FILE_PREFIX}/${1}"
+    load_script "${HELPER_SCRIPT_FILE}"
   }
 
   load_helper '00-base.sh'
