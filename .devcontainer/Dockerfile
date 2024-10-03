@@ -7,7 +7,7 @@ RUN <<EOM
   export DEBCONF_NONINTERACTIVE_SEEN=true
   apt-get --yes update
   # we require git and gnupg2 to make the Dev Container work properly
-  apt-get --yes install curl doas git gnupg2
+  apt-get --yes install curl doas git gnupg2 locales
 EOM
 
 RUN <<EOM
