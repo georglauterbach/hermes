@@ -8,4 +8,3 @@ sudo bash -c "${SUDO_CMD}"
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 echo "Restart you machine for changes to take effect"
-
