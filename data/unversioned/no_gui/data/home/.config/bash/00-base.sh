@@ -1,77 +1,50 @@
 #! /usr/bin/env bash
 
-# version       1.1.0
+# version       2.0.0
 # sourced by    ${HOME}/.bashrc or manually
 # task          this file should be usable even when not
 #               running interactively to provide very basic
 #               functionality and initialization
 
-function __hermes__is_bash_function() {
+function __is_function() {
   [[ $(type -t "${1:?Name of type to check is required}" || :) == 'function' ]]
-}
-export -f __hermes__is_bash_function
+}; export -f __is_function
 
-function __hermes__command_exists() {
+function __is_command() {
   command -v "${1:?Command name is required}" &>/dev/null
-}
-export -f __hermes__command_exists
+}; export -f __is_command
 
-function __hermes__execute_real_command() {
-  local COMMAND DIR FULL_COMMAND
-  COMMAND=${1:?Command name required}
-  shift 1
-
-  for DIR in ${PATH//:/ }; do
-    FULL_COMMAND="${DIR}/${COMMAND}"
-    [[ -x ${FULL_COMMAND} ]] && { ${FULL_COMMAND} "${@}" ; return ${?} ; }
-  done
-
-  echo "Command '${COMMAND}' not found" >&2
-  return 1
-}
-export -f __hermes__execute_real_command
-
-# shellcheck disable=SC2120
-function __hermes__declare_helpers() {
-  local FUNCTIONS=('__hermes__do_as_root' '__hermes__command_exists' '__hermes__is_bash_function' '__hermes__execute_real_command')
-  [[ ${#} -gt 0 ]] && FUNCTIONS+=("${@}")
-  declare -f "${FUNCTIONS[@]}"
-}
-export -f __hermes__declare_helpers
-
-function __hermes__do_as_root() {
+function __do_as_root() {
   local SU_COMMAND=${SU_COMMAND:-}
 
   if [[ -n ${SU_COMMAND} ]]; then
     :
-  elif __hermes__command_exists 'doas'; then
+  elif __is_command 'doas'; then
     SU_COMMAND='doas'
-  elif __hermes__command_exists 'sudo'; then
+  elif __is_command 'sudo'; then
     SU_COMMAND='sudo'
   else
-    echo 'Could not find program to execute command as root'
+    echo 'Could not find program to execute command as root' >&2
     return 1
   fi
 
-  if __hermes__is_bash_function "${1:?Command is required}"; then
-    ${SU_COMMAND} bash -c "$(__hermes__declare_helpers || :) ; ${*}"
+  if __is_function "${1:?Command is required}"; then
+    ${SU_COMMAND} bash -c "$(declare -f '__do_as_root' '__is_command' '__is_function' || :) ; ${*}"
   else
     ${SU_COMMAND} "${@}"
   fi
-}
-export -f __hermes__do_as_root
+}; export -f __do_as_root
 
 function __hermes__setup_path() {
   local ADDITIONAL_PATH_ENTRIES=(
     "${HOME}/bin"
     "${HOME}/.local/bin"
-    "${HOME}/.atuin/bin"
     "${HOME}/.fzf/bin"
   )
 
   for ADDITIONAL_PATH_ENTRY in "${ADDITIONAL_PATH_ENTRIES[@]}"; do
     if [[ -d ${ADDITIONAL_PATH_ENTRY} ]] && [[ ${PATH} != *${ADDITIONAL_PATH_ENTRY}* ]]; then
-      export PATH="${ADDITIONAL_PATH_ENTRY}${PATH:+:${PATH}}"
+      export PATH="${ADDITIONAL_PATH_ENTRY}${PATH+:${PATH}}"
     fi
   done
 

@@ -105,7 +105,7 @@ ble-face "command_builtin_dot=fg=${green}"       # :
 ble-face "argument_option=fg=${yellow}"          # flags
 ble-face "command_keyword=fg=${orange}"          # function, while, for, do, etc.
 ble-face "syntax_delimiter=fg=${orange}"         # ;, (), etc.
-ble-face "syntax_history_expansion=fg=${orange}" # !!
+ble-face "syntax_history_expansion=fg=${orange}" # = !!
 
 ble-face "filename_character=fg=${fg1}"          # normal file names
 ble-face "filename_ls_colors=fg=${fg1}"          # normal file names

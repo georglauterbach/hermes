@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# version       1.1.0
+# version       1.2.0
 # sourced by    ${HOME}/.bashrc
 # task          provide miscellaneous main setup
 
@@ -10,9 +10,10 @@ function __hermes__setup_shopt() {
 
 function __hermes__setup_variables() {
   VISUAL='nano'
-  __hermes__command_exists 'vi' && VISUAL='vi'
-  __hermes__command_exists 'vim' && VISUAL='vim'
-  __hermes__command_exists 'nvim' && VISUAL='nvim'
+  if   __is_command 'nvim'; then VISUAL='nvim'
+  elif __is_command 'vim' ; then VISUAL='vim'
+  elif __is_command 'vi'  ; then VISUAL='vi'
+  fi
 
   EDITOR=${VISUAL}
   PAGER="$(command -v less) -R"
@@ -31,16 +32,6 @@ function __hermes__setup_completion() {
       # shellcheck source=/dev/null
       source /etc/bash_completion
     fi
-
-    if __hermes__command_exists 'doas'; then
-      complete -cf doas
-      alias sudo='doas'
-    fi
-
-    if __hermes__command_exists 'kubectl'; then
-      complete -o default -F __start_kubectl k
-      alias k='kubectl'
-    fi
   fi
 }
 
@@ -50,7 +41,7 @@ function __hermes__setup_basic_prompt() {
   # disable blinking cursor (e.g., in TMUX)
   printf '\033[2 q'
 
-  if ! __hermes__command_exists 'starship'; then
+  if ! __is_command 'starship'; then
     PS2=''   # continuation shell prompt
     PS4='> ' # `set -x` tracing prompt
 
@@ -62,6 +53,6 @@ function __hermes__setup_basic_prompt() {
 }
 
 for __FUNCTION in 'shopt' 'variables' 'completion' 'basic_prompt'; do
-  "__hermes__setup_${__FUNCTION}"
+  "__hermes__setup_${__FUNCTION}" || :
   unset "__hermes__setup_${__FUNCTION}"
 done
