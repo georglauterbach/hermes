@@ -197,7 +197,7 @@ function main() {
   if [[ ${HERMES_VERSION} == 'main' ]]; then
     GITHUB_RAW_URI+='/main'
   else
-    GITHUB_RAW_URI+='/refs/tags/2.0.0'
+    GITHUB_RAW_URI+="/refs/tags/${HERMES_VERSION}"
   fi
 
   readonly SCRIPT_DIR GITHUB_RAW_URI GUI LOCAL_INSTALLATION SCRIPT_DIR
@@ -208,7 +208,7 @@ function main() {
   if [[ ${LOCAL_INSTALLATION} -eq 0 ]]; then
     # shellcheck source=/dev/null
     source <(curl -qsSfL https://raw.githubusercontent.com/georglauterbach/libbash/main/load) \
-      --online '7.0.0' 'log' 'errors'
+      --online '8.0.0' 'log' 'errors'
   else
     function log() {
       printf "%s %-5s %s: %s\n" \
