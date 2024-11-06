@@ -243,11 +243,9 @@ function main() {
     fi
   fi
 
-  # set -x
-
-  local LOCATIONS=('data/unversioned/no_gui' "data/versioned/${VERSION_ID}/no_gui")
+  local LOCATIONS=('data/unversioned' "data/versioned/${VERSION_ID}/no_gui")
   if [[ ${GUI} -eq 1 ]]; then
-    LOCATIONS+=('data/unversioned/gui' "data/versioned/${VERSION_ID}/gui")
+    LOCATIONS+=("data/versioned/${VERSION_ID}/gui")
   fi
 
   # We parse all index files into associative arrays so we can handle them later.
