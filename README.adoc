@@ -37,9 +37,9 @@ You should only use the early initialization when you need to change the configu
 
 By default, this project does not load the full configuration of the shell. You can individually add more configuration by setting the value of the following environment variables to `true`:
 
-. `HERMES_LOAD_EXTRA_PROGRAMS` to load the configuration of programs listed link:./data/unversioned/no_gui/data/home/.config/bash/30-extra_programs.sh[here]
-. `HERMES_LOAD_ALIASES` to load aliases define link:./data/unversioned/no_gui/data/home/.config/bash/80-aliases.sh[here]
-. `HERMES_LOAD_WRAPPER` to load wrappers, e.g. for `ls`, `cat`, `grep`, defined link:./data/unversioned/no_gui/data/home/.config/bash/90-wrapper.sh[here]
+. `HERMES_LOAD_EXTRA_PROGRAMS` to load the configuration of programs listed link:./data/unversioned/data/home/.config/bash/30-extra_programs.sh[here]
+. `HERMES_LOAD_ALIASES` to load aliases define link:./data/unversioned/data/home/.config/bash/80-aliases.sh[here]
+. `HERMES_LOAD_WRAPPER` to load wrappers, e.g. for `ls`, `cat`, `grep`, defined link:./data/unversioned/data/home/.config/bash/90-wrapper.sh[here]
 
 Where you define these variables does not matter; we need access to them when `.bashrc` is souced. You may optionally also `export` them in the <<subsection::custom-console-initialization,early init script>>.
 
