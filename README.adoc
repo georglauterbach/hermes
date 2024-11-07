@@ -21,7 +21,7 @@ You may also use the `--local-installation` flag when you cloned this repository
 
 Additonally, you can specify a version with `--version <GIT TAG>` to download and use a specific version. This feature is mutually exclusive with `--local-installation` and throws an error when used together.
 
-== Additional Optional Setup
+== Optional Additional Setup
 
 [[subsection::custom-console-initialization]]
 === Custom Console Initialization
