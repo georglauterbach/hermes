@@ -95,5 +95,6 @@ local configuration_options = {
   smartindent = true, shiftwidth = 2, tabstop = 2, expandtab = true,
   wrap = false,
   scrolloff = 8, sidescrolloff = 8,
+  termguicolors = true
 }
 for option_name, option_value in pairs(configuration_options) do vim.opt[option_name] = option_value end
