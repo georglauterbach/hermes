@@ -1,0 +1,45 @@
+{
+  "name": "development",
+  "image": "ghcr.io/georglauterbach/dev-container-base:3.0.0",
+  "features": {
+    "ghcr.io/georglauterbach/dev-container-features/rust:5.3.2": {
+      "system.packages.additional-packages": "pkg-config,musl-tools",
+      "linker.mold.install": "true"
+    }
+  },
+  "updateRemoteUserUID": true,
+  "remoteUser": "ubuntu",
+  "containerUser": "ubuntu",
+  "containerEnv": {
+    "CARGO_TARGET_DIR": "${containerWorkspaceFolder}/code/target",
+    "CARGO_HOME": "${containerWorkspaceFolder}/code/.rust/cargo/home",
+    "RUSTUP_HOME": "${containerWorkspaceFolder}/code/.rust/rustup",
+    "HERMES_LOAD_WRAPPER": "true"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "aaron-bond.better-comments",
+        "asciidoctor.asciidoctor-vscode",
+        "EditorConfig.EditorConfig",
+        "mads-hartmann.bash-ide-vscode",
+        "timonwong.shellcheck",
+        "usernamehw.errorlens",
+        "xshrim.txt-syntax"
+      ],
+      "settings": {
+        // * basics
+        "files.watcherExclude": {
+          "**/.git/objects/**": true,
+          "code/.rust/**": true
+        },
+        "files.exclude": {
+          "**/.git": true,
+          "code/.rust": true
+        },
+        // * extensions::asciidoctor.asciidoctor-vscode
+        "asciidoc.antora.showEnableAntoraPrompt": false
+      }
+    }
+  }
+}

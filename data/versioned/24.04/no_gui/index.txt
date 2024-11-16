@@ -1,9 +1,0 @@
-# Default APT sources
-data/versioned/24.04/no_gui/data/other/apt/sources.list            /etc/apt/sources.list
-data/versioned/24.04/no_gui/data/other/apt/ubuntu.sources          /etc/apt/sources.list.d/ubuntu.sources
-
-# Custom PPAs
-data/versioned/24.04/no_gui/data/other/apt/eza.sources             /etc/apt/sources.list.d/eza.sources
-data/versioned/24.04/no_gui/data/other/apt/flatpak.sources         /etc/apt/sources.list.d/flatpak.sources
-data/versioned/24.04/no_gui/data/other/apt/git-core.sources        /etc/apt/sources.list.d/git-core.sources
-data/versioned/24.04/no_gui/data/other/apt/neovim-unstable.sources /etc/apt/sources.list.d/neovim-unstable.sources
