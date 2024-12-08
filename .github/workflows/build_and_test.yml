@@ -71,6 +71,7 @@ jobs:
           configFile: .devcontainer/development/devcontainer.json
           runCmd: |
             export CC=aarch64-linux-gnu-gcc
+            apt-get --yes --quiet install gcc-multilib gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
             cd code
             cargo build  --quiet --release --target aarch64-unknown-linux-musl
 
@@ -96,12 +97,10 @@ jobs:
 
       - name: Prepare Binaries
         run: |
-          cp \
-            target/x86_64-unknown-linux-musl/release/hermes \
+          cp target/x86_64-unknown-linux-musl/release/hermes \
             target/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
 
-          cp \
-            target/aarch64-unknown-linux-musl/release/hermes
+          cp target/aarch64-unknown-linux-musl/release/hermes \
             target/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
 
       - name: Release

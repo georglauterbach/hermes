@@ -3,7 +3,7 @@
   "image": "ghcr.io/georglauterbach/dev-container-base:3.0.0",
   "features": {
     "ghcr.io/georglauterbach/dev-container-features/rust:5.3.2": {
-      "system.packages.additional-packages": "file,pkg-config,musl-tools,gcc-aarch64-linux-gnu,binutils-aarch64-linux-gnu",
+      "system.packages.additional-packages": "file,pkg-config,musl-tools",
       "linker.mold.install": "true"
     }
   },
