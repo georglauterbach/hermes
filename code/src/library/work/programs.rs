@@ -27,13 +27,13 @@ pub(super) async fn download_custom_programs() -> ::anyhow::Result<()> {
         &environment::home_and(".local"),
         environment::uid(),
         environment::gid(),
-        0o644,
+        0o755,
     )?;
     fs::adjust_permissions(
         &environment::home_and(".local/bin"),
         environment::uid(),
         environment::gid(),
-        0o644,
+        0o755,
     )?;
 
     let mut error_occured = false;

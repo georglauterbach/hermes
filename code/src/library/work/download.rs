@@ -17,9 +17,6 @@ pub(super) async fn download_file(uri: impl AsRef<str> + Send) -> ::anyhow::Resu
 }
 
 /// Uses [`download_file`] to download a file and writes it to a local path.
-///
-/// This methods adjusts permissions of the file to be `0o644` and sets the owner
-/// to the current user.
 pub(super) async fn download_and_place(uri: String, local_path: String) -> ::anyhow::Result<()> {
     let response = download_file(&uri).await?;
 

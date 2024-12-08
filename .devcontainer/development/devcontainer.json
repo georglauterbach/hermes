@@ -1,9 +1,9 @@
 {
   "name": "development",
-  "image": "ghcr.io/georglauterbach/dev-container-base:3.0.0",
+  "image": "ghcr.io/georglauterbach/dev-container-base:3.0.1",
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/rust:5.3.4": {
-      "system.packages.additional-packages": "file,pkg-config,musl-tools",
+    "ghcr.io/georglauterbach/dev-container-features/rust:5.3.5": {
+      "system.packages.additional-packages": "pkg-config,musl-tools",
       "linker.mold.install": "true"
     }
   },
