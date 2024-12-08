@@ -33,21 +33,20 @@ pub fn adjust_permissions(
 
 /// Crate the parent directory of a file or directory.
 pub async fn create_parent_dir(
-    directory: impl AsRef<async_std::path::Path>,
+    directory: &String,
 ) -> ::anyhow::Result<::async_std::path::PathBuf> {
-    let directory = directory.as_ref();
-
     let Some(parent_dir) = ::async_std::path::Path::new(directory).parent() else {
         anyhow::bail!("Could not get parent directory of '{directory:?}'");
     };
 
+    let parent_dir = parent_dir.to_owned();
     if !parent_dir.exists().await {
-        ::async_std::fs::create_dir_all(parent_dir)
+        ::async_std::fs::create_dir_all(&parent_dir)
             .await
             .context(format!(
                 "Could not create parent directory '{parent_dir:?}'"
             ))?;
     }
 
-    Ok(parent_dir.to_owned())
+    Ok(parent_dir)
 }

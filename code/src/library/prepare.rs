@@ -269,10 +269,7 @@ pub mod environment {
     /// #### Panics
     #[must_use]
     pub fn home_and(join: impl AsRef<str>) -> String {
-        format!(
-            "{}",
-            home().join(join.as_ref()).to_string_lossy()
-        )
+        format!("{}", home().join(join.as_ref()).to_string_lossy())
     }
 
     /// TODO

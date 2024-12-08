@@ -23,6 +23,7 @@ impl clap::ValueEnum for UbuntuVersion {
     }
 
     fn from_str(input: &str, _: bool) -> Result<Self, String> {
+        #[allow(clippy::single_match_else)]
         match input {
             "24.04" => Ok(Self::Ubuntu24_04),
             _ => {

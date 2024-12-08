@@ -46,8 +46,7 @@ pub(super) async fn download_and_place_configuration_files(
         let log_prefix = format!("{log_prefix}: {local_path}: ");
 
         let local_path = local_path.replace('~', &environment::home_str());
-        let canonical_local_path = match path::absolute(path::Path::new(&local_path))
-        {
+        let canonical_local_path = match path::absolute(path::Path::new(&local_path)) {
             Ok(path) => path,
             Err(error) => {
                 success = false;

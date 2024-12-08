@@ -75,31 +75,31 @@ async fn prepare_apt() -> ::anyhow::Result<()> {
         ::anyhow::bail!("Could not update packages with APT");
     }
 
-    ::log::debug!("Upgrading APT packages");
-    if !::async_std::process::Command::new("apt-get")
-        .args(["--yes", "upgrade"])
-        .stdout(::std::process::Stdio::null())
-        .stderr(::std::process::Stdio::inherit())
-        .output()
-        .await?
-        .status
-        .success()
-    {
-        ::anyhow::bail!("Could not upgrade packages with APT");
-    }
+    //::log::debug!("Upgrading APT packages");
+    //if !::async_std::process::Command::new("apt-get")
+    //    .args(["--yes", "upgrade"])
+    //    .stdout(::std::process::Stdio::null())
+    //    .stderr(::std::process::Stdio::inherit())
+    //    .output()
+    //    .await?
+    //    .status
+    //    .success()
+    //{
+    //    ::anyhow::bail!("Could not upgrade packages with APT");
+    //}
 
-    ::log::debug!("Auto-removing unnecessary packages");
-    if !::async_std::process::Command::new("apt-get")
-        .args(["--yes", "autoremove"])
-        .stdout(::std::process::Stdio::null())
-        .stderr(::std::process::Stdio::inherit())
-        .output()
-        .await?
-        .status
-        .success()
-    {
-        ::anyhow::bail!("Could not update packages with APT");
-    }
+    //::log::debug!("Auto-removing unnecessary packages");
+    //if !::async_std::process::Command::new("apt-get")
+    //    .args(["--yes", "autoremove"])
+    //    .stdout(::std::process::Stdio::null())
+    //    .stderr(::std::process::Stdio::inherit())
+    //    .output()
+    //    .await?
+    //    .status
+    //    .success()
+    //{
+    //    ::anyhow::bail!("Could not update packages with APT");
+    //}
 
     Ok(())
 }

@@ -10,7 +10,13 @@ pub struct Fallback;
 
 impl super::UbuntuVersion for Fallback {
     fn base_packages(&self) -> PackageIndex {
-        &["gnupg2", "openssh-client", "pinentry-curses", "vim", "xz-utils"]
+        &[
+            "gnupg2",
+            "openssh-client",
+            "pinentry-curses",
+            "vim",
+            "xz-utils",
+        ]
     }
 
     fn apt_index(&self) -> ConfigurationFileIndex {
