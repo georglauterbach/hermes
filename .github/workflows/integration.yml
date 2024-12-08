@@ -7,6 +7,7 @@ on:
   push:
     branches: [ main ]
     paths: [ code/**, .github/** ]
+    tags: [ '*.*.*' ]
   pull_request:
     branches: [ '**' ]
     paths: [ code/**, .github/** ]
