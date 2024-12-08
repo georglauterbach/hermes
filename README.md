@@ -8,6 +8,9 @@ _hermes_ configures _Ubuntu_ by installing various packages and (re-)placing con
 
 ## Usage
 
+> [!NOTE]
+> While optional, I recommend running `sudo apt-get --yes --quiet=2 update && sudo apt-get --yes --quiet=2 upgrade` before using _hermes_.
+
 Go to [the latest release](https://github.com/georglauterbach/hermes/releases/latest) and note the version number. Then run
 
 ```console
@@ -18,9 +21,6 @@ $ sudo curl --silent --show-error --fail --location --output /usr/local/bin/herm
 $ chmod +x /usr/local/bin/hermes
 $ /usr/local/bin/hermes --help
 ```
-
-> [!NOTE]
-> While optional, I recommend running `sudo apt-get --yes --quiet=2 update && sudo apt-get --yes --quiet=2 upgrade` before using _hermes_.
 
 > [!CAUTION]
 > _hermes_ overwrites files like `.bashrc`. You should make a backup of your configuration files before running _hermes_. You can later re-introduce the code from your `.bashrc` into a new file \[[1](#bash)\].
