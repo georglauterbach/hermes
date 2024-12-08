@@ -14,7 +14,7 @@ defaults:
     shell: bash
 
 env:
-  RUSTUP_HOME: ${{ github.workspace }}/code/target/rustup/home
+  RUSTUP_HOME: target/rustup/home
 
 jobs:
   build_x86_64:
@@ -71,9 +71,9 @@ jobs:
           configFile: .devcontainer/development/devcontainer.json
           runCmd: |
             export CC=aarch64-linux-gnu-gcc
-            apt-get --yes --quiet install gcc-multilib gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
+            sudo apt-get --yes --quiet install gcc-multilib gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
             cd code
-            cargo build  --quiet --release --target aarch64-unknown-linux-musl
+            cargo build --quiet --release --target aarch64-unknown-linux-musl
 
   publish:
     name: Publish
