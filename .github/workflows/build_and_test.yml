@@ -14,6 +14,7 @@ defaults:
     shell: bash
 
 env:
+  CARGO_HOME: target/cargo/home
   RUSTUP_HOME: target/rustup/home
 
 jobs:
@@ -70,9 +71,11 @@ jobs:
           push: never
           configFile: .devcontainer/development/devcontainer.json
           runCmd: |
-            export CC=aarch64-linux-gnu-gcc
-            sudo apt-get --yes --quiet install gcc-multilib gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
+            sudo apt-get --yes --quiet=2 update
+            sudo apt-get --yes --quiet=2 install gcc-multilib gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
+
             cd code
+            export CC=aarch64-linux-gnu-gcc
             cargo build --quiet --release --target aarch64-unknown-linux-musl
 
   publish:
