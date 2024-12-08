@@ -71,8 +71,8 @@ jobs:
           push: never
           configFile: .devcontainer/development/devcontainer.json
           runCmd: |
-            sudo apt-get --yes --quiet=2 update
-            sudo apt-get --yes --quiet=2 install gcc-multilib gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
+            sudo apt-get --yes update
+            sudo apt-get --yes install gcc-multilib gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
 
             cd code
             export CC=aarch64-linux-gnu-gcc
