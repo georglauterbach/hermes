@@ -10,8 +10,7 @@ mod ubuntu_24_04;
 /// GUI-related configuration, etc. for a specific version of Ubuntu.
 pub trait UbuntuVersion: Send + Sync {
     /// The base set of packages that is to be installed for this version of Ubuntu.
-    /// Extends an already existing set of packages that will always be installed, see
-    /// [`super::super::work::implementations::cswa`].
+    /// Extends an already existing set of packages that will always be installed.
     fn base_packages(&self) -> super::PackageIndex;
 
     /// A list of extra APT source files that are to be installed for this version of Ubuntu.
