@@ -45,6 +45,7 @@ codegen-units = 2
 incremental = true
 lto = true
 overflow-checks = true
+strip = true
 
 [lints]
 

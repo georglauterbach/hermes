@@ -35,10 +35,11 @@ jobs:
           key: github.ref
 
       - name: Build and Test
-        uses: devcontainers/ci@v0.3
+        uses: devcontainers/ci@main
         with:
           push: never
           configFile: .devcontainer/development/devcontainer.json
+          inheritEnv: true
           runCmd: |
             cd code
             cargo fmt    --quiet -- --check
@@ -66,16 +67,16 @@ jobs:
           key: github.ref
 
       - name: Build
-        uses: devcontainers/ci@v0.3
+        uses: devcontainers/ci@main
         with:
           push: never
           configFile: .devcontainer/development/devcontainer.json
+          inheritEnv: true
           runCmd: |
-            sudo apt-get --yes update
-            sudo apt-get --yes install gcc-multilib gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
+            sudo apt-get --yes --quiet=2 update
+            sudo apt-get --yes install gcc gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
 
             cd code
-            export CC=aarch64-linux-gnu-gcc
             cargo build --quiet --release --target aarch64-unknown-linux-musl
 
   publish:
