@@ -1,6 +1,11 @@
 version: 2
 
 updates:
+  - package-ecosystem: cargo
+    directory: code/
+    schedule:
+      interval: monthly
+
   - package-ecosystem: devcontainers
     directory: /
     schedule:

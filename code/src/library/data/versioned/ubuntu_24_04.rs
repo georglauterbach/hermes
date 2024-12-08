@@ -12,6 +12,7 @@ impl super::UbuntuVersion for Ubuntu24_04 {
             "doas",
             "gnupg2",
             "make",
+            "neovim",
             "openssh-client",
             "pinentry-curses",
         ]

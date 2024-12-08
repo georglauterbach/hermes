@@ -55,7 +55,7 @@ pub(super) async fn download_and_place_configuration_files(
             }
         };
 
-        if canonical_local_path.exists() && *overwrite == data::FileOverride::Yes {
+        if canonical_local_path.exists() && *overwrite == data::FileOverride::No {
             ::log::debug!("{log_prefix}file exists and shall not be overridden");
             continue;
         }

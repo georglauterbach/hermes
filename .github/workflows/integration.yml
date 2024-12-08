@@ -3,11 +3,13 @@ name: Integration
 run-name: Integration
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
+    paths: [ code/**, .github/** ]
   pull_request:
     branches: [ '**' ]
-  workflow_dispatch:
+    paths: [ code/**, .github/** ]
 
 defaults:
   run:

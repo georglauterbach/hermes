@@ -61,15 +61,40 @@ fn get_path_to_self() -> ::anyhow::Result<String> {
     let Some(hermes_binrary_path) = env::args().next() else {
         anyhow::bail!("Weird! On UNIX-like operating systems, the first argument to a program is always itself - but this was just violated. I can break rules too. Goodbye!");
     };
-    let hermes_binrary_path = ::std::path::Path::new(&hermes_binrary_path)
-        .canonicalize()
-        .context(format!("Could not canonicalize path '{hermes_binrary_path}' to myself - this is weird and should not happen"))?;
-    ::log::trace!(
-        "Acquired file system path '{}' to myself",
-        hermes_binrary_path.to_string_lossy()
-    );
 
-    Ok(hermes_binrary_path
+    let hermes_binrary_path = ::std::path::Path::new(&hermes_binrary_path);
+
+    let hermes_binary_path = if hermes_binrary_path.is_absolute() {
+        hermes_binrary_path
+            .canonicalize()
+            .context(format!("Could not canonicalize path '{hermes_binrary_path:?}' to myself - this is weird and should not happen"))?
+    } else {
+        // If the path is not absolute, then we have three options:
+        //
+        // 1. The binary path is relative to the current working directory and valid
+        // 2. The binary is in $PATH and we can find it
+        // 3. The path is somehow invalid
+        let hermes_relative_path = ::std::env::current_dir()
+            .context("Could not determine current working directory")?
+            .join(&hermes_binrary_path);
+        if hermes_relative_path.exists() {
+            hermes_relative_path
+        } else {
+            let hermes_binary_path = ::which::which(
+                &hermes_binrary_path
+                    .file_name()
+                    .context("Weird! Could not determine file name of myself")?,
+            )
+            .context("Could not find myself in $PATH - this is weird and should not happen")?;
+            hermes_binary_path
+        }
+        .canonicalize()
+        .context("Could not canonicalize path to myself - this is weird and should not happen")?
+    };
+
+    ::log::trace!("Acquired file system path '{hermes_binary_path:?}' to myself",);
+
+    Ok(hermes_binary_path
         .to_str()
         .context("Could not convert path to string")?
         .to_string())
