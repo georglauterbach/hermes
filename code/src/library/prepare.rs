@@ -92,7 +92,7 @@ fn get_path_to_self() -> ::anyhow::Result<String> {
         .context("Could not canonicalize path to myself - this is weird and should not happen")?
     };
 
-    ::log::trace!("Acquired file system path '{hermes_binary_path:?}' to myself",);
+    ::log::trace!("Acquired file system path {hermes_binary_path:?} to myself",);
 
     Ok(hermes_binary_path
         .to_str()
