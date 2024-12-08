@@ -13,6 +13,9 @@ defaults:
   run:
     shell: bash
 
+env:
+  RUSTUP_HOME: ${{ github.workspace }}/code/target/rustup/home
+
 jobs:
   build_x86_64:
     name: Build x86_64
@@ -43,10 +46,6 @@ jobs:
             cargo test   --quiet --target x86_64-unknown-linux-musl
             cargo build  --quiet --release --target x86_64-unknown-linux-musl
 
-            cp \
-              target/x86_64-unknown-linux-musl/release/hermes \
-              target/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
-
   build_aarch64:
     name: Build aarch64
     runs-on: ubuntu-latest
@@ -75,10 +74,6 @@ jobs:
             cd code
             cargo build  --quiet --release --target aarch64-unknown-linux-musl
 
-            cp \
-              target/aarch64-unknown-linux-musl/release/hermes
-              target/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
-
   publish:
     name: Publish
     runs-on: ubuntu-latest
@@ -98,6 +93,16 @@ jobs:
         with:
           path: code/target
           key: github.ref
+
+      - name: Prepare Binaries
+        run: |
+          cp \
+            target/x86_64-unknown-linux-musl/release/hermes \
+            target/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
+
+          cp \
+            target/aarch64-unknown-linux-musl/release/hermes
+            target/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
 
       - name: Release
         uses: softprops/action-gh-release@v2
