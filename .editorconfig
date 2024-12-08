@@ -25,6 +25,3 @@ switch_case_indent   = true
 space_redirects      = false
 keep_padding         = false
 function_next_line   = true
-
-[*.rs]
-indent_size          = 4

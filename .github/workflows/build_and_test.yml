@@ -11,6 +11,9 @@ on:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture: [ x86_64, aarch64 ]
 
     steps:
       - name: Checkout
@@ -18,8 +21,6 @@ jobs:
 
       - name: Run make ci-build in dev container
         uses: devcontainers/ci@v0.3
-        matrix:
-          architecture: [ x86_64, aarch64 ]
         with:
           push: never
           configFile: .devcontainer/development/devcontainer.json
