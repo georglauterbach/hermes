@@ -1,0 +1,32 @@
+---
+name: Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ '**' ]
+  workflow_dispatch:
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run make ci-build in dev container
+        uses: devcontainers/ci@v0.3
+        matrix:
+          architecture: [ x86_64, aarch64 ]
+        with:
+          push: never
+          configFile: .devcontainer/development/devcontainer.json
+          runCmd: |
+            cd code
+            cargo fmt -- --check
+            cargo clippy --all-targets --all-features -- -D warnings
+            cargo doc --document-private-items
+            cargo test
+            cargo build --release --target ${{ matrix.architecture }}-unknown-linux-musl
