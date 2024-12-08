@@ -1,8 +1,0 @@
-# Bash
-data/unversioned/data/home/.bashrc                           ${HOME}/.bashrc
-data/unversioned/data/home/.config/bash/00-base.sh           ${HOME}/.config/bash/00-base.sh
-data/unversioned/data/home/.config/bash/10-misc.sh           ${HOME}/.config/bash/10-misc.sh
-data/unversioned/data/home/.config/bash/30-extra_programs.sh ${HOME}/.config/bash/30-extra_programs.sh
-data/unversioned/data/home/.config/bash/80-aliases.sh        ${HOME}/.config/bash/80-aliases.sh
-data/unversioned/data/home/.config/bash/90-wrapper.sh        ${HOME}/.config/bash/90-wrapper.sh
-data/unversioned/data/home/.config/bash/starship.toml        ${HOME}/.config/bash/starship.toml

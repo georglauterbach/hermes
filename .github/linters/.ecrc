@@ -5,7 +5,8 @@
   "SpacesAftertabs": true,
   "NoColor": false,
   "Exclude": [
-    "\\.sources$"
+    "\\.sources$",
+    "code/Cargo\\.lock$"
   ],
   "AllowedContentTypes": [],
   "PassedFiles": [],
