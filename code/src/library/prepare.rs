@@ -101,17 +101,17 @@ fn get_path_to_self() -> ::anyhow::Result<String> {
 
 /// TODO
 fn get_user_information() -> ::anyhow::Result<(String, u32, String, u32, String)> {
-    let uid = users::get_current_uid();
-    let user = users::get_user_by_uid(uid)
-        .context("ould not determine user name for current UID '{user_uid}'")?;
+    let uid = ::users::get_current_uid();
+    let user = ::users::get_current_username()
+        .context("Could not determine user name for current UID '{user_uid}'")?;
     let user_name = user.name().to_str().context("Weird! Could not convert user name to UTF-8 string - hermes only works with UTF-8 strings")?.to_string();
     ::log::info!("Current user name is '{user_name}' with UID '{uid}'");
 
     let gid = user.primary_group_id();
-    let user_primary_group_name = users::get_group_by_gid(gid).context(
+    let user_primary_group_name = ::users::get_current_groupname().context(
         "Could not determine group name for current user '{user_name}' with GID '{user_gid}'",
     )?;
-    let user_primary_group_name = user_primary_group_name.name().to_str().context("Weird! Could not convert group name to UTF-8 string - hermes only works with UTF-8 strings")?.to_string();
+    let user_primary_group_name = user_primary_group_name.to_str().context("Weird! Could not convert group name to UTF-8 string - hermes only works with UTF-8 strings")?.to_string();
     ::log::info!("Current user's group name is '{user_primary_group_name}' with UID '{gid}'");
 
     let user_home_dir = user.home_dir().to_str().context("Weird! Could not convert home directory path to UTF-8 string - hermes only works with UTF-8 strings")?.to_string();
