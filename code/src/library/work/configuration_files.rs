@@ -100,9 +100,7 @@ pub(super) async fn set_up_unversioned_configuration_files() -> ::anyhow::Result
     .await;
 
     match result {
-        Ok(()) => {
-            Ok(())
-        }
+        Ok(()) => Ok(()),
         Err(error) => Err(error).context("Finished PUCF with errors"),
     }
 }
