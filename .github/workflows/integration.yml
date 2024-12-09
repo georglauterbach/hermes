@@ -47,10 +47,10 @@ jobs:
           runCmd: |
             set -e ; cd code ; mkdir -p ${CARGO_HOME}
 
-            cargo fmt    -- --check
-            cargo clippy --all-features -- -D warnings
-            cargo doc    --document-private-items
-            cargo test
+            cargo fmt    --quiet -- --check
+            cargo clippy --quiet --all-features -- -D warnings
+            cargo doc    --quiet --document-private-items
+            cargo test   --quiet
             cargo build  --release
 
   build_aarch64:
@@ -108,7 +108,7 @@ jobs:
           key: ${{ github.ref }}-x86_64
           path: code/target_x86_64/
 
-      - name: Load Cache for Build-Output (x86_64)
+      - name: Load Cache for Build-Output (aarch64)
         uses: actions/cache@v4
         with:
           key: ${{ github.ref }}-aarch64
