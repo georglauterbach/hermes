@@ -47,7 +47,7 @@ jobs:
           runCmd: |
             set -e ; cd code ; mkdir -p ${CARGO_HOME}
 
-            cargo fmt    --quiet -- --check
+            cargo fmt    -- --check
             cargo clippy --quiet --all-features -- -D warnings
             cargo doc    --quiet --document-private-items
             cargo test   --quiet
