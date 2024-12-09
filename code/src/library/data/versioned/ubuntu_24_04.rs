@@ -113,11 +113,10 @@ impl super::UbuntuVersion for Ubuntu24_04 {
             "fonts-firacode",
             "fonts-font-awesome",
             "fonts-nerd-font-firamono",
-            "p7zip-full",
-            //"regolith-desktop",
-            //"regolith-session-sway",
-            //"regolith-look-gruvbox",
-            //"regolith-wm-user-programs",
+            "regolith-desktop",
+            "regolith-session-sway",
+            "regolith-look-gruvbox",
+            "regolith-wm-user-programs",
             "seahorse",
         ]
     }
