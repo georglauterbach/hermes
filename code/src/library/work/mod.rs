@@ -31,7 +31,7 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
     ::log::info!("Starting work now");
 
     let mut task_handler = ::tokio::task::JoinSet::new();
-    ::log::info!("Spawning tasks in async runtime");
+    ::log::debug!("Spawning tasks in async runtime");
     task_handler.spawn(apt::configure_system_with_apt(
         arguments.change_apt_sources,
         arguments.gui,
@@ -42,30 +42,29 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
     ));
     task_handler.spawn(programs::download_custom_programs());
 
-    let mut error_occured = false;
-    let mut final_err = ::anyhow::anyhow!("Work finished with errors");
-
+    let mut errors = vec![];
     while let Some(handler) = task_handler.join_next().await {
         match handler {
             Ok(actual_result) => match actual_result {
                 Ok(()) => (),
                 Err(error) => {
-                    final_err = final_err.context(format!("{error}"));
-                    error_occured = true;
+                    errors.push(error);
                 }
             },
             Err(error) => {
-                final_err = final_err.context(format!(
+                errors.push(::anyhow::anyhow!(
                     "Could not join an async handle (this should not have happened): {error}"
                 ));
-                error_occured = true;
             }
         }
     }
 
-    if error_occured {
-        Err(final_err)
-    } else {
+    if errors.is_empty() {
         Ok(())
+    } else {
+        Err(anyhow::anyhow!(
+            "Errors occured during execution: {:?}",
+            errors
+        ))
     }
 }

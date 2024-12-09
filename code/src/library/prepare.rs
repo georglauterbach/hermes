@@ -39,7 +39,7 @@ fn check_etc_environment() -> ::anyhow::Result<String> {
     Ok(format!(
         "{}",
         cli::UbuntuVersion::from_str(ubuntu_version_id, true)
-            .map_err(|string| ::std::io::Error::other(string))
+            .map_err(::std::io::Error::other)
             .context(
                 "'UbuntuVersion::from_str' should always yield 'Ok()' with fallback if necessary"
             )?
@@ -248,27 +248,37 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
     }
 }
 
-/// TODO
+/// Contains functions that work with the environment that _hermes_ is called
+/// in again by itself.
 pub mod environment {
-    /// TODO
+    /// Get the user name of the user who invoked _hermes_
     ///
     /// #### Panics
+    ///
+    /// This function assumes _hermes_ has been called again already
+    /// and hence that the environment variable `USER` is set correctly.
     #[must_use]
     pub fn user() -> String {
         ::std::env::var("USER").expect("Could not determine home directory")
     }
 
-    /// TODO
+    /// Get the group name of the user who invoked _hermes_
     ///
     /// #### Panics
+    ///
+    /// This function assumes _hermes_ has been called again already
+    /// and hence that the environment variable `GROUP` is set correctly.
     #[must_use]
     pub fn group() -> String {
         ::std::env::var("GROUP").expect("Could not determine home directory")
     }
 
-    /// TODO
+    /// Get the home directory of the user who invoked _hermes_
     ///
     /// #### Panics
+    ///
+    /// This function assumes _hermes_ has been called again already
+    /// and hence that the environment variable `HOME` is set correctly.
     #[must_use]
     pub fn home() -> ::std::path::PathBuf {
         ::std::path::PathBuf::from(
@@ -276,33 +286,44 @@ pub mod environment {
         )
     }
 
-    /// TODO
+    /// Get the home directory name of the user who invoked _hermes_
+    /// as a [`String`]
     ///
     /// #### Panics
+    ///
+    /// Panics when [`home`] panics.
     #[must_use]
     pub fn home_str() -> String {
         home().to_string_lossy().to_string()
     }
 
-    /// TODO
+    /// Adds arbitrary directories to the directory obtained by
+    /// calling [`home`]
     ///
     /// #### Panics
+    ///
+    /// Panics when [`home`] panics.
     #[must_use]
     pub fn home_and(join: impl AsRef<str>) -> String {
         format!("{}", home().join(join.as_ref()).to_string_lossy())
     }
 
-    /// TODO
+    /// Returns the directory `${HOME}/.local/bin`
     ///
     /// #### Panics
+    ///
+    /// Panics when [`home`] panics.
     #[must_use]
     pub fn home_local_bin() -> String {
         home_and(".local/bin")
     }
 
-    /// TODO
+    /// Get the user ID of the user who invoked _hermes_
     ///
     /// #### Panics
+    ///
+    /// This function assumes _hermes_ has been called again already
+    /// and hence that the environment variable `UID` is set correctly.
     #[must_use]
     pub fn uid() -> u32 {
         ::std::env::var("UID")
@@ -311,9 +332,12 @@ pub mod environment {
             .expect("Could not parse UID")
     }
 
-    /// TODO
+    /// Get the group ID of the user who invoked _hermes_
     ///
     /// #### Panics
+    ///
+    /// This function assumes _hermes_ has been called again already
+    /// and hence that the environment variable `GID` is set correctly.
     #[must_use]
     pub fn gid() -> u32 {
         ::std::env::var("GID")
@@ -322,9 +346,14 @@ pub mod environment {
             .expect("Could not parse GID")
     }
 
-    /// TODO
+    /// Get the Ubuntu version ID [`String`] of the currently
+    /// installed version of Ubuntu
     ///
     /// #### Panics
+    ///
+    /// This function assumes _hermes_ has been called again already
+    /// and hence that the environment variable `UBUNTU_VERSION_ID`
+    /// is set correctly.
     #[must_use]
     pub fn ubuntu_version_id() -> super::super::cli::UbuntuVersion {
         use clap::ValueEnum as _;
