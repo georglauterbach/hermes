@@ -101,7 +101,6 @@ pub(super) async fn set_up_unversioned_configuration_files() -> ::anyhow::Result
 
     match result {
         Ok(()) => {
-            ::log::info!("Finished PUCF successfully");
             Ok(())
         }
         Err(error) => Err(error).context("Finished PUCF with errors"),
