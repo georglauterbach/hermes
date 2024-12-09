@@ -1,4 +1,5 @@
-//! TODO
+//! This module contains functions to download files from
+//! the internet and and place them on the local file system.
 
 use ::anyhow::Context as _;
 use ::async_std::io::WriteExt as _;

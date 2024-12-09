@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
 
-# version       0.1.0
+# version       0.1.1
 # sourced by    ${HOME}/.bashrc
-# task          TODO
+# task          overwrite well-known commands with modern alternatives
 
 # shellcheck disable=SC2317
 

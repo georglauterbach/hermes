@@ -1,4 +1,4 @@
-//! TODO
+//! This module handling installing additonal programs fro GitHub.
 
 use super::super::{fs, prepare::environment};
 use ::std::collections;
@@ -6,11 +6,11 @@ use ::std::collections;
 use ::anyhow::Context as _;
 use ::async_std::stream::StreamExt as _;
 
-/// TODO
+/// The architecture string for the amd64 (`x86_64`) architecture
 #[cfg(target_arch = "x86_64")]
 const ARCHITECTURE: &str = "x86_64";
 
-/// TODO
+/// The architecture string for the arm64 (`aarch64`) architecture
 #[cfg(target_arch = "aarch64")]
 const ARCHITECTURE: &str = "aarch64";
 

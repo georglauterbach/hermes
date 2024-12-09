@@ -1,4 +1,5 @@
-//! TODO
+//! This module contains functions that take
+//! care of managing configuration files.
 
 use super::{
     super::{data, fs, prepare::environment},
@@ -8,7 +9,7 @@ use ::std::path;
 
 use ::anyhow::Context as _;
 
-/// Download a file and place it onto the file system.
+/// Download a single file and place it onto the file system.
 pub async fn download_and_place_configuration_file(
     request_uri: String,
     absolute_local_path: path::PathBuf,
@@ -30,7 +31,9 @@ pub async fn download_and_place_configuration_file(
     Ok(())
 }
 
-/// TODO
+/// Given an `index`, iterates over the index asynchronously using
+/// [`super::download::download_and_place`] to download and place
+/// said configuration files.
 pub(super) async fn download_and_place_configuration_files(
     index: data::ConfigurationFileIndex,
     place_as_root: bool,

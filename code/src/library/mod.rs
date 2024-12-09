@@ -7,7 +7,9 @@ pub mod logger;
 pub mod prepare;
 pub mod work;
 
-/// TODO
+/// Given a vector of [`anyhow::Error`]s, this macro evaluates the vector and returns an [`anyhow::Result`].
+/// It returns [`Ok`] of the vector is empty, and [`Err`] with the errors and contexts sorted correctly.
+/// It will also log the message given the second argument.
 macro_rules! evaluate_errors_vector {
     ($errors:expr, $message:expr) => {{
       use ::anyhow::Context as _;

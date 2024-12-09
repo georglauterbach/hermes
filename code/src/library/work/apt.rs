@@ -1,11 +1,14 @@
-//! TODO
+//! This module contains functions that perform various
+//! operations with APT, such as updating package signatures
+//! or installing packages.
 
 use super::{
     super::{data, prepare::environment},
     configuration_files, GITHUB_RAW_URI,
 };
 
-/// TODO
+/// Change APT sources in `/etc/apt/sources.list.d/` if requested
+/// by the user
 async fn set_up_new_apt_sources(
     ubuntu: &dyn data::versioned::UbuntuVersion,
     change_apt_sources: bool,
@@ -52,7 +55,7 @@ async fn set_up_new_apt_sources(
     super::super::evaluate_errors_vector!(errors, "Changing APT sources failed")
 }
 
-/// TODO
+/// Prepare APT so that it is in a usable state
 async fn prepare_apt() -> ::anyhow::Result<()> {
     ::log::debug!("Updating APT package signatures");
     if !::async_std::process::Command::new("apt-get")
