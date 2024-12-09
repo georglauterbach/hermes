@@ -46,6 +46,7 @@ pub(super) async fn download_custom_programs() -> ::anyhow::Result<()> {
     join_set.spawn(eza());
     join_set.spawn(fd());
     join_set.spawn(fzf());
+    join_set.spawn(gitui());
     join_set.spawn(ripgrep());
     join_set.spawn(starship());
     join_set.spawn(zoxide());
@@ -266,6 +267,24 @@ async fn fzf() -> ::anyhow::Result<()> {
     );
 
     // TODO download additional config files
+    download_and_extract(uri, entries).await?;
+    Ok(())
+}
+
+/// Install `gitui` (<https://github.com/extrawurst/gitui>)
+async fn gitui() -> ::anyhow::Result<()> {
+    /// Version of `gitui` to install
+    const GITUI_VERSION: &str = "0.26.3";
+    let file = format!("gitui-linux-{ARCHITECTURE}.tar.gz");
+    let uri =
+        format!("https://github.com/extrawurst/gitui/releases/download/v{GITUI_VERSION}/{file}");
+
+    let mut entries = collections::HashMap::new();
+    entries.insert(
+        String::from("./gitui"),
+        format!("{}/gitui", environment::home_local_bin()),
+    );
+
     download_and_extract(uri, entries).await?;
     Ok(())
 }

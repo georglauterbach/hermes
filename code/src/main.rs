@@ -14,7 +14,10 @@ async fn main() -> anyhow::Result<()> {
     } else {
         match hermes::prepare::call_again(&arguments).context("Initial conditions could not be met")
         {
-            Ok(true) => Ok(()),
+            Ok(true) => {
+              ::log::info!("Finished without errors");
+              Ok(())
+            },
             Ok(false) => ::std::process::exit(1),
             Err(error) => Err(error),
         }
