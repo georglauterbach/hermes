@@ -13,7 +13,7 @@
 # HERMES_LOAD_EXTRA_PROGRAMS must be `true` in order
 # to be able to load any extra programs!
 export HERMES_LOAD_EXTRA_PROGRAMS=false
-export HERMES_LOAD_EXTRA_PROGRAMS_ATUIN=true
+export HERMES_LOAD_EXTRA_PROGRAMS_ATUIN=false
 export HERMES_LOAD_EXTRA_PROGRAMS_BAT=true
 export HERMES_LOAD_EXTRA_PROGRAMS_BLE_SH=true
 export HERMES_LOAD_EXTRA_PROGRAMS_FZF=true
@@ -26,6 +26,7 @@ export HERMES_LOAD_EXTRA_PROGRAMS_ZOXIDE=true
 #
 # Initialization of advanced commands previously is independent
 # of overriding system commands: Maximum flexibility.
+export HERMES_LOAD_OVERRIDE_COMMANDS=true
 export HERMES_OVERRIDE_APT_WITH_NALA=false
 export HERMES_OVERRIDE_CAT_WITH_BAT=false
 export HERMES_OVERRIDE_CD_WITH_ZOXIDE=false

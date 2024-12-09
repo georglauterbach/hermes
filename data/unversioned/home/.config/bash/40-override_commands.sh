@@ -68,7 +68,7 @@ function __hermes__override_grep_with_ripgrep() {
 # `eza` is in `${PATH}`; otherwise, execute `ls`.
 function __hermes__override_ls_with_eza() {
   __evaluates_to_true HERMES_OVERRIDE_LS_WITH_EZA 'false' || return 0
-  __is_command 'eza' && alias cd='eza --header --long --binary --group --classify --extended --group-directories-first'
+  __is_command 'eza' && alias ls='eza --header --long --binary --group --classify --extended --group-directories-first'
 }
 
 for __FUNCTION in 'apt_with_nala' 'cat_with_bat' 'cd_with_zoxide' \
