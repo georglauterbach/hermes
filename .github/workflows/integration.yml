@@ -108,11 +108,11 @@ jobs:
 
       - name: Prepare Binaries
         run: |
-          cp target/x86_64-unknown-linux-musl/release/hermes \
-            target/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
+          cp code/target/x86_64-unknown-linux-musl/release/hermes \
+            code/target/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
 
-          cp target/aarch64-unknown-linux-musl/release/hermes \
-            target/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
+          cp code/target/aarch64-unknown-linux-musl/release/hermes \
+            code/target/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
 
       - name: Release
         uses: softprops/action-gh-release@v2
