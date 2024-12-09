@@ -256,8 +256,27 @@ async fn fzf() -> ::anyhow::Result<()> {
         format!("{}/fzf", environment::home_local_bin()),
     );
 
-    // TODO download additional config files
     download_and_extract(uri, entries).await?;
+
+    for (uri, additional_file) in [
+        (
+            "https://raw.githubusercontent.com/junegunn/fzf/refs/heads/master/shell/",
+            "completion.bash",
+        ),
+        (
+            "https://raw.githubusercontent.com/junegunn/fzf/refs/heads/master/shell/",
+            "key-bindings.bash",
+        ),
+    ] {
+        let local_path = format!(
+            "{}/.config/bash/fzf/{additional_file}",
+            environment::home_str()
+        );
+        super::download::download_and_place(format!("{uri}/{additional_file}"), local_path.clone())
+            .await?;
+        fs::adjust_permissions(&local_path, environment::uid(), environment::gid(), 0o644)?;
+    }
+
     Ok(())
 }
 
