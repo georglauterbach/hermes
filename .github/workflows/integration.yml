@@ -128,8 +128,7 @@ jobs:
 
       - name: Prepare Binaries
         run: |
-          ls -lh code/target_x86_64/x86_64-unknown-linux-musl
-          ls -lh code/target_aarch64/aarch64-unknown-linux-musl/release
+          mkdir -p code/target  
 
           cp code/target_aarch64/aarch64-unknown-linux-musl/release/hermes \
             code/target/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
