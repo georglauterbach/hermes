@@ -112,6 +112,12 @@ jobs:
 
       - name: Prepare Binaries
         run: |
+          ls -lh code/ || :
+          ls -lh code/target_aarch64 || :
+          ls -lh code/target_aarch64/aarch64-unknown-linux-musl/release || :
+          ls -lh code/target_x86_64 || :
+          ls -lh code/target_x86_64/x86_64-unknown-linux-musl/release || :
+
           cp code/target_aarch64/aarch64-unknown-linux-musl/release/hermes \
             code/target_aarch64/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
 
