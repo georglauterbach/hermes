@@ -47,13 +47,13 @@ pub const INDEX: ConfigurationFileIndex = &[
         FileOverride::No,
     ),
     (
-        "home/.config/bash/starship.toml",
-        "~/.config/bash/starship.toml",
+        "home/.config/bash/starship/starship.toml",
+        "~/.config/bash/starship/starship.toml",
         FileOverride::No,
     ),
     (
         "home/.config/bash/ble_config.sh",
-        "~/.config/bash/ble_config.sh",
+        "~/.config/bash/ble.sh/config.sh",
         FileOverride::No,
     ),
 ];

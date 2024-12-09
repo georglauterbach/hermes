@@ -57,7 +57,7 @@ function __hermes__init_ble() {
   __evaluates_to_true HERMES_LOAD_EXTRA_PROGRAMS_BLE_SH 'true' || return 0
   local BLE_SOURCE="${HOME}/.local/share/blesh/ble.sh"
   if [[ -e ${BLE_SOURCE} ]]; then
-    local BLE_CONFIG_FILE="${HOME}/.config/bash/ble_config.sh"
+    local BLE_CONFIG_FILE="${HOME}/.config/bash/ble.sh/config.sh"
     if [[ -e ${BLE_CONFIG_FILE} ]]; then
       # shellcheck source=/dev/null
       source "${BLE_SOURCE}" --attach=none --rcfile "${BLE_CONFIG_FILE}"
@@ -71,15 +71,17 @@ function __hermes__init_ble() {
 function __hermes__init_fzf() {
   __evaluates_to_true HERMES_LOAD_EXTRA_PROGRAMS_FZF 'true' || return 0
   if __is_command 'fzf'; then
-    if [[ -e ${HOME}/.fzf/shell/completion.bash ]]; then
+    local FZF_COMPLETION="${HOME}/.fzf/shell/completion.bash"
+    if [[ -e ${FZF_COMPLETION} ]]; then
       # shellcheck source=/dev/null
-      source "${HOME}/.fzf/shell/completion.bash" 2>/dev/null
+      source "${FZF_COMPLETION}" 2>/dev/null
       [[ -v BLE_VERSION ]] && ble-import --delay 'integration/fzf-completion'
     fi
 
-    if [[ -e ${HOME}/.fzf/shell/key-bindings.bash ]]; then
+    local FZF_KEY_BINDINGS="${HOME}/.fzf/shell/key-bindings.bash"
+    if [[ -e ${FZF_KEY_BINDINGS} ]]; then
       # shellcheck source=/dev/null
-      source "${HOME}/.fzf/shell/key-bindings.bash"
+      source "${FZF_KEY_BINDINGS}"
       [[ -v BLE_VERSION ]] && ble-import --delay 'integration/fzf-key-bindings'
     fi
   fi
@@ -89,7 +91,7 @@ function __hermes__init_starship() {
   __evaluates_to_true HERMES_LOAD_EXTRA_PROGRAMS_STARSHIP 'true' || return 0
   if __is_command 'starship'; then
     if [[ ! -v STARSHIP_CONFIG ]]; then
-      STARSHIP_CONFIG="${HOME}/.config/bash/starship.toml"
+      STARSHIP_CONFIG="${HOME}/.config/bash/starship/starship.toml"
     fi
 
     if [[ ! -f ${STARSHIP_CONFIG} ]] || [[ ! -r ${STARSHIP_CONFIG} ]]; then
