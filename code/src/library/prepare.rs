@@ -76,17 +76,16 @@ fn get_path_to_self() -> ::anyhow::Result<String> {
         // 3. The path is somehow invalid
         let hermes_relative_path = ::std::env::current_dir()
             .context("Could not determine current working directory")?
-            .join(&hermes_binrary_path);
+            .join(hermes_binrary_path);
         if hermes_relative_path.exists() {
             hermes_relative_path
         } else {
-            let hermes_binary_path = ::which::which(
-                &hermes_binrary_path
+            ::which::which(
+                hermes_binrary_path
                     .file_name()
                     .context("Weird! Could not determine file name of myself")?,
             )
-            .context("Could not find myself in $PATH - this is weird and should not happen")?;
-            hermes_binary_path
+            .context("Could not find myself in $PATH - this is weird and should not happen")?
         }
         .canonicalize()
         .context("Could not canonicalize path to myself - this is weird and should not happen")?
