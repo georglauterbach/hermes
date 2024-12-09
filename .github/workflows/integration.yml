@@ -39,17 +39,18 @@ jobs:
           push: never
           configFile: .devcontainer/development/devcontainer.json
           env: |
-            CARGO_TARGET_DIR=target_x86_64
+            CARGO_BUILD_TARGET=x86_64-unknown-linux-musl
+            CARGO_BUILD_TARGET_DIR=target_x86_64
             CARGO_HOME=target_x86_64/cargo_home
             RUSTUP_HOME=target_x86_64/rustup_home
           runCmd: |
             set -e ; cd code ; mkdir -p ${CARGO_HOME}
 
             cargo fmt    --quiet -- --check
-            cargo clippy --quiet --target x86_64-unknown-linux-musl --all-features -- -D warnings
-            cargo doc    --quiet --target x86_64-unknown-linux-musl --document-private-items
-            cargo test   --quiet --target x86_64-unknown-linux-musl
-            cargo build  --quiet --release --target x86_64-unknown-linux-musl
+            cargo clippy --quiet --all-features -- -D warnings
+            cargo doc    --quiet --document-private-items
+            cargo test   --quiet
+            cargo build  --quiet --release
 
   build_aarch64:
     name: Build aarch64
@@ -73,7 +74,8 @@ jobs:
           push: never
           configFile: .devcontainer/development/devcontainer.json
           env: |
-            CARGO_TARGET_DIR=target_aarch64
+            CARGO_BUILD_TARGET=aarch64-unknown-linux-musl
+            CARGO_BUILD_TARGET_DIR=target_aarch64
             CARGO_HOME=target_aarch64/cargo_home
             RUSTUP_HOME=target_aarch64/rustup_home
           runCmd: |
@@ -82,7 +84,7 @@ jobs:
             sudo apt-get --yes --quiet=2 update
             sudo apt-get --yes install gcc gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
 
-            cargo build --quiet --release --target aarch64-unknown-linux-musl
+            cargo build --quiet --release
 
   publish:
     name: Publish
