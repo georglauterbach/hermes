@@ -11,7 +11,7 @@ async fn set_up_new_apt_sources(
     change_apt_sources: bool,
     gui: bool,
 ) -> ::anyhow::Result<()> {
-    let mut contexts: Vec<String> = vec![];
+    let mut errors = vec![];
 
     if change_apt_sources {
         ::log::debug!("Changing APT sources");
@@ -27,7 +27,7 @@ async fn set_up_new_apt_sources(
         .await
         {
             ::log::warn!("Changing APT sources failed");
-            contexts.push(format!("{error}"));
+            errors.push(error);
         };
     }
 
@@ -45,19 +45,11 @@ async fn set_up_new_apt_sources(
         .await
         {
             ::log::warn!("Updating GUI APT sources failed");
-            contexts.push(format!("{error}"));
+            errors.push(error);
         };
     }
 
-    if contexts.is_empty() {
-        Ok(())
-    } else {
-        let mut error = ::anyhow::anyhow!("Changing APT sources failed");
-        for context in contexts {
-            error = error.context(context);
-        }
-        Err(error)
-    }
+    super::super::evaluate_errors_vector!(errors, "Changing APT sources failed")
 }
 
 /// TODO

@@ -83,18 +83,7 @@ pub(super) async fn download_and_place_configuration_files(
         }
     }
 
-    if errors.is_empty() {
-        Ok(())
-    } else {
-        let mut final_error = Err(errors.pop().context(
-            "BUG! Popping an error should always be possible because we checked the size before",
-        )?);
-        for error in errors {
-            final_error = final_error.context(error);
-        }
-
-        final_error
-    }
+    super::super::evaluate_errors_vector!(errors, "Placing configuration files from index failed")
 }
 
 /// This function takes care of placing all unversioned configuration files
@@ -143,17 +132,5 @@ pub(super) async fn setup_up_versioned_configuration_files(gui: bool) -> ::anyho
         log::debug!("To change the bookmarks in file explorers, edit ~/.config/user-firs.dirs, ~/.config/gtk-3.0/bookmarks, and /etc/xdg/user-dirs.defaults");
     }
 
-    if errors.is_empty() {
-        ::log::info!("Finished PVCF successfully");
-        Ok(())
-    } else {
-        let mut final_error = Err(errors.pop().context(
-            "BUG! Popping an error should always be possible because we checked the size before",
-        )?);
-        for error in errors {
-            final_error = final_error.context(error);
-        }
-
-        final_error.context("Finished PVCF with errors")
-    }
+    super::super::evaluate_errors_vector!(errors, "Finished PVCF with errors")
 }

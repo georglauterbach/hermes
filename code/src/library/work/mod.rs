@@ -2,8 +2,6 @@
 //! perform the actual work, or call other subroutines that
 //! perform work depending on the Ubuntu version.
 
-use ::anyhow::Context;
-
 mod apt;
 mod configuration_files;
 mod download;
@@ -59,16 +57,5 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
         }
     }
 
-    if errors.is_empty() {
-        Ok(())
-    } else {
-        let mut final_error = Err(errors.pop().context(
-            "BUG! Popping an error should always be possible because we checked the size before",
-        )?);
-        for error in errors {
-            final_error = final_error.context(error);
-        }
-
-        final_error.context("Errors occured during execution")
-    }
+    super::evaluate_errors_vector!(errors, "Errors occured during execution")
 }

@@ -60,18 +60,10 @@ pub(super) async fn download_custom_programs() -> ::anyhow::Result<()> {
         }
     }
 
-    if errors.is_empty() {
-        Ok(())
-    } else {
-        let mut final_error = Err(errors.pop().context(
-            "BUG! Popping an error should always be possible because we checked the size before",
-        )?);
-        for error in errors {
-            final_error = final_error.context(error);
-        }
-
-        final_error.context("Could not acquire all additonal programs from GitHub successfully")
-    }
+    super::super::evaluate_errors_vector!(
+        errors,
+        "Could not acquire all additonal programs from GitHub successfully"
+    )
 }
 
 /// Recursively extracts files from an archive and places them in the local
