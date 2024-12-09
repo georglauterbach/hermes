@@ -16,10 +16,6 @@ defaults:
   run:
     shell: bash
 
-env:
-  CARGO_HOME: target/cargo/home
-  RUSTUP_HOME: target/rustup/home
-
 jobs:
   build_x86_64:
     name: Build x86_64
@@ -34,11 +30,6 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          key: ${{ github.ref }}
-          path: code/target/
-
-      - uses: actions/cache@v4
-        with:
           key: ${{ github.ref }}-x86_64
           path: code/target_x86_64/
 
@@ -49,11 +40,10 @@ jobs:
           configFile: .devcontainer/development/devcontainer.json
           env: |
             CARGO_TARGET_DIR=target_x86_64
-            CARGO_HOME=${{ env.CARGO_HOME }}
-            RUSTUP_HOME=${{ env.RUSTUP_HOME }}
+            CARGO_HOME=target_x86_64/cargo_home
+            RUSTUP_HOME=target_x86_64/rustup_home
           runCmd: |
-            set -e
-            cd code
+            set -e ; cd code ; mkdir -p ${CARGO_HOME}
 
             cargo fmt    --quiet -- --check
             cargo clippy --quiet --target x86_64-unknown-linux-musl --all-features -- -D warnings
@@ -65,19 +55,12 @@ jobs:
     name: Build aarch64
     runs-on: ubuntu-latest
 
-    needs: build_x86_64
-
     permissions:
       contents: read
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - uses: actions/cache@v4
-        with:
-          key: ${{ github.ref }}
-          path: code/target/
 
       - uses: actions/cache@v4
         with:
@@ -91,11 +74,10 @@ jobs:
           configFile: .devcontainer/development/devcontainer.json
           env: |
             CARGO_TARGET_DIR=target_aarch64
-            CARGO_HOME=${{ env.CARGO_HOME }}
-            RUSTUP_HOME=${{ env.RUSTUP_HOME }}
+            CARGO_HOME=target_aarch64/cargo_home
+            RUSTUP_HOME=target_aarch64/rustup_home
           runCmd: |
-            set -e
-            cd code
+            set -e ; cd code ; mkdir -p ${CARGO_HOME}
 
             sudo apt-get --yes --quiet=2 update
             sudo apt-get --yes install gcc gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
@@ -106,7 +88,7 @@ jobs:
     name: Publish
     runs-on: ubuntu-latest
 
-    needs: build_aarch64
+    needs: [ build_aarch64, build_x86_64 ]
     if: startsWith(github.ref, 'refs/tags/')
 
     permissions:
@@ -128,17 +110,15 @@ jobs:
 
       - name: Prepare Binaries
         run: |
-          mkdir -p code/target
-
           cp code/target_aarch64/aarch64-unknown-linux-musl/release/hermes \
-            code/target/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
+            code/target_aarch64/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
 
           cp code/target_x86_64/x86_64-unknown-linux-musl/release/hermes \
-            code/target/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
+            code/target_x86_64/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
 
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            code/target/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
-            code/target/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
+            code/target_aarch64/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
+            code/target_x86_64/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
