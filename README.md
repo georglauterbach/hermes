@@ -11,7 +11,7 @@ _hermes_ configures _Ubuntu_ by installing various packages and (re-)placing con
 > [!NOTE]
 > While optional, I recommend running `sudo apt-get --yes --quiet=2 update && sudo apt-get --yes --quiet=2 upgrade` before using _hermes_.
 
-Go to [the latest release](https://github.com/georglauterbach/hermes/releases/latest) and note the version number. Then run
+Run the following commands to acquire the latest version of _hermes_:
 
 ```console
 $ HERMES_VERSION="$(curl -sSIL -w '%{url_effective}' -o /dev/null \
@@ -19,7 +19,7 @@ $ HERMES_VERSION="$(curl -sSIL -w '%{url_effective}' -o /dev/null \
 $ sudo curl --silent --show-error --fail --location --output /usr/local/bin/hermes \
   "https://github.com/georglauterbach/hermes/releases/download/${HERMES_VERSION}/hermes-${HERMES_VERSION}-$(uname -m)-unknown-linux-musl"
 $ chmod +x /usr/local/bin/hermes
-$ /usr/local/bin/hermes --help
+$ hermes --help
 ```
 
 > [!CAUTION]
@@ -52,13 +52,13 @@ You can find additional setup scripts that aid in setting up machines under the 
 
 ## Architecture
 
-_hermes_ is written in the [Rust programming language](https://www.rust-lang.org/). Because it performs a lot of network request and disk I/O, it utilizes asynchronous programming with the [_tokio_](https://tokio.rs/) runtime. _hermes_ performs four main tasks:
+_hermes_ is written in the [Rust programming language](https://www.rust-lang.org/). As it performs a lot of network requests and disk I/O, it utilizes asynchronous programming with the [_tokio_](https://tokio.rs/) runtime. _hermes_ performs four main tasks:
 
 1. Downloading and placing [unversioned configuration files](./data/unversioned/).
 2. Downloading and placing [versioned configuration files](./data/versioned/).
 3. Setting up APT (optionally) and installing additional programs with it.
-4. Installing programs by downloading them from GitHub and unpacking them.
+4. Installing additional programs by downloading them from GitHub and unpacking them.
 
-All of these tasks are performed in asynchronously, which gives the illusion of parallelism (especially in the log). This makes _hermes_ extremely fast.
+All of these tasks are performed asynchronously, which gives the illusion of parallelism (especially in the log). This makes _hermes_ extremely fast.
 
 Most configuration is stored in the [`data/`](./code/src/library/data/) directory and is downloaded onto the target system.
