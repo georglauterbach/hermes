@@ -40,7 +40,7 @@ jobs:
           configFile: .devcontainer/development/devcontainer.json
           env: |
             CARGO_BUILD_TARGET=x86_64-unknown-linux-musl
-            CARGO_BUILD_TARGET_DIR=target_x86_64
+            CARGO_TARGET_DIR=target_x86_64
             CARGO_HOME=target_x86_64/cargo_home
             RUSTUP_HOME=target_x86_64/rustup_home
           runCmd: |
@@ -75,7 +75,7 @@ jobs:
           configFile: .devcontainer/development/devcontainer.json
           env: |
             CARGO_BUILD_TARGET=aarch64-unknown-linux-musl
-            CARGO_BUILD_TARGET_DIR=target_aarch64
+            CARGO_TARGET_DIR=target_aarch64
             CARGO_HOME=target_aarch64/cargo_home
             RUSTUP_HOME=target_aarch64/rustup_home
           runCmd: |
@@ -112,12 +112,6 @@ jobs:
 
       - name: Prepare Binaries
         run: |
-          ls -lh code/ || :
-          ls -lh code/target_aarch64 || :
-          ls -lh code/target_aarch64/aarch64-unknown-linux-musl/release || :
-          ls -lh code/target_x86_64 || :
-          ls -lh code/target_x86_64/x86_64-unknown-linux-musl/release || :
-
           cp code/target_aarch64/aarch64-unknown-linux-musl/release/hermes \
             code/target_aarch64/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
 
