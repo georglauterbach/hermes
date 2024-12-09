@@ -37,6 +37,11 @@ jobs:
           key: ${{ github.ref }}
           path: |
             code/target/
+      
+      - uses: actions/cache@v4
+        with:
+          key: ${{ github.ref }}-x86_64
+          path: |
             code/target_x86_64/
 
       - name: Build and Test
@@ -74,9 +79,12 @@ jobs:
       - uses: actions/cache@v4
         with:
           key: ${{ github.ref }}
-          path: |
-            code/target/
-            code/target_aarch64/
+          path: code/target/
+
+      - uses: actions/cache@v4
+        with:
+          key: ${{ github.ref }}-aarch64
+          path: target_aarch64/
 
       - name: Build
         uses: devcontainers/ci@v0.3
@@ -113,10 +121,17 @@ jobs:
       - uses: actions/cache@v4
         with:
           key: ${{ github.ref }}
-          path: |
-            code/target/
-            code/target_aarch64/
-            code/target_x86_64/
+          path: code/target/
+
+      - uses: actions/cache@v4
+        with:
+          key: ${{ github.ref }}-x86_64
+          path: code/target_x86_64/
+
+      - uses: actions/cache@v4
+        with:
+          key: ${{ github.ref }}-aarch64
+          path: code/target_aarch64/
 
       - name: Prepare Binaries
         run: |
