@@ -49,59 +49,23 @@ jobs:
             CARGO_HOME=${{ env.CARGO_HOME }}
             RUSTUP_HOME=${{ env.RUSTUP_HOME }}
           runCmd: |
+            set -e
             cd code
-            # set -e
+
             # cargo fmt    --quiet -- --check
             # cargo clippy --quiet --target x86_64-unknown-linux-musl --all-features -- -D warnings
             # cargo doc    --quiet --target x86_64-unknown-linux-musl --document-private-items
             # cargo test   --quiet --target x86_64-unknown-linux-musl
             cargo build  --quiet --release --target x86_64-unknown-linux-musl
 
-  # build_aarch64:
-  #   name: Build aarch64
-  #   runs-on: ubuntu-latest
-
-  #   needs: build_x86_64
-
-  #   permissions:
-  #     contents: read
-
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-
-  #     - uses: actions/cache@v4
-  #       with:
-  #         path: code/target/
-  #         key: ${{ github.ref }}
-
-  #     - name: Build
-  #       uses: devcontainers/ci@v0.3
-  #       with:
-  #         push: never
-  #         configFile: .devcontainer/development/devcontainer.json
-  #         env: |
-  #           CARGO_HOME=${{ env.CARGO_HOME }}
-  #           RUSTUP_HOME=${{ env.RUSTUP_HOME }}
-  #         runCmd: |
-  #           set -e
-  #
-  #           sudo apt-get --yes --quiet=2 update
-  #           sudo apt-get --yes install gcc gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
-
-  #           cd code
-  #           cargo build --quiet --release --target aarch64-unknown-linux-musl
-
-  publish:
-    name: Publish
+  build_aarch64:
+    name: Build aarch64
     runs-on: ubuntu-latest
 
     needs: build_x86_64
-    # if: startsWith(github.ref, 'refs/tags/')
 
     permissions:
       contents: read
-    continue-on-error: true
 
     steps:
       - name: Checkout
@@ -111,22 +75,58 @@ jobs:
         with:
           path: |
             code/target/
+            code/target_aarch64/
+
+      - name: Build
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          configFile: .devcontainer/development/devcontainer.json
+          env: |
+            CARGO_TARGET_DIR=target_aarch64
+            CARGO_HOME=${{ env.CARGO_HOME }}
+            RUSTUP_HOME=${{ env.RUSTUP_HOME }}
+          runCmd: |
+            set -e
+            cd code
+  
+            sudo apt-get --yes --quiet=2 update
+            sudo apt-get --yes install gcc gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
+
+            cargo build --quiet --release --target aarch64-unknown-linux-musl
+
+  publish:
+    name: Publish
+    runs-on: build_aarch64-latest
+
+    needs: build_x86_64
+    # if: startsWith(github.ref, 'refs/tags/')
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            code/target/
+            code/target_aarch64/
             code/target_x86_64/
           key: ${{ github.ref }}
 
       - name: Prepare Binaries
         run: |
-          ls -lh code
-          ls -lh code/target
-
           ls -lh code/target_x86_64/x86_64-unknown-linux-musl
-          ls -lh code/target_x86_64/x86_64-unknown-linux-musl/release
+          ls -lh code/target_aarch64/aarch64-unknown-linux-musl/release
 
-          # cp code/target_x86_64/x86_64-unknown-linux-musl/release/hermes \
-          #   code/target/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
+          cp code/target_aarch64/aarch64-unknown-linux-musl/release/hermes \
+            code/target/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
 
-          # cp code/target/aarch64-unknown-linux-musl/release/hermes \
-          #   code/target/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
+          cp code/target_x86_64/x86_64-unknown-linux-musl/release/hermes \
+            code/target/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
 
       # - name: Release
       #   uses: softprops/action-gh-release@v2
