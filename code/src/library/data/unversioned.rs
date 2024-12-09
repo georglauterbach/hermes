@@ -52,7 +52,7 @@ pub const INDEX: ConfigurationFileIndex = &[
         FileOverride::No,
     ),
     (
-        "home/.config/bash/ble_config.sh",
+        "home/.config/bash/ble.sh/config.sh",
         "~/.config/bash/ble.sh/config.sh",
         FileOverride::No,
     ),

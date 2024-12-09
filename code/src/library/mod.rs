@@ -24,7 +24,7 @@ macro_rules! evaluate_errors_vector {
             final_error = final_error.context(error);
         }
 
-        final_error.context("Could not acquire all additonal programs from GitHub successfully")
+        final_error.context($message)
     }
     }};
 }
