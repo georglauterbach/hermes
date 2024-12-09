@@ -10,7 +10,8 @@ pub(super) async fn download_file(uri: impl AsRef<str> + Send) -> ::anyhow::Resu
     ::log::trace!("Downloading from '{uri}'");
     ::reqwest::get(uri)
         .await
-        .context(format!("Could not download file from URL '{uri}'"))?
+        .context("BUG! reqwest encountered an error that prevented the start of the download")?
+        .error_for_status()?
         .bytes()
         .await
         .context(format!("Could not get request contents of URL '{uri}'"))

@@ -36,9 +36,8 @@ pub(super) async fn download_custom_programs() -> ::anyhow::Result<()> {
         0o755,
     )?;
 
-    let mut error_occured = false;
-    let mut final_err = ::anyhow::anyhow!("Downloading custom programs finished with errors");
     let mut join_set = ::tokio::task::JoinSet::new();
+    let mut errors = vec![];
 
     join_set.spawn(atuin());
     join_set.spawn(bat());
@@ -55,24 +54,23 @@ pub(super) async fn download_custom_programs() -> ::anyhow::Result<()> {
         match handler {
             Ok(actual_result) => match actual_result {
                 Ok(()) => (),
-                Err(error) => {
-                    final_err = final_err.context(format!("{error}"));
-                    error_occured = true;
-                }
+                Err(error) => errors.push(error),
             },
-            Err(error) => {
-                final_err = final_err.context(format!(
-                    "Could not join an async handle (this should not have happened): {error}"
-                ));
-                error_occured = true;
-            }
+            Err(error) => errors.push(::anyhow::anyhow!(error)),
         }
     }
 
-    if error_occured {
-        Err(final_err)
-    } else {
+    if errors.is_empty() {
         Ok(())
+    } else {
+        let mut final_error = Err(errors.pop().context(
+            "BUG! Popping an error should always be possible because we checked the size before",
+        )?);
+        for error in errors {
+            final_error = final_error.context(error);
+        }
+
+        final_error.context("Could not acquire all additonal programs from GitHub successfully")
     }
 }
 

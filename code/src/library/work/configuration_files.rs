@@ -37,9 +37,8 @@ pub(super) async fn download_and_place_configuration_files(
     base_uri: String,
     log_prefix: &'static str,
 ) -> ::anyhow::Result<()> {
-    let mut request_handler = ::tokio::task::JoinSet::new();
-    let mut success = true;
-    let mut final_error = anyhow::anyhow!("Finished {log_prefix} with errors");
+    let mut join_set = ::tokio::task::JoinSet::new();
+    let mut errors = vec![];
 
     for (remote_part, local_path, overwrite) in index {
         ::log::debug!("{log_prefix}: handling configuration file path '{local_path}' now");
@@ -49,8 +48,7 @@ pub(super) async fn download_and_place_configuration_files(
         let canonical_local_path = match path::absolute(path::Path::new(&local_path)) {
             Ok(path) => path,
             Err(error) => {
-                success = false;
-                final_error = final_error.context(format!("{error}"));
+                errors.push(::anyhow::anyhow!(error));
                 continue;
             }
         };
@@ -60,40 +58,42 @@ pub(super) async fn download_and_place_configuration_files(
             continue;
         }
 
-        request_handler.spawn(download_and_place_configuration_file(
+        join_set.spawn(download_and_place_configuration_file(
             format!("{base_uri}/{remote_part}"),
             canonical_local_path,
             place_as_root,
         ));
     }
 
-    while let Some(result) = request_handler.join_next().await {
+    while let Some(result) = join_set.join_next().await {
         match result {
             Ok(actual_result) => match actual_result {
                 Ok(()) => (),
                 Err(error) => {
-                    let message =
-                        format!("Something went wrong placing a configuration file: {error}");
-                    ::log::warn!("{message}");
-                    final_error = error.context(message);
-                    success = false;
+                    ::log::warn!("Something went wrong placing a configuration file: {error}");
+                    errors.push(error);
                 }
             },
             Err(error) => {
-                let message = format!(
+                ::log::warn!(
                     "Could not join an async handle (this should not have happened): {error}"
                 );
-                ::log::warn!("{message}");
-                final_error = final_error.context(message);
-                success = false;
+                errors.push(::anyhow::anyhow!(error));
             }
         }
     }
 
-    if success {
+    if errors.is_empty() {
         Ok(())
     } else {
-        Err(final_error)
+        let mut final_error = Err(errors.pop().context(
+            "BUG! Popping an error should always be possible because we checked the size before",
+        )?);
+        for error in errors {
+            final_error = final_error.context(error);
+        }
+
+        final_error
     }
 }
 
@@ -115,9 +115,7 @@ pub(super) async fn set_up_unversioned_configuration_files() -> ::anyhow::Result
             ::log::info!("Finished PUCF successfully");
             Ok(())
         }
-        Err(error) => {
-            Err(::anyhow::anyhow!("Finished PUCF with errors")).context(format!("{error}"))
-        }
+        Err(error) => Err(error).context("Finished PUCF with errors"),
     }
 }
 
@@ -125,7 +123,7 @@ pub(super) async fn set_up_unversioned_configuration_files() -> ::anyhow::Result
 /// onto the local file system.
 pub(super) async fn setup_up_versioned_configuration_files(gui: bool) -> ::anyhow::Result<()> {
     ::log::info!("Placing versioned configuration files (PVCF)");
-    let mut contexts: Vec<String> = vec![];
+    let mut errors = vec![];
 
     if gui {
         if let Err(error) = download_and_place_configuration_files(
@@ -139,21 +137,23 @@ pub(super) async fn setup_up_versioned_configuration_files(gui: bool) -> ::anyho
         )
         .await
         {
-            contexts.push(format!("{error}"));
+            errors.push(error);
         }
 
         log::debug!("To change the bookmarks in file explorers, edit ~/.config/user-firs.dirs, ~/.config/gtk-3.0/bookmarks, and /etc/xdg/user-dirs.defaults");
     }
 
-    if contexts.is_empty() {
+    if errors.is_empty() {
         ::log::info!("Finished PVCF successfully");
         Ok(())
     } else {
-        ::log::warn!("Finished PVCF with errors");
-        let mut error = ::anyhow::anyhow!("Finished PVCF with errors");
-        for context in contexts {
-            error = error.context(context);
+        let mut final_error = Err(errors.pop().context(
+            "BUG! Popping an error should always be possible because we checked the size before",
+        )?);
+        for error in errors {
+            final_error = final_error.context(error);
         }
-        Err(error)
+
+        final_error.context("Finished PVCF with errors")
     }
 }

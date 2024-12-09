@@ -2,6 +2,8 @@
 //! perform the actual work, or call other subroutines that
 //! perform work depending on the Ubuntu version.
 
+use ::anyhow::Context;
+
 mod apt;
 mod configuration_files;
 mod download;
@@ -52,9 +54,7 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
                 }
             },
             Err(error) => {
-                errors.push(::anyhow::anyhow!(
-                    "Could not join an async handle (this should not have happened): {error}"
-                ));
+                errors.push(::anyhow::anyhow!(error));
             }
         }
     }
@@ -62,9 +62,13 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
     if errors.is_empty() {
         Ok(())
     } else {
-        Err(anyhow::anyhow!(
-            "Errors occured during execution: {:?}",
-            errors
-        ))
+        let mut final_error = Err(errors.pop().context(
+            "BUG! Popping an error should always be possible because we checked the size before",
+        )?);
+        for error in errors {
+            final_error = final_error.context(error);
+        }
+
+        final_error.context("Errors occured during execution")
     }
 }
