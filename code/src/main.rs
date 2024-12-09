@@ -12,16 +12,14 @@ async fn main() -> anyhow::Result<()> {
     if let Err(error) = if arguments.assume_correct_invocation {
         hermes::work::run(arguments).await
     } else {
-        let success = hermes::prepare::call_again(&arguments)
-            .context("Initial conditions could not be met")?;
-        if success {
-            ::log::info!("Finished without errors");
-            Ok(())
-        } else {
-            std::process::exit(1);
+        match hermes::prepare::call_again(&arguments).context("Initial conditions could not be met")
+        {
+            Ok(true) => Ok(()),
+            Ok(false) => ::std::process::exit(1),
+            Err(error) => Err(error),
         }
     } {
-        let mut chain = error.chain().rev();
+        let mut chain = error.chain();
         log::error!("{}", chain.next().unwrap());
 
         if chain.len() > 0 {

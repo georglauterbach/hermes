@@ -6,30 +6,19 @@ use ::std::env;
 use ::anyhow::Context as _;
 use ::clap::ValueEnum;
 use ::std::io::Write as _;
-use ::users::os::unix::UserExt as _;
 
 use crate::cli;
 
 /// The path to `/etc/os-release`
 const ETC_OSRELEASE_STR: &str = "/etc/os-release";
 
-/// TODO
+/// Checks `/etc/environment`
 fn check_etc_environment() -> ::anyhow::Result<String> {
-    // ? Checking '/etc/os-release'
     ::log::trace!("Checkling '{}'", ETC_OSRELEASE_STR);
     let etc_osrelease = ::std::path::Path::new(ETC_OSRELEASE_STR);
-    ::anyhow::ensure!(
-        etc_osrelease.exists(),
-        "{} does not exist",
-        ETC_OSRELEASE_STR
-    );
-    ::anyhow::ensure!(
-        etc_osrelease.is_file(),
-        "{} is not a file",
-        ETC_OSRELEASE_STR
-    );
+    ::anyhow::ensure!(etc_osrelease.exists(), "{ETC_OSRELEASE_STR} does not exist");
+    ::anyhow::ensure!(etc_osrelease.is_file(), "{ETC_OSRELEASE_STR} is not a file");
 
-    // ? Checking Ubuntu version in '/etc/os-release'
     ::log::trace!("Checkling Ubuntu version");
     let etc_osrelease_contents = ::std::fs::read_to_string(ETC_OSRELEASE_STR)
         .context(format!("Could not read contents of {ETC_OSRELEASE_STR}"))?;
@@ -49,15 +38,16 @@ fn check_etc_environment() -> ::anyhow::Result<String> {
     ::log::info!("Ubuntu version ID is '{ubuntu_version_id}'");
     Ok(format!(
         "{}",
-        cli::UbuntuVersion::from_str(ubuntu_version_id, true).expect(
-            "'UbuntuVersion::from_str' should always yield 'Ok()' with fallback if necessary"
-        )
+        cli::UbuntuVersion::from_str(ubuntu_version_id, true)
+            .map_err(|string| ::std::io::Error::other(string))
+            .context(
+                "'UbuntuVersion::from_str' should always yield 'Ok()' with fallback if necessary"
+            )?
     ))
 }
 
-/// TODO this does not yet work when the binary is in $PATH (not the whole file path is provided)
+/// Takes care of finding the path with which _hermes_ has been called
 fn get_path_to_self() -> ::anyhow::Result<String> {
-    // ? Acquire path to itself
     let Some(hermes_binrary_path) = env::args().next() else {
         anyhow::bail!("Weird! On UNIX-like operating systems, the first argument to a program is always itself - but this was just violated. I can break rules too. Goodbye!");
     };
@@ -99,25 +89,31 @@ fn get_path_to_self() -> ::anyhow::Result<String> {
         .to_string())
 }
 
-/// TODO
+/// Acquires information about the user that invoked _hermes_
 fn get_user_information() -> ::anyhow::Result<(String, u32, String, u32, String)> {
     let uid = ::users::get_current_uid();
-    let user = ::users::get_current_username()
-        .context("Could not determine user name for current UID '{user_uid}'")?;
-    let user_name = user.name().to_str().context("Weird! Could not convert user name to UTF-8 string - hermes only works with UTF-8 strings")?.to_string();
+    let user_name = ::users::get_current_username()
+        .context(format!(
+            "Could not determine user name for current UID '{uid}'"
+        ))?
+        .to_string_lossy()
+        .to_string();
     ::log::info!("Current user name is '{user_name}' with UID '{uid}'");
 
-    let gid = user.primary_group_id();
-    let user_primary_group_name = ::users::get_current_groupname().context(
-        "Could not determine group name for current user '{user_name}' with GID '{user_gid}'",
-    )?;
-    let user_primary_group_name = user_primary_group_name.to_str().context("Weird! Could not convert group name to UTF-8 string - hermes only works with UTF-8 strings")?.to_string();
-    ::log::info!("Current user's group name is '{user_primary_group_name}' with UID '{gid}'");
+    let gid = ::users::get_current_gid();
+    let group_name = ::users::get_current_groupname()
+        .context(format!(
+            "Could not determine group name for current user '{user_name}' with GID '{gid}'",
+        ))?
+        .to_string_lossy()
+        .to_string();
+    ::log::info!("Current user's group name is '{group_name}' with GID '{gid}'");
 
-    let user_home_dir = user.home_dir().to_str().context("Weird! Could not convert home directory path to UTF-8 string - hermes only works with UTF-8 strings")?.to_string();
-    ::log::info!("Current user's home directory is '{user_home_dir}'");
+    let home_dir =
+        ::std::env::var("HOME").context("Required environment variable 'HOME' is not set")?;
+    ::log::info!("Current user's home directory is '{home_dir}'");
 
-    Ok((user_name, uid, user_primary_group_name, gid, user_home_dir))
+    Ok((user_name, uid, group_name, gid, home_dir))
 }
 
 /// Checking 'sudo' and building command to invoke itself again
@@ -197,7 +193,7 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
         print!("\nProceed? [Y/n] ");
         ::std::io::stdout()
             .flush()
-            .context("Weird! Could not flush ::stdout, which should be possible")?;
+            .context("Weird! Could not flush stdout, which should be possible")?;
         ::std::io::stdin()
             .read_line(&mut user_input)
             .context("Weird! Could not read line, which should be possible")?;
