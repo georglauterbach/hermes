@@ -4,6 +4,10 @@
 
 # shellcheck disable=SC2016,SC2034
 
+# integrations
+
+_ble_contrib_fzf_base="${HOME}/.config/bash/fzf"
+
 # color theme
 
 # background
