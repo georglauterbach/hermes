@@ -185,16 +185,33 @@ async fn bat() -> ::anyhow::Result<()> {
 async fn blesh() -> ::anyhow::Result<()> {
     /// Version of `blesh` to install
     const BLESH_VERSION: &str = "0.4.0-devel3";
-    let file = format!("ble-{BLESH_VERSION}-2");
+    let file = format!("ble-{BLESH_VERSION}");
     let uri = format!(
-        "https://github.com/akinomyoga/ble.sh/releases/download/v{BLESH_VERSION}/{file}.tar.xz"
+        "https://github.com/akinomyoga/ble.sh/releases/download/v{BLESH_VERSION}/{file}-2.tar.xz"
     );
 
-    let local_archive_path = format!("{}/.cache/{file}.tar.xz", environment::home_str());
-    super::download::download_and_place(uri, local_archive_path.clone()).await?;
-    ::log::debug!(
-        "To install ble.sh, unpack the archive with 'tar xf {local_archive_path}' and install it by running 'make -C <UNPACKED DIR> install PREFIX=~/.local'"
-    );
+    // We download and unpacl the archive to `${HOME}/.local/share`
+    let response = super::download::download_file(uri).await?;
+    let xz_decoder = ::async_compression::tokio::bufread::XzDecoder::new(&response[..]);
+    let mut archive = ::tokio_tar::Archive::new(xz_decoder);
+    let target_dir = format!("{}/.local/share/", environment::home_str());
+    ::async_std::fs::create_dir_all(&target_dir).await?;
+    let _ = ::async_std::fs::remove_file(format!("{target_dir}/{file}")).await;
+    archive.unpack(&target_dir).await?;
+    if !::async_std::process::Command::new("su")
+        .arg(environment::user())
+        .arg("-c")
+        .arg(format!(
+            "cp -r \"{target_dir}/{file}\" \"{target_dir}/blesh\""
+        ))
+        .output()
+        .await?
+        .status
+        .success()
+    {
+        anyhow::bail!("Could not unpack ble.sh archive");
+    }
+
     Ok(())
 }
 
