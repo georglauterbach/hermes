@@ -2,34 +2,12 @@
 //! care of managing configuration files.
 
 use super::{
-    super::{data, fs, prepare::environment},
+    super::{data, prepare::environment},
     GITHUB_RAW_URI,
 };
 use ::std::path;
 
 use ::anyhow::Context as _;
-
-/// Download a single file and place it onto the file system.
-pub async fn download_and_place_configuration_file(
-    request_uri: String,
-    absolute_local_path: path::PathBuf,
-    place_as_root: bool,
-) -> ::anyhow::Result<()> {
-    super::download::download_and_place(
-        request_uri,
-        absolute_local_path.to_string_lossy().to_string(),
-    )
-    .await?;
-
-    fs::adjust_permissions(
-        &absolute_local_path,
-        if place_as_root { 0 } else { environment::uid() },
-        if place_as_root { 0 } else { environment::gid() },
-        0o644,
-    )?;
-
-    Ok(())
-}
 
 /// Given an `index`, iterates over the index asynchronously using
 /// [`super::download::download_and_place`] to download and place
@@ -61,7 +39,7 @@ pub(super) async fn download_and_place_configuration_files(
             continue;
         }
 
-        join_set.spawn(download_and_place_configuration_file(
+        join_set.spawn(super::download::download_and_place_configuration_file(
             format!("{base_uri}/{remote_part}"),
             canonical_local_path,
             place_as_root,

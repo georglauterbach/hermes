@@ -32,7 +32,10 @@ pub fn adjust_permissions(
 }
 
 /// Crate the parent directory of a file or directory.
-pub async fn create_parent_dir(directory: &String) -> ::anyhow::Result<::async_std::path::PathBuf> {
+pub async fn create_parent_dir(
+    directory: &String,
+    create_as_root: bool,
+) -> ::anyhow::Result<::async_std::path::PathBuf> {
     let Some(parent_dir) = ::async_std::path::Path::new(directory).parent() else {
         anyhow::bail!("Could not get parent directory of '{directory:?}'");
     };
@@ -44,6 +47,21 @@ pub async fn create_parent_dir(directory: &String) -> ::anyhow::Result<::async_s
             .context(format!(
                 "Could not create parent directory '{parent_dir:?}'"
             ))?;
+
+        super::fs::adjust_permissions(
+            &parent_dir,
+            if create_as_root {
+                0
+            } else {
+                super::super::prepare::environment::uid()
+            },
+            if create_as_root {
+                0
+            } else {
+                super::super::prepare::environment::gid()
+            },
+            0o755,
+        )?;
     }
 
     Ok(parent_dir)

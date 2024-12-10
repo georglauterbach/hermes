@@ -22,20 +22,6 @@ const ARCHITECTURE: &str = "aarch64";
 /// runs much longer than the other functions that perform work. Hence, we can use our
 /// time more efficiently if we already start the download of custom programs.
 pub(super) async fn download_custom_programs() -> ::anyhow::Result<()> {
-    ::async_std::fs::create_dir_all(environment::home_and(".local/bin")).await?;
-    fs::adjust_permissions(
-        &environment::home_and(".local"),
-        environment::uid(),
-        environment::gid(),
-        0o755,
-    )?;
-    fs::adjust_permissions(
-        &environment::home_and(".local/bin"),
-        environment::uid(),
-        environment::gid(),
-        0o755,
-    )?;
-
     let mut join_set = ::tokio::task::JoinSet::new();
     let mut errors = vec![];
 
@@ -71,7 +57,7 @@ pub(super) async fn download_custom_programs() -> ::anyhow::Result<()> {
 /// and their corresponding local paths are in the value of the map.
 async fn extract_from_archive<R>(
     mut archive: ::tokio_tar::Archive<R>,
-    mut entry_path_mappings: collections::HashMap<String, String>,
+    mut entry_path_mappings: collections::HashMap<String, (String, bool)>,
 ) -> anyhow::Result<()>
 where
     R: ::tokio::io::AsyncRead + Unpin + Send,
@@ -96,8 +82,8 @@ where
             }
         };
 
-        if let Some(local_path) = entry_path_mappings.remove(&entry_path_str) {
-            fs::create_parent_dir(&local_path).await?;
+        if let Some((local_path, as_root)) = entry_path_mappings.remove(&entry_path_str) {
+            fs::create_parent_dir(&local_path, as_root).await?;
             ::log::trace!("Unpacking {entry_path_str} from archive to {local_path}");
             if let Err(error) = entry.unpack(&local_path).await {
                 ::log::warn!(
@@ -125,7 +111,7 @@ where
 /// Download an archive and extract it with [`extract_from_archive`].
 async fn download_and_extract(
     uri: String,
-    entry_path_mappings: collections::HashMap<String, String>,
+    entry_path_mappings: collections::HashMap<String, (String, bool)>,
 ) -> ::anyhow::Result<()> {
     let response = super::download::download_file(&uri).await?;
 
@@ -152,7 +138,7 @@ async fn atuin() -> ::anyhow::Result<()> {
     let mut entries = collections::HashMap::new();
     entries.insert(
         format!("{file}/atuin"),
-        format!("{}/atuin", environment::home_local_bin()),
+        (format!("{}/atuin", environment::home_local_bin()), false),
     );
 
     download_and_extract(uri, entries).await?;
@@ -170,11 +156,11 @@ async fn bat() -> ::anyhow::Result<()> {
     let mut entries = collections::HashMap::new();
     entries.insert(
         format!("{file}/bat"),
-        format!("{}/bat", environment::home_local_bin()),
+        (format!("{}/bat", environment::home_local_bin()), false),
     );
     entries.insert(
         format!("{file}/autocomplete/bat.bash"),
-        String::from("/etc/bash_completion.d/bat.bash"),
+        (String::from("/etc/bash_completion.d/bat.bash"), true),
     );
 
     download_and_extract(uri, entries).await?;
@@ -227,7 +213,7 @@ async fn eza() -> ::anyhow::Result<()> {
     let mut entries = collections::HashMap::new();
     entries.insert(
         String::from("./eza"),
-        format!("{}/eza", environment::home_local_bin()),
+        (format!("{}/eza", environment::home_local_bin()), false),
     );
 
     download_and_extract(uri, entries).await?;
@@ -245,11 +231,11 @@ async fn fd() -> ::anyhow::Result<()> {
     let mut entries = collections::HashMap::new();
     entries.insert(
         format!("{file}/fd"),
-        format!("{}/fd", environment::home_local_bin()),
+        (format!("{}/fd", environment::home_local_bin()), false),
     );
     entries.insert(
         format!("{file}/autocomplete/fd.bash"),
-        String::from("/etc/bash_completion.d/fd.bash"),
+        (String::from("/etc/bash_completion.d/fd.bash"), false),
     );
 
     download_and_extract(uri, entries).await?;
@@ -270,7 +256,7 @@ async fn fzf() -> ::anyhow::Result<()> {
     let mut entries = collections::HashMap::new();
     entries.insert(
         String::from("fzf"),
-        format!("{}/fzf", environment::home_local_bin()),
+        (format!("{}/fzf", environment::home_local_bin()), false),
     );
 
     download_and_extract(uri, entries).await?;
@@ -289,9 +275,12 @@ async fn fzf() -> ::anyhow::Result<()> {
             "{}/.config/bash/fzf/{additional_file}",
             environment::home_str()
         );
-        super::download::download_and_place(format!("{uri}/{additional_file}"), local_path.clone())
-            .await?;
-        fs::adjust_permissions(&local_path, environment::uid(), environment::gid(), 0o644)?;
+        super::download::download_and_place_configuration_file(
+            format!("{uri}/{additional_file}"),
+            ::std::path::PathBuf::from(local_path.clone()),
+            false,
+        )
+        .await?;
     }
 
     Ok(())
@@ -308,7 +297,7 @@ async fn gitui() -> ::anyhow::Result<()> {
     let mut entries = collections::HashMap::new();
     entries.insert(
         String::from("./gitui"),
-        format!("{}/gitui", environment::home_local_bin()),
+        (format!("{}/gitui", environment::home_local_bin()), false),
     );
 
     download_and_extract(uri, entries).await?;
@@ -327,11 +316,11 @@ async fn ripgrep() -> ::anyhow::Result<()> {
     let mut entries = collections::HashMap::new();
     entries.insert(
         format!("{file}/rg"),
-        format!("{}/rg", environment::home_local_bin()),
+        (format!("{}/rg", environment::home_local_bin()), false),
     );
     entries.insert(
         format!("{file}/complete/rg.bash"),
-        String::from("/etc/bash_completion.d/rg.bash"),
+        (String::from("/etc/bash_completion.d/rg.bash"), true),
     );
 
     download_and_extract(uri, entries).await?;
@@ -350,7 +339,7 @@ async fn starship() -> ::anyhow::Result<()> {
     let mut entries = collections::HashMap::new();
     entries.insert(
         String::from("starship"),
-        format!("{}/starship", environment::home_local_bin()),
+        (format!("{}/starship", environment::home_local_bin()), false),
     );
 
     download_and_extract(uri, entries).await?;
@@ -369,7 +358,7 @@ async fn zoxide() -> ::anyhow::Result<()> {
     let mut entries = collections::HashMap::new();
     entries.insert(
         String::from("zoxide"),
-        format!("{}/zoxide", environment::home_local_bin()),
+        (format!("{}/zoxide", environment::home_local_bin()), false),
     );
 
     download_and_extract(uri, entries).await?;
