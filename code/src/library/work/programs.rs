@@ -197,6 +197,7 @@ async fn blesh() -> ::anyhow::Result<()> {
     {
         anyhow::bail!("Could not unpack ble.sh archive");
     }
+    let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/{file}")).await;
 
     Ok(())
 }
