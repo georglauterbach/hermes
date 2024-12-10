@@ -123,9 +123,7 @@ fn get_user_information() -> ::anyhow::Result<(String, u32, String, u32, String)
     if !output.status.success() {
         ::anyhow::bail!("Could not determine group name from UID {uid} and GID {gid}");
     }
-    let group_name = std::str::from_utf8(&output.stdout)?
-        .replace('\n', "")
-        .to_string();
+    let group_name = std::str::from_utf8(&output.stdout)?.trim().to_string();
     ::log::info!("Current user's group name is '{group_name}' with GID '{gid}'");
 
     let home_dir =
