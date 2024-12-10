@@ -18,7 +18,7 @@ $ HERMES_VERSION="$(curl -sSIL -w '%{url_effective}' -o /dev/null \
   "https://github.com/georglauterbach/hermes/releases/latest" | sed 's|.*/||')"
 $ sudo curl --silent --show-error --fail --location --output /usr/local/bin/hermes \
   "https://github.com/georglauterbach/hermes/releases/download/${HERMES_VERSION}/hermes-${HERMES_VERSION}-$(uname -m)-unknown-linux-musl"
-$ chmod +x /usr/local/bin/hermes
+$ sudo chmod +x /usr/local/bin/hermes
 $ hermes --help
 ```
 
