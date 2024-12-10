@@ -160,6 +160,27 @@ fn get_invocation_command(uid: u32) -> ::anyhow::Result<::std::process::Command>
     Ok(command)
 }
 
+/// Acquire HTTP proxies if they are set
+fn get_http_proxies() -> (String, String, String) {
+    let http_proxy = env::var("http_proxy").unwrap_or_default();
+    let http_secure_proxy = env::var("https_proxy").unwrap_or_default();
+    let no_proxy = env::var("no_proxy").unwrap_or_default();
+
+    if !http_proxy.is_empty() {
+        ::log::info!("Using proxy http_proxy={http_proxy}");
+    }
+
+    if !http_secure_proxy.is_empty() {
+        ::log::info!("Using proxy https_proxy={http_secure_proxy}");
+    }
+
+    if !http_secure_proxy.is_empty() {
+        ::log::info!("Using proxy no_proxy={no_proxy}");
+    }
+
+    (http_proxy, http_secure_proxy, no_proxy)
+}
+
 /// _hermes_ invokes itself again with correct paramters and other permissions.
 /// This function does exactly that.
 ///
@@ -214,12 +235,11 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
         ::std::io::stdin()
             .read_line(&mut user_input)
             .context("Weird! Could not read line, which should be possible")?;
-        user_input = user_input.replace('\n', "");
-        user_input = user_input.replace('\r', "");
+        let user_input = user_input.trim().to_lowercase();
         println!();
         ::log::trace!("Input was: '{user_input}'");
 
-        match user_input.to_lowercase().as_str() {
+        match user_input.as_str() {
             "" | "y" | "ye" | "yes" => (),
             _ => {
                 ::log::warn!("Setup interrupted - not proceeding");
@@ -227,6 +247,8 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
             }
         }
     }
+
+    let (http_proxy, http_secure_proxy, no_proxy) = get_http_proxies();
 
     // ? Finally, calling itself again
     ::log::debug!("Calling myself again with correct environment");
@@ -241,12 +263,9 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
             format!("UBUNTU_VERSION_ID={ubuntu_version_id}"),
             String::from("DEBIAN_FRONTEND=noninteractive"),
             String::from("DEBCONF_NONINTERACTIVE_SEEN=true"),
-            format!("http_proxy={}", env::var("http_proxy").unwrap_or_default()),
-            format!(
-                "https_proxy={}",
-                env::var("https_proxy").unwrap_or_default()
-            ),
-            format!("no_proxy={}", env::var("no_proxy").unwrap_or_default()),
+            format!("http_proxy={http_proxy}"),
+            format!("https_proxy={http_secure_proxy}"),
+            format!("no_proxy={no_proxy}"),
             path_to_self,
             String::from("--assume-correct-invocation"),
         ])
