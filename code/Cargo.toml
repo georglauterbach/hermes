@@ -38,7 +38,6 @@ tokio = { version = "1.41", default-features = false, features = [
   "macros",
 ] }
 tokio-tar = "0.3"
-users = "0.11"
 which = "7.0"
 
 [profile.release]

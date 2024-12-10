@@ -90,22 +90,41 @@ fn get_path_to_self() -> ::anyhow::Result<String> {
 }
 
 /// Acquires information about the user that invoked _hermes_
+///
+/// We do not use a crate for this but the `id` command because in corporate
+/// networks, users may not be local and crates like `users` cannot deal with this.
 fn get_user_information() -> ::anyhow::Result<(String, u32, String, u32, String)> {
-    let uid = ::users::get_current_uid();
-    let user_name = ::users::get_current_username()
-        .context(format!(
-            "Could not determine user name for current UID '{uid}'"
-        ))?
-        .to_string_lossy()
-        .to_string();
+    let output = ::std::process::Command::new("id").arg("--user").output()?;
+    if !output.status.success() {
+        ::anyhow::bail!("Could not determine user ID (UID)");
+    }
+    let uid = std::str::from_utf8(&output.stdout)?.trim().parse::<u32>()?;
+
+    let output = ::std::process::Command::new("id")
+        .args(["--user", "--name"])
+        .arg(uid.to_string())
+        .output()?;
+    if !output.status.success() {
+        ::anyhow::bail!("Could not determine user name from UID {uid}");
+    }
+    let user_name = std::str::from_utf8(&output.stdout)?.trim().to_string();
     ::log::info!("Current user name is '{user_name}' with UID '{uid}'");
 
-    let gid = ::users::get_current_gid();
-    let group_name = ::users::get_current_groupname()
-        .context(format!(
-            "Could not determine group name for current user '{user_name}' with GID '{gid}'",
-        ))?
-        .to_string_lossy()
+    let output = ::std::process::Command::new("id").arg("--group").output()?;
+    if !output.status.success() {
+        ::anyhow::bail!("Could not determine group ID (GID)");
+    }
+    let gid = std::str::from_utf8(&output.stdout)?.trim().parse::<u32>()?;
+
+    let output = ::std::process::Command::new("id")
+        .args(["--group", "--name"])
+        .arg(uid.to_string())
+        .output()?;
+    if !output.status.success() {
+        ::anyhow::bail!("Could not determine group name from UID {uid} and GID {gid}");
+    }
+    let group_name = std::str::from_utf8(&output.stdout)?
+        .replace('\n', "")
         .to_string();
     ::log::info!("Current user's group name is '{group_name}' with GID '{gid}'");
 
