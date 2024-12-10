@@ -103,9 +103,12 @@ function __hermes__init_starship() {
     fi
 
     if [[ ! -f ${STARSHIP_CONFIG} ]] || [[ ! -r ${STARSHIP_CONFIG} ]]; then
+      echo "hermes: Starship configuration file '${STARSHIP_CONFIG}' does exist or is not readable" >&2
       unset STARSHIP_CONFIG
+    else
+      export STARSHIP_CONFIG
     fi
-    export STARSHIP_CONFIG
+
     eval "$(starship init bash || :)"
   fi
 }
