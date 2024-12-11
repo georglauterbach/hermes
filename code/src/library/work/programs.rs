@@ -30,6 +30,8 @@ const LINK_LIBRARY: &str = "gnu";
 /// runs much longer than the other functions that perform work. Hence, we can use our
 /// time more efficiently if we already start the download of custom programs.
 pub(super) async fn download_custom_programs() -> ::anyhow::Result<()> {
+    ::log::info!("Installing additional programs from GitHub");
+
     let mut join_set = ::tokio::task::JoinSet::new();
     let mut errors = vec![];
 
@@ -281,7 +283,7 @@ async fn fzf() -> ::anyhow::Result<()> {
         ),
     ] {
         let local_path = format!(
-            "{}/.config/bash/fzf/{additional_file}",
+            "{}/.config/fzf/{additional_file}",
             environment::home_str()
         );
         super::download::download_and_place_configuration_file(
