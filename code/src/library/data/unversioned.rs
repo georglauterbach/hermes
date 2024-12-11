@@ -27,8 +27,8 @@ pub const INDEX: ConfigurationFileIndex = &[
         FileOverride::No,
     ),
     (
-        "home/.config/bash/30-extra_programs.sh",
-        "~/.config/bash/30-extra_programs.sh",
+        "home/.config/bash/30-init_extra_programs.sh",
+        "~/.config/bash/30-init_extra_programs.sh",
         FileOverride::Yes,
     ),
     (
