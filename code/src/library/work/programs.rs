@@ -190,7 +190,7 @@ async fn blesh() -> ::anyhow::Result<()> {
         .context(format!(
             "Could not create ble.sh target directory '{target_dir}'"
         ))?;
-    let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/{file}")).await;
+    let _ = ::async_std::fs::remove_dir_all(format!("/tmp/{file}")).await;
     let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/blesh")).await;
 
     // We download and unpacl the archive to `${HOME}/.local/share`
@@ -199,7 +199,7 @@ async fn blesh() -> ::anyhow::Result<()> {
     let mut archive = ::tokio_tar::Archive::new(xz_decoder);
 
     archive
-        .unpack(format!("{target_dir}"))
+        .unpack("/tmp")
         .await
         .context("Could not unpack ble.sh archive")?;
 
