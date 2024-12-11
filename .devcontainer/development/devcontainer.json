@@ -22,7 +22,6 @@
     "vscode": {
       "extensions": [
         "aaron-bond.better-comments",
-        "asciidoctor.asciidoctor-vscode",
         "EditorConfig.EditorConfig",
         "mads-hartmann.bash-ide-vscode",
         "timonwong.shellcheck",

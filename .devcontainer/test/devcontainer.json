@@ -5,5 +5,5 @@
     "DEBIAN_FRONTEND": "noninteractive",
     "DEBCONF_NONINTERACTIVE_SEEN": "true"
   },
-  "postStartCommand": "apt-get --yes update && apt-get --yes install ca-certificates"
+  "postStartCommand": "apt-get --yes update && apt-get --yes install apt-utils ca-certificates"
 }
