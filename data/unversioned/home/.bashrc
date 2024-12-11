@@ -37,7 +37,7 @@ function __bash_setup() {
   __load_helper '10-misc.sh'
   __load_script "${HERMES_CUSTOM_EARLY_SCRIPT:-${SETUP_FILE_PREFIX}/20-custom_early.sh}"
 
-  __evaluates_to_true HERMES_LOAD_INIT_EXTRA_PROGRAMS 'false' && __load_helper '30-extra_programs.sh'
+  __evaluates_to_true HERMES_LOAD_INIT_EXTRA_PROGRAMS 'false' && __load_helper '30-init_extra_programs.sh'
   __evaluates_to_true HERMES_LOAD_OVERRIDE_COMMANDS   'false' && __load_helper '40-override_commands.sh'
   __evaluates_to_true HERMES_LOAD_GLOBAL_ALIASES      'false' && __load_helper '80-global_aliases.sh'
 
