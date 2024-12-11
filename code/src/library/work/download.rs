@@ -1,6 +1,8 @@
 //! This module contains functions to download files from
 //! the internet and and place them on the local file system.
 
+use super::super::fs;
+
 use ::anyhow::Context as _;
 use ::async_std::io::WriteExt as _;
 
@@ -27,7 +29,7 @@ pub(super) async fn download_and_place(
     let response = download_file(&uri).await?;
 
     ::log::trace!("Placing file '{local_path}'");
-    super::super::fs::create_parent_dir(&local_path, as_root).await?;
+    fs::create_parent_dir(&local_path, as_root).await?;
     ::async_std::fs::File::create(&local_path)
         .await
         .context(format!("Could not create file '{local_path}'"))?
@@ -53,20 +55,7 @@ pub(super) async fn download_and_place_configuration_file(
     )
     .await?;
 
-    super::super::fs::adjust_permissions(
-        &absolute_local_path,
-        if place_as_root {
-            0
-        } else {
-            super::super::prepare::environment::uid()
-        },
-        if place_as_root {
-            0
-        } else {
-            super::super::prepare::environment::gid()
-        },
-        0o644,
-    )?;
+    fs::adjust_permissions(&absolute_local_path, place_as_root, 0o644)?;
 
     Ok(())
 }

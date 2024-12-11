@@ -6,12 +6,20 @@ use ::anyhow::Context as _;
 /// Adjust the owner, group, and permissions of a file or directory.
 pub fn adjust_permissions(
     path: &impl AsRef<::std::path::Path>,
-    uid: u32,
-    gid: u32,
+    root: bool,
     mask: u32,
 ) -> ::anyhow::Result<()> {
     use ::std::os::unix::fs::PermissionsExt as _;
     use anyhow::Context as _;
+
+    let (uid, gid) = if root {
+        (0, 0)
+    } else {
+        (
+            super::prepare::environment::uid(),
+            super::prepare::environment::gid(),
+        )
+    };
 
     let path_str = path.as_ref().to_string_lossy();
     ::log::trace!("{path_str}: adjusting permissions");
@@ -48,20 +56,7 @@ pub async fn create_parent_dir(
                 "Could not create parent directory '{parent_dir:?}'"
             ))?;
 
-        super::fs::adjust_permissions(
-            &parent_dir,
-            if create_as_root {
-                0
-            } else {
-                super::super::prepare::environment::uid()
-            },
-            if create_as_root {
-                0
-            } else {
-                super::super::prepare::environment::gid()
-            },
-            0o755,
-        )?;
+        adjust_permissions(&parent_dir, create_as_root, 0o755)?;
     }
 
     Ok(parent_dir)

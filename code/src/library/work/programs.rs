@@ -180,16 +180,18 @@ async fn blesh() -> ::anyhow::Result<()> {
     let response = super::download::download_file(uri).await?;
     let xz_decoder = ::async_compression::tokio::bufread::XzDecoder::new(&response[..]);
     let mut archive = ::tokio_tar::Archive::new(xz_decoder);
+
     let target_dir = format!("{}/.local/share/", environment::home_str());
     ::async_std::fs::create_dir_all(&target_dir).await?;
-    let _ = ::async_std::fs::remove_file(format!("{target_dir}/{file}")).await;
-    archive.unpack(&target_dir).await?;
+    fs::adjust_permissions(&target_dir, false, 0o755)?;
+
+    let _ = ::async_std::fs::remove_file(format!("/tmp/{file}")).await;
+    let _ = ::async_std::fs::remove_file(format!("{target_dir}/blesh")).await;
+    archive.unpack("/tmp").await?;
     if !::async_std::process::Command::new("su")
         .arg(environment::user())
         .arg("-c")
-        .arg(format!(
-            "cp -r \"{target_dir}/{file}\" \"{target_dir}/blesh\""
-        ))
+        .arg(format!("cp -r \"/tmp/{file}\" \"{target_dir}/blesh\""))
         .output()
         .await?
         .status
