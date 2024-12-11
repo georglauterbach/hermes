@@ -187,7 +187,7 @@ async fn blesh() -> ::anyhow::Result<()> {
 
     let _ = ::async_std::fs::remove_dir_all(format!("/tmp/{file}")).await;
     let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/blesh")).await;
-    archive.unpack("/tmp").await?;
+    archive.unpack("/tmp").await.context("Could not unpack ble.sh archive")?;
     if !::async_std::process::Command::new("su")
         .arg(environment::user())
         .arg("-c")
@@ -197,7 +197,7 @@ async fn blesh() -> ::anyhow::Result<()> {
         .status
         .success()
     {
-        anyhow::bail!("Could not unpack ble.sh archive");
+        anyhow::bail!("Could not copy unpacked ble.sh archive to correct location");
     }
     let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/{file}")).await;
 
