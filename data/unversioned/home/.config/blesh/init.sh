@@ -4,11 +4,69 @@
 
 # shellcheck disable=SC2016,SC2034
 
-# integrations
+# -----------------------------------------------
+# ----  Integrations / Contrib  -----------------
+# -----------------------------------------------
 
-_ble_contrib_fzf_base="${HOME}/.config/bash/fzf"
+_ble_contrib_fzf_base="${HOME}/.config/fzf"
 
-# color theme
+# -----------------------------------------------
+# ----  Features  -------------------------------
+# -----------------------------------------------
+
+bleopt highlight_syntax=yes       # enable syntax highlighting
+bleopt highlight_filename=yes     # enable highlighting based on filenames
+bleopt highlight_variable=yes     # enable highlighting based on variable types
+
+bleopt complete_auto_complete=yes # enable auto-complete
+bleopt complete_auto_history=     # disable auto-complete based on the command history
+bleopt complete_ambiguous=        # disable ambiguous completion
+bleopt complete_menu_complete=yes # enable menu-complete by TAB
+
+bleopt complete_menu_filter=
+bleopt complete_menu_style=align-nowrap
+bleopt complete_menu_maxlines=3
+
+# disable marker
+bleopt prompt_eol_mark=''
+bleopt exec_errexit_mark=''
+bleopt exec_elapsed_mark=''
+
+# -----------------------------------------------
+# ----  Character Set / Encoding  ---------------
+# -----------------------------------------------
+
+bleopt char_width_mode='west'
+bleopt input_encoding='UTF-8'
+
+# -----------------------------------------------
+# ----  Miscellaneous  --------------------------
+# -----------------------------------------------
+
+# transient prompt
+bleopt prompt_ps1_final=
+bleopt 'prompt_ps1_transient=same-dir'
+
+# disable writing history to file
+bleopt history_share=
+
+# bells
+bleopt edit_abell=
+bleopt edit_vbell=
+
+# maximum line length
+bleopt line_limit_type=none
+
+# -----------------------------------------------
+# ----  Key Bindings  ---------------------------
+# -----------------------------------------------
+
+# Make CTRL+BACKSPACE delete a whole word (in Alacritty)
+ble-bind -f 'M-C-?' kill-backward-cword
+
+# -----------------------------------------------
+# ----  Theming  --------------------------------
+# -----------------------------------------------
 
 # background
 bg_dim='#141617'
@@ -37,50 +95,6 @@ bg_blue='#659F92'
 bg_purple='C86580'
 bg_aqua='#6BA163'
 bg_orange='#E16F23'
-
-# actual ble.sh options
-
-# Make CTRL+BACKSPACE delete a whole word (in Alacritty)
-ble-bind -f 'M-C-?' kill-backward-cword
-
-# syntax highlighting
-bleopt highlight_syntax=true
-bleopt highlight_filename=true
-bleopt highlight_variable=true
-
-# transient prompt
-bleopt prompt_ps1_final='$(starship module character)'
-
-# completion
-bleopt complete_auto_complete=true
-bleopt complete_auto_history=true
-bleopt complete_ambiguous=true
-bleopt complete_menu_complete=true
-bleopt complete_menu_filter=true
-bleopt complete_menu_style=align-nowrap
-bleopt complete_menu_maxlines=3
-
-# line & history lenght limits
-bleopt line_limit_length=10000
-bleopt history_limit_length=10000
-
-# markings & bells
-bleopt prompt_eol_mark=
-bleopt exec_errexit_mark=
-bleopt exec_elapsed_mark=
-bleopt edit_abell=
-bleopt edit_vbell=
-
-# charsets & encoding
-bleopt char_width_mode='west'
-bleopt input_encoding='UTF-8'
-
-# miscellaneous
-bleopt history_share=true
-bleopt menu_align_max=20
-bleopt accept_line_threshold=-1
-
-# line coloring
 
 ble-face "syntax_default=fg=${fg1}"              # default color
 ble-face "disabled=fg=${bg3}"                    # not executed command

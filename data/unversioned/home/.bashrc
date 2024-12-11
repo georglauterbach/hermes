@@ -27,10 +27,10 @@ function __bash_setup() {
   __load_helper '00-base.sh'
   [[ ${-} == *i* ]] || return 0 # if not running interactively, don't do anything
 
-  __load_helper '10-misc.sh'
   __load_script "${HERMES_CUSTOM_EARLY_SCRIPT:-${SETUP_FILE_PREFIX}/20-custom_early.sh}"
-  __load_helper '30-init_extra_programs.sh'
-  __load_helper '40-override_commands.sh'
+  __load_helper '40-misc.sh'
+  __load_helper '50-init_extra_programs.sh'
+  __load_helper '60-override_commands.sh'
   __load_helper '80-global_aliases.sh'
   __load_script "${HERMES_CUSTOM_LATE_SCRIPT:-${SETUP_FILE_PREFIX}/99-custom_late.sh}"
 
