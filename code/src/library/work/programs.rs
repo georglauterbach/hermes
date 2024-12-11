@@ -184,32 +184,28 @@ async fn blesh() -> ::anyhow::Result<()> {
         "https://github.com/akinomyoga/ble.sh/releases/download/v{BLESH_VERSION}/{file}-2.tar.xz"
     );
 
+    let target_dir = format!("{}/.local/share", environment::home_str());
+    ::async_std::fs::create_dir_all(&target_dir)
+        .await
+        .context(format!(
+            "Could not create ble.sh target directory '{target_dir}'"
+        ))?;
+    let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/{file}")).await;
+    let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/blesh")).await;
+
     // We download and unpacl the archive to `${HOME}/.local/share`
     let response = super::download::download_file(uri).await?;
     let xz_decoder = ::async_compression::tokio::bufread::XzDecoder::new(&response[..]);
     let mut archive = ::tokio_tar::Archive::new(xz_decoder);
 
-    let target_dir = format!("{}/.local/share/", environment::home_str());
-    ::async_std::fs::create_dir_all(&target_dir).await?;
-
-    let _ = ::async_std::fs::remove_dir_all(format!("/tmp/{file}")).await;
-    let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/blesh")).await;
     archive
-        .unpack("/tmp")
+        .unpack(format!("{target_dir}"))
         .await
         .context("Could not unpack ble.sh archive")?;
-    if !::async_std::process::Command::new("su")
-        .arg(environment::user())
-        .arg("-c")
-        .arg(format!("cp -r \"/tmp/{file}\" \"{target_dir}/blesh\""))
-        .output()
-        .await?
-        .status
-        .success()
-    {
-        anyhow::bail!("Could not copy unpacked ble.sh archive to correct location");
-    }
-    let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/{file}")).await;
+
+    ::async_std::fs::rename(format!("/tmp/{file}"), format!("{target_dir}/blesh"))
+        .await
+        .context("Could not move unpackaed ble.sh archive to final location")?;
 
     Ok(())
 }
@@ -276,11 +272,11 @@ async fn fzf() -> ::anyhow::Result<()> {
 
     for (uri, additional_file) in [
         (
-            "https://raw.githubusercontent.com/junegunn/fzf/refs/heads/master/shell/",
+            "https://raw.githubusercontent.com/junegunn/fzf/refs/heads/master/shell",
             "completion.bash",
         ),
         (
-            "https://raw.githubusercontent.com/junegunn/fzf/refs/heads/master/shell/",
+            "https://raw.githubusercontent.com/junegunn/fzf/refs/heads/master/shell",
             "key-bindings.bash",
         ),
     ] {
