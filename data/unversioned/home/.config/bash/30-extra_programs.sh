@@ -9,7 +9,7 @@
 
 # ! Has to be loaded first
 function __hermes__init_ble() {
-  __evaluates_to_true HERMES_LOAD_EXTRA_PROGRAMS_BLE_SH 'true' || return 0
+  __evaluates_to_true HERMES_INIT_BLE_SH 'true' || return 0
   local BLE_SOURCE="${HOME}/.local/share/blesh/ble.sh"
   if [[ -e ${BLE_SOURCE} ]]; then
     local BLE_CONFIG_FILE="${HOME}/.config/bash/ble.sh/config.sh"
@@ -30,13 +30,13 @@ function __hermes__init_atuin() {
   # programs, like StarShip).
   #
   # ref: https://docs.atuin.sh/guide/installation/#installing-the-shell-plugin
-  if __evaluates_to_true HERMES_LOAD_EXTRA_PROGRAMS_ATUIN 'true' \
+  if __evaluates_to_true HERMES_INIT_ATUIN 'true' \
   && __is_command 'atuin'                                        \
   && [[ ! -v BLE_VERSION ]]; then
     echo 'hermes: loading Atuin without ble.sh does not work (falling back to normal history)' >&2
   fi
 
-  if __evaluates_to_true HERMES_LOAD_EXTRA_PROGRAMS_ATUIN 'true' \
+  if __evaluates_to_true HERMES_INIT_ATUIN 'true' \
   && __is_command 'atuin'                                        \
   && [[ -v BLE_VERSION ]]; then
     eval "$(atuin init bash --disable-up-arrow --disable-ctrl-r  || :)"
@@ -50,7 +50,7 @@ function __hermes__init_atuin() {
 }
 
 function __hermes__init_bat() {
-  __evaluates_to_true HERMES_LOAD_EXTRA_PROGRAMS_BAT 'true' || return 0
+  __evaluates_to_true HERMES_INIT_BAT 'true' || return 0
 
   local BAT_CMD_NAME='bat'
   __is_command 'bat' || BAT_CMD_NAME='batcat'
@@ -71,7 +71,7 @@ function __hermes__init_bat() {
 
 # ref: https://github.com/akinomyoga/blesh-contrib/blob/master/integration/fzf.md
 function __hermes__init_fzf() {
-  __evaluates_to_true HERMES_LOAD_EXTRA_PROGRAMS_FZF 'true' || return 0
+  __evaluates_to_true HERMES_INIT_FZF 'true' || return 0
   if __is_command 'fzf'; then
     local FZF_COMPLETION="${HOME}/.config/bash/fzf/completion.bash"
     if [[ -e ${FZF_COMPLETION} ]]; then
@@ -96,7 +96,7 @@ function __hermes__init_fzf() {
 }
 
 function __hermes__init_starship() {
-  __evaluates_to_true HERMES_LOAD_EXTRA_PROGRAMS_STARSHIP 'true' || return 0
+  __evaluates_to_true HERMES_INIT_STARSHIP 'true' || return 0
   if __is_command 'starship'; then
     if [[ ! -v STARSHIP_CONFIG ]]; then
       STARSHIP_CONFIG="${HOME}/.config/bash/starship/starship.toml"
@@ -114,7 +114,7 @@ function __hermes__init_starship() {
 }
 
 function __hermes__init_zoxide() {
-  __evaluates_to_true HERMES_LOAD_EXTRA_PROGRAMS_ZOXIDE 'true' || return 0
+  __evaluates_to_true HERMES_INIT_ZOXIDE 'true' || return 0
   if __is_command 'zoxide'; then
     eval "$(zoxide init bash || :)"
     [[ -v BLE_VERSION ]] && ble-import -f 'integration/zoxide'

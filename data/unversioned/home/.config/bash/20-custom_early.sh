@@ -12,13 +12,13 @@
 #
 # HERMES_LOAD_EXTRA_PROGRAMS must be `true` in order
 # to be able to load any extra programs!
-export HERMES_LOAD_EXTRA_PROGRAMS=false
-export HERMES_LOAD_EXTRA_PROGRAMS_ATUIN=false
-export HERMES_LOAD_EXTRA_PROGRAMS_BAT=true
-export HERMES_LOAD_EXTRA_PROGRAMS_BLE_SH=true
-export HERMES_LOAD_EXTRA_PROGRAMS_FZF=true
-export HERMES_LOAD_EXTRA_PROGRAMS_STARSHIP=true
-export HERMES_LOAD_EXTRA_PROGRAMS_ZOXIDE=true
+export HERMES_LOAD_INIT_EXTRA_PROGRAMS=false
+export HERMES_INIT_ATUIN=false
+export HERMES_INIT_BAT=true
+export HERMES_INIT_BLE_SH=true
+export HERMES_INIT_FZF=true
+export HERMES_INIT_STARSHIP=true
+export HERMES_INIT_ZOXIDE=true
 
 # These variables control whether you want to have default
 # commands (like `ls`) overridden by another, more advanced
