@@ -185,8 +185,8 @@ async fn blesh() -> ::anyhow::Result<()> {
     ::async_std::fs::create_dir_all(&target_dir).await?;
     fs::adjust_permissions(&target_dir, false, 0o755)?;
 
-    let _ = ::async_std::fs::remove_file(format!("/tmp/{file}")).await;
-    let _ = ::async_std::fs::remove_file(format!("{target_dir}/blesh")).await;
+    let _ = ::async_std::fs::remove_dir_all(format!("/tmp/{file}")).await;
+    let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/blesh")).await;
     archive.unpack("/tmp").await?;
     if !::async_std::process::Command::new("su")
         .arg(environment::user())
