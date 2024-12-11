@@ -9,10 +9,16 @@ use ::async_std::stream::StreamExt as _;
 /// The architecture string for the amd64 (`x86_64`) architecture
 #[cfg(target_arch = "x86_64")]
 const ARCHITECTURE: &str = "x86_64";
+/// The library to link against.
+#[cfg(target_arch = "x86_64")]
+const LINK_LIBRARY: &str = "musl";
 
 /// The architecture string for the arm64 (`aarch64`) architecture
 #[cfg(target_arch = "aarch64")]
 const ARCHITECTURE: &str = "aarch64";
+/// The library to link against.
+#[cfg(target_arch = "aarch64")]
+const LINK_LIBRARY: &str = "gnu";
 
 // use async_std::prelude::*;
 
@@ -149,7 +155,7 @@ async fn atuin() -> ::anyhow::Result<()> {
 async fn bat() -> ::anyhow::Result<()> {
     /// Version of `bat` to install
     const BAT_VERSION: &str = "0.24.0";
-    let file = format!("bat-v{BAT_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
+    let file = format!("bat-v{BAT_VERSION}-{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri =
         format!("https://github.com/sharkdp/bat/releases/download/v{BAT_VERSION}/{file}.tar.gz");
 
@@ -187,7 +193,10 @@ async fn blesh() -> ::anyhow::Result<()> {
 
     let _ = ::async_std::fs::remove_dir_all(format!("/tmp/{file}")).await;
     let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/blesh")).await;
-    archive.unpack("/tmp").await.context("Could not unpack ble.sh archive")?;
+    archive
+        .unpack("/tmp")
+        .await
+        .context("Could not unpack ble.sh archive")?;
     if !::async_std::process::Command::new("su")
         .arg(environment::user())
         .arg("-c")
@@ -208,7 +217,7 @@ async fn blesh() -> ::anyhow::Result<()> {
 async fn eza() -> ::anyhow::Result<()> {
     /// The version `eza` to install
     const EZA_VERSION: &str = "0.20.11";
-    let file = format!("eza_{ARCHITECTURE}-unknown-linux-musl");
+    let file = format!("eza_{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri = format!(
         "https://github.com/eza-community/eza/releases/download/v{EZA_VERSION}/{file}.tar.gz"
     );
@@ -311,7 +320,7 @@ async fn gitui() -> ::anyhow::Result<()> {
 async fn ripgrep() -> ::anyhow::Result<()> {
     /// Version of `ripgrep` to install
     const RIPGREP_VERSION: &str = "14.1.1";
-    let file = format!("ripgrep-{RIPGREP_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
+    let file = format!("ripgrep-{RIPGREP_VERSION}-{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri = format!(
         "https://github.com/BurntSushi/ripgrep/releases/download/{RIPGREP_VERSION}/{file}.tar.gz"
     );
