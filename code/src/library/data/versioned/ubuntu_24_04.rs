@@ -9,7 +9,6 @@ impl super::UbuntuVersion for Ubuntu24_04 {
     fn base_packages(&self) -> PackageIndex {
         &[
             "btop",
-            "doas",
             "gnupg2",
             "make",
             "neovim",
