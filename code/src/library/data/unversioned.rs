@@ -17,23 +17,23 @@ pub const INDEX: ConfigurationFileIndex = &[
         FileOverride::Yes,
     ),
     (
-        "home/.config/bash/10-misc.sh",
-        "~/.config/bash/10-misc.sh",
-        FileOverride::Yes,
-    ),
-    (
         "home/.config/bash/20-custom_early.sh",
         "~/.config/bash/20-custom_early.sh",
         FileOverride::No,
     ),
     (
-        "home/.config/bash/30-init_extra_programs.sh",
-        "~/.config/bash/30-init_extra_programs.sh",
+        "home/.config/bash/40-misc.sh",
+        "~/.config/bash/40-misc.sh",
         FileOverride::Yes,
     ),
     (
-        "home/.config/bash/40-override_commands.sh",
-        "~/.config/bash/40-override_commands.sh",
+        "home/.config/bash/50-init_extra_programs.sh",
+        "~/.config/bash/50-init_extra_programs.sh",
+        FileOverride::Yes,
+    ),
+    (
+        "home/.config/bash/60-override_commands.sh",
+        "~/.config/bash/60-override_commands.sh",
         FileOverride::Yes,
     ),
     (

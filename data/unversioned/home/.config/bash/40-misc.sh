@@ -92,9 +92,6 @@ function __hermes__setup_history() {
   bind -x '"\C-e": __atuin_history' # CTRL+e will bring up Atuin
 }
 
-export USER=root
-export HERMES_INIT_BLE_SH=true
-
 # The setup of ble.sh should be done as early as possible and outside a function.
 #
 # ref: https://github.com/akinomyoga/ble.sh?tab=readme-ov-file#13-set-up-bashrc

@@ -282,10 +282,7 @@ async fn fzf() -> ::anyhow::Result<()> {
             "key-bindings.bash",
         ),
     ] {
-        let local_path = format!(
-            "{}/.config/fzf/{additional_file}",
-            environment::home_str()
-        );
+        let local_path = format!("{}/.config/fzf/{additional_file}", environment::home_str());
         super::download::download_and_place_configuration_file(
             format!("{uri}/{additional_file}"),
             ::std::path::PathBuf::from(local_path.clone()),
