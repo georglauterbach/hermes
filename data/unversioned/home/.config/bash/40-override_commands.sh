@@ -33,9 +33,9 @@ function __hermes__override_cat_with_bat() {
   __evaluates_to_true HERMES_OVERRIDE_CAT_WITH_BAT 'false' || return 0
 
   if __is_command 'bat'; then
-    alias cat='bat'
+    alias cat='bat --style=plain --paging=never'
   elif __is_command 'batcat'; then
-    alias cat='batcat'
+    alias cat='batcat --style=plain --paging=never'
   fi
 }
 
