@@ -142,12 +142,7 @@ fn get_invocation_command(uid: u32) -> ::anyhow::Result<::std::process::Command>
         command
     } else {
         log::debug!("UID is not 0 - checking for 'sudo'");
-        if ::std::process::Command::new("sudo")
-            .arg("--version")
-            .stdout(::std::process::Stdio::null())
-            .output()
-            .is_err()
-        {
+        if ::which::which("sudo").is_err() {
             anyhow::bail!(
             "Cannot run commands with 'sudo' (not installed or not in PATH?), and calling user does not have UID 0"
         );
