@@ -14,7 +14,6 @@ use ::anyhow::Context as _;
 /// said configuration files.
 pub(super) async fn download_and_place_configuration_files(
     index: data::ConfigurationFileIndex,
-    place_as_root: bool,
     base_uri: String,
     log_prefix: &'static str,
 ) -> ::anyhow::Result<()> {
@@ -42,7 +41,6 @@ pub(super) async fn download_and_place_configuration_files(
         join_set.spawn(super::download::download_and_place_configuration_file(
             format!("{base_uri}/{remote_part}"),
             canonical_local_path,
-            place_as_root,
         ));
     }
 
@@ -74,7 +72,6 @@ pub(super) async fn set_up_unversioned_configuration_files() -> ::anyhow::Result
 
     let result = download_and_place_configuration_files(
         super::super::data::unversioned::INDEX,
-        false,
         format!("{GITHUB_RAW_URI}/data/unversioned"),
         "PUCF",
     )
@@ -95,7 +92,6 @@ pub(super) async fn setup_up_versioned_configuration_files(gui: bool) -> ::anyho
     if gui {
         if let Err(error) = download_and_place_configuration_files(
             data::versioned::get_version_information().gui_configuration_index(),
-            false,
             format!(
                 "{GITHUB_RAW_URI}/data/versioned/{}",
                 environment::ubuntu_version_id()

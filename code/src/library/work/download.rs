@@ -21,15 +21,11 @@ pub(super) async fn download_file(uri: impl AsRef<str> + Send) -> ::anyhow::Resu
 }
 
 /// Uses [`download_file`] to download a file and writes it to a local path.
-pub(super) async fn download_and_place(
-    uri: String,
-    local_path: String,
-    as_root: bool,
-) -> ::anyhow::Result<()> {
+pub(super) async fn download_and_place(uri: String, local_path: String) -> ::anyhow::Result<()> {
     let response = download_file(&uri).await?;
 
     ::log::trace!("Placing file '{local_path}'");
-    fs::create_parent_dir(&local_path, as_root).await?;
+    fs::create_parent_dir(&local_path).await?;
     ::async_std::fs::File::create(&local_path)
         .await
         .context(format!("Could not create file '{local_path}'"))?
@@ -46,16 +42,11 @@ pub(super) async fn download_and_place(
 pub(super) async fn download_and_place_configuration_file(
     request_uri: String,
     absolute_local_path: ::std::path::PathBuf,
-    place_as_root: bool,
 ) -> ::anyhow::Result<()> {
     download_and_place(
         request_uri,
         absolute_local_path.to_string_lossy().to_string(),
-        place_as_root,
     )
     .await?;
-
-    fs::adjust_permissions(&absolute_local_path, place_as_root, 0o644)?;
-
     Ok(())
 }

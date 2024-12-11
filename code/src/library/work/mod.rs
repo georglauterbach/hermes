@@ -2,6 +2,8 @@
 //! perform the actual work, or call other subroutines that
 //! perform work depending on the Ubuntu version.
 
+use crate::prepare::environment;
+
 mod apt;
 mod configuration_files;
 mod download;
@@ -57,5 +59,34 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
         }
     }
 
+    final_chown(&mut errors);
+
     super::evaluate_errors_vector!(errors, "Errors occured during execution")
+}
+
+/// Perform a final `chown` on the calling user's home directory to
+/// adjust the permissions once, which is most effective.
+fn final_chown(errors: &mut Vec<::anyhow::Error>) {
+    ::log::debug!(
+        "Running final 'chown' on users directory '{}'",
+        environment::home_str()
+    );
+
+    let output = ::std::process::Command::new("chown")
+        .arg("-R")
+        .arg(format!("{}:{}", environment::user(), environment::group()))
+        .arg(environment::home())
+        .output();
+
+    match output {
+        Ok(output) => {
+            if !output.status.success() {
+                errors.push(::anyhow::anyhow!("Final 'chown' on user directory failed"));
+            }
+        }
+        Err(error) => errors.push(
+            ::anyhow::anyhow!(error)
+                .context("Could not generate output from final 'chown' on user directory"),
+        ),
+    }
 }

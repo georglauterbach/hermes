@@ -20,7 +20,6 @@ async fn set_up_new_apt_sources(
         ::log::debug!("Changing APT sources");
         if let Err(error) = configuration_files::download_and_place_configuration_files(
             ubuntu.apt_index(),
-            true,
             format!(
                 "{GITHUB_RAW_URI}/data/versioned/{}",
                 environment::ubuntu_version_id()
@@ -38,7 +37,6 @@ async fn set_up_new_apt_sources(
         ::log::debug!("Changing GUI APT sources");
         if let Err(error) = configuration_files::download_and_place_configuration_files(
             ubuntu.gui_apt_index(),
-            true,
             format!(
                 "{GITHUB_RAW_URI}/data/versioned/{}",
                 environment::ubuntu_version_id()
