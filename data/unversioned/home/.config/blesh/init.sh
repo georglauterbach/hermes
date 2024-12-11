@@ -1,5 +1,5 @@
 # version       0.2.0
-# sourced by    ${HOME}/.bashrc
+# sourced by    ble.sh
 # task          setup for ble.sh (https://github.com/akinomyoga/ble.sh)
 
 # shellcheck disable=SC2016,SC2034
