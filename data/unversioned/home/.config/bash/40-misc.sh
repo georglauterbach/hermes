@@ -83,6 +83,11 @@ function __hermes__setup_history() {
   unset HISTCONTROL HISTSIZE HISTFILESIZE
   eval "$(atuin init bash --disable-up-arrow --disable-ctrl-r  || :)"
   bind -x '"\C-e": __atuin_history' # CTRL+e will bring up Atuin
+
+  if [[ -n ${HERMES_CONFIG_ATUIN_DB_FILE:-} ]]; then
+    sed -i -E "s|(# )?db_path.*|db_path = \"${HERMES_CONFIG_ATUIN_DB_FILE}\"|" \
+      "${XDG_CONFIG_HOME:-${HOME}/.config}/atuin/config.toml"
+  fi
 }
 
 # The setup of ble.sh should be done as early as possible and outside a function.
