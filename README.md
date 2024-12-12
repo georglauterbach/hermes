@@ -57,6 +57,8 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 - [_fzf_](https://github.com/junegunn/fzf)
   - general-purpose command-line fuzzy finder
   - enabled with `HERMES_INIT_FZF`
+- [_gitui_](https://github.com/extrawurst/gitui)
+  - a fast, modern TUI for `git`
 - [_ripgrep_](https://github.com/BurntSushi/ripgrep)
   - fast, modern alternative to `grep`
   - override `grep` with `HERMES_OVERRIDE_GREP_WITH_RIPGREP`
