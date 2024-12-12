@@ -59,8 +59,6 @@ function __hermes__setup_history() {
     export HISTFILESIZE=${HISTFILESIZE:-10000}
 
     shopt -s histappend
-    mkdir -p "$(dirname "${HISTFILE}")"
-    touch "${HISTFILE}"
     [[ -v BLE_VERSION ]] && bleopt history_share=yes
   }
 
