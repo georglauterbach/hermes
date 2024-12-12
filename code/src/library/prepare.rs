@@ -244,6 +244,8 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
     }
 
     let (http_proxy, http_secure_proxy, no_proxy) = get_http_proxies();
+    let env_lang = env::var("LANG").unwrap_or_else(|_| String::from("C"));
+    let env_lc_all = env::var("LC_ALL").unwrap_or_else(|_| env_lang.clone());
 
     // ? Finally, calling itself again
     ::log::debug!("Calling myself again with correct environment");
@@ -255,6 +257,8 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
             format!("HOME={user_home_dir}"),
             format!("UID={uid}"),
             format!("GID={gid}"),
+            format!("LANG={env_lang}"),
+            format!("LC_ALL={env_lc_all}"),
             format!("UBUNTU_VERSION_ID={ubuntu_version_id}"),
             String::from("DEBIAN_FRONTEND=noninteractive"),
             String::from("DEBCONF_NONINTERACTIVE_SEEN=true"),
