@@ -26,7 +26,7 @@ function __hermes__init_fzf() {
     return 0
   fi
 
-  local FZF_COMPLETION="${HOME}/.config/bash/fzf/completion.bash"
+  local FZF_COMPLETION="${HOME}/.config/fzf/completion.bash"
   if [[ -e ${FZF_COMPLETION} ]] && [[ -r ${FZF_COMPLETION} ]]; then
     if [[ -v BLE_VERSION ]]; then
       ble-import --delay 'integration/fzf-completion'
@@ -36,7 +36,7 @@ function __hermes__init_fzf() {
     fi
   fi
 
-  local FZF_KEY_BINDINGS="${HOME}/.config/bash/fzf/key-bindings.bash"
+  local FZF_KEY_BINDINGS="${HOME}/.config/fzf/key-bindings.bash"
   if [[ -e ${FZF_KEY_BINDINGS} ]] && [[ -r ${FZF_KEY_BINDINGS} ]]; then
     if [[ -v BLE_VERSION ]]; then
       ble-import --delay 'integration/fzf-key-bindings'

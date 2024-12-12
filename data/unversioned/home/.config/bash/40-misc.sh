@@ -43,16 +43,11 @@ function __hermes__setup_prompt() {
     export PS4='> ' # `set -x` tracing prompt
 
     # shellcheck disable=SC2155
-    [[ -v debian_chroot ]] && [[ -r /etc/debian_chroot ]] && export debian_chroot=$(</etc/debian_chroot)
-    return 0
+    [[ ! -v debian_chroot ]] && [[ -r /etc/debian_chroot ]] && export debian_chroot=$(</etc/debian_chroot)
   fi
 
-  export STARSHIP_CONFIG=${STARSHIP_CONFIG:-${HOME}/.config/starship/starship.toml}
-  if [[ ! -f ${STARSHIP_CONFIG} ]] || [[ ! -r ${STARSHIP_CONFIG} ]]; then
-    echo "hermes: Starship configuration file '${STARSHIP_CONFIG}' does not exist or is not readable" >&2
-    unset STARSHIP_CONFIG
-  fi
-
+  export STARSHIP_CONFIG
+  [[ -v STARSHIP_CONFIG ]] || STARSHIP_CONFIG="${HOME}/.config/starship/starship.toml"
   eval "$(starship init bash || :)"
 }
 
