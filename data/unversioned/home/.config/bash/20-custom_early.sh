@@ -48,4 +48,4 @@ export HERMES_LOAD_GLOBAL_ALIASES=${HERMES_LOAD_GLOBAL_ALIASES:-false}
 # -----------------------------------------------
 
 # Configures the location of Atuin's SQLite database file
-export HERMES_CONFIG_ATUIN_DB_FILE=${HERMES_CONFIG_ATUIN_DB_FILE:-false}
+export HERMES_CONFIG_ATUIN_DB_FILE=${HERMES_CONFIG_ATUIN_DB_FILE:-}
