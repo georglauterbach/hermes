@@ -44,6 +44,7 @@ function __hermes__setup_prompt() {
 
     # shellcheck disable=SC2155
     [[ ! -v debian_chroot ]] && [[ -r /etc/debian_chroot ]] && export debian_chroot=$(</etc/debian_chroot)
+    return 0
   fi
 
   export STARSHIP_CONFIG
