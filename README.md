@@ -27,13 +27,45 @@ $ hermes --help
 
 ## Optional Additional Setup
 
-### Programs
-
-_hermes_ installs additional programs. Visit [`programs.rs`](code/src/library/work/programs.rs) to find out which ones. The programs are installed to `${HOME}/.local/bin/`.
-
 ### Bash
 
-The setup of Bash is performed by `${HOME}/.bashrc` and scripts in `${HOME}/.config/bash/`. These setup files can be found [here](data/unversioned/home/.config/bash). If you want to modify the havior of _hermes_, take a look at `{HOME}/.config/bash/20-custom_early.sh`. To add code that would normally go to `.bashrc`, edit `${HOME}/.config/bash/99-cutom_late.sh`. These two files are not overwritten by _hermes_ if you run _hermes_ again.
+The setup of Bash is performed by `${HOME}/.bashrc` and scripts in `${HOME}/.config/bash/`. These setup files can be found [here](data/unversioned/home/.config/).
+
+If you want to modify the havior of _hermes_, take a look at `{HOME}/.config/bash/20-custom_early.sh`. This file contains variables that control the initialization of programs and their overrides as well as other configurations. The "[Programs](#programs)" section below referrs to these variables.
+
+To add code that would normally go to `.bashrc`, edit `${HOME}/.config/bash/99-cutom_late.sh`. These two files are not overwritten by _hermes_ if you run _hermes_ again.
+
+### Programs
+
+_hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs include:
+
+- [_Atuin_](https://github.com/atuinsh/atuin)
+  - "magical" shell history using SQLite rather than a file
+  - enbled with `HERMES_INIT_ATUIN`
+- [_bat_](https://github.com/sharkdp/bat)
+  - `cat` with syntax highlighting and git integration
+  - enbled with `HERMES_INIT_BAT`, override `cat` with `HERMES_OVERRIDE_CAT_WITH_BAT`
+- [_ble.sh_](https://github.com/akinomyoga/ble.sh)
+  - command line editor written in pure Bash which replaces the default GNU Readline
+  - enabled with `HERMES_INIT_BLE_SH`
+- [_eza_]()
+  - fast, modern alternative to `ls`
+  - override `ls` with `HERMES_OVERRIDE_LS_WITH_EZA`
+- [_fd_](https://github.com/sharkdp/fd)
+  - fast, modern alternative to `find`
+  - override `find` with `HERMES_OVERRIDE_FIND_WITH_FD`
+- [_fzf_](https://github.com/junegunn/fzf)
+  - general-purpose command-line fuzzy finder
+  - enabled with `HERMES_INIT_FZF`
+- [_ripgrep_](https://github.com/BurntSushi/ripgrep)
+  - fast, modern alternative to `grep`
+  - override `grep` with `HERMES_OVERRIDE_GREP_WITH_RIPGREP`
+- [_starship_](https://github.com/starship/starship)
+  - minimal, blazing-fast, and infinitely customizable prompt for any shell
+  - enbled with `HERMES_INIT_STARSHIP`
+- [_zoxide_](https://github.com/ajeetdsouza/zoxide)
+  - smarter cd command
+  - enbled with `HERMES_INIT_ZOXIDE`, override `cd` with `HERMES_OVERRIDE_CD_WITH_ZOXIDE`
 
 ### Changing APT Sources
 
@@ -57,7 +89,7 @@ _hermes_ is written in the [Rust programming language](https://www.rust-lang.org
 1. Downloading and placing [unversioned configuration files](./data/unversioned/).
 2. Downloading and placing [versioned configuration files](./data/versioned/).
 3. Setting up APT (optionally) and installing additional programs with it.
-4. Installing additional programs by downloading them from GitHub and unpacking them.
+4. Installing [additional programs](#programs) by downloading them from GitHub and unpacking them.
 
 All of these tasks are performed asynchronously, which gives the illusion of parallelism (especially in the log). This makes _hermes_ extremely fast.
 
