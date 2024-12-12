@@ -1,6 +1,6 @@
 {
   "name": "development",
-  "image": "ghcr.io/georglauterbach/dev-container-base:4.1.0",
+  "image": "ghcr.io/georglauterbach/dev-container-base:4.2.0",
   "features": {
     "ghcr.io/georglauterbach/dev-container-features/rust:5.3.5": {
       "system.packages.additional-packages": "pkg-config,musl-tools",
