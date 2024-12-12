@@ -36,8 +36,8 @@ bleopt exec_elapsed_mark=''
 # ----  Character Set / Encoding  ---------------
 # -----------------------------------------------
 
-bleopt char_width_mode='west'
-bleopt input_encoding='UTF-8'
+bleopt char_width_mode=west
+bleopt input_encoding=UTF-8
 
 # -----------------------------------------------
 # ----  Miscellaneous  --------------------------
@@ -45,7 +45,7 @@ bleopt input_encoding='UTF-8'
 
 # transient prompt
 bleopt prompt_ps1_final=
-bleopt 'prompt_ps1_transient=same-dir'
+bleopt prompt_ps1_transient=same-dir:trim
 
 # disable writing history to file
 bleopt history_share=
