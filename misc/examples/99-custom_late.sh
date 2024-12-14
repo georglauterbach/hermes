@@ -17,8 +17,18 @@ if __is_command 'kubectl'; then
   alias k='kubectl'
 fi
 
-alias gcs='git commit'
-alias shutn='shutdown now'
+alias gcs='git commit --signoff --gpg-sign'
+function git() {
+  case "${1:-}" in
+    ( 'update' )
+      git fetch -apt
+      git pull
+      ;;
+    ( * )
+      command git "${@}"
+      ;;
+  esac
+}
 
 if __is_command 'gitui'; then
   alias g='gitui'
@@ -35,14 +45,3 @@ fi
 if __is_command 'zellij'; then
   alias tmux='zellij'
 fi
-
-function git() {
-  case "${1:-}" in
-    ( 'update' )
-      git fetch --all --tags --prune
-      git pull
-      git submodule update --recursive
-      ;;
-    ( * ) command git "${@}" ;;
-  esac
-}
