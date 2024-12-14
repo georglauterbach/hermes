@@ -23,7 +23,7 @@ pub(super) async fn download(
         .context(format!("Could not get request contents of URL '{uri}'"))
 }
 
-/// Uses [`download_file`] to download a file and writes it to a local path.
+/// Uses [`download`] to download a file and writes it to a local path.
 pub(super) async fn download_and_place(uri: String, local_path: String) -> ::anyhow::Result<()> {
     let response = download(&uri).await?;
 
