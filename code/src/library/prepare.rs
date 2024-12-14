@@ -14,12 +14,12 @@ const ETC_OSRELEASE_STR: &str = "/etc/os-release";
 
 /// Checks `/etc/environment`
 fn check_etc_environment() -> ::anyhow::Result<String> {
-    ::log::trace!("Checkling '{}'", ETC_OSRELEASE_STR);
+    ::tracing::trace!("Checkling '{}'", ETC_OSRELEASE_STR);
     let etc_osrelease = ::std::path::Path::new(ETC_OSRELEASE_STR);
     ::anyhow::ensure!(etc_osrelease.exists(), "{ETC_OSRELEASE_STR} does not exist");
     ::anyhow::ensure!(etc_osrelease.is_file(), "{ETC_OSRELEASE_STR} is not a file");
 
-    ::log::trace!("Checkling Ubuntu version");
+    ::tracing::trace!("Checkling Ubuntu version");
     let etc_osrelease_contents = ::std::fs::read_to_string(ETC_OSRELEASE_STR)
         .context(format!("Could not read contents of {ETC_OSRELEASE_STR}"))?;
     let ubuntu_version_id = if let Some(capture) = ::regex::Regex::new(r#"VERSION_ID="(.*)""#)
@@ -35,7 +35,7 @@ fn check_etc_environment() -> ::anyhow::Result<String> {
         ::anyhow::bail!("Could not acquire 'VERSION_ID' in file '{ETC_OSRELEASE_STR}'");
     };
 
-    ::log::info!("Ubuntu version ID is '{ubuntu_version_id}'");
+    ::tracing::info!(target: "preparation", "Ubuntu version ID is '{ubuntu_version_id}'");
     Ok(format!(
         "{}",
         cli::UbuntuVersion::from_str(ubuntu_version_id, true)
@@ -81,7 +81,7 @@ fn get_path_to_self() -> ::anyhow::Result<String> {
         .context("Could not canonicalize path to myself - this is weird and should not happen")?
     };
 
-    ::log::trace!("Acquired file system path {hermes_binary_path:?} to myself",);
+    ::tracing::trace!("Acquired file system path {hermes_binary_path:?} to myself",);
 
     Ok(hermes_binary_path
         .to_str()
@@ -108,7 +108,7 @@ fn get_user_information() -> ::anyhow::Result<(String, u32, String, u32, String)
         ::anyhow::bail!("Could not determine user name from UID {uid}");
     }
     let user_name = std::str::from_utf8(&output.stdout)?.trim().to_string();
-    ::log::info!("Current user name is '{user_name}' with UID '{uid}'");
+    ::tracing::info!(target: "preparation", "Current user name is '{user_name}' with UID '{uid}'");
 
     let output = ::std::process::Command::new("id").arg("--group").output()?;
     if !output.status.success() {
@@ -124,11 +124,11 @@ fn get_user_information() -> ::anyhow::Result<(String, u32, String, u32, String)
         ::anyhow::bail!("Could not determine group name from UID {uid} and GID {gid}");
     }
     let group_name = std::str::from_utf8(&output.stdout)?.trim().to_string();
-    ::log::info!("Current user's group name is '{group_name}' with GID '{gid}'");
+    ::tracing::info!(target: "preparation", "Current user's group name is '{group_name}' with GID '{gid}'");
 
     let home_dir =
         ::std::env::var("HOME").context("Required environment variable 'HOME' is not set")?;
-    ::log::info!("Current user's home directory is '{home_dir}'");
+    ::tracing::info!(target: "preparation", "Current user's home directory is '{home_dir}'");
 
     Ok((user_name, uid, group_name, gid, home_dir))
 }
@@ -136,12 +136,12 @@ fn get_user_information() -> ::anyhow::Result<(String, u32, String, u32, String)
 /// Checking 'sudo' and building command to invoke itself again
 fn get_invocation_command(uid: u32) -> ::anyhow::Result<::std::process::Command> {
     let command = if uid == 0 {
-        log::debug!("UID is 0 - not using 'sudo'");
+        ::tracing::debug!("UID is 0 - not using 'sudo'");
         let mut command = ::std::process::Command::new("env");
         command.args(["--ignore-environment", "-"]);
         command
     } else {
-        log::debug!("UID is not 0 - checking for 'sudo'");
+        ::tracing::debug!("UID is not 0 - checking for 'sudo'");
         if ::which::which("sudo").is_err() {
             anyhow::bail!(
             "Cannot run commands with 'sudo' (not installed or not in PATH?), and calling user does not have UID 0"
@@ -162,15 +162,15 @@ fn get_http_proxies() -> (String, String, String) {
     let no_proxy = env::var("no_proxy").unwrap_or_default();
 
     if !http_proxy.is_empty() {
-        ::log::info!("Using proxy http_proxy={http_proxy}");
+        ::tracing::info!(target: "preparation", "Using HTTP proxy '{http_proxy}'");
     }
 
     if !http_secure_proxy.is_empty() {
-        ::log::info!("Using proxy https_proxy={http_secure_proxy}");
+        ::tracing::info!(target: "preparation", "Using HTTP proxy '{http_secure_proxy}'");
     }
 
     if !http_secure_proxy.is_empty() {
-        ::log::info!("Using proxy no_proxy={no_proxy}");
+        ::tracing::info!(target: "preparation", "Addresses not proxied are '{no_proxy}'");
     }
 
     (http_proxy, http_secure_proxy, no_proxy)
@@ -186,7 +186,9 @@ fn get_http_proxies() -> (String, String, String) {
 /// [`Ok`] with a value of `false`. If everything worked, we return [`Ok`] with a
 /// value of `true`.
 pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
-    ::log::info!(
+    ::tracing::info!(target: "preparation", "This is hermes {}", env!("CARGO_PKG_VERSION"));
+    ::tracing::info!(
+        target: "preparation",
         "Preparing environment and arguments to call myself again - this is expected and correct"
     );
 
@@ -203,13 +205,15 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
     let mut command = get_invocation_command(uid)?;
 
     // ? Noting GUI options
-    ::log::info!(
+    ::tracing::info!(
+        target: "preparation",
         "GUI will {}be installed",
         if arguments.gui { "" } else { "not " }
     );
 
     // ? Noting APT options
-    ::log::info!(
+    ::tracing::info!(
+        target: "preparation",
         "APT sources will {}be changed",
         if arguments.change_apt_sources {
             ""
@@ -218,9 +222,13 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
         }
     );
 
+    let (http_proxy, http_secure_proxy, no_proxy) = get_http_proxies();
+    let env_lang = env::var("LANG").unwrap_or_else(|_| String::from("C"));
+    let env_lc_all = env::var("LC_ALL").unwrap_or_else(|_| env_lang.clone());
+
     // ? Asking for confirmation if not supressed
     if arguments.non_interactive {
-        ::log::debug!("Skipping confirmation prompts because '--non-interactive' was supplied");
+        ::tracing::debug!("Skipping confirmation prompts because '--non-interactive' was supplied");
     } else {
         let mut user_input = String::new();
         print!("\nProceed? [Y/n] ");
@@ -232,23 +240,19 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
             .context("Weird! Could not read line, which should be possible")?;
         let user_input = user_input.trim().to_lowercase();
         println!();
-        ::log::trace!("Input was: '{user_input}'");
+        ::tracing::trace!("Input was: '{user_input}'");
 
         match user_input.as_str() {
             "" | "y" | "ye" | "yes" => (),
             _ => {
-                ::log::warn!("Setup interrupted - not proceeding");
+                ::tracing::warn!(target: "preparation", "Setup interrupted - not proceeding");
                 return Ok(true);
             }
         }
     }
 
-    let (http_proxy, http_secure_proxy, no_proxy) = get_http_proxies();
-    let env_lang = env::var("LANG").unwrap_or_else(|_| String::from("C"));
-    let env_lc_all = env::var("LC_ALL").unwrap_or_else(|_| env_lang.clone());
-
     // ? Finally, calling itself again
-    ::log::debug!("Calling myself again with correct environment");
+    ::tracing::debug!("Calling myself again with correct environment");
     if command
         .args([
             format!("PATH={environment_variable_path}"),

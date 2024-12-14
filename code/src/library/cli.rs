@@ -27,7 +27,7 @@ impl clap::ValueEnum for UbuntuVersion {
         match input {
             "24.04" => Ok(Self::Ubuntu24_04),
             _ => {
-                ::log::debug!("Fallback chosen for Ubuntu {input}");
+                ::tracing::debug!("Fallback chosen for Ubuntu {input}");
                 Ok(Self::Fallback)
             }
         }

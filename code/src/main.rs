@@ -6,8 +6,11 @@ use ::anyhow::Context as _;
 #[tokio::main(flavor = "multi_thread")]
 async fn main() -> anyhow::Result<()> {
     let arguments = <hermes::cli::Arguments as clap::Parser>::parse();
-    hermes::logger::Logger::initialize(arguments.verbosity.log_level())?;
-    ::log::trace!("Dumping CLI arguments: \n{arguments:#?}");
+    ::tracing_subscriber::fmt()
+        .with_max_level(arguments.verbosity.clone())
+        .init();
+
+    ::tracing::trace!("Dumping CLI arguments: \n{arguments:#?}");
 
     if let Err(error) = if arguments.assume_correct_invocation {
         hermes::work::run(arguments).await
@@ -15,7 +18,7 @@ async fn main() -> anyhow::Result<()> {
         match hermes::prepare::call_again(&arguments).context("Initial conditions could not be met")
         {
             Ok(true) => {
-                ::log::info!("Finished without errors");
+                ::tracing::info!("Finished without errors");
                 Ok(())
             }
             Ok(false) => ::std::process::exit(1),
@@ -23,7 +26,7 @@ async fn main() -> anyhow::Result<()> {
         }
     } {
         let mut chain = error.chain();
-        log::error!("{}", chain.next().unwrap());
+        ::tracing::error!("{}", chain.next().unwrap());
 
         if chain.len() > 0 {
             println!("Caused by:");

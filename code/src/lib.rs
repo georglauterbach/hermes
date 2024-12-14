@@ -2,4 +2,4 @@
 
 mod library;
 
-pub use library::{cli, logger, prepare, work};
+pub use library::{cli, prepare, work};

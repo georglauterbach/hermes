@@ -21,7 +21,7 @@ pub(super) async fn download_and_place_configuration_files(
     let mut errors = vec![];
 
     for (remote_part, local_path, overwrite) in index {
-        ::log::debug!("{log_prefix}: handling configuration file path '{local_path}' now");
+        ::tracing::debug!("{log_prefix}: handling configuration file path '{local_path}' now");
         let log_prefix = format!("{log_prefix}: {local_path}: ");
 
         let local_path = local_path.replace('~', &environment::home_str());
@@ -34,7 +34,7 @@ pub(super) async fn download_and_place_configuration_files(
         };
 
         if canonical_local_path.exists() && *overwrite == data::FileOverride::No {
-            ::log::debug!("{log_prefix}file exists and shall not be overridden");
+            ::tracing::debug!("{log_prefix}file exists and shall not be overridden");
             continue;
         }
 
@@ -49,12 +49,12 @@ pub(super) async fn download_and_place_configuration_files(
             Ok(actual_result) => match actual_result {
                 Ok(()) => (),
                 Err(error) => {
-                    ::log::warn!("Something went wrong placing a configuration file: {error}");
+                    ::tracing::warn!("Something went wrong placing a configuration file: {error}");
                     errors.push(error);
                 }
             },
             Err(error) => {
-                ::log::warn!(
+                ::tracing::warn!(
                     "Could not join an async handle (this should not have happened): {error}"
                 );
                 errors.push(::anyhow::anyhow!(error));
@@ -68,7 +68,7 @@ pub(super) async fn download_and_place_configuration_files(
 /// This function takes care of placing all unversioned configuration files
 /// onto the local file system.
 pub(super) async fn set_up_unversioned_configuration_files() -> ::anyhow::Result<()> {
-    ::log::info!("Placing unversioned configuration files (PUCF)");
+    ::tracing::info!(target: "work", "Placing unversioned configuration files (PUCF)");
 
     let result = download_and_place_configuration_files(
         super::super::data::unversioned::INDEX,
@@ -86,7 +86,7 @@ pub(super) async fn set_up_unversioned_configuration_files() -> ::anyhow::Result
 /// This function takes care of placing all versioned configuration files
 /// onto the local file system.
 pub(super) async fn setup_up_versioned_configuration_files(gui: bool) -> ::anyhow::Result<()> {
-    ::log::info!("Placing versioned configuration files (PVCF)");
+    ::tracing::info!(target: "work", "Placing versioned configuration files (PVCF)");
     let mut errors = vec![];
 
     if gui {
@@ -103,7 +103,7 @@ pub(super) async fn setup_up_versioned_configuration_files(gui: bool) -> ::anyho
             errors.push(error);
         }
 
-        log::debug!("To change the bookmarks in file explorers, edit ~/.config/user-firs.dirs, ~/.config/gtk-3.0/bookmarks, and /etc/xdg/user-dirs.defaults");
+        ::tracing::debug!("To change the bookmarks in file explorers, edit ~/.config/user-firs.dirs, ~/.config/gtk-3.0/bookmarks, and /etc/xdg/user-dirs.defaults");
     }
 
     super::super::evaluate_errors_vector!(errors, "Finished PVCF with errors")

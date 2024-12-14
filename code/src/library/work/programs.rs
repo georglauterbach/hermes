@@ -30,7 +30,7 @@ const LINK_LIBRARY: &str = "gnu";
 /// runs much longer than the other functions that perform work. Hence, we can use our
 /// time more efficiently if we already start the download of custom programs.
 pub(super) async fn download_custom_programs() -> ::anyhow::Result<()> {
-    ::log::info!("Installing additional programs from GitHub");
+    ::tracing::info!(target: "work", "Installing additional programs from GitHub");
 
     let mut join_set = ::tokio::task::JoinSet::new();
     let mut errors = vec![];
@@ -79,7 +79,7 @@ where
         let mut entry = match entry {
             Ok(entry) => entry,
             Err(error) => {
-                ::log::warn!("Could not get entry from archive: {error}");
+                ::tracing::warn!("Could not get entry from archive: {error}");
                 continue;
             }
         };
@@ -87,16 +87,16 @@ where
         let entry_path_str = match entry.path() {
             Ok(path) => path.to_string_lossy().to_string(),
             Err(error) => {
-                ::log::warn!("Could get acquire path of entry '{error}'");
+                ::tracing::warn!("Could get acquire path of entry '{error}'");
                 continue;
             }
         };
 
         if let Some(local_path) = entry_path_mappings.remove(&entry_path_str) {
             fs::create_parent_dir(&local_path).await?;
-            ::log::trace!("Unpacking {entry_path_str} from archive to {local_path}");
+            ::tracing::trace!("Unpacking {entry_path_str} from archive to {local_path}");
             if let Err(error) = entry.unpack(&local_path).await {
-                ::log::warn!(
+                ::tracing::warn!(
                     "Could not unpack entry '{entry_path_str}' to '{local_path}': {error}"
                 );
                 continue;
@@ -109,7 +109,7 @@ where
     }
 
     if !entry_path_mappings.is_empty() {
-        ::log::warn!(
+        ::tracing::warn!(
             "Not all desired entries from the archive were unpacked: {:?}",
             entry_path_mappings.keys()
         );
@@ -123,7 +123,7 @@ async fn download_and_extract(
     uri: String,
     entry_path_mappings: collections::HashMap<String, String>,
 ) -> ::anyhow::Result<()> {
-    let response = super::download::download_file(&uri).await?;
+    let response = super::download::download(&uri).await?;
 
     if uri.ends_with(".tar.gz") {
         let gz_decoder = ::async_compression::tokio::bufread::GzipDecoder::new(&response[..]);
@@ -196,7 +196,7 @@ async fn blesh() -> ::anyhow::Result<()> {
     let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/blesh")).await;
 
     // We download and unpacl the archive to `${HOME}/.local/share`
-    let response = super::download::download_file(uri).await?;
+    let response = super::download::download(uri).await?;
     let xz_decoder = ::async_compression::tokio::bufread::XzDecoder::new(&response[..]);
     let mut archive = ::tokio_tar::Archive::new(xz_decoder);
 

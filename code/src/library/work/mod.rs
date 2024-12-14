@@ -21,19 +21,17 @@ const GITHUB_RAW_URI: &str =
 /// is propagated. This is done for all functions, so that the context
 /// is complete and the user is informed about all errors and issues.
 pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
-    ::log::debug!("I was now called correctly");
+    ::tracing::debug!("I was now called correctly");
 
-    ::log::trace!("Here is my environment:");
-    if ::log::max_level() == ::log::Level::Trace {
-        for (var_key, var_name) in ::std::env::vars() {
-            println!("  {var_key}={var_name}");
-        }
+    ::tracing::trace!("Here is my environment:");
+    for (var_key, var_name) in ::std::env::vars() {
+        ::tracing::trace!("  {var_key}={var_name}");
     }
 
-    ::log::info!("Starting work now");
+    ::tracing::info!(target: "work", "Starting actual work now");
 
     let mut task_handler = ::tokio::task::JoinSet::new();
-    ::log::debug!("Spawning tasks in async runtime");
+    ::tracing::debug!("Spawning tasks in async runtime");
     task_handler.spawn(apt::configure_system_with_apt(
         arguments.change_apt_sources,
         arguments.gui,
@@ -67,7 +65,7 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
 /// Perform a final `chown` on the calling user's home directory to
 /// adjust the permissions once, which is most effective.
 fn final_chown(errors: &mut Vec<::anyhow::Error>) {
-    ::log::debug!(
+    ::tracing::debug!(
         "Running final 'chown' on users directory '{}'",
         environment::home_str()
     );

@@ -1,6 +1,6 @@
 [package]
 name = "hermes"
-version = "3.0.0-beta.10"
+version = "3.0.0-beta.13"
 edition = "2021"
 publish = false
 
@@ -25,9 +25,10 @@ async-tar = "0.5"
 bytes = "1.9"
 chrono = "0.4"
 clap = { version = "4.5", features = ["cargo", "derive", "env"] }
-clap-verbosity-flag = "3.0"
+clap-verbosity-flag = { version = "3.0", default-features = false, features = [
+  "tracing",
+] }
 colored = "2.1"
-log = "0.4"
 regex = "1.11"
 reqwest = { version = "0.12", default-features = false, features = [
   "rustls-tls",
@@ -38,6 +39,8 @@ tokio = { version = "1.41", default-features = false, features = [
   "macros",
 ] }
 tokio-tar = "0.3"
+tracing = "0.1"
+tracing-subscriber = "0.3"
 which = "7.0"
 
 [profile.release]

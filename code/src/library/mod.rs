@@ -3,7 +3,6 @@
 pub mod cli;
 mod data;
 mod fs;
-pub mod logger;
 pub mod prepare;
 pub mod work;
 

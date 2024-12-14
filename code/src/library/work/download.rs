@@ -7,10 +7,13 @@ use ::anyhow::Context as _;
 use ::async_std::io::WriteExt as _;
 
 /// Downloads a file asynconously and returns its contents as [`::bytes::Bytes`].
-pub(super) async fn download_file(uri: impl AsRef<str> + Send) -> ::anyhow::Result<::bytes::Bytes> {
+#[::tracing::instrument]
+pub(super) async fn download(
+    uri: impl AsRef<str> + Send + ::std::fmt::Debug,
+) -> ::anyhow::Result<::bytes::Bytes> {
     let uri = uri.as_ref();
 
-    ::log::trace!("Downloading from '{uri}'");
+    ::tracing::trace!("Downloading from '{uri}'");
     ::reqwest::get(uri)
         .await
         .context("BUG! reqwest encountered an error that prevented the start of the download")?
@@ -22,9 +25,9 @@ pub(super) async fn download_file(uri: impl AsRef<str> + Send) -> ::anyhow::Resu
 
 /// Uses [`download_file`] to download a file and writes it to a local path.
 pub(super) async fn download_and_place(uri: String, local_path: String) -> ::anyhow::Result<()> {
-    let response = download_file(&uri).await?;
+    let response = download(&uri).await?;
 
-    ::log::trace!("Placing file '{local_path}'");
+    ::tracing::trace!("Placing file '{local_path}'");
     fs::create_parent_dir(&local_path).await?;
     ::async_std::fs::File::create(&local_path)
         .await
