@@ -82,7 +82,11 @@ function __hermes__setup_history() {
   shopt -u histappend
   export HISTFILE=/dev/null
   unset HISTCONTROL HISTSIZE HISTFILESIZE
-  eval "$(atuin init bash --disable-up-arrow --disable-ctrl-r  || :)"
+
+  local ATUIN_INIT_ARGUMENTS=('--disable-ctrl-r')
+  __evaluates_to_true HERMES_CONFIG_ATUIN_DISABLE_UP_ARROW && ATUIN_INIT_ARGUMENTS+=('--disable-up-arrow')
+
+  eval "$(atuin init bash "${ATUIN_INIT_ARGUMENTS[@]}" || :)"
   bind -x '"\C-e": __atuin_history' # CTRL+e will bring up Atuin
 
   if [[ -n ${HERMES_CONFIG_ATUIN_DB_FILE:-} ]]; then
