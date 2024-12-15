@@ -22,6 +22,12 @@ $ sudo chmod +x /usr/local/bin/hermes
 $ hermes --help
 ```
 
+To update _hermes_, run the following commands:
+
+```console
+$ hermes --update --non-interactive
+```
+
 > [!CAUTION]
 > _hermes_ overwrites files like `.bashrc`. You should make a backup of your configuration files before running _hermes_. You can later re-introduce the code from your `.bashrc` into a new file \[[1](#bash)\].
 

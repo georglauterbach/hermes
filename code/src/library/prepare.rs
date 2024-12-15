@@ -205,22 +205,26 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
     let mut command = get_invocation_command(uid)?;
 
     // ? Noting GUI options
-    ::tracing::info!(
-        target: "preparation",
-        "GUI will {}be installed",
-        if arguments.gui { "" } else { "not " }
-    );
+    if !arguments.update {
+        ::tracing::info!(
+            target: "preparation",
+            "GUI will {}be installed",
+            if arguments.gui { "" } else { "not " }
+        );
+    }
 
     // ? Noting APT options
-    ::tracing::info!(
-        target: "preparation",
-        "APT sources will {}be changed",
-        if arguments.change_apt_sources {
-            ""
-        } else {
-            "not "
-        }
-    );
+    if !arguments.update {
+        ::tracing::info!(
+            target: "preparation",
+            "APT sources will {}be changed",
+            if arguments.change_apt_sources {
+                ""
+            } else {
+                "not "
+            }
+        );
+    }
 
     let (http_proxy, http_secure_proxy, no_proxy) = get_http_proxies();
     let env_lang = env::var("LANG").unwrap_or_else(|_| String::from("C"));

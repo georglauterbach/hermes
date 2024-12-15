@@ -7,7 +7,7 @@ use ::anyhow::Context as _;
 use ::async_std::io::WriteExt as _;
 
 /// Downloads a file asynconously and returns its contents as [`::bytes::Bytes`].
-#[::tracing::instrument]
+#[::tracing::instrument(skip_all)]
 pub(super) async fn download(
     uri: impl AsRef<str> + Send + ::std::fmt::Debug,
 ) -> ::anyhow::Result<::bytes::Bytes> {

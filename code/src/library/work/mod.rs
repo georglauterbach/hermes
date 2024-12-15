@@ -8,6 +8,7 @@ mod apt;
 mod configuration_files;
 mod download;
 mod programs;
+mod update;
 
 /// The base part of URI that we fetch file from.
 const GITHUB_RAW_URI: &str =
@@ -22,6 +23,10 @@ const GITHUB_RAW_URI: &str =
 /// is complete and the user is informed about all errors and issues.
 pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
     ::tracing::debug!("I was now called correctly");
+
+    if arguments.update {
+        return update::update_self().await;
+    }
 
     ::tracing::trace!("Here is my environment:");
     for (var_key, var_name) in ::std::env::vars() {

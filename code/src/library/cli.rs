@@ -69,6 +69,10 @@ pub struct Arguments {
     #[clap(short, long, default_value_t = false)]
     pub change_apt_sources: bool,
 
+    /// Update hermes itself
+    #[clap(short, long, default_value_t = false)]
+    pub update: bool,
+
     /// Used when calling _hermes_ again in the correct environment.
     /// Indicates whether _hermes_ was called again.
     #[clap(long, hide = true, default_value_t = false)]

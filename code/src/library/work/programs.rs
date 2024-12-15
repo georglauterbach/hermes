@@ -8,7 +8,7 @@ use ::async_std::stream::StreamExt as _;
 
 /// The architecture string for the amd64 (`x86_64`) architecture
 #[cfg(target_arch = "x86_64")]
-const ARCHITECTURE: &str = "x86_64";
+pub(super) const ARCHITECTURE: &str = "x86_64";
 /// The library that is linked against by programs. Not all programs
 /// support `musl`, especially on `aarch64`.
 #[cfg(target_arch = "x86_64")]
@@ -16,7 +16,7 @@ const LINK_LIBRARY: &str = "musl";
 
 /// The architecture string for the arm64 (`aarch64`) architecture
 #[cfg(target_arch = "aarch64")]
-const ARCHITECTURE: &str = "aarch64";
+pub(super) const ARCHITECTURE: &str = "aarch64";
 /// The library that is linked against by programs. Not all programs
 /// support `musl`, especially on `aarch64`.
 #[cfg(target_arch = "aarch64")]
