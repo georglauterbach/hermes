@@ -11,20 +11,25 @@ _hermes_ configures _Ubuntu_ by installing various packages and (re-)placing con
 > [!NOTE]
 > While optional, I recommend running `sudo apt-get --yes --quiet=2 update && sudo apt-get --yes --quiet=2 upgrade` before using _hermes_.
 
-Run the following commands to acquire the latest version of _hermes_:
+To **download** the latest version of _hermes_, run the following commands:
 
 ```console
-$ HERMES_VERSION="$(curl -sSIL -w '%{url_effective}' -o /dev/null \
-  "https://github.com/georglauterbach/hermes/releases/latest" | sed 's|.*/||')"
-$ sudo curl --silent --show-error --fail --location --output /usr/local/bin/hermes \
-  "https://github.com/georglauterbach/hermes/releases/download/${HERMES_VERSION}/hermes-${HERMES_VERSION}-$(uname -m)-unknown-linux-musl"
+$ HERMES_VERSION="$(curl -sSIL -w '%{url_effective}' -o /dev/null "https://github.com/georglauterbach/hermes/releases/latest" | sed 's|.*/||')"
+$ sudo curl --silent --show-error --fail --location --output /usr/local/bin/hermes "https://github.com/georglauterbach/hermes/releases/download/${HERMES_VERSION}/hermes-${HERMES_VERSION}-$(uname -m)-unknown-linux-musl"
 $ sudo chmod +x /usr/local/bin/hermes
-$ hermes --help
 ```
 
-To update _hermes_, run the following commands:
+To see the help message and **install** _hermes_, run the following commands:
 
 ```console
+$ hermes --help
+$ hermes
+```
+
+To **update** _hermes_, run the following command
+
+```bash
+$ hermes --version # has to be >= v3.0.0-beta.14
 $ hermes --update --non-interactive
 ```
 
