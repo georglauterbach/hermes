@@ -53,7 +53,7 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 - [_Atuin_](https://github.com/atuinsh/atuin)
   - "magical" shell history using SQLite rather than a file
   - enbled with `HERMES_INIT_ATUIN`
-  - `CTRL+e` (or up-arrow with `HERMES_CONFIG_ATUIN_DISABLE_UP_ARROW`) brings up the history
+  - `CTRL+e` (or `up-arrow` when `HERMES_CONFIG_ATUIN_DISABLE_UP_ARROW=false`) brings up the history
   - setting `HERMES_CONFIG_ATUIN_DB_FILE` changes the database file
 - [_bat_](https://github.com/sharkdp/bat)
   - `cat` with syntax highlighting and git integration
