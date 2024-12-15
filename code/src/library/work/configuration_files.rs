@@ -15,15 +15,12 @@ use ::anyhow::Context as _;
 pub(super) async fn download_and_place_configuration_files(
     index: data::ConfigurationFileIndex,
     base_uri: String,
-    log_prefix: &'static str,
 ) -> ::anyhow::Result<()> {
     let mut join_set = ::tokio::task::JoinSet::new();
     let mut errors = vec![];
 
     for (remote_part, local_path, overwrite) in index {
-        ::tracing::debug!("{log_prefix}: handling configuration file path '{local_path}' now");
-        let log_prefix = format!("{log_prefix}: {local_path}: ");
-
+        ::tracing::debug!("handling configuration file path '{local_path}' now");
         let local_path = local_path.replace('~', &environment::home_str());
         let canonical_local_path = match path::absolute(path::Path::new(&local_path)) {
             Ok(path) => path,
@@ -34,7 +31,7 @@ pub(super) async fn download_and_place_configuration_files(
         };
 
         if canonical_local_path.exists() && *overwrite == data::FileOverride::No {
-            ::tracing::debug!("{log_prefix}file exists and shall not be overridden");
+            ::tracing::debug!("file {canonical_local_path:?} exists and shall not be overridden");
             continue;
         }
 
@@ -67,13 +64,13 @@ pub(super) async fn download_and_place_configuration_files(
 
 /// This function takes care of placing all unversioned configuration files
 /// onto the local file system.
+#[::tracing::instrument(skip_all)]
 pub(super) async fn set_up_unversioned_configuration_files() -> ::anyhow::Result<()> {
     ::tracing::info!(target: "work", "Placing unversioned configuration files (PUCF)");
 
     let result = download_and_place_configuration_files(
         super::super::data::unversioned::INDEX,
         format!("{GITHUB_RAW_URI}/data/unversioned"),
-        "PUCF",
     )
     .await;
 
@@ -85,6 +82,7 @@ pub(super) async fn set_up_unversioned_configuration_files() -> ::anyhow::Result
 
 /// This function takes care of placing all versioned configuration files
 /// onto the local file system.
+#[::tracing::instrument(skip_all)]
 pub(super) async fn setup_up_versioned_configuration_files(gui: bool) -> ::anyhow::Result<()> {
     ::tracing::info!(target: "work", "Placing versioned configuration files (PVCF)");
     let mut errors = vec![];
@@ -96,7 +94,6 @@ pub(super) async fn setup_up_versioned_configuration_files(gui: bool) -> ::anyho
                 "{GITHUB_RAW_URI}/data/versioned/{}",
                 environment::ubuntu_version_id()
             ),
-            "PVCF (GUI)",
         )
         .await
         {

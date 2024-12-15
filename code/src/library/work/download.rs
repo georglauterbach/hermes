@@ -42,6 +42,7 @@ pub(super) async fn download_and_place(uri: String, local_path: String) -> ::any
 }
 
 /// Download a single file and place it onto the file system.
+#[::tracing::instrument]
 pub(super) async fn download_and_place_configuration_file(
     request_uri: String,
     absolute_local_path: ::std::path::PathBuf,

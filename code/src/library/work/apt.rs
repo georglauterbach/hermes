@@ -9,6 +9,7 @@ use super::{
 
 /// Change APT sources in `/etc/apt/sources.list.d/` if requested
 /// by the user
+#[::tracing::instrument(skip_all)]
 async fn set_up_new_apt_sources(
     ubuntu: &dyn data::versioned::UbuntuVersion,
     change_apt_sources: bool,
@@ -24,7 +25,6 @@ async fn set_up_new_apt_sources(
                 "{GITHUB_RAW_URI}/data/versioned/{}",
                 environment::ubuntu_version_id()
             ),
-            "changing APT sources",
         )
         .await
         {
@@ -41,7 +41,6 @@ async fn set_up_new_apt_sources(
                 "{GITHUB_RAW_URI}/data/versioned/{}",
                 environment::ubuntu_version_id()
             ),
-            "updating GUI APT sources",
         )
         .await
         {
