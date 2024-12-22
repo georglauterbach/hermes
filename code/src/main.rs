@@ -7,7 +7,7 @@ use ::anyhow::Context as _;
 async fn main() -> anyhow::Result<()> {
     let arguments = <hermes::cli::Arguments as clap::Parser>::parse();
     ::tracing_subscriber::fmt()
-        .with_max_level(arguments.verbosity.clone())
+        .with_max_level(arguments.verbosity)
         .init();
 
     ::tracing::trace!("Dumping CLI arguments: \n{arguments:#?}");
