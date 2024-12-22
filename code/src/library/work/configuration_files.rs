@@ -64,7 +64,7 @@ pub(super) async fn download_and_place_configuration_files(
 
 /// This function takes care of placing all unversioned configuration files
 /// onto the local file system.
-#[::tracing::instrument(skip_all)]
+#[::tracing::instrument(skip_all, name = "pucf")]
 pub(super) async fn set_up_unversioned_configuration_files() -> ::anyhow::Result<()> {
     ::tracing::info!(target: "work", "Placing unversioned configuration files (PUCF)");
 
@@ -82,7 +82,7 @@ pub(super) async fn set_up_unversioned_configuration_files() -> ::anyhow::Result
 
 /// This function takes care of placing all versioned configuration files
 /// onto the local file system.
-#[::tracing::instrument(skip_all)]
+#[::tracing::instrument(skip_all, name = "pvcf")]
 pub(super) async fn setup_up_versioned_configuration_files(gui: bool) -> ::anyhow::Result<()> {
     ::tracing::info!(target: "work", "Placing versioned configuration files (PVCF)");
     let mut errors = vec![];

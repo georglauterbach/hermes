@@ -45,7 +45,7 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
     task_handler.spawn(configuration_files::setup_up_versioned_configuration_files(
         arguments.gui,
     ));
-    task_handler.spawn(programs::download_custom_programs());
+    task_handler.spawn(programs::install_additional_programs());
 
     let mut errors = vec![];
     while let Some(handler) = task_handler.join_next().await {

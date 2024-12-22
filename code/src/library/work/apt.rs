@@ -9,12 +9,13 @@ use super::{
 
 /// Change APT sources in `/etc/apt/sources.list.d/` if requested
 /// by the user
-#[::tracing::instrument(skip_all)]
+#[::tracing::instrument(skip_all, name = "cswa")]
 async fn set_up_new_apt_sources(
     ubuntu: &dyn data::versioned::UbuntuVersion,
     change_apt_sources: bool,
     gui: bool,
 ) -> ::anyhow::Result<()> {
+    ::tracing::info!(target: "work", "Configuring system with APT (CSWA)");
     let mut errors = vec![];
 
     if change_apt_sources {

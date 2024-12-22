@@ -29,8 +29,9 @@ const LINK_LIBRARY: &str = "gnu";
 /// This function is mainly an optimization. [`super::apt::configure_system_with_apt`]
 /// runs much longer than the other functions that perform work. Hence, we can use our
 /// time more efficiently if we already start the download of custom programs.
-pub(super) async fn download_custom_programs() -> ::anyhow::Result<()> {
-    ::tracing::info!(target: "work", "Installing additional programs from GitHub");
+#[::tracing::instrument(skip_all, name = "iap")]
+pub(super) async fn install_additional_programs() -> ::anyhow::Result<()> {
+    ::tracing::info!(target: "work", "Installing additional programs (IAP)");
 
     let mut join_set = ::tokio::task::JoinSet::new();
     let mut errors = vec![];
