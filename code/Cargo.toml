@@ -37,7 +37,7 @@ tokio = { version = "1.41", default-features = false, features = [
 ] }
 tokio-tar = "0.3"
 tracing = "0.1"
-tracing-subscriber = "0.3"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 which = "7.0"
 
 [profile.release]

@@ -6,9 +6,7 @@ use ::anyhow::Context as _;
 #[tokio::main(flavor = "multi_thread")]
 async fn main() -> anyhow::Result<()> {
     let arguments = <hermes::cli::Arguments as clap::Parser>::parse();
-    ::tracing_subscriber::fmt()
-        .with_max_level(arguments.verbosity)
-        .init();
+    arguments.init_tracing();
 
     ::tracing::trace!("Dumping CLI arguments: \n{arguments:#?}");
 

@@ -10,7 +10,7 @@ pub enum UbuntuVersion {
     Ubuntu24_04,
 }
 
-impl clap::ValueEnum for UbuntuVersion {
+impl ::clap::ValueEnum for UbuntuVersion {
     fn value_variants<'a>() -> &'a [Self] {
         &[Self::Fallback, Self::Ubuntu24_04]
     }
@@ -77,4 +77,19 @@ pub struct Arguments {
     /// Indicates whether _hermes_ was called again.
     #[clap(long, hide = true, default_value_t = false)]
     pub assume_correct_invocation: bool,
+}
+
+impl Arguments {
+    /// Initializes the [`::tracing_subscriber`] based on the verbosity level.
+    pub fn init_tracing(&self) {
+        use ::tracing_subscriber::{layer::SubscriberExt as _, util::SubscriberInitExt as _};
+
+        ::tracing_subscriber::registry()
+            .with(
+              ::tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
+                  format!("polling=warn,reqwest=warn,reqwest=warn,hyper_util::client::legacy=warn,async_io=warn,async_std=warn,{}", self.verbosity).into()
+              })
+            ).with(tracing_subscriber::fmt::layer())
+            .init();
+    }
 }
