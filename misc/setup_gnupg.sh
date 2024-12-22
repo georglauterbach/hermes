@@ -1,7 +1,4 @@
-#! /usr/bin/env bash
-
-set -eE -u -o pipefail
-shopt -s inherit_errexit
+#! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
 
 sudo apt-get --yes install gnupg2
 

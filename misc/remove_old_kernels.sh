@@ -1,7 +1,7 @@
-#! /usr/bin/env bash
+#! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
 
 if [[ ${EUID} -ne 0 ]]; then
-  echo "This script needs to run with superuser privileges" >&2
+  echo "ERROR: This script needs to run with superuser privileges" >&2
   exit 1
 fi
 

@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
 
 SUDO_CMD="add-apt-repository --yes --no-update ppa:flatpak/stable"
 SUDO_CMD+=" && apt-get --yes update"

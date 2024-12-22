@@ -1,9 +1,14 @@
-#! /usr/bin/env bash
+#! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
 
 # shellcheck disable=SC2154
 
 if [[ ${EUID} -ne 0 ]]; then
-  echo "ERROR Run this script with superuser privileges!" >&2
+  echo "ERROR: This script needs to run with superuser privileges" >&2
+  exit 1
+fi
+
+if [[ ${#} -gt 1 ]]; then
+  echo "ERROR: More than one argument is not supported" >&1
   exit 1
 fi
 
@@ -20,11 +25,6 @@ readonly LOCALES=(
   LC_TIME
   LC_NUMERIC
 )
-
-if [[ ${#} -gt 1 ]]; then
-  echo "ERROR More than one argument is not supported" >&1
-  exit 1
-fi
 
 for REQUIRED_COMMAND in 'locale-gen' 'update-locale'; do
   if ! command -v "${REQUIRED_COMMAND}" &>/dev/null; then
