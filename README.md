@@ -9,7 +9,8 @@ _hermes_ configures _Ubuntu_ by installing various packages and (re-)placing con
 ## Usage
 
 > [!NOTE]
-> While optional, I recommend running `sudo apt-get --yes --quiet=2 update && sudo apt-get --yes --quiet=2 upgrade` before using _hermes_.
+>
+> While optional, I recommend running `sudo apt-get --yes update && sudo apt-get --yes upgrade` before using _hermes_.
 
 To **download** the latest version of _hermes_, run the following commands:
 
@@ -29,12 +30,13 @@ hermes
 To **update** _hermes_, run the following command
 
 ```bash
-hermes --version # has to be >= v3.0.0-beta.14
-hermes --update --non-interactive
+hermes --version
+hermes --update --non-interactive # works on >= v3.0.0-beta.14
 ```
 
 > [!CAUTION]
-> _hermes_ overwrites files like `.bashrc`. You should make a backup of your configuration files before running _hermes_. You can later re-introduce the code from your `.bashrc` into a new file \[[1](#bash)\].
+>
+> _hermes_ overwrites files like `.bashrc`. You should make a backup of your Bash configuration files before running _hermes_. You can later re-introduce the code from your `.bashrc` into a new file \[[1](#bash)\].
 
 ## Optional Additional Setup
 
@@ -89,6 +91,7 @@ To change and add APT sources (including PPAs), run _hermes_ with the `--change-
 ### GUI
 
 > [!WARNING]
+>
 > Support for installing a GUI via [_Regolith Linux_](https://regolith-desktop.com/) is experimental. I am currently working on the Sway integration but lack Wayland capabilities because of an old graphics card of mine.
 
 To set up a GUI, run _hermes_ with the `--gui` flag. This option installs new PPAs for _Regolith Linux_, [_Alacritty_](https://github.com/alacritty/alacritty), [_Cryptomator_](https://github.com/cryptomator/cryptomator), and [_Visual Studio Code_](https://github.com/microsoft/vscode). _hermes_ installs _Regolith Linux_, _Alacritty_ and _VS Code_, and provides a default configuratin for _Alacritty_.
