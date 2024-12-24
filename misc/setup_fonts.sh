@@ -21,3 +21,5 @@ function download_extract_place() {
 
 download_extract_place 'FiraCode'
 download_extract_place 'JetBrainsMono'
+
+fc-cache -fv
