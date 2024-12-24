@@ -109,9 +109,6 @@ impl super::UbuntuVersion for Ubuntu24_04 {
         &[
             "alacritty",
             "code",
-            "fonts-firacode",
-            "fonts-font-awesome",
-            "fonts-nerd-font-firamono",
             "regolith-desktop",
             "regolith-session-sway",
             "regolith-look-gruvbox",
