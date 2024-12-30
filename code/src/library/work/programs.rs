@@ -140,7 +140,7 @@ async fn download_and_extract(
 /// Install `atuin` (<https://github.com/atuinsh/atuin>)
 async fn atuin() -> ::anyhow::Result<()> {
     /// Version of `atuin` to install
-    const ATUIN_VERSION: &str = "18.3.0";
+    const ATUIN_VERSION: &str = "18.4.0";
     let file = format!("atuin-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
         "https://github.com/atuinsh/atuin/releases/download/v{ATUIN_VERSION}/{file}.tar.gz"
@@ -216,7 +216,7 @@ async fn blesh() -> ::anyhow::Result<()> {
 /// Install `eza` (<https://github.com/eza-community/eza>)
 async fn eza() -> ::anyhow::Result<()> {
     /// The version `eza` to install
-    const EZA_VERSION: &str = "0.20.13";
+    const EZA_VERSION: &str = "0.20.14";
     let file = format!("eza_{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri = format!(
         "https://github.com/eza-community/eza/releases/download/v{EZA_VERSION}/{file}.tar.gz"
