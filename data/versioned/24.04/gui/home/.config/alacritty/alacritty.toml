@@ -1,6 +1,5 @@
 import = [
   "~/.config/alacritty/10-general.toml",
-  "~/.config/alacritty/20-font.toml",
   "~/.config/alacritty/30-colors.toml",
   "~/.config/alacritty/40-bindings.toml",
 ]
