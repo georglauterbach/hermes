@@ -2,7 +2,7 @@
   "name": "development",
   "image": "ghcr.io/georglauterbach/dev-container-base:4.3.0",
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/rust:5.3.6": {
+    "ghcr.io/georglauterbach/dev-container-features/rust:5.4.3": {
       "system.packages.additional-packages": "pkg-config,musl-tools",
       "linker.mold.install": "true"
     }
