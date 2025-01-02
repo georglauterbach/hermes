@@ -1,13 +1,7 @@
 {
   // cSpell:enable
   // ? miscellaneous / general
-  "telemetry.telemetryLevel": "off",
-  "http.proxy": "http://proxy.ssn.mu.rsint.net:9480",
-  "http.noProxy": [
-    "localhost",
-    "rsint.net",
-    "rsext.net"
-  ],
+  "telemetry.telemetryLevel": "error",
   "update.mode": "none",
   // ? search & window
   "window.titleBarStyle": "custom",
