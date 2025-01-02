@@ -113,7 +113,7 @@ impl super::UbuntuVersion for Ubuntu24_04 {
             "regolith-session-sway",
             "regolith-look-gruvbox",
             "regolith-wm-user-programs",
-            "seahorse",
+            "swaylock"
         ]
     }
 }
