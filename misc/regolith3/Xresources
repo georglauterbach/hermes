@@ -1,0 +1,48 @@
+! -----------------------------------------------
+! ----  Modifier  -------------------------------
+! -----------------------------------------------
+
+wm.mod: Mod4
+wm.alt: Mod1
+
+! -----------------------------------------------
+! ----  Font  -----------------------------------
+! -----------------------------------------------
+
+gnome.terminal.font: JetBrainsMono Nerd Font 11
+gtk.monospace_font_name: JetBrainsMono Nerd Font 11
+wm.bar.font: JetBrainsMono Nerd Font 10
+
+gtk.document_font_name: Ubuntu 10
+gtk.font_name: Ubuntu 10
+
+! -----------------------------------------------
+! ----  Wallpaper  ------------------------------
+! -----------------------------------------------
+
+regolith.wallpaper.file: ${HOME}/.config/regolith3/wallpaper.png
+regolith.lockscreen.wallpaper.file: ${HOME}/.config/regolith3/wallpaper.png
+
+wm.program.lock: "swaylock --indicator-caps-lock --image ${HOME}/.config/regolith3/wallpaper.png"
+
+! -----------------------------------------------
+! ----  Key Bindings  ---------------------------
+! -----------------------------------------------
+
+wm.binding.exit_app: q
+
+wm.binding.terminal: Return
+wm.binding.float_toggle: Shift+Space
+
+wm.binding.browser: f
+wm.binding.fullscreen_toggle: Shift+f
+
+wm.binding.launcher.app: Space
+wm.binding.launcher.cmd: KP_1
+wm.binding.launcher.window: KP_2
+
+wm.binding.files: n
+wm.binding.notification_ui: Shift+n
+
+wm.binding.settings: Shift+c
+wm.binding.code: c

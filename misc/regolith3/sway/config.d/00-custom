@@ -1,0 +1,38 @@
+# -----------------------------------------------
+# ----  General  --------------------------------
+# -----------------------------------------------
+
+# Documentation
+# https://regolith-desktop.com/docs/using-regolith/configuration/
+
+# -----------------------------------------------
+# ----  Keyboard Layout  ------------------------
+# -----------------------------------------------
+
+input type:keyboard {
+    xkb_layout de
+}
+
+# -----------------------------------------------
+# ----  Mouse  ----------------------------------
+# -----------------------------------------------
+
+focus_follows_mouse yes
+
+# -----------------------------------------------
+# ----  Key Bindings  ---------------------------
+# -----------------------------------------------
+
+set_from_resource $wm.binding.code wm.binding.code c
+bindsym $mod+$wm.binding.code exec code
+
+set_from_resource $wm.binding.move_workspace wm.binding.move_workspace m
+bindsym $mod+$wm.binding.move_workspace move workspace to output left
+
+# -----------------------------------------------
+# ----  Workspaces  -----------------------------
+# -----------------------------------------------
+
+assign [class="Code"] $ws2
+assign [app_id="org.mozilla.firefox"] $ws3
+assign [title="Microsoft Teams"] $ws10
