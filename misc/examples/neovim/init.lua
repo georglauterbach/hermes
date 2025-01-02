@@ -50,43 +50,15 @@ require("lazy").setup({
       end
     },
     {
-      "stevearc/conform.nvim",
-      lazy = true,
-      event = { "BufWritePre" },
-      cmd = { "ConformInfo" },
-      opts = {
-        formatters_by_ft = {
-          python = { "black" },
-        },
-        format_on_save = {
-          timeout_ms = 500,
-          lsp_fallback = true,
-        },
-      }
-    },
-    {
       "nvim-treesitter/nvim-treesitter",
       lazy = true,
       build = ":TSUpdate",
-    },
-    {
-      "hrsh7th/nvim-cmp",
-      lazy = true,
-      event = "InsertEnter",
     },
     {
       "folke/noice.nvim",
       lazy = true,
       event = "VeryLazy",
       opts = {
-        lsp = {
-          -- override markdown rendering so that `cmp` and other plugins use `Treesitter`
-          override = {
-            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
-          },
-        },
         presets = {
           bottom_search = false,        -- use a classic bottom cmdline for search
           command_palette = true,       -- position the cmdline and popupmenu together
