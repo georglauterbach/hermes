@@ -8,11 +8,6 @@
 
 __evaluates_to_true HERMES_LOAD_GLOBAL_ALIASES || return 0
 
-# shellcheck disable=SC2139
-alias v="${EDITOR:-vi}"
-# shellcheck disable=SC2139
-alias sv="sudo ${EDITOR:-vi}"
-
 alias lsa='ls -a'
 
 alias ..='cd ..'
