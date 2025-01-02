@@ -23,4 +23,3 @@ readonoly EXTENSIONS=(
 for EXTENSION in "${EXTENSIONS[@]}"; do
   code --install-extension "${EXTENSION}"
 done
-

@@ -1,247 +1,247 @@
 {
-    // cSpell:enable
-    // ? miscellaneous / general
-    "telemetry.telemetryLevel": "off",
-    "http.proxy": "http://proxy.ssn.mu.rsint.net:9480",
-    "http.noProxy": [
-      "localhost",
-      "rsint.net",
-      "rsext.net"
-    ],
-    "update.mode": "none",
-    // ? search & window
-    "window.titleBarStyle": "custom",
-    "window.commandCenter": false,
-    "window.customTitleBarVisibility": "auto",
-    "window.menuBarVisibility": "compact",
-    "search.useIgnoreFiles": true,
-    // ? git
-    "git.confirmSync": false,
-    "git.autofetch": false,
-    "git.ignoreMissingGitWarning": true,
-    "git.openRepositoryInParentFolders": "never",
-    // ? workbench
-    // * workbench::miscellaneous
-    "workbench.iconTheme": "material-icon-theme",
-    "workbench.editor.showTabs": "multiple",
-    "workbench.editor.wrapTabs": true,
-    "workbench.editor.enablePreview": true,
-    "workbench.editor.decorations.colors": true,
-    "workbench.editor.enablePreviewFromQuickOpen": true,
-    "workbench.editor.closeEmptyGroups": true,
-    "workbench.editor.pinnedTabSizing": "compact",
-    "workbench.editor.enablePreviewFromCodeNavigation": true,
-    "workbench.editor.limit.value": 5,
-    "workbench.editor.limit.enabled": true,
-    "workbench.editor.limit.perEditorGroup": true,
-    "workbench.activityBar.location": "top",
-    "workbench.sideBar.location": "right",
-    // * workbench::theme
-    "workbench.preferredDarkColorTheme": "Gruvbox Material Dark",
-    "workbench.preferredLightColorTheme": "Default Light+",
-    "window.autoDetectColorScheme": true,
-    "window.autoDetectHighContrast": false,
-    // * workbench::theme::gruvbox-material
-    "gruvboxMaterial.darkContrast": "hard",
-    "gruvboxMaterial.darkWorkbench": "high-contrast",
-    "gruvboxMaterial.darkPalette": "material",
-    "gruvboxMaterial.darkCursor": "blue",
-    "gruvboxMaterial.darkSelection": "aqua",
-    "gruvboxMaterial.diagnosticTextBackgroundOpacity": "25%",
-    // * workbench::color-customization
-    "workbench.colorCustomizations": {
-      // https://github.com/morhetz/gruvbox
-      // https://github.com/sainnhe/gruvbox-material
-      "[Gruvbox Material Dark]": {
-        "minimap.errorHighlight": "#EA6962",
-        "minimap.warningHighlight": "#D8A657",
-        "minimap.infoHighlight": "#2E3B3B",
-        "minimap.selectionHighlight": "#7C6F6480", // editor selection
-        "minimap.findMatchHighlight": "#333E34D0" // search matches
-      },
-      "[Default Light+]": {
-        "editor.background": "#e8e8e8",
-        "editor.lineHighlightBackground": "#ecefec",
-        "sideBar.background": "#d9d9d9",
-        "editorGroupHeader.tabsBackground": "#d9d9d9",
-        "titleBar.activeBackground": "#d9d9d9"
-      }
+  // cSpell:enable
+  // ? miscellaneous / general
+  "telemetry.telemetryLevel": "off",
+  "http.proxy": "http://proxy.ssn.mu.rsint.net:9480",
+  "http.noProxy": [
+    "localhost",
+    "rsint.net",
+    "rsext.net"
+  ],
+  "update.mode": "none",
+  // ? search & window
+  "window.titleBarStyle": "custom",
+  "window.commandCenter": false,
+  "window.customTitleBarVisibility": "auto",
+  "window.menuBarVisibility": "compact",
+  "search.useIgnoreFiles": true,
+  // ? git
+  "git.confirmSync": false,
+  "git.autofetch": false,
+  "git.ignoreMissingGitWarning": true,
+  "git.openRepositoryInParentFolders": "never",
+  // ? workbench
+  // * workbench::miscellaneous
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.editor.showTabs": "multiple",
+  "workbench.editor.wrapTabs": true,
+  "workbench.editor.enablePreview": true,
+  "workbench.editor.decorations.colors": true,
+  "workbench.editor.enablePreviewFromQuickOpen": true,
+  "workbench.editor.closeEmptyGroups": true,
+  "workbench.editor.pinnedTabSizing": "compact",
+  "workbench.editor.enablePreviewFromCodeNavigation": true,
+  "workbench.editor.limit.value": 5,
+  "workbench.editor.limit.enabled": true,
+  "workbench.editor.limit.perEditorGroup": true,
+  "workbench.activityBar.location": "top",
+  "workbench.sideBar.location": "right",
+  // * workbench::theme
+  "workbench.preferredDarkColorTheme": "Gruvbox Material Dark",
+  "workbench.preferredLightColorTheme": "Default Light+",
+  "window.autoDetectColorScheme": true,
+  "window.autoDetectHighContrast": false,
+  // * workbench::theme::gruvbox-material
+  "gruvboxMaterial.darkContrast": "hard",
+  "gruvboxMaterial.darkWorkbench": "high-contrast",
+  "gruvboxMaterial.darkPalette": "material",
+  "gruvboxMaterial.darkCursor": "blue",
+  "gruvboxMaterial.darkSelection": "aqua",
+  "gruvboxMaterial.diagnosticTextBackgroundOpacity": "25%",
+  // * workbench::color-customization
+  "workbench.colorCustomizations": {
+    // https://github.com/morhetz/gruvbox
+    // https://github.com/sainnhe/gruvbox-material
+    "[Gruvbox Material Dark]": {
+      "minimap.errorHighlight": "#EA6962",
+      "minimap.warningHighlight": "#D8A657",
+      "minimap.infoHighlight": "#2E3B3B",
+      "minimap.selectionHighlight": "#7C6F6480", // editor selection
+      "minimap.findMatchHighlight": "#333E34D0" // search matches
     },
-    // ? editor
-    // * editor::font
-    "editor.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
-    "editor.fontSize": 13,
-    "editor.fontLigatures": true,
-    "editor.renderWhitespace": "all",
-    // * editor::scroll-bar
-    "editor.scrollbar.vertical": "hidden",
-    "editor.hideCursorInOverviewRuler": true,
-    "editor.scrollbar.verticalScrollbarSize": 0,
-    // * editor::general
-    "editor.cursorSurroundingLines": 25,
-    "editor.selectionHighlight": true,
-    "editor.tabCompletion": "on",
+    "[Default Light+]": {
+      "editor.background": "#e8e8e8",
+      "editor.lineHighlightBackground": "#ecefec",
+      "sideBar.background": "#d9d9d9",
+      "editorGroupHeader.tabsBackground": "#d9d9d9",
+      "titleBar.activeBackground": "#d9d9d9"
+    }
+  },
+  // ? editor
+  // * editor::font
+  "editor.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
+  "editor.fontSize": 13,
+  "editor.fontLigatures": true,
+  "editor.renderWhitespace": "all",
+  // * editor::scroll-bar
+  "editor.scrollbar.vertical": "hidden",
+  "editor.hideCursorInOverviewRuler": true,
+  "editor.scrollbar.verticalScrollbarSize": 0,
+  // * editor::general
+  "editor.cursorSurroundingLines": 25,
+  "editor.selectionHighlight": true,
+  "editor.tabCompletion": "on",
+  "editor.wordWrap": "bounded",
+  "editor.suggestSelection": "first",
+  "editor.insertSpaces": false,
+  "editor.wordWrapColumn": 112,
+  "editor.rulers": [
+    88,
+    100,
+    112
+  ],
+  "editor.renderControlCharacters": true,
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  "editor.inlineSuggest.enabled": true,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "diffEditor.diffAlgorithm": "advanced",
+  "editor.renderFinalNewline": "dimmed",
+  // * editor::minimap
+  "editor.minimap.enabled": true,
+  "editor.minimap.renderCharacters": false,
+  "editor.minimap.size": "proportional",
+  "editor.minimap.side": "left",
+  "editor.minimap.maxColumn": 100,
+  "editor.minimap.showSlider": "always",
+  "editor.minimap.autohide": false,
+  // * editor::brackets
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  // * editor::cursor
+  "editor.cursorBlinking": "phase",
+  "editor.cursorSmoothCaretAnimation": "on",
+  // ? explorer
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+  // ? terminal
+  "terminal.external.linuxExec": "alacritty",
+  "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
+  "terminal.integrated.tabs.enabled": true,
+  "terminal.integrated.showExitAlert": false,
+  "terminal.integrated.enableMultiLinePasteWarning": "auto",
+  // ? files
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "files.defaultLanguage": "txt",
+  "files.associations": {
+    "*.env": "bash",
+    "*.conf": "ini"
+  },
+  "files.exclude": {
+    "**/.git": true
+  },
+  // ? extensions
+  // * extensions::asciidoctor.asciidoctor-vscode
+  "asciidoc.antora.showEnableAntoraPrompt": false,
+  // * extension::always-enabled::adpyke.codesnap
+  "codesnap.boxShadow": "none",
+  "codesnap.roundedCorners": true,
+  "codesnap.containerPadding": "0em",
+  "codesnap.showWindowControls": false,
+  "codesnap.showWindowTitle": false,
+  "codesnap.showLineNumbers": true,
+  "codesnap.realLineNumbers": false,
+  "codesnap.transparentBackground": true,
+  "codesnap.target": "container",
+  "codesnap.shutterAction": "save",
+  // * extensions::bierner.docs-view
+  "docsView.documentationView.updateMode": "sticky",
+  // * extensions::github.copilot
+  "github.copilot.chat.localeOverride": "en",
+  "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.editor.enableCodeActions": true,
+  "github.copilot.enable": {
+    "*": false,
+    "asciidoc": true,
+    "json": true,
+    "jsonc": true,
+    "git-commit": true,
+    "git-rebase": true,
+    "markdown": true,
+    "rust": true,
+    "shellscript": true,
+    "yaml": true
+  },
+  // * extensions::maattdd.gitless
+  "gitlens.hovers.enabled": false,
+  "gitlens.codeLens.enabled": false,
+  "gitlens.currentLine.enabled": false,
+  "gitlens.statusBar.enabled": false,
+  "gitlens.integrations.enabled": false,
+  "gitlens.defaultTimeFormat": "HH:mm",
+  "gitlens.defaultDateShortFormat": "DD.MM.YY",
+  "gitlens.defaultDateFormat": "DD.MM.YY | HH:mm",
+  // * extensions::timonwong.shellcheck
+  "shellcheck.useWorkspaceRootAsCwd": true,
+  "shellcheck.exclude": [
+    "SC2310",
+    "SC2312"
+  ],
+  "shellcheck.enableQuickFix": true,
+  "shellcheck.enable": true,
+  "shellcheck.run": "onSave",
+  "shellcheck.customArgs": [
+    "--shell=bash",
+    "--check-sourced",
+    "--external-sources",
+    "--color=auto",
+    "--severity=style",
+    "--enable=all"
+  ],
+  // * extensions::streetsidesoftware.code-spell-checker
+  "cSpell.language": "en",
+  "cSpell.diagnosticLevel": "Information",
+  "cSpell.enabledFileTypes": {
+    "*": true,
+    "asciidoc": false,
+    "latex": false,
+    "markdown": false
+  },
+  "cSpell.globRoot": "${workspaceFolder}",
+  "cSpell.ignorePaths": [
+    "vscode-extension",
+    "**/.vscode/settings.json",
+    "**/.devcontainer/**/devcontainer.json"
+  ],
+  // * extensions::usernamehw.errorlens
+  "errorLens.margin": "1ch",
+  "errorLens.gutterIconSize": "70%",
+  "errorLens.gutterIconSet": "circle",
+  "errorLens.gutterIconsEnabled": true,
+  "errorLens.messageBackgroundMode": "line",
+  "errorLens.codeLensEnabled": false,
+  "errorLens.problemRangeDecorationEnabled": true,
+  "errorLens.severityText": [
+    "🔥",
+    "⚠️",
+    "❕",
+    "❔"
+  ],
+  "errorLens.fontFamily": "JetBrainsMono Nerd Font, FiraCode Nerd Font, Consolas",
+  "errorLens.messageTemplate": "$severity [$source] $message",
+  "errorLens.exclude": [
+    "Unknown word"
+  ],
+  "errorLens.enabledDiagnosticLevels": [
+    "error",
+    "warning",
+    "info",
+    "hint"
+  ],
+  "errorLens.statusBarIconsEnabled": true,
+  "errorLens.statusBarColorsEnabled": true,
+  // ? language-specific
+  // * language-specific::asciidoc
+  "[asciidoc]": {
     "editor.wordWrap": "bounded",
-    "editor.suggestSelection": "first",
-    "editor.insertSpaces": false,
-    "editor.wordWrapColumn": 112,
-    "editor.rulers": [
-      88,
-      100,
-      112
-    ],
-    "editor.renderControlCharacters": true,
-    "editor.suggest.snippetsPreventQuickSuggestions": false,
-    "editor.inlineSuggest.enabled": true,
-    "diffEditor.ignoreTrimWhitespace": false,
-    "diffEditor.diffAlgorithm": "advanced",
-    "editor.renderFinalNewline": "dimmed",
-    // * editor::minimap
-    "editor.minimap.enabled": true,
-    "editor.minimap.renderCharacters": false,
-    "editor.minimap.size": "proportional",
-    "editor.minimap.side": "left",
-    "editor.minimap.maxColumn": 100,
-    "editor.minimap.showSlider": "always",
-    "editor.minimap.autohide": false,
-    // * editor::brackets
-    "editor.bracketPairColorization.enabled": true,
-    "editor.guides.bracketPairs": "active",
-    // * editor::cursor
-    "editor.cursorBlinking": "phase",
-    "editor.cursorSmoothCaretAnimation": "on",
-    // ? explorer
-    "explorer.confirmDragAndDrop": false,
-    "explorer.confirmDelete": false,
-    // ? terminal
-    "terminal.external.linuxExec": "alacritty",
-    "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
-    "terminal.integrated.tabs.enabled": true,
-    "terminal.integrated.showExitAlert": false,
-    "terminal.integrated.enableMultiLinePasteWarning": "auto",
-    // ? files
-    "files.insertFinalNewline": true,
-    "files.trimTrailingWhitespace": true,
-    "files.defaultLanguage": "txt",
-    "files.associations": {
-      "*.env": "bash",
-      "*.conf": "ini"
-    },
-    "files.exclude": {
-      "**/.git": true
-    },
-    // ? extensions
-    // * extensions::asciidoctor.asciidoctor-vscode
-    "asciidoc.antora.showEnableAntoraPrompt": false,
-    // * extension::always-enabled::adpyke.codesnap
-    "codesnap.boxShadow": "none",
-    "codesnap.roundedCorners": true,
-    "codesnap.containerPadding": "0em",
-    "codesnap.showWindowControls": false,
-    "codesnap.showWindowTitle": false,
-    "codesnap.showLineNumbers": true,
-    "codesnap.realLineNumbers": false,
-    "codesnap.transparentBackground": true,
-    "codesnap.target": "container",
-    "codesnap.shutterAction": "save",
-    // * extensions::bierner.docs-view
-    "docsView.documentationView.updateMode": "sticky",
-    // * extensions::github.copilot
-    "github.copilot.chat.localeOverride": "en",
-    "github.copilot.editor.enableAutoCompletions": true,
-    "github.copilot.editor.enableCodeActions": true,
-    "github.copilot.enable": {
-      "*": false,
-      "asciidoc": true,
-      "json": true,
-      "jsonc": true,
-      "git-commit": true,
-      "git-rebase": true,
-      "markdown": true,
-      "rust": true,
-      "shellscript": true,
-      "yaml": true
-    },
-    // * extensions::maattdd.gitless
-    "gitlens.hovers.enabled": false,
-    "gitlens.codeLens.enabled": false,
-    "gitlens.currentLine.enabled": false,
-    "gitlens.statusBar.enabled": false,
-    "gitlens.integrations.enabled": false,
-    "gitlens.defaultTimeFormat": "HH:mm",
-    "gitlens.defaultDateShortFormat": "DD.MM.YY",
-    "gitlens.defaultDateFormat": "DD.MM.YY | HH:mm",
-    // * extensions::timonwong.shellcheck
-    "shellcheck.useWorkspaceRootAsCwd": true,
-    "shellcheck.exclude": [
-      "SC2310",
-      "SC2312"
-    ],
-    "shellcheck.enableQuickFix": true,
-    "shellcheck.enable": true,
-    "shellcheck.run": "onSave",
-    "shellcheck.customArgs": [
-      "--shell=bash",
-      "--check-sourced",
-      "--external-sources",
-      "--color=auto",
-      "--severity=style",
-      "--enable=all"
-    ],
-    // * extensions::streetsidesoftware.code-spell-checker
-    "cSpell.language": "en",
-    "cSpell.diagnosticLevel": "Information",
-    "cSpell.enabledFileTypes": {
-      "*": true,
-      "asciidoc": false,
-      "latex": false,
-      "markdown": false
-    },
-    "cSpell.globRoot": "${workspaceFolder}",
-    "cSpell.ignorePaths": [
-      "vscode-extension",
-      "**/.vscode/settings.json",
-      "**/.devcontainer/**/devcontainer.json"
-    ],
-    // * extensions::usernamehw.errorlens
-    "errorLens.margin": "1ch",
-    "errorLens.gutterIconSize": "70%",
-    "errorLens.gutterIconSet": "circle",
-    "errorLens.gutterIconsEnabled": true,
-    "errorLens.messageBackgroundMode": "line",
-    "errorLens.codeLensEnabled": false,
-    "errorLens.problemRangeDecorationEnabled": true,
-    "errorLens.severityText": [
-      "🔥",
-      "⚠️",
-      "❕",
-      "❔"
-    ],
-    "errorLens.fontFamily": "JetBrainsMono Nerd Font, FiraCode Nerd Font, Consolas",
-    "errorLens.messageTemplate": "$severity [$source] $message",
-    "errorLens.exclude": [
-      "Unknown word"
-    ],
-    "errorLens.enabledDiagnosticLevels": [
-      "error",
-      "warning",
-      "info",
-      "hint"
-    ],
-    "errorLens.statusBarIconsEnabled": true,
-    "errorLens.statusBarColorsEnabled": true,
-    // ? language-specific
-    // * language-specific::asciidoc
-    "[asciidoc]": {
-      "editor.wordWrap": "bounded",
-      "editor.quickSuggestions": {
-        "comments": true,
-        "strings": true,
-        "other": true
-      }
-    },
-    // ? comments
-    /*
+    "editor.quickSuggestions": {
+      "comments": true,
+      "strings": true,
+      "other": true
+    }
+  },
+  // ? comments
+  /*
       = Additional Information
   
       == Extensions
@@ -276,7 +276,6 @@
       - tamasfe.even-better-toml
       - vadimcn.vscode-lldb
     */
-    // ? dynamic
-    "window.zoomLevel": 1
-  }
-  
+  // ? dynamic
+  "window.zoomLevel": 1
+}
