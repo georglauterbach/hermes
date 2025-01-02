@@ -102,6 +102,11 @@ impl super::UbuntuVersion for Ubuntu24_04 {
                 "~/.config/alacritty/40-bindings.toml",
                 FileOverride::No,
             ),
+            (
+                "gui/home/.config/xdg-desktop-portal/portals.conf",
+                "~/.config/xdg-desktop-portal/portals.conf",
+                FileOverride::No,
+            ),
         ]
     }
 
