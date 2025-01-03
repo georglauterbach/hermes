@@ -1,0 +1,13 @@
+#! /bin/bash
+
+TIMEOUT=${1:-5}
+
+swayidle \
+    timeout "${TIMEOUT}" 'swaymsg output \* dpms off' \
+    resume               'swaymsg output \* dpms on'  \
+    &
+
+swaylock --indicator-caps-lock --image ${HOME}/.config/regolith3/wallpaper.png
+kill -TERM "${!}"
+
+exit 0
