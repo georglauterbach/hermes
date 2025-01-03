@@ -5,6 +5,11 @@
 # Documentation
 # https://regolith-desktop.com/docs/using-regolith/configuration/
 
+exec_always systemctl --user import-environment HOME
+exec waybar
+
+bindsym $mod+Shift+n exec swaync-client -t -sw
+
 # -----------------------------------------------
 # ----  Keyboard Layout  ------------------------
 # -----------------------------------------------
@@ -28,6 +33,18 @@ bindsym $mod+$wm.binding.code exec code
 
 set_from_resource $wm.binding.move_workspace wm.binding.move_workspace m
 bindsym $mod+$wm.binding.move_workspace move workspace to output left
+
+# -----------------------------------------------
+# ----  Lockscreen  -----------------------------
+# -----------------------------------------------
+
+# Lock screen manually
+bindsym $mod+Shift+l exec custom_way_lock
+
+# Lock screen after 180 seconds of inactivity and when going to sleep
+exec swayidle -w \
+    timeout 180  'swaymsg exec custom_way_lock' \
+    before-sleep 'swaymsg exec custom_way_lock'
 
 # -----------------------------------------------
 # ----  Workspaces  -----------------------------
