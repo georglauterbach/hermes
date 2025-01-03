@@ -25,7 +25,7 @@ pub trait UbuntuVersion: Send + Sync {
     /// A list of packages that are to be installed for the GUI for this version of Ubuntu.
     fn gui_packages(&self) -> super::PackageIndex;
     /// A list of packages that to be removed after GUI packages have been installed.
-    fn gui_packages_removal(&self) -> PackageIndex
+    fn gui_packages_removal(&self) -> PackageIndex;
 }
 
 /// Return the
