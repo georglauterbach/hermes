@@ -98,7 +98,11 @@ To set up a GUI, run _hermes_ with the `--gui` flag. This option installs new PP
 
 ### Supplementary Setup Scripts
 
-You can find additional setup scripts that aid in setting up machines under the [`./misc/` directory](./misc/).
+You can find additional setup scripts that aid in setting up machines under the [`scripts/` directory](./scripts/).
+
+### Examples
+
+You can find setup examples in the [`examples/`](./examples/) directory, e.g. for a custom post-hermes Bash setup, a simple NeoVim setup file,a Regolith configuration, etc.
 
 ## Architecture
 
