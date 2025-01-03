@@ -120,6 +120,7 @@ impl super::UbuntuVersion for Ubuntu24_04 {
             "regolith-look-gruvbox",
             "regolith-wm-user-programs",
             "swaylock",
+            "sway-notification-center",
         ]
     }
 
