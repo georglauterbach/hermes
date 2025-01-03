@@ -83,8 +83,8 @@ impl super::UbuntuVersion for Ubuntu24_04 {
                 FileOverride::No,
             ),
             (
-                "gui/home/.config/alacritty/10-general.toml",
-                "~/.config/alacritty/10-general.toml",
+                "gui/home/.config/alacritty/10-miscellaneous.toml",
+                "~/.config/alacritty/10-miscellaneous.toml",
                 FileOverride::No,
             ),
             (

@@ -1,6 +1,10 @@
 [general]
+ipc_socket = false
+working_directory = "None"
+live_config_reload = true
+
 import = [
-  "~/.config/alacritty/10-general.toml",
+  "~/.config/alacritty/10-miscellaneous.toml",
   "~/.config/alacritty/30-colors.toml",
   "~/.config/alacritty/40-bindings.toml",
 ]

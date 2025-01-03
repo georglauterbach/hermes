@@ -1,7 +1,3 @@
-working_directory = "None"
-live_config_reload = true
-ipc_socket = false
-
 [env]
 
 [window]
@@ -46,7 +42,6 @@ osc52 = "CopyPaste"
 
 [shell]
 program = "bash"
-args = [ "-o", "pipefail", "-O", "inherit_errexit" ]
 
 [mouse]
 hide_when_typing = true
