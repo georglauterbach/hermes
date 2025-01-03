@@ -1,0 +1,78 @@
+{
+  "layer": "bottom",
+  "position": "top",
+  "spacing": 5,
+  "modules-left": [
+    "tray",
+    "sway/window"
+  ],
+  "modules-center": [
+    "sway/workspaces",
+    "sway/mode"
+  ],
+  "modules-right": [
+    "cpu",
+    "memory",
+    "network",
+    "battery",
+    "wireplumber",
+    "clock"
+  ],
+  "tray": {
+    "icon-size": 15,
+    "show-passive-items": true
+  },
+  "sway/window": {
+    "max-length": 90
+  },
+  "sway/mode": {},
+  "sway/workspaces": {
+    "all-outputs": false,
+    "format": "{name}",
+    "disable-scroll": true
+  },
+  "cpu": {
+    "interval": 10,
+    "format": " {usage:3}%"
+  },
+  "memory": {
+    "interval": 30,
+    "format": " {used:4.1f}GiB/{total:4.1f}GiB (󰯍 {swapUsed:4.1f}GiB/{swapTotal:4.1f}GiB)",
+    "tooltip-format": ""
+  },
+  "network": {
+    "interval": 10,
+    "family": "ipv4",
+    "format-wifi": "  {signalStrength}% ",
+    "format-ethernet": "   {bandwidthDownBytes:20}  {bandwidthUpBytes}",
+    "format-disconnected": "",
+    "tooltip-format": "{ifname} via {gwaddr}"
+  },
+  "battery": {
+    "bat": "BAT0",
+    "states": {
+      "good": 95,
+      "warning": 30,
+      "critical": 5
+    },
+    "format-icons": ["", "", "", "", ""],
+    "format": "{icon} {capacity:3}%",
+    "format-charging": "󰂅 {capacity:3}%",
+    "format-plugged": " {capacity:3}%"
+  },
+  "wireplumber": {
+    "format": " {volume:3}%",
+    "format-muted": "󰝟",
+    "on-click": ""
+  },
+  "clock": {
+    "format": "{:%H:%M Uhr}",
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "format": {
+        "months": "<span color='#ffead3'><b>{}</b></span>",
+        "today": "<span color='#ff6699'><b>{}</b></span>"
+      }
+    }
+  }
+}
