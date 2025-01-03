@@ -102,6 +102,7 @@ impl super::UbuntuVersion for Ubuntu24_04 {
                 "~/.config/alacritty/40-bindings.toml",
                 FileOverride::No,
             ),
+            // XDG Portals
             (
                 "gui/home/.config/xdg-desktop-portal/portals.conf",
                 "~/.config/xdg-desktop-portal/portals.conf",
@@ -119,6 +120,16 @@ impl super::UbuntuVersion for Ubuntu24_04 {
             "regolith-look-gruvbox",
             "regolith-wm-user-programs",
             "swaylock",
+        ]
+    }
+
+    fn gui_packages_removal(&self) -> PackageIndex {
+        &[
+            "regolith-powerd",
+            "regolith-rofication",
+            "regolith-sway-gtklock",
+            "i3status",
+            "i3status-rs",
         ]
     }
 }

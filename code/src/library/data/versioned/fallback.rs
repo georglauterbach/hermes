@@ -26,10 +26,16 @@ impl super::UbuntuVersion for Fallback {
     fn gui_apt_index(&self) -> ConfigurationFileIndex {
         &[]
     }
+
     fn gui_configuration_index(&self) -> ConfigurationFileIndex {
         &[]
     }
+
     fn gui_packages(&self) -> PackageIndex {
+        &[]
+    }
+
+    fn gui_packages_removal(&self) -> PackageIndex {
         &[]
     }
 }
