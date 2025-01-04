@@ -60,13 +60,17 @@ if [[ ${#} -eq 0 ]]; then
     read_locale "${__LOCALE}" "${PREVIOUS_LOCALE}"
     __NEW_LOCALE="__${__LOCALE}"
     uncomment_in_locale_gen "${!__NEW_LOCALE}"
-    echo "DEBUG Adding '${__LOCALE}=${!__NEW_LOCALE}' to new locales"
-    NEW_LOCALES+=("${__LOCALE}=${!__NEW_LOCALE}")
+    __LOCALE=${__LOCALE}=${!__NEW_LOCALE}
+    echo "DEBUG Adding '${__LOCALE}' to new locales"
+    NEW_LOCALES+=("${__LOCALE}")
+	# shellcheck disable=SC2163
+    export "${__LOCALE}"
   done
   unset PREVIOUS_LOCALE __NEW_LOCALE
 
   echo "INFO  Setting LANGUAGE and LC_CTYPE to the value of LANG (${__LANG})"
-  NEW_LOCALES+=("LANGUAGE=${__LANG}" "LC_CTYPE=${__LANG}")
+  export "LANGUAGE=${__LANG}" "LC_CTYPE=${__LANG}" "LC_ALL=${__LANG}"
+  NEW_LOCALES+=("LANGUAGE=${__LANG}" "LC_CTYPE=${__LANG}" "LC_ALL=${__LANG}")
 else
   echo "INFO  Locale will be set to '${1}'"
   uncomment_in_locale_gen "${1}"
@@ -89,3 +93,6 @@ update-locale --reset "${NEW_LOCALES[@]}"
 echo "INFO  Here are the contents of /etc/default/locale"
 echo ''
 cat /etc/default/locale
+
+echo ''
+echo "INFO  You may need to run 'sudo dpkg-reconfigure locales' manaully again"
