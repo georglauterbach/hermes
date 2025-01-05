@@ -16,24 +16,37 @@ pub(super) async fn update_self() -> ::anyhow::Result<()> {
 
     ::tracing::info!(target: "update", "The latest version is {latest_version}");
 
-    let hermes_path = ::which::which("hermes").map_or_else(
-        |_| String::from("/home/ubuntu/hermes"),
-        |path| path.to_string_lossy().to_string(),
-    );
-
-    ::tracing::debug!("Placing new file at {hermes_path}");
+    let hermes_tmp_path = std::path::PathBuf::from("/tmp/hermes_updated");
+    if hermes_tmp_path.exists() {
+        ::std::fs::remove_file(hermes_tmp_path.clone()).context(format!(
+            "Could not remove existing temporary file {hermes_tmp_path:?}"
+        ))?;
+    }
+    let hermes_tmp_path = hermes_tmp_path.to_string_lossy().to_string();
+    ::tracing::debug!("Placing new file at {hermes_tmp_path:?}");
 
     super::download::download_and_place(
       format!("https://github.com/georglauterbach/hermes/releases/download/{latest_version}/hermes-{latest_version}-{}-unknown-linux-musl", super::programs::ARCHITECTURE),
-      hermes_path.clone()
+      hermes_tmp_path.clone()
     )
     .await
     .context("Could not download latest version")?;
 
+    let hermes_current_path = ::which::which("hermes").map_or_else(
+        |_| String::from("/usr/local/bin/hermes"),
+        |path| path.to_string_lossy().to_string(),
+    );
+
+    std::fs::rename(hermes_tmp_path.clone(), hermes_current_path.clone()).context(
+        format!("Could not move new binary to current installation location (run 'sudo mv {hermes_tmp_path} {hermes_current_path}' yourself)"),
+    )?;
+
     ::std::process::Command::new("chmod")
-        .args(["+x", hermes_path.as_str()])
+        .args(["+x", hermes_current_path.as_str()])
         .output()
-        .context("Could not change permissions of new binary file")?;
+        .context(format!(
+            "Could not change permissions of binary file at '{hermes_current_path}'"
+        ))?;
 
     Ok(())
 }
