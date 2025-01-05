@@ -1,6 +1,6 @@
 #! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
 
-readonoly EXTENSIONS=(
+readonly EXTENSIONS=(
   'aaron-bond.better-comments'
   'adpyke.codesnap'
   'asciidoctor.asciidoctor-vscode'
