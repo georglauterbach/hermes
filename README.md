@@ -92,7 +92,7 @@ To change and add APT sources (including PPAs), run _hermes_ with the `--change-
 
 ### GUI
 
-To set up a GUI with [_Regolith Linux_](https://regolith-desktop.com/), run _hermes_ with the `--gui` flag. This option installs new PPAs for _Regolith Linux_ ([_Alacritty_](https://github.com/alacritty/alacritty), [_Cryptomator_](https://github.com/cryptomator/cryptomator), _Regolith_ itself, and [_Visual Studio Code_](https://github.com/microsoft/vscode). Configurations for these packages is **not** provided; if you want to grab examples, navigate to [`examples/gui/`](./examples/gui/) where you will find directories that you can copy to `${HOME}/.config/` as a starting point.
+To set up a GUI with [_Regolith Linux_](https://regolith-desktop.com/), run _hermes_ with the `--gui` flag. This option installs new PPAs for _Regolith Linux_ ([_Alacritty_](https://github.com/alacritty/alacritty), [_Cryptomator_](https://github.com/cryptomator/cryptomator), _Regolith_ itself, and [_Visual Studio Code_](https://github.com/microsoft/vscode). Configurations for these packages is **not** provided; if you want to grab examples, navigate to [`examples/gui/`](./examples/gui/) where you will find directories that you can copy to `${HOME}/.config/` as a starting point. Inside the `regolith3/` directory, you can find a directory called `usr_local_bin/` which contains scripts that are copied to `/usr/local/bin/`.
 
 ### Supplementary Setup Scripts
 

@@ -6,6 +6,13 @@ wm.mod: Mod4
 wm.alt: Mod1
 
 ! -----------------------------------------------
+! ----  GTK Theme  ------------------------------
+! -----------------------------------------------
+
+gtk.theme_name: Yaru-sage-dark
+gtk.icon_theme_name: Yaru-sage-dark
+
+! -----------------------------------------------
 ! ----  Gaps  -----------------------------------
 ! -----------------------------------------------
 
@@ -17,12 +24,12 @@ wm.gaps.smart: on
 ! ----  Font  -----------------------------------
 ! -----------------------------------------------
 
-gnome.terminal.font: JetBrainsMono Nerd Font 11
-gtk.monospace_font_name: JetBrainsMono Nerd Font 11
-wm.bar.font: JetBrainsMono Nerd Font 10
-
 gtk.document_font_name: Ubuntu 10
 gtk.font_name: Ubuntu 10
+
+gnome.terminal.font: JetBrainsMono Nerd Font 11
+gtk.monospace_font_name: JetBrainsMono Nerd Font 11
+wm.bar.font: JetBrainsMono Nerd Font 11
 
 ! -----------------------------------------------
 ! ----  Wallpaper  ------------------------------

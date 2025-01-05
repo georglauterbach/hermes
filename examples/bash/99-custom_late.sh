@@ -12,6 +12,8 @@ alias v="${EDITOR:-vi}"
 # shellcheck disable=SC2139
 alias sv="sudo ${EDITOR:-vi}"
 
+alias zj='zellij'
+
 if __is_command 'doas'; then
   complete -cf doas
   alias sudo='doas'
