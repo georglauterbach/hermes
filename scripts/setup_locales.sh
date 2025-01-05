@@ -63,7 +63,7 @@ if [[ ${#} -eq 0 ]]; then
     __LOCALE=${__LOCALE}=${!__NEW_LOCALE}
     echo "DEBUG Adding '${__LOCALE}' to new locales"
     NEW_LOCALES+=("${__LOCALE}")
-	# shellcheck disable=SC2163
+    # shellcheck disable=SC2163
     export "${__LOCALE}"
   done
   unset PREVIOUS_LOCALE __NEW_LOCALE
