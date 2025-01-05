@@ -13,19 +13,14 @@ pub trait UbuntuVersion: Send + Sync {
     /// Extends an already existing set of packages that will always be installed.
     fn base_packages(&self) -> super::PackageIndex;
 
-    /// A list of extra APT source files that are to be installed for this version of Ubuntu.
+    /// A list of extra APT source files that can be installed for this version of Ubuntu.
     fn apt_index(&self) -> super::ConfigurationFileIndex;
 
     /// A list of extra APT source files for the GUI that are to be installed
     /// for this version of Ubuntu.
     fn gui_apt_index(&self) -> super::ConfigurationFileIndex;
-    /// A list of extra configuration files for the GUI that are to be installed
-    /// for the GUI for this version of Ubuntu.
-    fn gui_configuration_index(&self) -> super::ConfigurationFileIndex;
-    /// A list of packages that are to be installed for the GUI for this version of Ubuntu.
-    fn gui_packages(&self) -> super::PackageIndex;
-    /// A list of packages that to be removed after GUI packages have been installed.
-    fn gui_packages_removal(&self) -> super::PackageIndex;
+    /// A list of packages that are to be installed and removed afterwards for the GUI for this version of Ubuntu.
+    fn gui_packages(&self) -> (super::PackageIndex, super::PackageIndex);
 }
 
 /// Return the

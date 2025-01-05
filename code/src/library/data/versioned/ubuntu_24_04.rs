@@ -21,28 +21,28 @@ impl super::UbuntuVersion for Ubuntu24_04 {
         &[
             // Default APT sources
             (
-                "apt/sources.list",
+                "sources.list",
                 "/etc/apt/sources.list",
                 FileOverride::Yes,
             ),
             (
-                "apt/ubuntu.sources",
+                "ubuntu.sources",
                 "/etc/apt/sources.list.d/ubuntu.sources",
                 FileOverride::Yes,
             ),
             // Custom PPAs
             (
-                "apt/flatpak.sources",
+                "flatpak.sources",
                 "/etc/apt/sources.list.d/flatpak.sources",
                 FileOverride::Yes,
             ),
             (
-                "apt/git.sources",
+                "git.sources",
                 "/etc/apt/sources.list.d/git.sources",
                 FileOverride::Yes,
             ),
             (
-                "apt/neovim.sources",
+                "neovim.sources",
                 "/etc/apt/sources.list.d/neovim.sources",
                 FileOverride::Yes,
             ),
@@ -52,86 +52,48 @@ impl super::UbuntuVersion for Ubuntu24_04 {
     fn gui_apt_index(&self) -> ConfigurationFileIndex {
         &[
             (
-                "gui/apt/alacritty.sources",
+                "alacritty.sources",
                 "/etc/apt/sources.list.d/alacritty.sources",
                 FileOverride::Yes,
             ),
             (
-                "gui/apt/cryptomator.sources",
+                "cryptomator.sources",
                 "/etc/apt/sources.list.d/cryptomator.sources",
                 FileOverride::Yes,
             ),
             (
-                "gui/apt/regolith.sources",
+                "regolith.sources",
                 "/etc/apt/sources.list.d/regolith.sources",
                 FileOverride::Yes,
             ),
             (
-                "gui/apt/vscode.sources",
+                "vscode.sources",
                 "/etc/apt/sources.list.d/vscode.sources",
                 FileOverride::No,
             ),
         ]
     }
 
-    fn gui_configuration_index(&self) -> ConfigurationFileIndex {
-        &[
-            // Alacritty
-            (
-                "gui/home/.config/alacritty/alacritty.toml",
-                "~/.config/alacritty/alacritty.toml",
-                FileOverride::No,
-            ),
-            (
-                "gui/home/.config/alacritty/10-miscellaneous.toml",
-                "~/.config/alacritty/10-miscellaneous.toml",
-                FileOverride::No,
-            ),
-            (
-                "gui/home/.config/alacritty/20-font.toml",
-                "~/.config/alacritty/20-font.toml",
-                FileOverride::No,
-            ),
-            (
-                "gui/home/.config/alacritty/30-colors.toml",
-                "~/.config/alacritty/30-colors.toml",
-                FileOverride::No,
-            ),
-            (
-                "gui/home/.config/alacritty/40-bindings.toml",
-                "~/.config/alacritty/40-bindings.toml",
-                FileOverride::No,
-            ),
-            // XDG Portals
-            (
-                "gui/home/.config/xdg-desktop-portal/portals.conf",
-                "~/.config/xdg-desktop-portal/portals.conf",
-                FileOverride::No,
-            ),
-        ]
-    }
-
-    fn gui_packages(&self) -> PackageIndex {
-        &[
-            "alacritty",
-            "code",
-            "regolith-desktop",
-            "regolith-session-sway",
-            "regolith-look-gruvbox",
-            "regolith-wm-user-programs",
-            "xdg-desktop-portal-regolith-wayland-config",
-            "swaylock",
-            "sway-notification-center",
-        ]
-    }
-
-    fn gui_packages_removal(&self) -> PackageIndex {
-        &[
-            "regolith-powerd",
-            "regolith-rofication",
-            "regolith-sway-gtklock",
-            "i3status",
-            "i3status-rs",
-        ]
+    fn gui_packages(&self) -> (PackageIndex, PackageIndex) {
+        (
+            &[
+                "alacritty",
+                "code",
+                "regolith-desktop",
+                "regolith-session-sway",
+                "regolith-look-gruvbox",
+                "regolith-wm-user-programs",
+                "xdg-desktop-portal-regolith-wayland-config",
+                "swaylock",
+                "sway-notification-center",
+            ],
+            &[
+                "regolith-powerd",
+                "regolith-rofication",
+                "regolith-sway-gtklock",
+                "i3status",
+                "i3status-rs",
+            ]
+        )
     }
 }

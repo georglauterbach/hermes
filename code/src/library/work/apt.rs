@@ -23,7 +23,7 @@ async fn set_up_new_apt_sources(
         if let Err(error) = configuration_files::download_and_place_configuration_files(
             ubuntu.apt_index(),
             format!(
-                "{GITHUB_RAW_URI}/data/versioned/{}",
+                "{GITHUB_RAW_URI}/data/versioned/{}/apt",
                 environment::ubuntu_version_id()
             ),
         )
@@ -39,7 +39,7 @@ async fn set_up_new_apt_sources(
         if let Err(error) = configuration_files::download_and_place_configuration_files(
             ubuntu.gui_apt_index(),
             format!(
-                "{GITHUB_RAW_URI}/data/versioned/{}",
+                "{GITHUB_RAW_URI}/data/versioned/{}/apt_gui",
                 environment::ubuntu_version_id()
             ),
         )
@@ -51,37 +51,6 @@ async fn set_up_new_apt_sources(
     }
 
     super::super::evaluate_errors_vector!(errors, "Changing APT sources failed")
-}
-
-/// Prepare APT so that it is in a usable state
-async fn prepare_apt() -> ::anyhow::Result<()> {
-    ::tracing::debug!("Updating APT package signatures");
-    if !::async_std::process::Command::new("apt-get")
-        .args(["--yes", "update"])
-        .stdout(::std::process::Stdio::null())
-        .stderr(::std::process::Stdio::inherit())
-        .output()
-        .await?
-        .status
-        .success()
-    {
-        ::anyhow::bail!("Could not update packages with APT");
-    }
-
-    //::tracing::debug!("Upgrading APT packages");
-    //if !::async_std::process::Command::new("apt-get")
-    //    .args(["--yes", "upgrade"])
-    //    .stdout(::std::process::Stdio::null())
-    //    .stderr(::std::process::Stdio::inherit())
-    //    .output()
-    //    .await?
-    //    .status
-    //    .success()
-    //{
-    //    ::anyhow::bail!("Could not upgrade packages with APT");
-    //}
-
-    Ok(())
 }
 
 /// Configures the system with APT, which boils down to
@@ -99,7 +68,19 @@ pub(super) async fn configure_system_with_apt(
     let ubuntu = data::versioned::get_version_information();
 
     set_up_new_apt_sources(ubuntu, change_apt_sources, gui).await?;
-    prepare_apt().await?;
+    
+    ::tracing::debug!("Updating APT package signatures");
+    if !::async_std::process::Command::new("apt-get")
+        .args(["--yes", "update"])
+        .stdout(::std::process::Stdio::null())
+        .stderr(::std::process::Stdio::inherit())
+        .output()
+        .await?
+        .status
+        .success()
+    {
+        ::anyhow::bail!("Could not update packages with APT");
+    }
 
     ::tracing::debug!("Installing base packages");
     if !::async_std::process::Command::new("apt-get")
@@ -133,7 +114,7 @@ pub(super) async fn configure_system_with_apt(
         ::tracing::debug!("Installing GUI packages");
         if !::async_std::process::Command::new("apt-get")
             .args(["--yes", "install", "--no-install-recommends"])
-            .args(ubuntu.gui_packages())
+            .args(ubuntu.gui_packages().0)
             .stdout(::std::process::Stdio::null())
             .stderr(::std::process::Stdio::inherit())
             .output()
@@ -147,7 +128,7 @@ pub(super) async fn configure_system_with_apt(
         ::tracing::debug!("Removed unwanted GUI packages");
         if !::async_std::process::Command::new("apt-get")
             .args(["--yes", "remove"])
-            .args(ubuntu.gui_packages_removal())
+            .args(ubuntu.gui_packages().1)
             .stdout(::std::process::Stdio::null())
             .stderr(::std::process::Stdio::inherit())
             .output()
