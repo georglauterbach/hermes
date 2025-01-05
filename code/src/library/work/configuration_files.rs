@@ -79,29 +79,3 @@ pub(super) async fn set_up_unversioned_configuration_files() -> ::anyhow::Result
         Err(error) => Err(error).context("Finished PUCF with errors"),
     }
 }
-
-/// This function takes care of placing all versioned configuration files
-/// onto the local file system.
-#[::tracing::instrument(skip_all, name = "pvcf")]
-pub(super) async fn setup_up_versioned_configuration_files(gui: bool) -> ::anyhow::Result<()> {
-    ::tracing::info!(target: "work", "Placing versioned configuration files (PVCF)");
-    let mut errors = vec![];
-
-    if gui {
-        if let Err(error) = download_and_place_configuration_files(
-            data::versioned::get_version_information().gui_configuration_index(),
-            format!(
-                "{GITHUB_RAW_URI}/data/versioned/{}",
-                environment::ubuntu_version_id()
-            ),
-        )
-        .await
-        {
-            errors.push(error);
-        }
-
-        ::tracing::debug!("To change the bookmarks in file explorers, edit ~/.config/user-firs.dirs, ~/.config/gtk-3.0/bookmarks, and /etc/xdg/user-dirs.defaults");
-    }
-
-    super::super::evaluate_errors_vector!(errors, "Finished PVCF with errors")
-}

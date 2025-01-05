@@ -20,11 +20,7 @@ impl super::UbuntuVersion for Ubuntu24_04 {
     fn apt_index(&self) -> ConfigurationFileIndex {
         &[
             // Default APT sources
-            (
-                "sources.list",
-                "/etc/apt/sources.list",
-                FileOverride::Yes,
-            ),
+            ("sources.list", "/etc/apt/sources.list", FileOverride::Yes),
             (
                 "ubuntu.sources",
                 "/etc/apt/sources.list.d/ubuntu.sources",
@@ -93,7 +89,7 @@ impl super::UbuntuVersion for Ubuntu24_04 {
                 "regolith-sway-gtklock",
                 "i3status",
                 "i3status-rs",
-            ]
+            ],
         )
     }
 }

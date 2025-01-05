@@ -68,7 +68,7 @@ pub(super) async fn configure_system_with_apt(
     let ubuntu = data::versioned::get_version_information();
 
     set_up_new_apt_sources(ubuntu, change_apt_sources, gui).await?;
-    
+
     ::tracing::debug!("Updating APT package signatures");
     if !::async_std::process::Command::new("apt-get")
         .args(["--yes", "update"])

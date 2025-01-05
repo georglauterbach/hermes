@@ -42,9 +42,6 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
         arguments.gui,
     ));
     task_handler.spawn(configuration_files::set_up_unversioned_configuration_files());
-    task_handler.spawn(configuration_files::setup_up_versioned_configuration_files(
-        arguments.gui,
-    ));
     task_handler.spawn(programs::install_additional_programs());
 
     let mut errors = vec![];
