@@ -105,6 +105,7 @@ pub(super) async fn configure_system_with_apt(
     if !::async_std::process::Command::new("apt-get")
         .args([
             "--yes",
+            "--no-install-recommends",
             "install",
             "apt-utils",
             "bash-completion",
@@ -131,7 +132,7 @@ pub(super) async fn configure_system_with_apt(
     if gui {
         ::tracing::debug!("Installing GUI packages");
         if !::async_std::process::Command::new("apt-get")
-            .args(["--yes", "install"])
+            .args(["--yes", "install", "--no-install-recommends"])
             .args(ubuntu.gui_packages())
             .stdout(::std::process::Stdio::null())
             .stderr(::std::process::Stdio::inherit())
@@ -145,7 +146,7 @@ pub(super) async fn configure_system_with_apt(
 
         ::tracing::debug!("Removed unwanted GUI packages");
         if !::async_std::process::Command::new("apt-get")
-            .args(["--yes", "install"])
+            .args(["--yes", "remove"])
             .args(ubuntu.gui_packages_removal())
             .stdout(::std::process::Stdio::null())
             .stderr(::std::process::Stdio::inherit())
