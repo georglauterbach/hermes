@@ -1,14 +1,18 @@
+// Waybar Configuration
+//   - GitHub wiki: https://github.com/Alexays/Waybar/wiki/Configuration
+// Nerd Font Icons
+//   - cheat sheet: https://www.nerdfonts.com/cheat-sheet
 {
   "layer": "bottom",
   "position": "top",
   "spacing": 5,
   "modules-left": [
     "tray",
-    "sway/window"
+    "sway/window",
+    "sway/mode"
   ],
   "modules-center": [
-    "sway/workspaces",
-    "sway/mode"
+    "sway/workspaces"
   ],
   "modules-right": [
     "cpu",
@@ -25,7 +29,6 @@
   "sway/window": {
     "max-length": 90
   },
-  "sway/mode": {},
   "sway/workspaces": {
     "all-outputs": false,
     "format": "{name}",
@@ -37,7 +40,7 @@
   },
   "memory": {
     "interval": 30,
-    "format": " {used:4.1f}GiB/{total:4.1f}GiB (󰯍 {swapUsed:4.1f}GiB/{swapTotal:4.1f}GiB)",
+    "format": " {used:4.1f}/{total:4.1f}GiB (󰯍 {swapUsed:3.1f}/{swapTotal:3.1f}GiB)",
     "tooltip-format": ""
   },
   "network": {
@@ -66,7 +69,7 @@
     "on-click": ""
   },
   "clock": {
-    "format": "{:%H:%M Uhr}",
+    "format": " {:%H:%M}",
     "tooltip-format": "<tt><small>{calendar}</small></tt>",
     "calendar": {
       "format": {
