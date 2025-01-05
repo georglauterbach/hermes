@@ -83,6 +83,8 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 - [_zoxide_](https://github.com/ajeetdsouza/zoxide)
   - smarter cd command
   - enbled with `HERMES_INIT_ZOXIDE`, override `cd` with `HERMES_OVERRIDE_CD_WITH_ZOXIDE`
+- [_zellij_](https://github.com/zellij-org/zellij)
+  - terminal workspace with batteries included
 
 ### Changing APT Sources
 

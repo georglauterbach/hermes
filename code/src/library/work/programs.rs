@@ -46,6 +46,7 @@ pub(super) async fn install_additional_programs() -> ::anyhow::Result<()> {
     join_set.spawn(ripgrep());
     join_set.spawn(starship());
     join_set.spawn(zoxide());
+    join_set.spawn(zellij());
 
     while let Some(handler) = join_set.join_next().await {
         match handler {
@@ -367,6 +368,25 @@ async fn zoxide() -> ::anyhow::Result<()> {
     entries.insert(
         String::from("zoxide"),
         format!("{}/zoxide", environment::home_local_bin()),
+    );
+
+    download_and_extract(uri, entries).await?;
+    Ok(())
+}
+
+/// Install `zoxide` (<https://github.com/zellij-org/zellij>)
+async fn zellij() -> ::anyhow::Result<()> {
+    /// Version of `zoxide` to install
+    const ZOXIDE_VERSION: &str = "0.41.2";
+    let file = format!("zellij-{ARCHITECTURE}-unknown-linux-musl");
+    let uri = format!(
+        "https://github.com/zellij-org/zellij/releases/download/v{ZOXIDE_VERSION}/{file}.tar.gz"
+    );
+
+    let mut entries = collections::HashMap::new();
+    entries.insert(
+        String::from("zellij"),
+        format!("{}/zellij", environment::home_local_bin()),
     );
 
     download_and_extract(uri, entries).await?;
