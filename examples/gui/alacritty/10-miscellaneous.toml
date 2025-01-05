@@ -35,7 +35,6 @@ save_to_clipboard = true
 style = { shape = "Block", blinking = "Never" }
 vi_mode_style = "None"
 unfocused_hollow = true
-thickness = 1.0
 
 [terminal]
 osc52 = "CopyPaste"

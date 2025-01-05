@@ -31,7 +31,7 @@ To **update** _hermes_, run the following command
 
 ```bash
 hermes --version
-hermes --update --non-interactive # works on >= v3.0.0-beta.14
+hermes --update --non-interactive # works properly on >= v4.0.0
 ```
 
 > [!CAUTION]
@@ -100,7 +100,7 @@ You can find additional setup scripts that aid in setting up machines under the 
 
 ### Examples
 
-You can find setup examples in the [`examples/`](./examples/) directory, e.g. for a custom post-hermes Bash setup, a simple NeoVim setup file,a Regolith configuration, etc.
+You can find setup examples in the [`examples/`](./examples/) directory, e.g. for a custom post-hermes Bash setup, the GUI setup (including a Regolith, Waybar, and Alacritty configuration), VS Code configuration files, etc.
 
 ## Architecture
 
