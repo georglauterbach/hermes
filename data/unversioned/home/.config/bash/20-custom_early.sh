@@ -29,7 +29,6 @@ export HERMES_INIT_ZOXIDE=${HERMES_INIT_ZOXIDE:-false}
 # Initialization of additonal programs previously is independent
 # of overriding system commands.
 
-export HERMES_OVERRIDE_APT_WITH_NALA=${HERMES_OVERRIDE_APT_WITH_NALA:-false}
 export HERMES_OVERRIDE_CAT_WITH_BAT=${HERMES_OVERRIDE_CAT_WITH_BAT:-false}
 export HERMES_OVERRIDE_CD_WITH_ZOXIDE=${HERMES_OVERRIDE_CD_WITH_ZOXIDE:-false}
 export HERMES_OVERRIDE_FIND_WITH_FD=${HERMES_OVERRIDE_FIND_WITH_FD:-false}
