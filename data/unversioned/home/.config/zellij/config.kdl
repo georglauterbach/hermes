@@ -1,0 +1,120 @@
+// ref: https://zellij.dev/documentation/configuration
+
+// If you'd like to override the default keybindings completely,
+// be sure to change "keybinds" to "keybinds clear-defaults=true"
+
+plugins {
+    tab-bar         { path "tab-bar"; }
+    status-bar      { path "status-bar"; }
+    compact-bar     { path "compact-bar"; }
+    session-manager { path "session-manager"; }
+}
+
+// Toggle between having pane frames around the panes
+pane_frames false
+
+// Whether pane viewports are serialized along with the session, default is false
+serialize_pane_viewport true
+
+// Scrollback lines to serialize along with the pane viewport when serializing sessions, 0
+// defaults to the scrollback size. If this number is higher than the scrollback size, it will
+// also default to the scrollback size. This does nothing if `serialize_pane_viewport` is not true.
+//
+scrollback_lines_to_serialize 0
+
+themes {
+    // ref: https://github.com/sainnhe/gruvbox-material?tab=readme-ov-file
+    gruvbox-material-dark {
+        fg "#DDC7A1"
+        bg "#282828"
+
+        black "#1D2021"
+        red "#EA6962"
+        green "#A9B665"
+        yellow "#D8A657"
+        blue "#7DAEA3"
+        magenta "#D3869B" // purple
+        cyan "#89B482" // aqua
+        white "#FBF1C7"
+        orange "#E78A4E"
+    }
+}
+
+// Select a theme
+theme "gruvbox-material-dark"
+
+// The name of the default layout to load on startup
+//
+// Options:
+//   - "default"
+//   - "compact"
+default_layout "default"
+
+// Choose the mode that zellij uses when starting up.
+//
+// Options:
+//   - "normal"
+//   - "locked"
+default_mode "normal"
+
+// Toggle enabling the mouse mode. On certain configurations, or terminals this could
+// potentially interfere with copying text.
+//
+// Options:
+//   - true (default)
+//   - false
+mouse_mode true
+
+// Configure the scroll back buffer size
+// This is the number of lines zellij stores for each pane in the scroll back
+// buffer. Excess number of lines are discarded in a FIFO fashion.
+// Valid values: positive integers
+// Default value: 10000
+//
+// scroll_buffer_size 10000
+
+// Provide a command to execute when copying text. The text will be piped to
+// the stdin of the program to perform the copy. This can be used with
+// terminal emulators which do not support the OSC 52 ANSI control sequence
+// that will be used by default if this option is not set.
+// Examples:
+//
+// copy_command "xclip -selection clipboard" // x11
+// copy_command "wl-copy"                    // wayland
+
+// Choose the destination for copied text
+// Allows using the primary selection buffer (on x11/wayland) instead of the system clipboard.
+// Does not apply when using copy_command.
+//
+// Options:
+//   - system (default)
+//   - primary
+// copy_clipboard "system"
+
+// Enable or disable automatic copy (and clear) of selection when releasing mouse
+// Default: true
+//
+copy_on_select true
+
+// Path to the default editor to use to edit pane scrollbuffer
+// Default: $EDITOR or $VISUAL
+//
+// scrollback_editor "$EDITOR"
+
+// When attaching to an existing session with other users,
+// should the session be mirrored (true) or should each user have their own cursor (false)?
+mirror_session true
+
+// The folder in which Zellij will look for layouts
+//
+// layout_dir "${HOME}/.config/zellij/layouts"
+
+// The folder in which Zellij will look for themes
+//
+// theme_dir "${HOME}/.config/zellij/themes"
+
+// Enable or disable the rendering of styled and colored underlines (undercurl).
+// May need to be disabled for certain unsupported terminals
+//
+// Default: true
+styled_underlines true

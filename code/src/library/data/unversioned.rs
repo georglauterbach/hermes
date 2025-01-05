@@ -9,6 +9,12 @@ use super::{ConfigurationFileIndex, FileOverride};
 /// 1. the remote part (a part of the request URL), and
 /// 2. the non-canonical path on the local file system.
 pub const INDEX: ConfigurationFileIndex = &[
+    // Starship
+    (
+        "home/.config/starship/starship.toml",
+        "~/.config/starship/starship.toml",
+        FileOverride::No,
+    ),
     // Bash
     ("home/.bashrc", "~/.bashrc", FileOverride::Yes),
     (
@@ -46,19 +52,22 @@ pub const INDEX: ConfigurationFileIndex = &[
         "~/.config/bash/99-custom_late.sh",
         FileOverride::No,
     ),
+    // ble.sh
     (
         "home/.config/blesh/init.sh",
         "~/.config/blesh/init.sh",
         FileOverride::No,
     ),
+    // NeoVim
     (
         "home/.config/nvim/init.lua",
         "~/.config/nvim/init.lua",
         FileOverride::No,
     ),
+    // Zellij
     (
-        "home/.config/starship/starship.toml",
-        "~/.config/starship/starship.toml",
+        "home/.config/zellij/config.kdl",
+        "~/.config/zellij/config.kdl",
         FileOverride::No,
     ),
 ];
