@@ -6,7 +6,8 @@
   "NoColor": false,
   "Exclude": [
     "\\.sources$",
-    "code/Cargo\\.lock$"
+    "code/Cargo\\.lock$",
+    "examples/git/gitconfig"
   ],
   "AllowedContentTypes": [],
   "PassedFiles": [],
