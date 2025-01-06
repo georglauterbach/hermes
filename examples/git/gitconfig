@@ -1,0 +1,29 @@
+[core]
+	autocrlf = input
+	safecrlf = true
+	eol = lf
+
+[gpg]
+	program = gpg2
+
+[init]
+	defaultBranch = main
+
+[commit]
+	gpgsign = true
+
+[push]
+	default = simple
+	autoSetupRemote = true
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[includeIf "gitdir:**/git/hub/"]
+	path = .gitconfig.github.conf
+
+[includeIf "gitdir:**/git/lab/"]
+	path = .gitconfig.gitlab.conf
