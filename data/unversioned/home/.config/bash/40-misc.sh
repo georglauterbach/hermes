@@ -11,18 +11,27 @@ function __hermes__setup_misc() {
   shopt -s checkwinsize globstar autocd
 
   # miscellaneous environment variables
-  VISUAL='nano'
-  if   __is_command 'nvim'; then VISUAL='nvim'
-  elif __is_command 'vim' ; then VISUAL='vim'
-  elif __is_command 'vi'  ; then VISUAL='vi'
+  if [[ ! -v VISUAL ]]; then
+    VISUAL=nano
+    if   __is_command 'nvim'; then VISUAL='nvim'
+    elif __is_command 'vim' ; then VISUAL='vim'
+    elif __is_command 'vi'  ; then VISUAL='vi'
+    fi
   fi
 
-  EDITOR=${VISUAL}
+  EDITOR=${EDITOR:-${VISUAL}}
   PAGER="$(command -v less) -R"
   GPG_TTY=$(tty)
   HERMES_LOADED=true
-
   export VISUAL EDITOR PAGER GPG_TTY HERMES_LOADED
+
+  if [[ ! -v LANG ]]; then
+    # shellcheck source=/dev/null
+    [[ -e /etc/locale.conf ]] && source /etc/locale.conf
+    export LANG=${LANG:-en_US.UTF-8}
+    export LANGUAGE=${LANGUAGE:-en_US.UTF-8}
+    export LC_ALL=${LC_ALL:-en_US.UTF-8}
+  fi
 
   # completion
   if ! shopt -oq posix; then
