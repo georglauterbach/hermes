@@ -8,8 +8,6 @@
 exec_always systemctl --user import-environment HOME
 exec waybar
 
-bindsym $mod+Shift+n exec swaync-client -t -sw
-
 # -----------------------------------------------
 # ----  Keyboard Layout  ------------------------
 # -----------------------------------------------
@@ -19,10 +17,14 @@ input type:keyboard {
 }
 
 # -----------------------------------------------
-# ----  Mouse  ----------------------------------
+# ----  Borders  --------------------------------
 # -----------------------------------------------
 
-focus_follows_mouse yes
+smart_borders on
+default_border pixel 2
+
+# disable windows titlebars while preserving border
+for_window [class=".*"] border pixel 2
 
 # -----------------------------------------------
 # ----  Key Bindings  ---------------------------
@@ -34,6 +36,9 @@ bindsym $mod+$wm.binding.code exec code
 set_from_resource $wm.binding.move_workspace wm.binding.move_workspace m
 bindsym $mod+$wm.binding.move_workspace move workspace to output left
 
+set_from_resource $wm.program.notification_ui wm.program.notification_ui Shift+n
+bindsym $mod+$wm.program.notification_ui exec swaync-client -t -sw
+
 # -----------------------------------------------
 # ----  Lockscreen  -----------------------------
 # -----------------------------------------------
@@ -43,7 +48,7 @@ bindsym $mod+Shift+l exec custom_way_lock
 
 # Lock screen after 180 seconds of inactivity and when going to sleep
 exec swayidle -w \
-    timeout 180  'swaymsg exec custom_way_lock' \
+    timeout 300  'swaymsg exec custom_way_lock' \
     before-sleep 'swaymsg exec custom_way_lock'
 
 # -----------------------------------------------
