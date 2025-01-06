@@ -2,7 +2,7 @@
   "name": "development",
   "image": "ghcr.io/georglauterbach/dev-container-base:4.3.0",
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/rust:5.4.3": {
+    "ghcr.io/georglauterbach/dev-container-features/rust:5.5.0": {
       "system.packages.additional-packages": "pkg-config,musl-tools",
       "linker.mold.install": "true"
     }
@@ -52,10 +52,8 @@
     "vscode": {
       "extensions": [
         "aaron-bond.better-comments",
-        "EditorConfig.EditorConfig",
         "mads-hartmann.bash-ide-vscode",
         "timonwong.shellcheck",
-        "usernamehw.errorlens",
         "xshrim.txt-syntax"
       ],
       "settings": {
