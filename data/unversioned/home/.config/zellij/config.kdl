@@ -10,6 +10,9 @@ plugins {
     session-manager { path "session-manager"; }
 }
 
+// Set the default shell to Bash
+default_shell "bash"
+
 // Toggle between having pane frames around the panes
 pane_frames false
 
