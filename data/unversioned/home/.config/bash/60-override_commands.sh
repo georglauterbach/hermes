@@ -1,6 +1,5 @@
 #! /usr/bin/env bash
 
-#    version  0.2.0
 # sourced by  ${HOME}/.bashrc
 #       task  overwrite well-known commands with modern alternatives
 

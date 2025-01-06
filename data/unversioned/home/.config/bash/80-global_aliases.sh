@@ -1,6 +1,5 @@
 #! /usr/bin/env bash
 
-#    version  0.5.0
 # sourced by  ${HOME}/.bashrc
 #       task  configure universal Bash aliases
 

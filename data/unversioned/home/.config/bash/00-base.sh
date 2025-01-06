@@ -1,6 +1,5 @@
 #! /usr/bin/env bash
 
-#    version  3.0.0
 # sourced by  ${HOME}/.bashrc or manually
 #       task  usable even when not running interactively to
 #             provide basic functionality and initialization

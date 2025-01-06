@@ -1,4 +1,3 @@
-# version       0.2.0
 # sourced by    ble.sh
 # task          setup for ble.sh (https://github.com/akinomyoga/ble.sh)
 

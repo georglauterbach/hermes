@@ -1,6 +1,5 @@
 #! /usr/bin/env bash
 
-#    version  2.1.0
 # sourced by  ${HOME}/.bashrc
 #       task  user-customizable loading of _hermes_
 

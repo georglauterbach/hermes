@@ -1,6 +1,5 @@
 #! /usr/bin/env bash
 
-#    version  2.2.0
 # sourced by  ${HOME}/.bashrc
 #       task  initialize miscellaneous programs
 
