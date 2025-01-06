@@ -44,6 +44,7 @@ tooltip {
 
 tooltip label {
     color: #DDC7A1;
+    font-size: 16px;
 }
 
 /* ------------------------------------------- */
@@ -91,6 +92,12 @@ tooltip label {
 
 #workspaces button.focused label {
     color: #504945;
+}
+
+#workspaces button:hover {
+    box-shadow: none; /* Remove predefined box-shadow */
+    text-shadow: none; /* Remove predefined text-shadow */
+    transition: none; /* Disable predefined animations */
 }
 
 /* ------------------------------------------- */

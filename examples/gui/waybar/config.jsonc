@@ -46,8 +46,9 @@
   "network": {
     "interval": 10,
     "family": "ipv4",
-    "format-wifi": "  {signalStrength}% ",
-    "format-ethernet": "   {bandwidthDownBytes:20}  {bandwidthUpBytes}",
+    "format": "   {bandwidthDownBytes:20}  {bandwidthUpBytes}",
+    "tooltip-format-wifi": " \n󰩟 {ipaddr}/{cidr}@{ifname} via {gwaddr}\n {signalStrength}%",
+    "tooltip-format-ethernet": "󰈀\n󰩟 {ipaddr}/{cidr}@{ifname} via {gwaddr}",
     "format-disconnected": "",
     "tooltip-format": "{ifname} via {gwaddr}"
   },
