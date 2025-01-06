@@ -7,7 +7,7 @@ swayidle \
     resume               'swaymsg output \* dpms on'  \
     &
 
-swaylock --indicator-caps-lock --image "${HOME}/.config/regolith3/wallpaper.png"
+swaylock --config "${HOME}/.config/swaylock/config"
 kill -TERM "${!}"
 
 exit 0
