@@ -46,14 +46,18 @@ function git() {
 
 function theme() {
   case "${1:-dark}" in
-    ( 'dark' )
-      gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark
-      gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+    ( 'd' | 'dark' )
+      gsettings set org.gnome.desktop.interface      gtk-theme    'Gruvbox'
+      gsettings set org.gnome.desktop.interface      icon-theme   'Gruvbox-Plus-Dark'
+      gsettings set org.gnome.desktop.interface      color-scheme 'prefer-dark'
+      gsettings set org.gnome.desktop.wm.preferences theme        'Gruvbox'
       ;;
 
-    ( 'light' )
-      gsettings set org.gnome.desktop.interface gtk-theme Adwaita
-      gsettings set org.gnome.desktop.interface color-scheme prefer-light
+    ( 'l' | 'light' )
+      gsettings set org.gnome.desktop.interface      gtk-theme    'Adwaita'
+      gsettings set org.gnome.desktop.interface      icon-theme   'Gruvbox-Plus-Light'
+      gsettings set org.gnome.desktop.interface      color-scheme 'prefer-light'
+      gsettings set org.gnome.desktop.wm.preferences theme        'Adwaita'
       ;;
 
     ( * )

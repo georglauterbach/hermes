@@ -11,8 +11,8 @@ wm.gaps.focus_follows_mouse: yes
 ! ----  GTK Theme  ------------------------------
 ! -----------------------------------------------
 
-gtk.theme_name: Yaru-sage-dark
-gtk.icon_theme_name: Yaru-sage-dark
+gtk.theme_name: Gruvbox
+gtk.icon_theme_name: Gruvbox-Plus-Dark
 
 ! -----------------------------------------------
 ! ----  Gaps & Borders  -------------------------
