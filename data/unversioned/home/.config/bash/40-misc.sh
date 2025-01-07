@@ -19,8 +19,9 @@ function __hermes__setup_misc() {
     fi
   fi
 
+  [[ ! -v PAGER ]] && command -v less &>/dev/null && PAGER="$(command -v less) -R"
+
   EDITOR=${EDITOR:-${VISUAL}}
-  PAGER="$(command -v less) -R"
   GPG_TTY=$(tty)
   HERMES_LOADED=true
   export VISUAL EDITOR PAGER GPG_TTY HERMES_LOADED
