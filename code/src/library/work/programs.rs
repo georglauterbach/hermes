@@ -160,7 +160,7 @@ async fn atuin() -> ::anyhow::Result<()> {
 /// Install `bat` (<https://github.com/sharkdp/bat>)
 async fn bat() -> ::anyhow::Result<()> {
     /// Version of `bat` to install
-    const BAT_VERSION: &str = "0.24.0";
+    const BAT_VERSION: &str = "0.25.0";
     let file = format!("bat-v{BAT_VERSION}-{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri =
         format!("https://github.com/sharkdp/bat/releases/download/v{BAT_VERSION}/{file}.tar.gz");
@@ -217,7 +217,7 @@ async fn blesh() -> ::anyhow::Result<()> {
 /// Install `eza` (<https://github.com/eza-community/eza>)
 async fn eza() -> ::anyhow::Result<()> {
     /// The version `eza` to install
-    const EZA_VERSION: &str = "0.20.14";
+    const EZA_VERSION: &str = "0.20.16";
     let file = format!("eza_{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri = format!(
         "https://github.com/eza-community/eza/releases/download/v{EZA_VERSION}/{file}.tar.gz"
