@@ -2,7 +2,7 @@
   "name": "development",
   "image": "ghcr.io/georglauterbach/dev-container-base:4.4.0",
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/rust:5.5.0": {
+    "ghcr.io/georglauterbach/dev-container-features/rust:5.5.1": {
       "system.packages.additional-packages": "pkg-config,musl-tools",
       "linker.mold.install": "true"
     }
@@ -24,6 +24,9 @@
     "HERMES_CONFIG_ATUIN_DB_FILE": "/home/ubuntu/.cache/atuin_history.db",
     "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER": "aarch64-linux-gnu-gcc",
     "CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER": "x86_64-linux-musl-gcc"
+  },
+  "remoteEnv": {
+    "PATH": "${containerEnv:CARGO_HOME}/bin:${containerEnv:PATH}"
   },
   "initializeCommand": "mkdir -p \"${HOME}/.gnupg\" \"${HOME}/.ssh\"",
   "mounts": [
