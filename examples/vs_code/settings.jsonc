@@ -16,7 +16,6 @@
   "git.openRepositoryInParentFolders": "never",
   // ? workbench
   // * workbench::miscellaneous
-  "workbench.iconTheme": "material-icon-theme",
   "workbench.editor.showTabs": "multiple",
   "workbench.editor.wrapTabs": true,
   "workbench.editor.enablePreview": true,
@@ -31,8 +30,9 @@
   "workbench.activityBar.location": "top",
   "workbench.sideBar.location": "right",
   // * workbench::theme
+  "workbench.iconTheme": "material-icon-theme",
   "workbench.preferredDarkColorTheme": "Gruvbox Material Dark",
-  "workbench.preferredLightColorTheme": "Default Light+",
+  "workbench.preferredLightColorTheme": "Edge Light",
   "window.autoDetectColorScheme": true,
   "window.autoDetectHighContrast": false,
   // * workbench::theme::gruvbox-material
@@ -53,12 +53,10 @@
       "minimap.selectionHighlight": "#7C6F6480", // editor selection
       "minimap.findMatchHighlight": "#333E34D0" // search matches
     },
-    "[Default Light+]": {
-      "editor.background": "#e8e8e8",
-      "editor.lineHighlightBackground": "#ecefec",
-      "sideBar.background": "#d9d9d9",
-      "editorGroupHeader.tabsBackground": "#d9d9d9",
-      "titleBar.activeBackground": "#d9d9d9"
+    "[Edge Light]": {
+      "minimap.errorHighlight": "#D05858",
+      "minimap.warningHighlight": "#BE7E05",
+      "minimap.infoHighlight": "#5079BE"
     }
   },
   // ? editor
@@ -127,6 +125,22 @@
   // ? extensions
   // * extensions::asciidoctor.asciidoctor-vscode
   "asciidoc.antora.showEnableAntoraPrompt": false,
+  // * extensions::aaron-bond.better-comments
+  "better-comments.tags": [
+    {
+      "tag": "!",
+      "color": "#EA6962",
+      "bold": true
+    },
+    {
+      "tag": "?",
+      "color": "#7DAEA3"
+    },
+    {
+      "tag": "todo",
+      "color": "#D8A657"
+    }
+  ],
   // * extension::always-enabled::adpyke.codesnap
   "codesnap.boxShadow": "none",
   "codesnap.roundedCorners": true,
@@ -237,17 +251,17 @@
   // ? comments
   /*
       = Additional Information
-  
+
       == Extensions
-  
+
       === Markdown
-  
+
       - bierner.markdown-emoji
       - bierner.markdown-preview-github-styles
       - davidanson.vscode-markdownlint
-  
+
       === Miscellaneous
-  
+
       - C/C++: llvm-vs-code-extensions.vscode-clangd
       - BATS (Bash Tests): jetmartin.bats
       - Docker: ms-azuretools.vscode-docker
@@ -255,21 +269,21 @@
       - LaTeX: james-yu.latex-workshop
       - ProtoBuf (gRPC): pbkit.vscode-pbkit
       - YAML: redhat.vscode-yaml
-  
+
       === Python
-  
+
       - ms-python.black-formatter
       - ms-python.debugpy
       - ms-python.python
       - ms-python.vscode-pylance
-  
+
       === Rust
-  
+
       - fill-labs.dependi
       - rust-lang.rust-analyzer
       - tamasfe.even-better-toml
       - vadimcn.vscode-lldb
-    */
+  */
   // ? dynamic
   "window.zoomLevel": 1
 }
