@@ -1,0 +1,17 @@
+[colors.primary]
+background = "#282828"
+foreground = "#DDC7A1"
+
+[colors.normal]
+black = "#141617"
+white = "#FFFFFF"
+
+red = "#EA6962"
+yellow = "#D8A657"
+green = "#A9B665"
+cyan = "#7BB674"
+blue = "#7DAEA3"
+magenta = "#D3869B"
+
+[window]
+opacity = 0.6

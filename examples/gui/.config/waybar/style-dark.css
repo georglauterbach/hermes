@@ -1,0 +1,151 @@
+/* ------------------------------------------- */
+/* ----  General  ---------------------------- */
+/* ------------------------------------------- */
+
+/*
+  Waybar Styling [Dark System Theme]
+    - GitHub wiki: https://github.com/Alexays/Waybar/wiki/Styling
+*/
+
+* {
+  font-family: "JetbrainsMono Nerd Font";
+  font-size: 12px;
+
+  border: none;
+  border-radius: 10px;
+
+  margin: 0px 0px 0px 0px;
+  padding: 0px 10px 0px 10px;
+
+  transition: none;
+
+  color: #282828;
+  font-weight: 600;
+}
+
+window {
+  background: transparent;
+}
+
+window#waybar>box {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+/* ------------------------------------------- */
+/* ----  Tooltips  --------------------------- */
+/* ------------------------------------------- */
+
+tooltip {
+  background-color: #282828;
+}
+
+tooltip label {
+  color: #DDC7A1;
+  font-size: 16px;
+}
+
+/* ------------------------------------------- */
+/* ----  Left Modules  ----------------------- */
+/* ------------------------------------------- */
+
+#tray {
+  padding-left: 5px;
+  padding-right: 5px;
+  background: #504945;
+}
+
+#tray label {
+  color: #DDC7A1;
+}
+
+#custom-notifications {
+  background: #504945;
+  color: #DDC7A1;
+}
+
+#window {
+  color: #DDC7A1;
+}
+
+#mode {
+  color: #DDC7A1;
+}
+
+/* ------------------------------------------- */
+/* ----  Middle Modules  --------------------- */
+/* ------------------------------------------- */
+
+#workspaces button {
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  background: #504945;
+}
+
+#workspaces button label {
+  color: #DDC7A1;
+}
+
+#workspaces button.focused {
+  background: #DDC7A1;
+}
+
+#workspaces button.focused label {
+  color: #504945;
+}
+
+#workspaces button.urgent {
+  background: #EA6962;
+}
+
+#workspaces button.urgent label {
+  color: #282828;
+}
+
+#workspaces button:hover {
+  box-shadow: none; /* Remove predefined box-shadow */
+  text-shadow: none; /* Remove predefined text-shadow */
+  transition: none; /* Disable predefined animations */
+}
+
+/* ------------------------------------------- */
+/* ----  Right Modules  ---------------------- */
+/* ------------------------------------------- */
+
+#cpu {
+  background: #E78A4E;
+}
+
+#memory {
+  background: #D8A657;
+}
+
+#network {
+  background: #A9B655;
+  min-width: 15em;
+}
+
+#battery {
+  background: #89B482;
+}
+
+#battery.critical:not(.charging) {
+  background: #EA6962;
+  animation-name: blink;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+#wireplumber {
+  background: #7DAEA3;
+}
+
+#clock {
+  background: #D3869B;
+}

@@ -6,5 +6,6 @@ live_config_reload = true
 import = [
   "~/.config/alacritty/10-miscellaneous.toml",
   "~/.config/alacritty/30-colors.toml",
+  "~/.config/alacritty/33-colors_active.toml",
   "~/.config/alacritty/40-bindings.toml",
 ]

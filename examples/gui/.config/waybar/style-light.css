@@ -2,8 +2,10 @@
 /* ----  General  ---------------------------- */
 /* ------------------------------------------- */
 
+/* TODO This configuration is not done */
+
 /*
-  Waybar Styling
+  Waybar Styling [Light System Theme]
     - GitHub wiki: https://github.com/Alexays/Waybar/wiki/Styling
 */
 
@@ -39,11 +41,11 @@ window#waybar>box {
 /* ------------------------------------------- */
 
 tooltip {
-    background-color: #282828;
+    background-color: #FAFAFA;
 }
 
 tooltip label {
-    color: #DDC7A1;
+    color: #4B505B;
     font-size: 16px;
 }
 
@@ -54,20 +56,25 @@ tooltip label {
 #tray {
     padding-left: 0px;
     padding-right: 0px;
-    background: #DDC7A1;
+    background: #FAFAFA;
 }
 
 #tray label {
     border-radius: 0px;
-    color: #DDC7A1;
+    color: #4B505B;
+}
+
+#custom-notifications {
+    background: #4B505B;
+    color: #FAFAFA;
 }
 
 #window {
-    color: #DDC7A1;
+    color: #4B505B;
 }
 
 #mode {
-    color: #DDC7A1;
+    color: #4B505B;
 }
 
 /* ------------------------------------------- */
@@ -79,25 +86,29 @@ tooltip label {
     padding-right: 5px;
     margin-left: 5px;
     margin-right: 5px;
-    background: #504945;
+    background: #FAFAFA;
 }
 
 #workspaces button label {
-    color: #DDC7A1;
+    color: #4B505B;
 }
 
 #workspaces button.focused {
-    background: #DDC7A1;
+    background: #4B505B;
 }
 
 #workspaces button.focused label {
-    color: #504945;
+    color: #FAFAFA;
 }
 
 #workspaces button:hover {
     box-shadow: none; /* Remove predefined box-shadow */
     text-shadow: none; /* Remove predefined text-shadow */
     transition: none; /* Disable predefined animations */
+}
+
+#workspaces button.urgent {
+    background: #D05858;
 }
 
 /* ------------------------------------------- */
@@ -114,7 +125,7 @@ tooltip label {
 
 #network {
     background: #A9B655;
-    min-width: 15em;
+    /* min-width: 15em; */
 }
 
 #battery {
