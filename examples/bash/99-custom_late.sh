@@ -43,26 +43,3 @@ function git() {
       ;;
   esac
 }
-
-function theme() {
-  case "${1:-dark}" in
-    ( 'd' | 'dark' )
-      gsettings set org.gnome.desktop.interface      gtk-theme    'Gruvbox'
-      gsettings set org.gnome.desktop.interface      icon-theme   'Gruvbox-Plus-Dark'
-      gsettings set org.gnome.desktop.interface      color-scheme 'prefer-dark'
-      gsettings set org.gnome.desktop.wm.preferences theme        'Gruvbox'
-      ;;
-
-    ( 'l' | 'light' )
-      gsettings set org.gnome.desktop.interface      gtk-theme    'Adwaita'
-      gsettings set org.gnome.desktop.interface      icon-theme   'Gruvbox-Plus-Light'
-      gsettings set org.gnome.desktop.interface      color-scheme 'prefer-light'
-      gsettings set org.gnome.desktop.wm.preferences theme        'Adwaita'
-      ;;
-
-    ( * )
-      echo "'${1}' is not a valid option - use 'light' or 'dark'" >&2
-      return 1
-      ;;
-  esac
-}

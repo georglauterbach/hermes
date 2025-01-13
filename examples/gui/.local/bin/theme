@@ -1,0 +1,36 @@
+#! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
+
+# TODO use `regolith-look & ; __PID=${!} ; ... ; wait -F "${__PID}" ;`
+
+function link_alacritty_colors_to() {
+  ln -sf \
+    "${HOME}/.config/alacritty/${1:-Alacritty color file required}.toml" \
+    "${HOME}/.config/alacritty/33-colors_active.toml"
+}
+
+case "${1:-dark}" in
+  ( 'd' | 'dark' )
+    gsettings set org.gnome.desktop.interface      gtk-theme    'Gruvbox'
+    gsettings set org.gnome.desktop.interface      icon-theme   'Gruvbox-Plus-Dark'
+    gsettings set org.gnome.desktop.interface      color-scheme 'prefer-dark'
+    gsettings set org.gnome.desktop.wm.preferences theme        'Gruvbox'
+
+    link_alacritty_colors_to '31-colors_dark'
+    ;;
+
+  ( 'l' | 'light' )
+    gsettings set org.gnome.desktop.interface      gtk-theme    'Adwaita'
+    gsettings set org.gnome.desktop.interface      icon-theme   'Gruvbox-Plus-Light'
+    gsettings set org.gnome.desktop.interface      color-scheme 'prefer-light'
+    gsettings set org.gnome.desktop.wm.preferences theme        'Adwaita'
+
+    link_alacritty_colors_to '32-colors_light'
+    ;;
+
+  ( * )
+    echo "'${1}' is not a valid option - use 'light|l' or 'dark|d'" >&2
+    return 1
+    ;;
+esac
+
+exit 0

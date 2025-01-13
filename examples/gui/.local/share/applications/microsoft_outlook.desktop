@@ -1,0 +1,14 @@
+#!/usr/bin/env dex
+[Desktop Entry]
+Version=1.0
+
+Name=Microsoft Outlook
+GenericName=Outlook
+Type=Application
+Exec=google-chrome --profile-directory=Default --app=https://webmail.rohde-schwarz.com/owa
+
+Comment=Personal information manager software system from Microsoft as part of the Microsoft 365 family of products
+StartupNotify=true
+StartupWMClass=Microsoft Teams
+Terminal=false
+Categories=Office;
