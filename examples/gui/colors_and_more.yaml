@@ -1,0 +1,43 @@
+typography:
+  icons: https://www.nerdfonts.com/cheat-sheet
+  ascii_art: https://patorjk.com/software/taag/#p=display&f=ANSI%20Shadow&t=test
+  fonts:
+    - name: JetBrainsMono Nerd Font
+      installation: scripts/setup_fonts.sh
+    - name: FiraCode Nerd Font
+      installation: scripts/setup_fonts.sh
+
+color:
+  dark:
+    name: Gruvbox Material Dark
+    link: https://github.com/sainnhe/gruvbox-material
+    coolors: https://coolors.co/161611-282828-ddc7a1-ea6962-e78a4e-d8a657-a9b665-7bb674-7daea3-d3869b
+    colors:
+      background_dim: 161611
+      background: 282828
+      foreground: DDC7A1
+
+      red: EA6962
+      orange: E78A4E
+      yellow: D8A657
+      green: A9B665
+      cyan(aqua): 7BB674
+      blue: 7DAEA3
+      purple(magenta,violet): D3869B
+
+  light:
+    name: Edge Light
+    link: https://github.com/sainnhe/edge-vscode/tree/master
+    coolors: https://coolors.co/E8EBF0-FAFAFA-4B505B-D05858-D17A58-BE7E05-608E32-3A8B84-5079BE-B05CCC
+    colors:
+      background_dim: E8EBF0
+      background: FAFAFA
+      foreground: 4B505B
+
+      red: D05858
+      orange: D17A58
+      yellow: BE7E05
+      green: 608E32
+      cyan(aqua): 3A8B84
+      blue: 5079BE
+      purple(magenta,violet): B05CCC
