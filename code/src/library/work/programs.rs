@@ -1,4 +1,4 @@
-//! This module handling installing additonal programs fro GitHub.
+//! This module handles installing additional programs from GitHub.
 
 use super::super::{fs, prepare::environment};
 use ::std::collections;
@@ -60,7 +60,7 @@ pub(super) async fn install_additional_programs() -> ::anyhow::Result<()> {
 
     super::super::evaluate_errors_vector!(
         errors,
-        "Could not acquire all additonal programs from GitHub successfully"
+        "Could not acquire all additional programs from GitHub successfully"
     )
 }
 

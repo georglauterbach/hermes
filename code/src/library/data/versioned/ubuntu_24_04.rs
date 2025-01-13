@@ -75,20 +75,25 @@ impl super::UbuntuVersion for Ubuntu24_04 {
             &[
                 "alacritty",
                 "code",
+                "dex",
+                "gnome-screenshot",
                 "regolith-desktop",
                 "regolith-session-sway",
                 "regolith-look-gruvbox",
-                "regolith-wm-user-programs",
                 "xdg-desktop-portal-regolith-wayland-config",
                 "swaylock",
                 "sway-notification-center",
             ],
             &[
+                "foot",
+                "i3status",
+                "i3status-rs",
+                "ilia",
                 "regolith-powerd",
                 "regolith-rofication",
                 "regolith-sway-gtklock",
-                "i3status",
-                "i3status-rs",
+                "rofi",
+                "zutty",
             ],
         )
     }
