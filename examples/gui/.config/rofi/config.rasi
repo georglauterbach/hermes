@@ -1,0 +1,13 @@
+configuration {
+    show-icons: false;
+    font: "JetBrainsMono Nerd Font 11";
+
+    display-ssh:         "󰣀";
+    display-run:         "";
+    display-drun:        "󱓞";
+    display-window:      "󱂬";
+    display-combi:       "󰕘";
+    display-filebrowser: "󰉋";
+}
+
+@theme "gruvbox-material"
