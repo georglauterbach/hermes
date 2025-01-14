@@ -94,6 +94,8 @@ To change and add APT sources (including PPAs), run _hermes_ with the `--change-
 
 To set up a GUI with [_Regolith Linux_](https://regolith-desktop.com/), run _hermes_ with the `--gui` flag. This option installs new PPAs for _Regolith Linux_ ([_Alacritty_](https://github.com/alacritty/alacritty), [_Cryptomator_](https://github.com/cryptomator/cryptomator), _Regolith_ itself, and [_Visual Studio Code_](https://github.com/microsoft/vscode). Configurations for these packages is **not** provided automatically. In [`examples/gui/`](./examples/gui/), you will find directories that are typically located in `${HOME}`. You can copy the subdirectories of the directories to `${HOME}/.config/` to acquire my configurations.
 
+You may also want to installed a [patched version of `rofi`](https://github.com/georglauterbach/hermes/releases/tag/rofi-v1.7.7%2Bwayland) that better integrates into Wayland.
+
 ### Supplementary Setup Scripts
 
 You can find additional setup scripts that aid in setting up machines under the [`scripts/` directory](./scripts/).

@@ -81,6 +81,7 @@ impl super::UbuntuVersion for Ubuntu24_04 {
                 "regolith-session-sway",
                 "regolith-look-gruvbox",
                 "xdg-desktop-portal-regolith-wayland-config",
+                "rofi",
                 "swaylock",
                 "sway-notification-center",
             ],
@@ -92,7 +93,6 @@ impl super::UbuntuVersion for Ubuntu24_04 {
                 "regolith-powerd",
                 "regolith-rofication",
                 "regolith-sway-gtklock",
-                "rofi",
                 "zutty",
             ],
         )
