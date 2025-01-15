@@ -3,6 +3,9 @@
 // Nerd Font Icons
 //   - cheat sheet: https://www.nerdfonts.com/cheat-sheet
 {
+  // -------------------------------------------
+  // ----  General  ----------------------------
+  // -------------------------------------------
   "layer": "bottom",
   "position": "top",
   "spacing": 5,
@@ -23,32 +26,55 @@
     "wireplumber",
     "clock"
   ],
+  // -------------------------------------------
+  // ----  Left Modules  -----------------------
+  // -------------------------------------------
   "tray": {
     "icon-size": 15,
     "show-passive-items": true
   },
   "custom/notifications": {
-    "format": "󰛮 {:>2}",
-    "interval": 10,
-    "exec": "swaync-client --count --skip-wait",
-    "on-click": "swaync-client --toggle-panel --skip-wait"
+    "format": "{icon} {:>2}",
+    "format-icons": {
+      "notification": " ",
+      "none": " ",
+      "dnd-notification": " ",
+      "dnd-none": " ",
+      "inhibited-notification": "󱅫 ",
+      "inhibited-none": "󱅫 ",
+      "dnd-inhibited-notification": " ",
+      "dnd-inhibited-none": " "
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client --subscribe-waybar",
+    "on-click": "swaync-client --toggle-panel --skip-wait",
+    "on-click-right": "swaync-client --toggle-dnd --skip-wait",
+    "escape": true,
+    "tooltip": false
   },
+  "sway/window": {
+    "max-length": 90
+  },
+  // -------------------------------------------
+  // ----  Middle Modules  ---------------------
+  // -------------------------------------------
   "sway/workspaces": {
     "format": "{name}",
     "all-outputs": false,
     "disable-scroll": true,
     "sort-by-number": true
   },
-  "sway/window": {
-    "max-length": 90
-  },
+  // -------------------------------------------
+  // ----  Right Modules  ----------------------
+  // -------------------------------------------
   "cpu": {
     "interval": 5,
     "format": " {usage:3}%"
   },
   "memory": {
     "interval": 10,
-    "format": " {used:4.1f}/{total:4.1f}GiB (󰯍 {swapUsed:3.1f}/{swapTotal:3.1f}GiB)",
+    "format": " {used:4.1f}/{total:4.1f}GiB", // (󰯍 {swapUsed:3.1f}/{swapTotal:3.1f}GiB)
     "tooltip-format": ""
   },
   "network": {
@@ -92,7 +118,7 @@
     "on-click": "__wpctl_hush_toggle"
   },
   "clock": {
-    "format": "󱑂 {:%H:%M %d.%m}",
+    "format": "󱑂 {:%H:%M}", // %d.%m
     "tooltip-format": "<tt>{calendar}</tt>",
     "locale": "de_DE.UTF-8",
     "calendar": {
