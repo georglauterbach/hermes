@@ -1,0 +1,14 @@
+#!/usr/bin/env dex
+[Desktop Entry]
+Version=1.0
+
+Name=Microsoft Teams
+GenericName=Teams
+Type=Application
+Exec=google-chrome --profile-directory=Default --app=https://teams.microsoft.com/v2
+
+Comment=Team collaboration application developed by Microsoft as part of the Microsoft 365 family of products
+StartupNotify=true
+StartupWMClass=Microsoft Teams
+Terminal=false
+Categories=Office;

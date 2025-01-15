@@ -1,7 +1,7 @@
 -- ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
 -- ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
 -- ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
--- ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
+-- ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║       version  2.0.0
 -- ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║    sourced by  nvim
 -- ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝          task  configure NeoVIM
 
@@ -55,15 +55,28 @@ require("lazy").setup({
     {
       "sainnhe/gruvbox-material",
       lazy = false,
-      priority = 1000,
-      config = function()
-        vim.cmd([[colorscheme gruvbox-material]])
-      end
+      priority = 2000
     },
     {
-      "nvim-treesitter/nvim-treesitter",
-      lazy = true,
-      build = ":TSUpdate",
+      "sainnhe/everforest",
+      version = false,
+      lazy = false,
+      priority = 2000
+    },
+    {
+      "f-person/auto-dark-mode.nvim",
+      lazy = false,
+      opts = {
+        update_interval = 2000,
+        set_dark_mode = function()
+          vim.api.nvim_set_option_value("background", "dark", {})
+          vim.cmd("colorscheme gruvbox-material")
+        end,
+        set_light_mode = function()
+          vim.api.nvim_set_option_value("background", "light", {})
+          vim.cmd("colorscheme everforest")
+        end,
+      },
     },
     {
       "folke/noice.nvim",
@@ -85,4 +98,3 @@ require("lazy").setup({
     }
   }
 })
-

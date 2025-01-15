@@ -10,13 +10,16 @@ function __hermes__init_bat() {
     return 0
   fi
 
+  local BAT_ARGUMENTS='--color=always --style=plain --theme-dark="gruvbox-material-dark" --theme-light="everforest-light"'
+
   # shellcheck disable=SC2154
   [[ -v PAGER ]] && export BAT_PAGER=${PAGER}
 
-  export MANPAGER="bash -c 'col -bx | bat --language=man --style=plain --theme=gruvbox-dark'"
+  export MANPAGER="bash -c 'col -bx | bat --language=man ${BAT_ARGUMENTS}'"
   export MANROFFOPT='-c'
 
-  alias less="bat --paging=always --color=always --style=plain --theme=gruvbox-dark"
+  # shellcheck disable=2139
+  alias less="bat --paging=always ${BAT_ARGUMENTS}"
 }
 
 # ref: https://github.com/akinomyoga/blesh-contrib/blob/master/integration/fzf.md

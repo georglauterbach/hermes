@@ -1,0 +1,142 @@
+// Waybar Configuration
+//   - GitHub wiki: https://github.com/Alexays/Waybar/wiki/Configuration
+// Nerd Font Icons
+//   - cheat sheet: https://www.nerdfonts.com/cheat-sheet
+{
+  // -------------------------------------------
+  // ----  General  ----------------------------
+  // -------------------------------------------
+  "layer": "bottom",
+  "position": "top",
+  "spacing": 5,
+  "modules-left": [
+    "tray",
+    "idle_inhibitor",
+    "custom/notifications",
+    "sway/window",
+    "sway/mode"
+  ],
+  "modules-center": [
+    "sway/workspaces"
+  ],
+  "modules-right": [
+    "cpu",
+    "memory",
+    "network",
+    "battery",
+    "wireplumber",
+    "clock"
+  ],
+  // -------------------------------------------
+  // ----  Left Modules  -----------------------
+  // -------------------------------------------
+  "tray": {
+    "icon-size": 15,
+    "show-passive-items": true
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": " ",
+      "deactivated": " "
+    },
+    "tooltip-format-activated": "idle inhibitor {status}",
+    "tooltip-format-deactivated": "idle inhibitor {status}"
+  },
+  "custom/notifications": {
+    "format": "{icon} {:>2}",
+    "format-icons": {
+      "notification": " ",
+      "none": " ",
+      "dnd-notification": " ",
+      "dnd-none": " ",
+      "inhibited-notification": "󱅫 ",
+      "inhibited-none": "󱅫 ",
+      "dnd-inhibited-notification": " ",
+      "dnd-inhibited-none": " "
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client --subscribe-waybar",
+    "on-click": "swaync-client --toggle-panel --skip-wait",
+    "on-click-right": "swaync-client --toggle-dnd --skip-wait",
+    "escape": true,
+    "tooltip": false
+  },
+  "sway/window": {
+    "max-length": 90
+  },
+  // -------------------------------------------
+  // ----  Middle Modules  ---------------------
+  // -------------------------------------------
+  "sway/workspaces": {
+    "format": "{name}",
+    "all-outputs": false,
+    "disable-scroll": true,
+    "sort-by-number": true
+  },
+  // -------------------------------------------
+  // ----  Right Modules  ----------------------
+  // -------------------------------------------
+  "cpu": {
+    "interval": 5,
+    "format": " {usage:3}%"
+  },
+  "memory": {
+    "interval": 10,
+    "format": " {used:4.1f}/{total:4.1f}GiB", // (󰯍 {swapUsed:3.1f}/{swapTotal:3.1f}GiB)
+    "tooltip-format": ""
+  },
+  "network": {
+    "interval": 5,
+    "family": "ipv4",
+    "format": "󰌘 {bandwidthDownBytes:>}  |{bandwidthUpBytes:>} ",
+    "tooltip-format-wifi": "  WIFI\n󰩟 {ipaddr}/{cidr}@{ifname} via {gwaddr}\n {signalStrength}%",
+    "tooltip-format-ethernet": "󰈀 WIRED\n󰩟 {ipaddr}/{cidr}@{ifname} via {gwaddr}",
+    "format-disconnected": "",
+    "tooltip-format": "{ifname} via {gwaddr}"
+  },
+  "battery": {
+    "internal": 60,
+    "bat": "BAT0",
+    "states": {
+      "good": 95,
+      "warning": 30,
+      "critical": 5
+    },
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "format": "{icon} {capacity:3}%",
+    "format-charging": "󰂅 {capacity:3}%",
+    "format-plugged": " {capacity:3}%"
+  },
+  "wireplumber": {
+    "format": "{icon} {volume:3}%",
+    "format-icons": [
+      "",
+      "",
+      ""
+    ],
+    "max-volume": 100.0,
+    "format-muted": "󰝟 HUSH",
+    // "on-click-middle": "wpctl set-volume '@DEFAULT_AUDIO_SOURCE@' toggle",
+    "on-click": "__wpctl_hush_toggle"
+  },
+  "clock": {
+    "format": "󱑂 {:%H:%M}", // %d.%m
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "locale": "de_DE.UTF-8",
+    "calendar": {
+      "mode": "month",
+      "weeks-pos": "left",
+      "format": {
+        "today": "<span color='#EA6962'>{}</span>"
+      }
+    }
+  }
+}

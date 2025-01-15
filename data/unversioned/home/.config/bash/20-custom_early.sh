@@ -25,7 +25,7 @@ export HERMES_INIT_ZOXIDE=${HERMES_INIT_ZOXIDE:-false}
 # These variables control whether you want to have default commands (like
 # `ls`) overridden by another, more advanced command (like `eza`).
 #
-# Initialization of additonal programs previously is independent
+# Initialization of additional programs previously is independent
 # of overriding system commands.
 
 export HERMES_OVERRIDE_CAT_WITH_BAT=${HERMES_OVERRIDE_CAT_WITH_BAT:-false}

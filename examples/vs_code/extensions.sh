@@ -12,7 +12,6 @@ readonly EXTENSIONS=(
   'ms-vscode-remote.remote-ssh-edit'
   'ms-vscode.remote-explorer'
   'pkief.material-icon-theme'
-  'redhat.vscode-yaml'
   'sainnhe.gruvbox-material'
   'streetsidesoftware.code-spell-checker'
   'timonwong.shellcheck'

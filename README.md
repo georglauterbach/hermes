@@ -44,9 +44,9 @@ hermes --update --non-interactive # works properly on >= v4.0.0
 
 The setup of Bash is performed by `${HOME}/.bashrc` and scripts in `${HOME}/.config/bash/`. These setup files can be found [here](data/unversioned/home/.config/).
 
-If you want to modify the havior of _hermes_, take a look at `{HOME}/.config/bash/20-custom_early.sh`. This file contains variables that control the initialization of programs and their overrides as well as other configurations. The "[Programs](#programs)" section below referrs to these variables.
+If you want to modify the behavior of _hermes_, take a look at `{HOME}/.config/bash/20-custom_early.sh`. This file contains variables that control the initialization of programs and their overrides as well as other configurations. The "[Programs](#programs)" section below refers to these variables.
 
-To add code that would normally go to `.bashrc`, edit `${HOME}/.config/bash/99-cutom_late.sh`. These two files are not overwritten by _hermes_ if you run _hermes_ again.
+To add code that would normally go to `.bashrc`, edit `${HOME}/.config/bash/99-custom_late.sh`. These two files are not overwritten by _hermes_ if you run _hermes_ again.
 
 ### Programs
 
@@ -54,12 +54,12 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 
 - [_Atuin_](https://github.com/atuinsh/atuin)
   - "magical" shell history using SQLite rather than a file
-  - enbled with `HERMES_INIT_ATUIN`
+  - enabled with `HERMES_INIT_ATUIN`
   - `CTRL+e` (or `up-arrow` when `HERMES_CONFIG_ATUIN_DISABLE_UP_ARROW=false`) brings up the history
   - setting `HERMES_CONFIG_ATUIN_DB_FILE` changes the database file
 - [_bat_](https://github.com/sharkdp/bat)
   - `cat` with syntax highlighting and git integration
-  - enbled with `HERMES_INIT_BAT`, override `cat` with `HERMES_OVERRIDE_CAT_WITH_BAT`
+  - enabled with `HERMES_INIT_BAT`, override `cat` with `HERMES_OVERRIDE_CAT_WITH_BAT`
 - [_ble.sh_](https://github.com/akinomyoga/ble.sh)
   - command line editor written in pure Bash which replaces the default GNU Readline
   - enabled with `HERMES_INIT_BLE_SH`
@@ -79,20 +79,48 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
   - override `grep` with `HERMES_OVERRIDE_GREP_WITH_RIPGREP`
 - [_starship_](https://github.com/starship/starship)
   - minimal, blazing-fast, and infinitely customizable prompt for any shell
-  - enbled with `HERMES_INIT_STARSHIP`
+  - enabled with `HERMES_INIT_STARSHIP`
 - [_zoxide_](https://github.com/ajeetdsouza/zoxide)
   - smarter cd command
-  - enbled with `HERMES_INIT_ZOXIDE`, override `cd` with `HERMES_OVERRIDE_CD_WITH_ZOXIDE`
+  - enabled with `HERMES_INIT_ZOXIDE`, override `cd` with `HERMES_OVERRIDE_CD_WITH_ZOXIDE`
 - [_zellij_](https://github.com/zellij-org/zellij)
   - terminal workspace with batteries included
 
 ### Changing APT Sources
 
-To change and add APT sources (including PPAs), run _hermes_ with the `--change-apt-sources` (or `-c`) flag. This option installs a new `ubuntu.sources` file in `/etc/apt/sources.list.d/` and adds additonal PPAs for `git`, `neovim`, and `flatpak`.
+To change and add APT sources (including PPAs), run _hermes_ with the `--change-apt-sources` (or `-c`) flag. This option installs a new `ubuntu.sources` file in `/etc/apt/sources.list.d/` and adds additional PPAs for `git`, `neovim`, and `flatpak`.
 
 ### GUI
 
-To set up a GUI with [_Regolith Linux_](https://regolith-desktop.com/), run _hermes_ with the `--gui` flag. This option installs new PPAs for _Regolith Linux_ ([_Alacritty_](https://github.com/alacritty/alacritty), [_Cryptomator_](https://github.com/cryptomator/cryptomator), _Regolith_ itself, and [_Visual Studio Code_](https://github.com/microsoft/vscode). Configurations for these packages is **not** provided; if you want to grab examples, navigate to [`examples/gui/`](./examples/gui/) where you will find directories that you can copy to `${HOME}/.config/` as a starting point. Inside the `regolith3/` directory, you can find a directory called `usr_local_bin/` which contains scripts that are copied to `/usr/local/bin/`.
+To set up a GUI with [_Regolith Linux_](https://regolith-desktop.com/), run _hermes_ with the `--gui` flag. This option installs new PPAs for _Regolith Linux_ ([_Alacritty_](https://github.com/alacritty/alacritty), [_Cryptomator_](https://github.com/cryptomator/cryptomator), _Regolith_ itself, and [_Visual Studio Code_](https://github.com/microsoft/vscode). Configurations for these packages is **not** provided automatically. In [`examples/gui/`](./examples/gui/), you will find directories that are typically located in `${HOME}`. You can copy the subdirectories of the directories to `${HOME}/.config/` to acquire my configurations.
+
+<details>
+<summary>Manual Setup Steps</summary>
+
+There are programs and configuration files that you may want to install manually. These include:
+
+1. Rofi: A [patched version of `rofi`](https://github.com/georglauterbach/hermes/releases/tag/rofi-v1.7.7%2Bwayland) that better integrates into Wayland
+2. Gruvbox Material Icon Pack
+
+    ```bash
+    mkdir -p "${HOME}/.local/share/icons"
+    cd "${HOME}/.local/share/icons"
+    git clone 'https://github.com/SylEleuth/gruvbox-plus-icon-pack.git' '.Gruvbox-Plus'
+    ln -sf '.Gruvbox-Plus/Gruvbox-Plus-Dark' 'Gruvbox-Plus-Dark'
+    ln -sf '.Gruvbox-Plus/Gruvbox-Plus-Light' 'Gruvbox-Plus-Light'
+    ```
+
+3. Everforest Icon Pack
+
+    ```bash
+    mkdir -p "${HOME}/.local/share/icons"
+    cd "${HOME}/.local/share/icons"
+    cd 'https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme.git' '.Everforest-GTK-Theme'
+    ln -sf '.Everforest-GTK-Theme/icons/Everforest-Dark' 'Everforest-Dark'
+    ln -sf '.Everforest-GTK-Theme/icons/Everforest-Light' 'Everforest-Light'
+    ```
+
+</details>
 
 ### Supplementary Setup Scripts
 

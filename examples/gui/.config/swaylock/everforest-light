@@ -1,0 +1,45 @@
+show-keyboard-layout
+layout-bg-color=FFFBEF
+layout-text-color=5C6A72
+
+font=JetBrainsMono Nerd Font
+font-size=20
+
+color=FFFBEF
+line-color=00000000
+separator-color=00000000
+
+indicator-idle-visible
+indicator-caps-lock
+indicator-radius=100
+indicator-thickness=7
+
+line-uses-inside
+
+# NORMAL
+text-color=5C6A72
+inside-color=FFFBEF
+ring-color=35A77C
+key-hl-color=FFFBEF
+
+# CLEAR
+text-clear-color=5C6A72
+inside-clear-color=FFFBEF
+ring-clear-color=DF69BA
+
+# CAPS
+text-caps-lock-color=5C6A72
+inside-caps-lock-color=FFFBEF
+ring-caps-lock-color=DFA000
+caps-lock-key-hl-color=FFFBEF
+
+# VERIFYING
+text-ver-color=5C6A72
+inside-ver-color=FFFBEF
+ring-ver-color=3A94C5
+
+# WRONG
+text-wrong-color=FFFBEF
+inside-wrong-color=FFFBEF
+ring-wrong-color=F85552
+

@@ -1,0 +1,19 @@
+// ref: https://github.com/davatorium/rofi/blob/next/doc/rofi-theme.5.markdown
+
+configuration {
+    show: "combi";
+    modes: [combi,drun];
+    combi-modes: [window,drun];
+
+    show-icons: false;
+    font: "JetBrainsMono Nerd Font 11";
+
+    display-ssh:         "󰣀 ";
+    display-run:         " ";
+    display-drun:        "󱓞 ";
+    display-window:      "󱂬 ";
+    display-combi:       "󰕘 ";
+    display-filebrowser: "󰉋 ";
+}
+
+@theme "gruvbox-material-dark"

@@ -1,0 +1,58 @@
+# -----------------------------------------------
+# ----  Regolith Sway Custom Configuration  -----
+# -----------------------------------------------
+
+# copied from `/etc/regolith/sway/config`
+#
+# ref:
+#   - https://github.com/swaywm/sway
+#   - https://regolith-desktop.com
+#   - https://regolith-desktop.com/docs/using-regolith/configuration/
+#
+# Many values are taken from Xresources with the directive `set_from_resource`:
+# `set_from_resource <VARIABLE NAME> <XRESOURCES KEY> <DEFAULT VALUE>`
+
+# -----------------------------------------------
+# ----  Initialization  -------------------------
+# -----------------------------------------------
+
+exec_always systemctl --user import-environment HOME
+
+# -----------------------------------------------
+# ----  Keyboard Layout  ------------------------
+# -----------------------------------------------
+
+input type:keyboard {
+    xkb_layout de
+    xkb_numlock enabled
+}
+
+# -----------------------------------------------
+# ----  Meta Key Mappings  ----------------------
+# -----------------------------------------------
+
+# Mod4 == Super | Mod1 == Alt
+set_from_resource $mod wm.mod Mod4
+set_from_resource $alt wm.alt Mod1
+
+# -----------------------------------------------
+# ----  Regolith WM Configuration Partials  -----
+# -----------------------------------------------
+
+include /usr/share/regolith/sway/config.d/*
+
+# -----------------------------------------------
+# ----  User WM Configuration Partials  ---------
+# -----------------------------------------------
+
+include $HOME/.config/regolith3/sway/config.d/*
+
+# -----------------------------------------------
+# ----  Finalization  ---------------------------
+# -----------------------------------------------
+
+# Start the systemd target manually if the session is not started by systemd
+# Notify systemd about successful session start otherwise
+exec --no-startup-id [ -z "${NOTIFY_SOCKET:-}" ]    \
+  && systemctl --user start regolith-wayland.target \
+  || systemd-notify --ready

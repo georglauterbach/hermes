@@ -1,0 +1,95 @@
+* {
+    color-background: #FFFBEF;
+    color-foreground: #5C6A72;
+    red: #F85552;
+    yellow: #DFA000;
+    green: #8DA101;
+    purple: #DF69BA;
+
+    background-color: @color-background;
+    text-color: @color-foreground;
+}
+
+#window {
+    height: 40%;
+    width: 60%;
+
+    padding: 10px;
+
+    border: 2px;
+    border-radius: 20px;
+    border-color: @color-foreground;
+}
+
+// the outermost container
+#mainbox {
+    children: [ inputbar, message, listview ];
+}
+
+// the search bar
+#inputbar {
+    text-color: @purple;
+    padding: 10px;
+}
+
+// message shown when this configuration contains an error
+#message {
+    background-color: @yellow;
+    text-color: @color-background;
+
+    margin: 10px;
+    padding: 8px;
+
+    border-radius: 20px;
+}
+
+// message shown when execution yields an error
+#error-message {
+    background-color: @red;
+    text-color: @color-background;
+
+    margin: 10px;
+    padding: 8px;
+
+    border-radius: 13px;
+}
+
+// the container for all entries
+#listview {
+    padding: 8px;
+    border-radius: 10px;
+    scrollbar: false;
+    spacing: 5px;
+}
+
+// the icon in the `#inputbar`
+#prompt {
+    margin: 0px 0.5em 0px 0px;
+}
+
+// an entry in `#listview`
+#element {
+    vertical-align: 0.5;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+// the currently selected entry
+#element.selected.normal {
+    background-color: @green;
+    text-color: @color-background;
+}
+
+// meta-classes for background and text colors
+#textbox, element-text, element-icon, entry, prompt {
+    background-color: inherit;
+    text-color: inherit;
+}
+
+element-text {
+    margin: 0px 1em; /* Adjust left/right padding */
+}
+
+#element-text {
+    padding: 0px 100px 0px 0px;
+}
