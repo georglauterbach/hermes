@@ -94,7 +94,30 @@ To change and add APT sources (including PPAs), run _hermes_ with the `--change-
 
 To set up a GUI with [_Regolith Linux_](https://regolith-desktop.com/), run _hermes_ with the `--gui` flag. This option installs new PPAs for _Regolith Linux_ ([_Alacritty_](https://github.com/alacritty/alacritty), [_Cryptomator_](https://github.com/cryptomator/cryptomator), _Regolith_ itself, and [_Visual Studio Code_](https://github.com/microsoft/vscode). Configurations for these packages is **not** provided automatically. In [`examples/gui/`](./examples/gui/), you will find directories that are typically located in `${HOME}`. You can copy the subdirectories of the directories to `${HOME}/.config/` to acquire my configurations.
 
-You may also want to installed a [patched version of `rofi`](https://github.com/georglauterbach/hermes/releases/tag/rofi-v1.7.7%2Bwayland) that better integrates into Wayland.
+<details>
+<summary>Manual Setup Steps</summary>
+
+There are programs and configuration files that you may want to install manually. These include:
+
+1. Rofi: A [patched version of `rofi`](https://github.com/georglauterbach/hermes/releases/tag/rofi-v1.7.7%2Bwayland) that better integrates into Wayland
+2. Gruvbox Material Icon Pack
+    ```bash
+    mkdir -p "${HOME}/.local/share/icons"
+    cd "${HOME}/.local/share/icons"
+    git clone 'https://github.com/SylEleuth/gruvbox-plus-icon-pack.git' '.Gruvbox-Plus'
+    ln -sf '.Gruvbox-Plus/Gruvbox-Plus-Dark' 'Gruvbox-Plus-Dark'
+    ln -sf '.Gruvbox-Plus/Gruvbox-Plus-Light' 'Gruvbox-Plus-Light'
+    ```
+3. Everforest Icon Pack
+    ```bash
+    mkdir -p "${HOME}/.local/share/icons"
+    cd "${HOME}/.local/share/icons"
+    cd 'https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme.git' '.Everforest-GTK-Theme'
+    ln -sf '.Everforest-GTK-Theme/icons/Everforest-Dark' 'Everforest-Dark'
+    ln -sf '.Everforest-GTK-Theme/icons/Everforest-Light' 'Everforest-Light'
+    ```
+
+</details>
 
 ### Supplementary Setup Scripts
 
