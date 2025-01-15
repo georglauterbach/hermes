@@ -40,31 +40,6 @@ color.blue:   #7DAEA3
 color.violet: #D3869B
 
 ! -----------------------------------------------
-! ----  Workspaces  -----------------------------
-! -----------------------------------------------
-
-wm.ws.01.name: 1:01 <span foreground='#EA6962'></span>
-wm.ws.02.name: 2:02 <span foreground='#E78A4E'>󰨞</span>
-wm.ws.03.name: 3:03 <span foreground='#D8A657'></span>
-wm.ws.04.name: 4:04 <span foreground='#A9B665'>󰇮</span>
-wm.ws.05.name: 5:05 <span foreground='#7BB674'></span>
-wm.ws.06.name: 6:06 <span foreground='#7DAEA3'></span>
-wm.ws.07.name: 7:07 <span foreground='#D3869B'></span>
-wm.ws.08.name: 8:08 <span foreground='#689d6a'></span>
-wm.ws.09.name: 9:09 <span foreground='#7DAEA3'></span>
-wm.ws.10.name: 10:10 <span foreground='#7BB674'>󰊻</span>
-
-wm.ws.11.name: 11:11 <span foreground='#EA6962'></span>
-wm.ws.12.name: 12:12 <span foreground='#E78A4E'></span>
-wm.ws.13.name: 13:13 <span foreground='#D8A657'></span>
-wm.ws.14.name: 14:14 <span foreground='#A9B665'></span>
-wm.ws.15.name: 15:15 <span foreground='#7BB674'></span>
-wm.ws.16.name: 16:16 <span foreground='#7DAEA3'></span>
-wm.ws.17.name: 17:17 <span foreground='#D3869B'></span>
-wm.ws.18.name: 18:18 <span foreground='#7DAEA3'></span>
-wm.ws.19.name: 19:19 <span foreground='#7BB674'></span>
-
-! -----------------------------------------------
 ! ----  Wallpaper  ------------------------------
 ! -----------------------------------------------
 
