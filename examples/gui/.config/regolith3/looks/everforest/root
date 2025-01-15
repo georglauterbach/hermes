@@ -1,0 +1,65 @@
+! -----------------------------------------------
+! ---- Regolith Look Custom Configuration  ------
+! -----------------------------------------------
+
+! -----------------------------------------------
+! ----  Look Name  ------------------------------
+! -----------------------------------------------
+
+regolith.look: everforest
+
+! -----------------------------------------------
+! ----  Typography  -----------------------------
+! -----------------------------------------------
+
+gtk.font_name: Ubuntu 11
+gtk.document_font_name: Ubuntu 11
+gtk.monospace_font_name: JetBrainsMono Nerd Font 11
+
+! -----------------------------------------------
+! ----  GTK Theme & Icons  ----------------------
+! -----------------------------------------------
+
+gtk.theme_name: TODO
+gtk.icon_theme_name: TODO
+
+! -----------------------------------------------
+! ----  Colors  ---------------------------------
+! -----------------------------------------------
+
+color.background_dim: #F2EFDF
+color.background:     #FFFBEF
+color.foreground:     #5C6A72
+
+color.red:    #F85552
+color.orange: #F57D26
+color.yellow: #DFA000
+color.green:  #8DA101
+color.cyan:   #35A77C
+color.blue:   #3A94C5
+color.violet: #DF69BA
+
+! -----------------------------------------------
+! ----  Wallpaper  ------------------------------
+! -----------------------------------------------
+
+
+regolith.wallpaper.file: ~/.config/regolith3/looks/everforest/wallpaper.png
+regolith.wallpaper.options: zoom
+regolith.wallpaper.color.primary: #FFFBEF
+
+regolith.lockscreen.wallpaper.file: ~/.config/regolith3/looks/everforest/wallpaper.png
+regolith.lockscreen.wallpaper.options: zoom
+regolith.lockscreen.wallpaper.color.primary: #FFFBEF
+
+! -----------------------------------------------
+! ----  Ilia  -----------------------------------
+! -----------------------------------------------
+
+ilia.stylesheet: /dev/null
+
+! -----------------------------------------------
+! ----  Loader  ---------------------------------
+! -----------------------------------------------
+
+regolith.look.loader: /usr/share/regolith-look/default_loader.sh
