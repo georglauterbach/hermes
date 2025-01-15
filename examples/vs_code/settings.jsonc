@@ -42,9 +42,14 @@
   "gruvboxMaterial.darkCursor": "blue",
   "gruvboxMaterial.darkSelection": "aqua",
   "gruvboxMaterial.diagnosticTextBackgroundOpacity": "25%",
+  // * workbench::theme::everforest
+  "everforest.lightContrast": "hard",
+  "everforest.lightWorkbench": "material",
+  "everforest.lightCursor": "green",
+  "everforest.lightSelection": "aqua",
+  "everforest.diagnosticTextBackgroundOpacity": "25%",
   // * workbench::color-customization
   "workbench.colorCustomizations": {
-    // https://github.com/morhetz/gruvbox
     // https://github.com/sainnhe/gruvbox-material
     "[Gruvbox Material Dark]": {
       "minimap.errorHighlight": "#EA6962",
@@ -53,10 +58,10 @@
       "minimap.selectionHighlight": "#7C6F6480", // editor selection
       "minimap.findMatchHighlight": "#333E34D0" // search matches
     },
-    "[Edge Light]": {
-      "minimap.errorHighlight": "#D05858",
-      "minimap.warningHighlight": "#BE7E05",
-      "minimap.infoHighlight": "#5079BE"
+    // https://github.com/sainnhe/everforest-vscode
+    "[Everforest Light]": {
+      "minimap.errorHighlight": "#D05858", // TODO
+      "minimap.warningHighlight": "#BE7E05" // TODO
     }
   },
   // ? editor
@@ -108,6 +113,7 @@
   // ? terminal
   "terminal.external.linuxExec": "alacritty",
   "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
+  "terminal.integrated.fontLigatures": true,
   "terminal.integrated.tabs.enabled": true,
   "terminal.integrated.showExitAlert": false,
   "terminal.integrated.enableMultiLinePasteWarning": "auto",
