@@ -1,57 +1,93 @@
 #! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
 
-function gnome_settings() {
-    gsettings set 'org.gnome.desktop.interface' 'color-scheme' "prefer-${1}"
+function log_warn() {
+  echo "WARN  ${1:?Log warning message required}" >&2
+  ERROR_OCCURRED=true
 }
 
-function alacritty_link_colors_to() {
-  ln -sf \
-    "${HOME}/.config/alacritty/${1:-Alacritty color file required}.toml" \
-    "${HOME}/.config/alacritty/33-colors_active.toml"
+function set_theme_alacritty() {
+  local CONFIG_FILE="${HOME}/.config/alacritty/30-colors-${COMPLETE_THEME_NAME}.toml"
+
+  if [[ -f ${CONFIG_FILE} ]] && ! ln --symbolic --force \
+    "${CONFIG_FILE}" \
+    "${HOME}/.config/alacritty/33-colors_active.toml"; then
+    log_warn 'Could not update color theme of Alacritty'
+  fi
 }
 
-function rofi_change_theme_to() {
-  sed -i -E "s/(theme )\".*\"/\1\"${1}\"/" "${HOME}/.config/rofi/config.rasi"
+function set_theme_rofi() {
+  local CONFIG_FILE="${HOME}/.config/rofi/config.rasi"
+
+  if [[ -f ${CONFIG_FILE} ]] && ! sed --in-place --regexp-extended \
+    "s/(theme )\".*\"/\1\"${COMPLETE_THEME_NAME}\"/" \
+    "${CONFIG_FILE}"; then
+    log_warn 'Could not update color theme of Rofi'
+  fi
 }
 
-function swaylock_link_config_to() {
-  ln -sf \
-    "${HOME}/.config/swaylock/config_${1:-Color value required}" \
-    "${HOME}/.config/swaylock/config"
+function set_theme_swaylock() {
+  local CONFIG_FILE="${HOME}/.config/swaylock/${COMPLETE_THEME_NAME}"
+
+  if [[ -f ${CONFIG_FILE} ]] && ! ln --symbolic --force \
+    "${CONFIG_FILE}" \
+    "${HOME}/.config/swaylock/config"; then
+    log_warn 'Could not update color theme of Swaylock'
+  fi
 }
 
-function zellij_set_theme_to() {
-  sed -i -E "s/(theme )\".*\"/\1\"${1}\"/" "${HOME}/.config/zellij/config.kdl"
+function set_theme_zellij() {
+  local CONFIG_FILE="${HOME}/.config/zellij/config.kdl"
+
+  if [[ -f ${CONFIG_FILE} ]] && ! sed --in-place --regexp-extended \
+    "s/(theme )\".*\"/\1\"${COMPLETE_THEME_NAME}\"/" \
+    "${CONFIG_FILE}"; then
+    log_warn 'Could not update color theme of Zellij'
+  fi
 }
 
-case "${1:-dark}" in
-  ( 'd' | 'dark' )
-    regolith-look set 'gruvbox-material' &
-    readonly REGOLITH_LOOK_PID=${!}
+function set_theme_regolith() {
+  regolith-look set "${COMPLETE_THEME_NAME}" &
+  readonly REGOLITH_LOOK_PID=${!}
 
-    alacritty_link_colors_to '31-colors_dark'
-    rofi_change_theme_to 'gruvbox-material'
-    swaylock_link_config_to 'dark'
-    zellij_set_theme_to 'gruvbox-material-dark'
-    gnome_settings 'dark'
-    ;;
+  gsettings set 'org.gnome.desktop.interface' 'color-scheme' "prefer-${THEME_PALETTE}"
+}
 
-  ( 'l' | 'light' )
-    regolith-look set 'everforest' &
-    readonly REGOLITH_LOOK_PID=${!}
+function main() {
+  local THEME_PALETTE THEME_NAME COMPLETE_THEME_NAME
 
-    alacritty_link_colors_to '32-colors_light'
-    rofi_change_theme_to 'everforest'
-    swaylock_link_config_to 'light'
-    zellij_set_theme_to 'everforest'
-    gnome_settings 'light'
-    ;;
+  case "${1:-dark}" in
+    ( 'd' | 'dark' )
+      readonly THEME_PALETTE='dark'
+      readonly THEME_NAME='gruvbox-material'
+      ;;
 
-  ( * )
-    echo "'${1}' is not a valid option - use 'light|l' or 'dark|d'" >&2
+    ( 'l' | 'light' )
+      readonly THEME_PALETTE='light'
+      readonly THEME_NAME='everforest'
+      ;;
+
+    ( * )
+      echo "'${1}' is not a valid option - use 'light|l' or 'dark|d'" >&2
+      exit 1
+      ;;
+  esac
+
+  readonly COMPLETE_THEME_NAME="${THEME_NAME}-${THEME_PALETTE}"
+
+  set_theme_regolith
+
+  set_theme_alacritty
+  set_theme_rofi
+  set_theme_swaylock
+  set_theme_zellij
+
+  wait -f "${REGOLITH_LOOK_PID}" || :
+
+  if ${ERROR_OCCURRED:-false}; then
     exit 1
-    ;;
-esac
+  else
+    exit 0
+  fi
+}
 
-wait -f "${REGOLITH_LOOK_PID}"
-exit 0
+main "${@}"
