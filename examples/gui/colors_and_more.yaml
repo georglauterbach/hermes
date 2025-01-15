@@ -26,18 +26,18 @@ color:
       purple(magenta,violet): D3869B
 
   light:
-    name: Edge Light
-    link: https://github.com/sainnhe/edge-vscode/tree/master
-    coolors: https://coolors.co/E8EBF0-FAFAFA-4B505B-D05858-D17A58-BE7E05-608E32-3A8B84-5079BE-B05CCC
+    name: Everforest
+    link: https://github.com/sainnhe/everforest
+    coolors: https://coolors.co/F2EFDF-FFFBEF-5C6A72-F85552-F57D26-DFA000-8DA101-35A77C-3A94C5-DF69BA
     colors:
-      background_dim: E8EBF0
-      background: FAFAFA
-      foreground: 4B505B
+      background_dim: F2EFDF
+      background: FFFBEF
+      foreground: 5C6A72
 
-      red: D05858
-      orange: D17A58
-      yellow: BE7E05
-      green: 608E32
-      cyan(aqua): 3A8B84
-      blue: 5079BE
-      purple(magenta,violet): B05CCC
+      red: F85552
+      orange: F57D26
+      yellow: DFA000
+      green: 8DA101
+      cyan(aqua): 35A77C
+      blue: 3A94C5
+      purple(magenta,violet): DF69BA
