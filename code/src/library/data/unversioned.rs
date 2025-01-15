@@ -52,6 +52,17 @@ pub const INDEX: ConfigurationFileIndex = &[
         "~/.config/bash/99-custom_late.sh",
         FileOverride::No,
     ),
+    // bat
+    (
+      "home/.config/bat/everforest.tmTheme",
+      "~/.config/bat/everforest.tmTheme",
+      FileOverride::No,
+    ),
+    (
+      "home/.config/bat/gruvbox-material-dark.tmTheme",
+      "~/.config/bat/gruvbox-material-dark.tmTheme",
+      FileOverride::No,
+    ),
     // ble.sh
     (
         "home/.config/blesh/init.sh",
