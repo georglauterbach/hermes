@@ -101,6 +101,7 @@ There are programs and configuration files that you may want to install manually
 
 1. Rofi: A [patched version of `rofi`](https://github.com/georglauterbach/hermes/releases/tag/rofi-v1.7.7%2Bwayland) that better integrates into Wayland
 2. Gruvbox Material Icon Pack
+
     ```bash
     mkdir -p "${HOME}/.local/share/icons"
     cd "${HOME}/.local/share/icons"
@@ -108,7 +109,9 @@ There are programs and configuration files that you may want to install manually
     ln -sf '.Gruvbox-Plus/Gruvbox-Plus-Dark' 'Gruvbox-Plus-Dark'
     ln -sf '.Gruvbox-Plus/Gruvbox-Plus-Light' 'Gruvbox-Plus-Light'
     ```
+
 3. Everforest Icon Pack
+
     ```bash
     mkdir -p "${HOME}/.local/share/icons"
     cd "${HOME}/.local/share/icons"
