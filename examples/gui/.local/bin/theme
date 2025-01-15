@@ -27,24 +27,24 @@ function zellij_set_theme_to() {
 case "${1:-dark}" in
   ( 'd' | 'dark' )
     regolith-look set 'gruvbox-material' &
-    __PID=${!}
+    readonly REGOLITH_LOOK_PID=${!}
 
-    gnome_settings 'dark'
     alacritty_link_colors_to '31-colors_dark'
     rofi_change_theme_to 'gruvbox-material'
     swaylock_link_config_to 'dark'
     zellij_set_theme_to 'gruvbox-material-dark'
+    gnome_settings 'dark'
     ;;
 
   ( 'l' | 'light' )
     regolith-look set 'everforest' &
-    __PID=${!}
+    readonly REGOLITH_LOOK_PID=${!}
 
-    gnome_settings 'light'
     alacritty_link_colors_to '32-colors_light'
     rofi_change_theme_to 'everforest'
     swaylock_link_config_to 'light'
     zellij_set_theme_to 'everforest'
+    gnome_settings 'light'
     ;;
 
   ( * )
@@ -53,5 +53,5 @@ case "${1:-dark}" in
     ;;
 esac
 
-wait -f "${__PID}"
+wait -f "${REGOLITH_LOOK_PID}"
 exit 0
