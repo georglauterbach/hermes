@@ -30,8 +30,8 @@ themes {
         bg "#282828"
         fg "#DDC7A1"
 
-        black "#282828"
-        white "#DDC7A1"
+        black "#141414"
+        white "#F6EFE5"
 
         red "#EA6962"
         orange "#E78A4E"
@@ -46,8 +46,8 @@ themes {
         bg "#FFFBEF"
         fg "#5C6A72"
 
-        black "#FFFBEF"
-        white "#5C6A72"
+        black "#444F55"
+        white "#FFFEFA"
 
         red "#F85552"
         orange "#F57D26"
