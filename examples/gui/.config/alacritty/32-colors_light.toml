@@ -1,17 +1,17 @@
 [colors.primary]
-background = "#FAFAFA"
-foreground = "#4B505B"
+background = "#FFFBEF"
+foreground = "#5C6A72"
 
 [colors.normal]
-black = "#000000"
-white = "#FFFFFF"
+black = "#5C6A72"
+white = "#FFFBEF"
 
-red = "#D05858"
-yellow = "#BE7E05"
-green = "#608E32"
-cyan = "#3A8B84"
-blue = "#5079BE"
-magenta = "#B05CCC"
+red = "#F85552"
+yellow = "#DFA000"
+green = "#8DA101"
+cyan = "#35A77C"
+blue = "#3A94C5"
+magenta = "#DF69BA"
 
 [window]
 opacity = 1
