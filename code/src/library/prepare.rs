@@ -230,7 +230,7 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
     let env_lang = env::var("LANG").unwrap_or_else(|_| String::from("C"));
     let env_lc_all = env::var("LC_ALL").unwrap_or_else(|_| env_lang.clone());
 
-    // ? Asking for confirmation if not supressed
+    // ? Asking for confirmation if not suppressed
     if arguments.non_interactive {
         ::tracing::debug!("Skipping confirmation prompts because '--non-interactive' was supplied");
     } else {
