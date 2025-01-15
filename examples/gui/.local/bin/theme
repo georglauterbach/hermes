@@ -1,11 +1,26 @@
 #! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
 
 # TODO use `regolith-look & ; __PID=${!} ; ... ; wait -F "${__PID}" ;`
+# TODO find proper GTK color theme
 
-function link_alacritty_colors_to() {
+function alacritty_link_colors_to() {
   ln -sf \
     "${HOME}/.config/alacritty/${1:-Alacritty color file required}.toml" \
     "${HOME}/.config/alacritty/33-colors_active.toml"
+}
+
+function rofi_change_theme_to() {
+  sed -i -E "s/(theme )\".*\"/\1\"${1}\"/" "${HOME}/.config/rofi/config.rasi"
+}
+
+function swaylock_link_config_to() {
+  ln -sf \
+    "${HOME}/.config/swaylock/config_${1:-Color value required}" \
+    "${HOME}/.config/swaylock/config"
+}
+
+function zellij_set_theme_to() {
+  sed -i -E "s/(theme )\".*\"/\1\"${1}\"/" "${HOME}/.config/zellij/config.kdl"
 }
 
 case "${1:-dark}" in
@@ -15,7 +30,10 @@ case "${1:-dark}" in
     gsettings set org.gnome.desktop.interface      color-scheme 'prefer-dark'
     gsettings set org.gnome.desktop.wm.preferences theme        'Gruvbox'
 
-    link_alacritty_colors_to '31-colors_dark'
+    alacritty_link_colors_to '31-colors_dark'
+    rofi_change_theme_to 'gruvbox-material'
+    swaylock_link_config_to 'dark'
+    zellij_set_theme_to 'gruvbox-material-dark'
     ;;
 
   ( 'l' | 'light' )
@@ -24,12 +42,15 @@ case "${1:-dark}" in
     gsettings set org.gnome.desktop.interface      color-scheme 'prefer-light'
     gsettings set org.gnome.desktop.wm.preferences theme        'Adwaita'
 
-    link_alacritty_colors_to '32-colors_light'
+    alacritty_link_colors_to '32-colors_light'
+    rofi_change_theme_to 'everforest'
+    swaylock_link_config_to 'light'
+    zellij_set_theme_to 'everforest'
     ;;
 
   ( * )
     echo "'${1}' is not a valid option - use 'light|l' or 'dark|d'" >&2
-    return 1
+    exit 1
     ;;
 esac
 
