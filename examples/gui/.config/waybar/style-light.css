@@ -93,6 +93,9 @@ tooltip label {
 
 #workspaces button.focused {
   background: #5C6A72;
+  box-shadow: none; /* Remove predefined box-shadow */
+  text-shadow: none; /* Remove predefined text-shadow */
+  transition: none; /* Disable predefined animations */
 }
 
 #workspaces button.focused label {
@@ -101,6 +104,9 @@ tooltip label {
 
 #workspaces button.urgent {
   background: #F85552;
+  box-shadow: none; /* Remove predefined box-shadow */
+  text-shadow: none; /* Remove predefined text-shadow */
+  transition: none; /* Disable predefined animations */
 }
 
 #workspaces button.urgent label {
