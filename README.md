@@ -44,9 +44,9 @@ hermes --update --non-interactive # works properly on >= v4.0.0
 
 The setup of Bash is performed by `${HOME}/.bashrc` and scripts in `${HOME}/.config/bash/`. These setup files can be found [here](data/unversioned/home/.config/).
 
-If you want to modify the havior of _hermes_, take a look at `{HOME}/.config/bash/20-custom_early.sh`. This file contains variables that control the initialization of programs and their overrides as well as other configurations. The "[Programs](#programs)" section below referrs to these variables.
+If you want to modify the behavior of _hermes_, take a look at `{HOME}/.config/bash/20-custom_early.sh`. This file contains variables that control the initialization of programs and their overrides as well as other configurations. The "[Programs](#programs)" section below refers to these variables.
 
-To add code that would normally go to `.bashrc`, edit `${HOME}/.config/bash/99-cutom_late.sh`. These two files are not overwritten by _hermes_ if you run _hermes_ again.
+To add code that would normally go to `.bashrc`, edit `${HOME}/.config/bash/99-custom_late.sh`. These two files are not overwritten by _hermes_ if you run _hermes_ again.
 
 ### Programs
 
@@ -54,12 +54,12 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 
 - [_Atuin_](https://github.com/atuinsh/atuin)
   - "magical" shell history using SQLite rather than a file
-  - enbled with `HERMES_INIT_ATUIN`
+  - enabled with `HERMES_INIT_ATUIN`
   - `CTRL+e` (or `up-arrow` when `HERMES_CONFIG_ATUIN_DISABLE_UP_ARROW=false`) brings up the history
   - setting `HERMES_CONFIG_ATUIN_DB_FILE` changes the database file
 - [_bat_](https://github.com/sharkdp/bat)
   - `cat` with syntax highlighting and git integration
-  - enbled with `HERMES_INIT_BAT`, override `cat` with `HERMES_OVERRIDE_CAT_WITH_BAT`
+  - enabled with `HERMES_INIT_BAT`, override `cat` with `HERMES_OVERRIDE_CAT_WITH_BAT`
 - [_ble.sh_](https://github.com/akinomyoga/ble.sh)
   - command line editor written in pure Bash which replaces the default GNU Readline
   - enabled with `HERMES_INIT_BLE_SH`
@@ -79,10 +79,10 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
   - override `grep` with `HERMES_OVERRIDE_GREP_WITH_RIPGREP`
 - [_starship_](https://github.com/starship/starship)
   - minimal, blazing-fast, and infinitely customizable prompt for any shell
-  - enbled with `HERMES_INIT_STARSHIP`
+  - enabled with `HERMES_INIT_STARSHIP`
 - [_zoxide_](https://github.com/ajeetdsouza/zoxide)
   - smarter cd command
-  - enbled with `HERMES_INIT_ZOXIDE`, override `cd` with `HERMES_OVERRIDE_CD_WITH_ZOXIDE`
+  - enabled with `HERMES_INIT_ZOXIDE`, override `cd` with `HERMES_OVERRIDE_CD_WITH_ZOXIDE`
 - [_zellij_](https://github.com/zellij-org/zellij)
   - terminal workspace with batteries included
 
