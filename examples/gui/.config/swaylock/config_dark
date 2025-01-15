@@ -1,9 +1,9 @@
-font=JetBrainsMono Nerd Font
-font-size=20
-
 show-keyboard-layout
 layout-bg-color=282828
 layout-text-color=DDC7A1
+
+font=JetBrainsMono Nerd Font
+font-size=20
 
 color=282828
 line-color=00000000
@@ -19,7 +19,7 @@ line-uses-inside
 # NORMAL
 text-color=DDC7A1
 inside-color=282828
-ring-color=89B482
+ring-color=7BB674
 key-hl-color=282828
 
 # CLEAR
@@ -42,3 +42,4 @@ ring-ver-color=7DAEA3
 text-wrong-color=282828
 inside-wrong-color=282828
 ring-wrong-color=EA6962
+
