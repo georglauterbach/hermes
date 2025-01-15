@@ -2,38 +2,36 @@
 /* ----  General  ---------------------------- */
 /* ------------------------------------------- */
 
-/* TODO This configuration is not done */
-
 /*
   Waybar Styling [Light System Theme]
     - GitHub wiki: https://github.com/Alexays/Waybar/wiki/Styling
 */
 
 * {
-    font-family: "JetbrainsMono Nerd Font";
-    font-size: 12px;
+  font-family: "JetbrainsMono Nerd Font";
+  font-size: 12px;
 
-    border: none;
-    border-radius: 10px;
+  border: none;
+  border-radius: 10px;
 
-    margin: 0px 0px 0px 0px;
-    padding: 0px 10px 0px 10px;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 10px 0px 10px;
 
-    transition: none;
+  transition: none;
 
-    color: #282828;
-    font-weight: 600;
+  color: #5C6A72;
+  font-weight: 600;
 }
 
 window {
-    background: transparent;
+  background: transparent;
 }
 
 window#waybar>box {
-    padding-top: 2px;
-    padding-bottom: 2px;
-    padding-left: 0px;
-    padding-right: 0px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 /* ------------------------------------------- */
@@ -41,12 +39,13 @@ window#waybar>box {
 /* ------------------------------------------- */
 
 tooltip {
-    background-color: #FAFAFA;
+  background-color: #FFFBEF;
 }
 
 tooltip label {
-    color: #4B505B;
-    font-size: 16px;
+  color: #5C6A72;
+  font-size: 16px;
+  font-weight: 300;
 }
 
 /* ------------------------------------------- */
@@ -54,27 +53,26 @@ tooltip label {
 /* ------------------------------------------- */
 
 #tray {
-    padding-left: 0px;
-    padding-right: 0px;
-    background: #FAFAFA;
+  padding-left: 5px;
+  padding-right: 5px;
+  background: #FFFBEF;
 }
 
 #tray label {
-    border-radius: 0px;
-    color: #4B505B;
+  color: #5C6A72;
 }
 
 #custom-notifications {
-    background: #4B505B;
-    color: #FAFAFA;
+  background: #FFFBEF;
+  color: #5C6A72;
 }
 
 #window {
-    color: #4B505B;
+  color: #282828;
 }
 
 #mode {
-    color: #4B505B;
+  color: #282828;
 }
 
 /* ------------------------------------------- */
@@ -82,33 +80,37 @@ tooltip label {
 /* ------------------------------------------- */
 
 #workspaces button {
-    padding-left: 5px;
-    padding-right: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-    background: #FAFAFA;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  background: #FFFBEF;
 }
 
 #workspaces button label {
-    color: #4B505B;
+  color: #5C6A72;
 }
 
 #workspaces button.focused {
-    background: #4B505B;
+  background: #5C6A72;
 }
 
 #workspaces button.focused label {
-    color: #FAFAFA;
-}
-
-#workspaces button:hover {
-    box-shadow: none; /* Remove predefined box-shadow */
-    text-shadow: none; /* Remove predefined text-shadow */
-    transition: none; /* Disable predefined animations */
+  color: #FFFBEF;
 }
 
 #workspaces button.urgent {
-    background: #D05858;
+  background: #F85552;
+}
+
+#workspaces button.urgent label {
+  color: #5C6A72;
+}
+
+#workspaces button:hover {
+  box-shadow: none; /* Remove predefined box-shadow */
+  text-shadow: none; /* Remove predefined text-shadow */
+  transition: none; /* Disable predefined animations */
 }
 
 /* ------------------------------------------- */
@@ -116,35 +118,41 @@ tooltip label {
 /* ------------------------------------------- */
 
 #cpu {
-    background: #E78A4E;
+  background: #F57D26;
+  color: #282828;
 }
 
 #memory {
-    background: #D8A657;
+  background: #DFA000;
+  color: #282828;
 }
 
 #network {
-    background: #A9B655;
-    /* min-width: 15em; */
+  background: #8DA101;
+  color: #282828;
 }
 
 #battery {
-    background: #89B482;
+  background: #35A77C;
+  color: #282828;
 }
 
 #battery.critical:not(.charging) {
-    background: #EA6962;
-    animation-name: blink;
-    animation-duration: 1s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
+  background: #F85552;
+  color: #282828;
+  animation-name: blink;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 #wireplumber {
-    background: #7DAEA3;
+  background: #3A94C5;
+  color: #282828;
 }
 
 #clock {
-    background: #D3869B;
+  background: #DF69BA;
+  color: #282828;
 }
