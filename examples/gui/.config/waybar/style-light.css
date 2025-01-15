@@ -62,6 +62,11 @@ tooltip label {
   color: #5C6A72;
 }
 
+#idle_inhibitor {
+  background: #FFFBEF;
+  color: #5C6A72;
+}
+
 #custom-notifications {
   background: #FFFBEF;
   color: #5C6A72;

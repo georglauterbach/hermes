@@ -11,6 +11,7 @@
   "spacing": 5,
   "modules-left": [
     "tray",
+    "idle_inhibitor",
     "custom/notifications",
     "sway/window",
     "sway/mode"
@@ -32,6 +33,15 @@
   "tray": {
     "icon-size": 15,
     "show-passive-items": true
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": " ",
+      "deactivated": " "
+    },
+    "tooltip-format-activated": "idle inhibitor {status}",
+    "tooltip-format-deactivated": "idle inhibitor {status}"
   },
   "custom/notifications": {
     "format": "{icon} {:>2}",
