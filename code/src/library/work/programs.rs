@@ -298,7 +298,7 @@ async fn fzf() -> ::anyhow::Result<()> {
 /// Install `gitui` (<https://github.com/extrawurst/gitui>)
 async fn gitui() -> ::anyhow::Result<()> {
     /// Version of `gitui` to install
-    const GITUI_VERSION: &str = "0.26.3";
+    const GITUI_VERSION: &str = "0.27.0";
     let file = format!("gitui-linux-{ARCHITECTURE}.tar.gz");
     let uri =
         format!("https://github.com/extrawurst/gitui/releases/download/v{GITUI_VERSION}/{file}");
@@ -339,7 +339,7 @@ async fn ripgrep() -> ::anyhow::Result<()> {
 /// Install `starship` (<https://github.com/starship/starship>)
 async fn starship() -> ::anyhow::Result<()> {
     /// Version of `starship` to install
-    const STARSHIP_VERSION: &str = "1.21.1";
+    const STARSHIP_VERSION: &str = "1.22.1";
     let file = format!("starship-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
         "https://github.com/starship/starship/releases/download/v{STARSHIP_VERSION}/{file}.tar.gz"
