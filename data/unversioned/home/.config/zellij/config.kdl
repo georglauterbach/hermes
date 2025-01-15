@@ -26,20 +26,36 @@ serialize_pane_viewport true
 scrollback_lines_to_serialize 0
 
 themes {
-    // ref: https://github.com/sainnhe/gruvbox-material?tab=readme-ov-file
     gruvbox-material-dark {
-        fg "#DDC7A1"
         bg "#282828"
+        fg "#DDC7A1"
 
-        black "#1D2021"
+        black "#282828"
+        white "#DDC7A1"
+
         red "#EA6962"
-        green "#A9B665"
-        yellow "#D8A657"
-        blue "#7DAEA3"
-        magenta "#D3869B" // purple
-        cyan "#89B482" // aqua
-        white "#FBF1C7"
         orange "#E78A4E"
+        yellow "#D8A657"
+        green "#A9B665"
+        cyan "#89B482"
+        blue "#7DAEA3"
+        magenta "#D3869B"
+    }
+
+    everforest {
+        bg "#FFFBEF"
+        fg "#5C6A72"
+
+        black "#FFFBEF"
+        white "#5C6A72"
+
+        red "#F85552"
+        orange "#F57D26"
+        yellow "#DFA000"
+        green "#8DA101"
+        cyan "#35A77C"
+        blue "#3A94C5"
+        magenta "#DF69BA"
     }
 }
 
