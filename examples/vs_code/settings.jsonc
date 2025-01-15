@@ -32,7 +32,7 @@
   // * workbench::theme
   "workbench.iconTheme": "material-icon-theme",
   "workbench.preferredDarkColorTheme": "Gruvbox Material Dark",
-  "workbench.preferredLightColorTheme": "Edge Light",
+  "workbench.preferredLightColorTheme": "Everforest Light",
   "window.autoDetectColorScheme": true,
   "window.autoDetectHighContrast": false,
   // * workbench::theme::gruvbox-material-dark
@@ -50,18 +50,19 @@
   "everforest.diagnosticTextBackgroundOpacity": "25%",
   // * workbench::color-customization
   "workbench.colorCustomizations": {
-    // https://github.com/sainnhe/gruvbox-material
+    // https://github.com/sainnhe/gruvbox-material-vscode
     "[Gruvbox Material Dark]": {
       "minimap.errorHighlight": "#EA6962",
       "minimap.warningHighlight": "#D8A657",
       "minimap.infoHighlight": "#2E3B3B",
-      "minimap.selectionHighlight": "#7C6F6480", // editor selection
-      "minimap.findMatchHighlight": "#333E34D0" // search matches
+      "minimap.selectionHighlight": "#7C6F6480",
+      "minimap.findMatchHighlight": "#333E34D0"
     },
     // https://github.com/sainnhe/everforest-vscode
     "[Everforest Light]": {
-      "minimap.errorHighlight": "#D05858", // TODO
-      "minimap.warningHighlight": "#BE7E05" // TODO
+      "minimap.errorHighlight": "#F85552",
+      "minimap.warningHighlight": "#DFA000",
+      "minimap.infoHighlight": "#3A94C5"
     }
   },
   // ? editor
@@ -147,19 +148,6 @@
       "color": "#D8A657"
     }
   ],
-  // * extension::always-enabled::adpyke.codesnap
-  "codesnap.boxShadow": "none",
-  "codesnap.roundedCorners": true,
-  "codesnap.containerPadding": "0em",
-  "codesnap.showWindowControls": false,
-  "codesnap.showWindowTitle": false,
-  "codesnap.showLineNumbers": true,
-  "codesnap.realLineNumbers": false,
-  "codesnap.transparentBackground": true,
-  "codesnap.target": "container",
-  "codesnap.shutterAction": "save",
-  // * extensions::bierner.docs-view
-  "docsView.documentationView.updateMode": "sticky",
   // * extensions::github.copilot
   "github.copilot.chat.localeOverride": "en",
   "github.copilot.editor.enableAutoCompletions": true,
@@ -206,16 +194,13 @@
   "cSpell.language": "en",
   "cSpell.diagnosticLevel": "Information",
   "cSpell.enabledFileTypes": {
-    "*": true,
-    "asciidoc": false,
-    "latex": false,
-    "markdown": false
+    "*": true
   },
   "cSpell.globRoot": "${workspaceFolder}",
   "cSpell.ignorePaths": [
-    "vscode-extension",
-    "**/.vscode/settings.json",
-    "**/.devcontainer/**/devcontainer.json"
+    "**/settings.json",
+    "**/settings.jsonc",
+    "**/devcontainer.json"
   ],
   // * extensions::usernamehw.errorlens
   "errorLens.margin": "1ch",
@@ -231,7 +216,7 @@
     "❕",
     "❔"
   ],
-  "errorLens.fontFamily": "JetBrainsMono Nerd Font, FiraCode Nerd Font, Consolas",
+  "errorLens.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
   "errorLens.messageTemplate": "$severity [$source] $message",
   "errorLens.exclude": [
     "Unknown word"
@@ -256,39 +241,50 @@
   },
   // ? comments
   /*
-      = Additional Information
+    = Additional Information
 
-      == Extensions
+    == Extensions
 
-      === Markdown
+    === Markdown
 
-      - bierner.markdown-emoji
-      - bierner.markdown-preview-github-styles
-      - davidanson.vscode-markdownlint
+    - bierner.markdown-emoji
+    - bierner.markdown-preview-github-styles
+    - davidanson.vscode-markdownlint
 
-      === Miscellaneous
+    === Miscellaneous
 
-      - C/C++: llvm-vs-code-extensions.vscode-clangd
-      - BATS (Bash Tests): jetmartin.bats
-      - Docker: ms-azuretools.vscode-docker
-      - Encode-Decode: mitchdenny.ecdc
-      - LaTeX: james-yu.latex-workshop
-      - ProtoBuf (gRPC): pbkit.vscode-pbkit
-      - YAML: redhat.vscode-yaml
+    - C/C++: llvm-vs-code-extensions.vscode-clangd
+    - BATS (Bash Tests): jetmartin.bats
+    - Docker: ms-azuretools.vscode-docker
+    - Encode-Decode: mitchdenny.ecdc
+    - LaTeX: james-yu.latex-workshop
+    - ProtoBuf (gRPC): pbkit.vscode-pbkit
+    - Screenshots: adpyke.codesnap
+      "codesnap.boxShadow": "none",
+      "codesnap.roundedCorners": true,
+      "codesnap.containerPadding": "0em",
+      "codesnap.showWindowControls": false,
+      "codesnap.showWindowTitle": false,
+      "codesnap.showLineNumbers": true,
+      "codesnap.realLineNumbers": false,
+      "codesnap.transparentBackground": true,
+      "codesnap.target": "container",
+      "codesnap.shutterAction": "save",
+    - YAML: redhat.vscode-yaml
 
-      === Python
+    === Python
 
-      - ms-python.black-formatter
-      - ms-python.debugpy
-      - ms-python.python
-      - ms-python.vscode-pylance
+    - ms-python.black-formatter
+    - ms-python.debugpy
+    - ms-python.python
+    - ms-python.vscode-pylance
 
-      === Rust
+    === Rust
 
-      - fill-labs.dependi
-      - rust-lang.rust-analyzer
-      - tamasfe.even-better-toml
-      - vadimcn.vscode-lldb
+    - fill-labs.dependi
+    - rust-lang.rust-analyzer
+    - tamasfe.even-better-toml
+    - vadimcn.vscode-lldb
   */
   // ? dynamic
   "window.zoomLevel": 1
