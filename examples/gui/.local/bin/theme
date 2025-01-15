@@ -26,7 +26,7 @@ function zellij_set_theme_to() {
 
 case "${1:-dark}" in
   ( 'd' | 'dark' )
-    regolith-look set gruvbox-material &
+    regolith-look set 'gruvbox-material' &
     __PID=${!}
 
     gnome_settings 'dark'
@@ -37,7 +37,7 @@ case "${1:-dark}" in
     ;;
 
   ( 'l' | 'light' )
-    regolith-look set gruvbox-material &
+    regolith-look set 'everforest' &
     __PID=${!}
 
     gnome_settings 'light'
