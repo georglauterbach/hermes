@@ -42,7 +42,7 @@ themes {
         magenta "#D3869B"
     }
 
-    everforest {
+    everforest-light {
         bg "#FFFBEF"
         fg "#5C6A72"
 

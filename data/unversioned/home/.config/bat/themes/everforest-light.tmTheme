@@ -3,7 +3,7 @@
 <plist version="1.0">
   <dict>
     <key>name</key>
-    <string>Everforest</string>
+    <string>Everforest Light</string>
     <key>settings</key>
     <array>
       <dict>
@@ -3177,7 +3177,7 @@
     <key>colorSpaceName</key>
     <string>sRGB</string>
     <key>semanticClass</key>
-    <string>theme.light.everforest</string>
+    <string>theme.light.everforest-light</string>
     <key>author</key>
     <string/>
     <key>comment</key>

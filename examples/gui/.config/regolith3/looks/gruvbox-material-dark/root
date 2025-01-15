@@ -44,11 +44,11 @@ color.violet: #D3869B
 ! -----------------------------------------------
 
 
-regolith.wallpaper.file: ~/.config/regolith3/looks/gruvbox-material/wallpaper.svg
+regolith.wallpaper.file: ~/.config/regolith3/looks/gruvbox-material-dark/wallpaper.svg
 regolith.wallpaper.options: wallpaper
 regolith.wallpaper.color.primary: #282828
 
-regolith.lockscreen.wallpaper.file: ~/.config/regolith3/looks/gruvbox-material/wallpaper.svg
+regolith.lockscreen.wallpaper.file: ~/.config/regolith3/looks/gruvbox-material-dark/wallpaper.svg
 regolith.lockscreen.wallpaper.options: wallpaper
 regolith.lockscreen.wallpaper.color.primary: #282828
 

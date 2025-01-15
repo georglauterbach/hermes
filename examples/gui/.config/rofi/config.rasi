@@ -14,4 +14,4 @@ configuration {
     display-filebrowser: "󰉋 ";
 }
 
-@theme "gruvbox-material"
+@theme "gruvbox-material-dark"

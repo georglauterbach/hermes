@@ -35,14 +35,14 @@
   "workbench.preferredLightColorTheme": "Edge Light",
   "window.autoDetectColorScheme": true,
   "window.autoDetectHighContrast": false,
-  // * workbench::theme::gruvbox-material
+  // * workbench::theme::gruvbox-material-dark
   "gruvboxMaterial.darkContrast": "hard",
   "gruvboxMaterial.darkWorkbench": "high-contrast",
   "gruvboxMaterial.darkPalette": "material",
   "gruvboxMaterial.darkCursor": "blue",
   "gruvboxMaterial.darkSelection": "aqua",
   "gruvboxMaterial.diagnosticTextBackgroundOpacity": "25%",
-  // * workbench::theme::everforest
+  // * workbench::theme::everforest-light
   "everforest.lightContrast": "hard",
   "everforest.lightWorkbench": "material",
   "everforest.lightCursor": "green",

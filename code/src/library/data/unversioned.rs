@@ -54,8 +54,8 @@ pub const INDEX: ConfigurationFileIndex = &[
     ),
     // bat
     (
-      "home/.config/bat/everforest.tmTheme",
-      "~/.config/bat/everforest.tmTheme",
+      "home/.config/bat/everforest-light.tmTheme",
+      "~/.config/bat/everforest-light.tmTheme",
       FileOverride::No,
     ),
     (

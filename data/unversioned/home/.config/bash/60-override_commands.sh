@@ -10,7 +10,7 @@
 # Overrides `cat` with `bat` but only if `bat` is available.
 function __hermes__override_cat_with_bat() {
   __evaluates_to_true HERMES_OVERRIDE_CAT_WITH_BAT || return 0
-  __is_command 'bat' && alias cat='bat --style=plain --paging=never --theme-dark="gruvbox-material-dark" --theme-light="everforest"'
+  __is_command 'bat' && alias cat='bat --style=plain --paging=never --theme-dark="gruvbox-material-dark" --theme-light="everforest-light"'
 }
 
 # Overrides `cd` with `zoxide` but only if `zoxide` is available.

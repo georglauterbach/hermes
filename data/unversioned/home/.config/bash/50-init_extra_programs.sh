@@ -10,12 +10,12 @@ function __hermes__init_bat() {
     return 0
   fi
 
-  local BAT_ARGUMENTS='--color=always --style=plain --theme-dark="gruvbox-material-dark" --theme-light="everforest"'
+  local BAT_ARGUMENTS='--color=always --style=plain --theme-dark="gruvbox-material-dark" --theme-light="everforest-light"'
 
   # shellcheck disable=SC2154
   [[ -v PAGER ]] && export BAT_PAGER=${PAGER}
 
-  export MANPAGER="bash -c 'col -bx | bat --language=man ${BAT_ARGUMENTS}"
+  export MANPAGER="bash -c 'col -bx | bat --language=man ${BAT_ARGUMENTS}'"
   export MANROFFOPT='-c'
 
   # shellcheck disable=2139
