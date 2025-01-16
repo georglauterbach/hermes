@@ -61,7 +61,7 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
 
     final_chown(&mut errors);
 
-    super::evaluate_errors_vector!(errors, "Errors occured during execution")
+    super::evaluate_errors_vector!(errors, "Errors occurred during execution")
 }
 
 /// Perform a final `chown` on the calling user's home directory to

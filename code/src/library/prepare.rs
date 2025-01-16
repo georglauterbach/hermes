@@ -14,12 +14,12 @@ const ETC_OSRELEASE_STR: &str = "/etc/os-release";
 
 /// Checks `/etc/environment`
 fn check_etc_environment() -> ::anyhow::Result<String> {
-    ::tracing::trace!("Checkling '{}'", ETC_OSRELEASE_STR);
+    ::tracing::trace!("Checking '{}'", ETC_OSRELEASE_STR);
     let etc_osrelease = ::std::path::Path::new(ETC_OSRELEASE_STR);
     ::anyhow::ensure!(etc_osrelease.exists(), "{ETC_OSRELEASE_STR} does not exist");
     ::anyhow::ensure!(etc_osrelease.is_file(), "{ETC_OSRELEASE_STR} is not a file");
 
-    ::tracing::trace!("Checkling Ubuntu version");
+    ::tracing::trace!("Checking Ubuntu version");
     let etc_osrelease_contents = ::std::fs::read_to_string(ETC_OSRELEASE_STR)
         .context(format!("Could not read contents of {ETC_OSRELEASE_STR}"))?;
     let ubuntu_version_id = if let Some(capture) = ::regex::Regex::new(r#"VERSION_ID="(.*)""#)
@@ -48,16 +48,16 @@ fn check_etc_environment() -> ::anyhow::Result<String> {
 
 /// Takes care of finding the path with which _hermes_ has been called
 fn get_path_to_self() -> ::anyhow::Result<String> {
-    let Some(hermes_binrary_path) = env::args().next() else {
+    let Some(hermes_binary_path) = env::args().next() else {
         anyhow::bail!("Weird! On UNIX-like operating systems, the first argument to a program is always itself - but this was just violated. I can break rules too. Goodbye!");
     };
 
-    let hermes_binrary_path = ::std::path::Path::new(&hermes_binrary_path);
+    let hermes_binary_path = ::std::path::Path::new(&hermes_binary_path);
 
-    let hermes_binary_path = if hermes_binrary_path.is_absolute() {
-        hermes_binrary_path
+    let hermes_binary_path = if hermes_binary_path.is_absolute() {
+        hermes_binary_path
             .canonicalize()
-            .context(format!("Could not canonicalize path '{hermes_binrary_path:?}' to myself - this is weird and should not happen"))?
+            .context(format!("Could not canonicalize path '{hermes_binary_path:?}' to myself - this is weird and should not happen"))?
     } else {
         // If the path is not absolute, then we have three options:
         //
@@ -66,12 +66,12 @@ fn get_path_to_self() -> ::anyhow::Result<String> {
         // 3. The path is somehow invalid
         let hermes_relative_path = ::std::env::current_dir()
             .context("Could not determine current working directory")?
-            .join(hermes_binrary_path);
+            .join(hermes_binary_path);
         if hermes_relative_path.exists() {
             hermes_relative_path
         } else {
             ::which::which(
-                hermes_binrary_path
+                hermes_binary_path
                     .file_name()
                     .context("Weird! Could not determine file name of myself")?,
             )
@@ -176,7 +176,7 @@ fn get_http_proxies() -> (String, String, String) {
     (http_proxy, http_secure_proxy, no_proxy)
 }
 
-/// _hermes_ invokes itself again with correct paramters and other permissions.
+/// _hermes_ invokes itself again with correct parameters and other permissions.
 /// This function does exactly that.
 ///
 /// #### Errors

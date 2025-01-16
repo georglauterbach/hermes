@@ -95,4 +95,4 @@ echo ''
 cat /etc/default/locale
 
 echo ''
-echo "INFO  You may need to run 'sudo dpkg-reconfigure locales' manaully again"
+echo "INFO  You may need to run 'sudo dpkg-reconfigure locales' manually again"

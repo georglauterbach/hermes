@@ -197,7 +197,7 @@ async fn blesh() -> ::anyhow::Result<()> {
     let _ = ::async_std::fs::remove_dir_all(format!("/tmp/{file}")).await;
     let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/blesh")).await;
 
-    // We download and unpacl the archive to `${HOME}/.local/share`
+    // We download and unpack the archive to `${HOME}/.local/share`
     let response = super::download::download(uri).await?;
     let xz_decoder = ::async_compression::tokio::bufread::XzDecoder::new(&response[..]);
     let mut archive = ::tokio_tar::Archive::new(xz_decoder);
@@ -209,7 +209,7 @@ async fn blesh() -> ::anyhow::Result<()> {
 
     ::async_std::fs::rename(format!("/tmp/{file}"), format!("{target_dir}/blesh"))
         .await
-        .context("Could not move unpackaed ble.sh archive to final location")?;
+        .context("Could not move unpacked ble.sh archive to final location")?;
 
     Ok(())
 }

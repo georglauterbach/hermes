@@ -1,4 +1,4 @@
-//! Contains CLI paramter definition using [`clap`]
+//! Contains CLI parameter definition using [`clap`]
 //! and helper structures tied to CLI input.
 
 /// Represents the version of Ubuntu that we are working with.

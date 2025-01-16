@@ -58,7 +58,7 @@ async fn set_up_new_apt_sources(
 /// 1. updating APT sources if requested,
 /// 2. updating package signatures (version-specific),
 /// 3. upgrading packages,
-/// 4. autoremoving unused packages,
+/// 4. auto-removing unused packages,
 /// 5. installing packages (version-specific).
 pub(super) async fn configure_system_with_apt(
     change_apt_sources: bool,
