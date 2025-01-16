@@ -55,7 +55,7 @@ tooltip label {
 #tray {
   padding-left: 5px;
   padding-right: 5px;
-  background: #FFFBEF;
+  background: #F2EFDF;
 }
 
 #tray label {
@@ -63,12 +63,12 @@ tooltip label {
 }
 
 #idle_inhibitor {
-  background: #FFFBEF;
+  background: #F2EFDF;
   color: #5C6A72;
 }
 
 #custom-notifications {
-  background: #FFFBEF;
+  background: #F2EFDF;
   color: #5C6A72;
 }
 
@@ -89,7 +89,7 @@ tooltip label {
   padding-right: 5px;
   margin-left: 5px;
   margin-right: 5px;
-  background: #FFFBEF;
+  background: #F2EFDF;
 }
 
 #workspaces button label {
