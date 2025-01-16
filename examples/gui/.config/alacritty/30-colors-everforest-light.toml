@@ -1,3 +1,7 @@
+[colors.cursor]
+cursor = "#7DA101"
+text = "#FFFBEF"
+
 [colors.primary]
 background = "#FFFBEF"
 foreground = "#5C6A72"

@@ -1,3 +1,7 @@
+[colors.cursor]
+cursor = "CellForeground"
+text = "CellBackground"
+
 [colors.primary]
 background = "#282828"
 foreground = "#DDC7A1"
