@@ -100,25 +100,7 @@ To set up a GUI with [_Regolith Linux_](https://regolith-desktop.com/), run _her
 There are programs and configuration files that you may want to install manually. These include:
 
 1. Rofi: A [patched version of `rofi`](https://github.com/georglauterbach/hermes/releases/tag/rofi-v1.7.7%2Bwayland) that better integrates into Wayland
-2. Gruvbox Material Icon Pack
-
-    ```bash
-    mkdir -p "${HOME}/.local/share/icons"
-    cd "${HOME}/.local/share/icons"
-    git clone 'https://github.com/SylEleuth/gruvbox-plus-icon-pack.git' '.Gruvbox-Plus'
-    ln -sf '.Gruvbox-Plus/Gruvbox-Plus-Dark' 'Gruvbox-Plus-Dark'
-    ln -sf '.Gruvbox-Plus/Gruvbox-Plus-Light' 'Gruvbox-Plus-Light'
-    ```
-
-3. Everforest Icon Pack
-
-    ```bash
-    mkdir -p "${HOME}/.local/share/icons"
-    cd "${HOME}/.local/share/icons"
-    cd 'https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme.git' '.Everforest-GTK-Theme'
-    ln -sf '.Everforest-GTK-Theme/icons/Everforest-Dark' 'Everforest-Dark'
-    ln -sf '.Everforest-GTK-Theme/icons/Everforest-Light' 'Everforest-Light'
-    ```
+2. Icons: Setup icon packs with the [`scripts/setup_icons.sh` script](./scripts/setup_icons.sh)
 
 </details>
 
