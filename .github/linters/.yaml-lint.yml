@@ -3,14 +3,6 @@ yaml-files:
   - '*.yaml'
   - '*.yml'
 
-ignore: |
-  **/.output.yaml
-  **/.old.output.yaml
-  **/.gitlab-ci.yml
-  **/cloud-init.yml
-  **/charts/
-  **/libbash/
-
 rules:
   braces:
     min-spaces-inside: 1

@@ -1,4 +1,4 @@
-#! /usr/bin/env bash -eE -u -o pipefail -O inherit_errexit
+#! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
 
 if ! command -v git &>/dev/null; then
   echo "ERROR Command 'git' is required but not installed or in PATH" >&2

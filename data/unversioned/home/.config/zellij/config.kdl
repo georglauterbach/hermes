@@ -28,10 +28,10 @@ scrollback_lines_to_serialize 0
 themes {
     gruvbox-material-dark {
         bg "#282828"
-        fg "#DDC7A1"
+        black "#282828"
 
-        black "#141414"
-        white "#F6EFE5"
+        fg "#DDC7A1"
+        white "#DDC7A1"
 
         red "#EA6962"
         orange "#E78A4E"
@@ -44,10 +44,10 @@ themes {
 
     everforest-light {
         bg "#FFFBEF"
-        fg "#5C6A72"
+        black "#FFFBEF"
 
-        black "#444F55"
-        white "#FFFEFA"
+        fg "#5C6A72"
+        white "#5C6A72"
 
         red "#F85552"
         orange "#F57D26"

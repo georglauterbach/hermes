@@ -41,7 +41,7 @@
   "gruvboxMaterial.darkPalette": "material",
   "gruvboxMaterial.darkCursor": "blue",
   "gruvboxMaterial.darkSelection": "aqua",
-  "gruvboxMaterial.diagnosticTextBackgroundOpacity": "25%",
+  "gruvboxMaterial.diagnosticTextBackgroundOpacity": "12.5%",
   // * workbench::theme::everforest-light
   "everforest.lightContrast": "hard",
   "everforest.lightWorkbench": "material",
