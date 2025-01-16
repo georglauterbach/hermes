@@ -26,23 +26,7 @@ serialize_pane_viewport true
 scrollback_lines_to_serialize 0
 
 themes {
-    gruvbox-material-dark {
-        bg "#282828"
-        black "#282828"
-
-        fg "#DDC7A1"
-        white "#DDC7A1"
-
-        red "#EA6962"
-        orange "#E78A4E"
-        yellow "#D8A657"
-        green "#A9B665"
-        cyan "#89B482"
-        blue "#7DAEA3"
-        magenta "#D3869B"
-    }
-
-    everforest-light {
+    everforest-light-custom {
         bg "#FFFBEF"
         black "#FFFBEF"
 
@@ -56,6 +40,22 @@ themes {
         cyan "#35A77C"
         blue "#3A94C5"
         magenta "#DF69BA"
+    }
+
+    gruvbox-material-dark-custom {
+        bg "#282828"
+        black "#282828"
+
+        fg "#DDC7A1"
+        white "#DDC7A1"
+
+        red "#EA6962"
+        orange "#E78A4E"
+        yellow "#D8A657"
+        green "#A9B665"
+        cyan "#89B482"
+        blue "#7DAEA3"
+        magenta "#D3869B"
     }
 }
 

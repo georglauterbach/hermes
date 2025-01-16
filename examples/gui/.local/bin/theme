@@ -39,7 +39,7 @@ function set_theme_zellij() {
   local CONFIG_FILE="${HOME}/.config/zellij/config.kdl"
 
   if [[ -f ${CONFIG_FILE} ]] && ! sed --in-place --regexp-extended \
-    "s/(theme )\".*\"/\1\"${COMPLETE_THEME_NAME}\"/" \
+    "s/(theme )\".*\"/\1\"${COMPLETE_THEME_NAME}-custom\"/" \
     "${CONFIG_FILE}"; then
     log_warn 'Could not update color theme of Zellij'
   fi
