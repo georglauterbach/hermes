@@ -41,7 +41,8 @@
       "deactivated": " "
     },
     "tooltip-format-activated": "idle inhibitor {status}",
-    "tooltip-format-deactivated": "idle inhibitor {status}"
+    "tooltip-format-deactivated": "idle inhibitor {status}",
+    "timeout": 180
   },
   "custom/notifications": {
     "format": "{icon} {:>2}",
