@@ -12,6 +12,11 @@ title = "alacritty"
 dynamic_title = true
 decorations_theme_variant = "None"
 
+# Opacity has to be 1 because some characters (especially in
+# bars (Zellij, NeoVim)) do not render uniformly with an
+# opacity < 1.
+opacity = 1
+
 [window.class]
 instance = "alacritty"
 general = "alacritty"

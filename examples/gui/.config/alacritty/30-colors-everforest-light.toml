@@ -12,6 +12,3 @@ green = "#8DA101"
 cyan = "#35A77C"
 blue = "#3A94C5"
 magenta = "#DF69BA"
-
-[window]
-opacity = 0.9
