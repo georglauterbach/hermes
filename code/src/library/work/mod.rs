@@ -12,8 +12,8 @@ mod update;
 
 /// The base part of URI that we fetch file from.
 const GITHUB_RAW_URI: &str = ::const_format::concatcp!(
-  "https://raw.githubusercontent.com/georglauterbach/hermes/refs/tags/v",
-  env!("CARGO_PKG_VERSION")
+    "https://raw.githubusercontent.com/georglauterbach/hermes/refs/tags/v",
+    env!("CARGO_PKG_VERSION")
 );
 
 /// Does the actual work that _hermes_ is supposed to do.
