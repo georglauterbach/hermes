@@ -54,13 +54,13 @@ pub const INDEX: ConfigurationFileIndex = &[
     ),
     // bat
     (
-        "home/.config/bat/everforest-light.tmTheme",
-        "~/.config/bat/everforest-light.tmTheme",
+        "home/.config/bat/themes/everforest-light.tmTheme",
+        "~/.config/bat/themes/everforest-light.tmTheme",
         FileOverride::No,
     ),
     (
-        "home/.config/bat/gruvbox-material-dark.tmTheme",
-        "~/.config/bat/gruvbox-material-dark.tmTheme",
+        "home/.config/bat/themes/gruvbox-material-dark.tmTheme",
+        "~/.config/bat/themes/gruvbox-material-dark.tmTheme",
         FileOverride::No,
     ),
     // ble.sh
