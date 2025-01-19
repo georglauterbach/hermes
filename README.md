@@ -31,7 +31,7 @@ To **update** _hermes_, run the following command
 
 ```bash
 hermes --version
-hermes --update --non-interactive # works properly on >= v4.0.0
+sudo hermes --update --non-interactive # works since v4.0.0
 ```
 
 > [!CAUTION]
