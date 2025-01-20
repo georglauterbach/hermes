@@ -74,6 +74,7 @@ require("lazy").setup({
         end,
         set_light_mode = function()
           vim.api.nvim_set_option_value("background", "light", {})
+          vim.g.everforest_background = "hard"
           vim.cmd("colorscheme everforest")
         end,
       },
