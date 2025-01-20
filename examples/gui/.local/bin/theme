@@ -1,59 +1,80 @@
 #! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
 
+function log_info() {
+  echo -e "\033[1;34mINFO\033[0m  ${1:?Log info message required}"
+}
+
 function log_warn() {
-  echo "WARN  ${1:?Log warning message required}" >&2
+  echo -e "\033[1;33mWARN\033[0m  ${1:?Log warning message required}" >&2
   ERROR_OCCURRED=true
 }
 
 function set_theme_alacritty() {
-  local CONFIG_FILE="${HOME}/.config/alacritty/30-colors-${COMPLETE_THEME_NAME}.toml"
+  local CONFIG_FILE="${HOME}/.config/alacritty/30-colors-${THEME_NAME_COMPLETE}.toml"
 
-  if [[ -f ${CONFIG_FILE} ]] && ! ln --symbolic --force \
-    "${CONFIG_FILE}" \
-    "${HOME}/.config/alacritty/33-colors_active.toml"; then
-    log_warn 'Could not update color theme of Alacritty'
+  if [[ -f ${CONFIG_FILE} ]]; then
+    log_info 'Updating Alacritty configuration'
+    if ! ln --symbolic --force \
+      "${CONFIG_FILE}" \
+      "${HOME}/.config/alacritty/33-colors_active.toml"; then
+      log_warn 'Could not update color theme of Alacritty'
+    fi
   fi
 }
 
 function set_theme_rofi() {
   local CONFIG_FILE="${HOME}/.config/rofi/config.rasi"
 
-  if [[ -f ${CONFIG_FILE} ]] && ! sed --in-place --regexp-extended \
-    "s/(theme )\".*\"/\1\"${COMPLETE_THEME_NAME}\"/" \
-    "${CONFIG_FILE}"; then
-    log_warn 'Could not update color theme of Rofi'
+  if [[ -f ${CONFIG_FILE} ]]; then
+    log_info 'Updating Rofi configuration'
+    if ! sed --in-place --regexp-extended \
+      "s/(theme )\".*\"/\1\"${THEME_NAME_COMPLETE}\"/" \
+      "${CONFIG_FILE}"; then
+      log_warn 'Could not update color theme of Rofi'
+    fi
   fi
 }
 
 function set_theme_swaylock() {
-  local CONFIG_FILE="${HOME}/.config/swaylock/${COMPLETE_THEME_NAME}"
+  local CONFIG_FILE="${HOME}/.config/swaylock/${THEME_NAME_COMPLETE}"
 
-  if [[ -f ${CONFIG_FILE} ]] && ! ln --symbolic --force \
-    "${CONFIG_FILE}" \
-    "${HOME}/.config/swaylock/config"; then
-    log_warn 'Could not update color theme of Swaylock'
+  if [[ -f ${CONFIG_FILE} ]]; then
+    log_info 'Updating Swaylock configuration'
+    if ! ln --symbolic --force "${CONFIG_FILE}" "${HOME}/.config/swaylock/config"; then
+      Log_warn 'Could not update color theme of Swaylock'
+    fi
   fi
 }
 
 function set_theme_zellij() {
   local CONFIG_FILE="${HOME}/.config/zellij/config.kdl"
 
-  if [[ -f ${CONFIG_FILE} ]] && ! sed --in-place --regexp-extended \
-    "s/(theme )\".*\"/\1\"${COMPLETE_THEME_NAME}-custom\"/" \
-    "${CONFIG_FILE}"; then
-    log_warn 'Could not update color theme of Zellij'
+  if [[ -f ${CONFIG_FILE} ]]; then
+    log_info 'Updating Zellij configuration'
+    if ! sed --in-place --regexp-extended \
+      "s/(theme )\".*\"/\1\"${THEME_NAME_COMPLETE}-custom\"/" \
+      "${CONFIG_FILE}"; then
+      log_warn 'Could not update color theme of Zellij'
+    fi
   fi
 }
 
 function set_theme_regolith() {
-  regolith-look set "${COMPLETE_THEME_NAME}" &
+  log_info "Updating Regolith look to $(tput bold)${THEME_NAME}$(tput sgr0)"
+  regolith-look set "${THEME_NAME_COMPLETE}" >/dev/null &
   readonly REGOLITH_LOOK_PID=${!}
 
+  log_info "Updating preferred color palette to $(tput bold)${THEME_PALETTE}$(tput sgr0)"
   gsettings set 'org.gnome.desktop.interface' 'color-scheme' "prefer-${THEME_PALETTE}"
 }
 
 function main() {
-  local THEME_PALETTE THEME_NAME COMPLETE_THEME_NAME
+  local FLAG_FORCE=0
+  local THEME_PALETTE THEME_NAME THEME_NAME_COMPLETE
+  
+  if [[ ${*} == *--force* ]]; then
+    FLAG_FORCE=1
+  fi
 
   case "${1:-dark}" in
     ( 'd' | 'dark' )
@@ -72,7 +93,7 @@ function main() {
       ;;
   esac
 
-  readonly COMPLETE_THEME_NAME="${THEME_NAME}-${THEME_PALETTE}"
+  readonly THEME_NAME_COMPLETE="${THEME_NAME}-${THEME_PALETTE}"
 
   set_theme_regolith
 
@@ -82,6 +103,11 @@ function main() {
   set_theme_zellij
 
   wait -f "${REGOLITH_LOOK_PID}" || :
+
+  if [[ ${FLAG_FORCE} -eq 1 ]]; then
+    log_info 'Restarting kanshi (forced)'
+    systemctl --user restart 'regolith-init-kanshi'
+  fi
 
   if ${ERROR_OCCURRED:-false}; then
     exit 1
