@@ -76,7 +76,7 @@ impl super::UbuntuVersion for Ubuntu24_04 {
                 "alacritty",
                 "code",
                 "dex",
-                "gnome-screenshot",
+                "grimshot",
                 "regolith-desktop",
                 "regolith-session-sway",
                 "regolith-look-gruvbox",
