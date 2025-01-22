@@ -49,7 +49,7 @@ style = "purple"
 symbol = '󱘗'
 
 [python]
-format = ' [\[$symbol $version($virtualenv)\]]($style)'
+format = ' [\[$symbol $version  $virtualenv\]]($style)'
 style = "purple"
 
 symbol = '󰌠'
