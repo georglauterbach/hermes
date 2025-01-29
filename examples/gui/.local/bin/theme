@@ -64,6 +64,8 @@ function set_theme_regolith() {
   regolith-look set "${THEME_NAME_COMPLETE}" >/dev/null &
   readonly REGOLITH_LOOK_PID=${!}
 
+  gsettings set 'org.gnome.desktop.wm.preferences' 'theme' "${THEME_NAME_GTK}"
+
   log_info "Updating preferred color palette to $(tput bold)${THEME_PALETTE}$(tput sgr0)"
   gsettings set 'org.gnome.desktop.interface' 'color-scheme' "prefer-${THEME_PALETTE}"
 }
@@ -80,11 +82,13 @@ function main() {
     ( 'd' | 'dark' )
       readonly THEME_PALETTE='dark'
       readonly THEME_NAME='gruvbox-material'
+      readonly THEME_NAME_GTK='Gruvbox'
       ;;
 
     ( 'l' | 'light' )
       readonly THEME_PALETTE='light'
       readonly THEME_NAME='everforest'
+      readonly THEME_NAME_GTK='Everforest-Light'
       ;;
 
     ( * )

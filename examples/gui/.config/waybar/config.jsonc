@@ -92,9 +92,9 @@
     "interval": 5,
     "family": "ipv4",
     "format": "󰌘 {bandwidthDownBytes:>}  |{bandwidthUpBytes:>} ",
+    "format-disconnected": "󰌙",
     "tooltip-format-wifi": "  WIFI\n󰩟 {ipaddr}/{cidr}@{ifname} via {gwaddr}\n {signalStrength}%",
     "tooltip-format-ethernet": "󰈀 WIRED\n󰩟 {ipaddr}/{cidr}@{ifname} via {gwaddr}",
-    "format-disconnected": "",
     "tooltip-format": "{ifname} via {gwaddr}"
   },
   "battery": {
