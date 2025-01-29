@@ -11,7 +11,8 @@ mod programs;
 mod update;
 
 /// The common base part of URI that we fetch file from.
-const GITHUB_RAW_URI_COMMON: &str = "https://raw.githubusercontent.com/georglauterbach/hermes/refs/";
+const GITHUB_RAW_URI_COMMON: &str =
+    "https://raw.githubusercontent.com/georglauterbach/hermes/refs/";
 
 /// The base part of URI that we fetch file from.
 #[cfg(debug_assertions)]
