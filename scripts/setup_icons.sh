@@ -21,8 +21,8 @@ function setup_icons_dark() {
 
   cd "${LOCAL_ICONS_DIR}"
   for VARIANT in 'Gruvbox-Plus-Light' 'Gruvbox-Plus-Dark'; do
-    rm -f "${VARIANT}"
-    ln -fs "${DIR_NAME}/${VARIANT}/" "${VARIANT}"
+    rm -f "${VARIANT,,}"
+    ln -fs "${DIR_NAME}/${VARIANT}/" "${VARIANT,,}"
   done
 }
 
@@ -39,8 +39,8 @@ function setup_icons_light() {
 
   cd "${LOCAL_ICONS_DIR}"
   for VARIANT in 'Everforest-Dark' 'Everforest-Light'; do
-    rm -f "${VARIANT}"
-    ln -fs "${DIR_NAME}/icons/${VARIANT}/" "${VARIANT}"
+    rm -f "${VARIANT,,}"
+    ln -fs "${DIR_NAME}/icons/${VARIANT}/" "${VARIANT,,}"
   done
 }
 

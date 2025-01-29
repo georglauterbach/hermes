@@ -20,8 +20,8 @@ gtk.monospace_font_name: JetBrainsMono Nerd Font 11
 ! ----  GTK Theme & Icons  ----------------------
 ! -----------------------------------------------
 
-gtk.theme_name: Everforest-Light
-gtk.icon_theme_name: Everforest-Light
+gtk.theme_name: everforest-light
+gtk.icon_theme_name: everforest-light
 
 ! -----------------------------------------------
 ! ----  Colors  ---------------------------------

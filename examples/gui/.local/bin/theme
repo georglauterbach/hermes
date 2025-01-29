@@ -9,6 +9,11 @@ function log_warn() {
   ERROR_OCCURRED=true
 }
 
+function log_error_and_exit() {
+  echo -e "\033[1;31mERROR\033[0m ${1:?Log error message required}" >&2
+  exit 1
+}
+
 function set_theme_alacritty() {
   local CONFIG_FILE="${HOME}/.config/alacritty/30-colors-${THEME_NAME_COMPLETE}.toml"
 
@@ -64,8 +69,6 @@ function set_theme_regolith() {
   regolith-look set "${THEME_NAME_COMPLETE}" >/dev/null &
   readonly REGOLITH_LOOK_PID=${!}
 
-  gsettings set 'org.gnome.desktop.wm.preferences' 'theme' "${THEME_NAME_GTK}"
-
   log_info "Updating preferred color palette to $(tput bold)${THEME_PALETTE}$(tput sgr0)"
   gsettings set 'org.gnome.desktop.interface' 'color-scheme' "prefer-${THEME_PALETTE}"
 }
@@ -73,27 +76,25 @@ function set_theme_regolith() {
 function main() {
   local FLAG_FORCE=0
   local THEME_PALETTE THEME_NAME THEME_NAME_COMPLETE
-  
-  if [[ ${*} == *--force* ]]; then
-    FLAG_FORCE=1
-  fi
 
-  case "${1:-dark}" in
+  while [[ ${#} -gt 1 ]]; do
+    [[ ${1} == --force ]] && { FLAG_FORCE=1 ; shift 1 ; continue ; }
+    log_error_and_exit "Option '${1}' is unknown (valid: --force)"
+  done
+
+  case "${1:-}" in
     ( 'd' | 'dark' )
       readonly THEME_PALETTE='dark'
       readonly THEME_NAME='gruvbox-material'
-      readonly THEME_NAME_GTK='Gruvbox'
       ;;
 
     ( 'l' | 'light' )
       readonly THEME_PALETTE='light'
       readonly THEME_NAME='everforest'
-      readonly THEME_NAME_GTK='Everforest-Light'
       ;;
 
     ( * )
-      echo "'${1}' is not a valid option - use 'light|l' or 'dark|d'" >&2
-      exit 1
+      log_error_and_exit "Argument '${1}' is invalid - use 'light|l' or 'dark|d'"
       ;;
   esac
 
