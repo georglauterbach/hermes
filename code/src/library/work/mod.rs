@@ -10,9 +10,18 @@ mod download;
 mod programs;
 mod update;
 
+/// The common base part of URI that we fetch file from.
+const GITHUB_RAW_URI_COMMON: &str = "https://raw.githubusercontent.com/georglauterbach/hermes/refs/";
+
 /// The base part of URI that we fetch file from.
+#[cfg(debug_assertions)]
+const GITHUB_RAW_URI: &str = ::const_format::concatcp!(GITHUB_RAW_URI_COMMON, "heads/main");
+
+/// The base part of URI that we fetch file from.
+#[cfg(not(debug_assertions))]
 const GITHUB_RAW_URI: &str = ::const_format::concatcp!(
-    "https://raw.githubusercontent.com/georglauterbach/hermes/refs/tags/v",
+    GITHUB_RAW_URI_COMMON
+    "tags/v",
     env!("CARGO_PKG_VERSION")
 );
 
