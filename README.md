@@ -99,8 +99,9 @@ To set up a GUI with [_Regolith Linux_](https://regolith-desktop.com/), run _her
 
 There are programs and configuration files that you may want to install manually. These include:
 
-1. Rofi: A [patched version of `rofi`](https://github.com/georglauterbach/hermes/releases/tag/rofi-v1.7.7%2Bwayland) that better integrates into Wayland
-2. Icons: Setup icon packs with the [`scripts/setup_icons.sh` script](./scripts/setup_icons.sh)
+1. GTK: Set up GTK by following [this release](https://github.com/georglauterbach/hermes/releases/tag/gtk-v0.1.0)
+2. Icons: Set up icon packs with the [`scripts/setup_icons.sh` script](./scripts/setup_icons.sh)
+3. Rofi: A [patched version of `rofi`](https://github.com/georglauterbach/hermes/releases/tag/rofi-v1.7.7%2Bwayland) that better integrates into Wayland
 
 </details>
 
