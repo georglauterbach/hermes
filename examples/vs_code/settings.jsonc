@@ -62,7 +62,9 @@
     "[Everforest Light]": {
       "minimap.errorHighlight": "#F85552",
       "minimap.warningHighlight": "#DFA000",
-      "minimap.infoHighlight": "#3A94C5"
+      "minimap.infoHighlight": "#3A94C5",
+      "sideBar.foreground": "#5C6A72",
+      "gitDecoration.ignoredResourceForeground": "#A6B0A0"
     }
   },
   // ? editor

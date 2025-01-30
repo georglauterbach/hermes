@@ -21,7 +21,7 @@ const GITHUB_RAW_URI: &str = ::const_format::concatcp!(GITHUB_RAW_URI_COMMON, "h
 /// The base part of URI that we fetch file from.
 #[cfg(not(debug_assertions))]
 const GITHUB_RAW_URI: &str = ::const_format::concatcp!(
-    GITHUB_RAW_URI_COMMON
+    GITHUB_RAW_URI_COMMON,
     "tags/v",
     env!("CARGO_PKG_VERSION")
 );
