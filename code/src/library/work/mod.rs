@@ -20,11 +20,8 @@ const GITHUB_RAW_URI: &str = ::const_format::concatcp!(GITHUB_RAW_URI_COMMON, "h
 
 /// The base part of URI that we fetch file from.
 #[cfg(not(debug_assertions))]
-const GITHUB_RAW_URI: &str = ::const_format::concatcp!(
-    GITHUB_RAW_URI_COMMON,
-    "tags/v",
-    env!("CARGO_PKG_VERSION")
-);
+const GITHUB_RAW_URI: &str =
+    ::const_format::concatcp!(GITHUB_RAW_URI_COMMON, "tags/v", env!("CARGO_PKG_VERSION"));
 
 /// Does the actual work that _hermes_ is supposed to do.
 ///
