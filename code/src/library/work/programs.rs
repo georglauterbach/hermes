@@ -45,8 +45,8 @@ pub(super) async fn install_additional_programs() -> ::anyhow::Result<()> {
     join_set.spawn(gitui());
     join_set.spawn(ripgrep());
     join_set.spawn(starship());
-    join_set.spawn(zoxide());
     join_set.spawn(zellij());
+    join_set.spawn(zoxide());
 
     while let Some(handler) = join_set.join_next().await {
         match handler {
@@ -217,7 +217,7 @@ async fn blesh() -> ::anyhow::Result<()> {
 /// Install `eza` (<https://github.com/eza-community/eza>)
 async fn eza() -> ::anyhow::Result<()> {
     /// The version `eza` to install
-    const EZA_VERSION: &str = "0.20.17";
+    const EZA_VERSION: &str = "0.20.19";
     let file = format!("eza_{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri = format!(
         "https://github.com/eza-community/eza/releases/download/v{EZA_VERSION}/{file}.tar.gz"
@@ -258,7 +258,7 @@ async fn fd() -> ::anyhow::Result<()> {
 /// Install `fzf` (<https://github.com/junegunn/fzf>)
 async fn fzf() -> ::anyhow::Result<()> {
     /// Version of `fzf` to install
-    const FZF_VERSION: &str = "0.57.0";
+    const FZF_VERSION: &str = "0.58.0";
     #[cfg(target_arch = "x86_64")]
     let file = format!("fzf-{FZF_VERSION}-linux_amd64");
     #[cfg(target_arch = "aarch64")]
@@ -355,25 +355,6 @@ async fn starship() -> ::anyhow::Result<()> {
     Ok(())
 }
 
-/// Install `zoxide` (<https://github.com/ajeetdsouza/zoxide>)
-async fn zoxide() -> ::anyhow::Result<()> {
-    /// Version of `zoxide` to install
-    const ZOXIDE_VERSION: &str = "0.9.6";
-    let file = format!("zoxide-{ZOXIDE_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
-    let uri = format!(
-        "https://github.com/ajeetdsouza/zoxide/releases/download/v{ZOXIDE_VERSION}/{file}.tar.gz"
-    );
-
-    let mut entries = collections::HashMap::new();
-    entries.insert(
-        String::from("zoxide"),
-        format!("{}/zoxide", environment::home_local_bin()),
-    );
-
-    download_and_extract(uri, entries).await?;
-    Ok(())
-}
-
 /// Install `zoxide` (<https://github.com/zellij-org/zellij>)
 async fn zellij() -> ::anyhow::Result<()> {
     /// Version of `zoxide` to install
@@ -387,6 +368,25 @@ async fn zellij() -> ::anyhow::Result<()> {
     entries.insert(
         String::from("zellij"),
         format!("{}/zellij", environment::home_local_bin()),
+    );
+
+    download_and_extract(uri, entries).await?;
+    Ok(())
+}
+
+/// Install `zoxide` (<https://github.com/ajeetdsouza/zoxide>)
+async fn zoxide() -> ::anyhow::Result<()> {
+    /// Version of `zoxide` to install
+    const ZOXIDE_VERSION: &str = "0.9.6";
+    let file = format!("zoxide-{ZOXIDE_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
+    let uri = format!(
+        "https://github.com/ajeetdsouza/zoxide/releases/download/v{ZOXIDE_VERSION}/{file}.tar.gz"
+    );
+
+    let mut entries = collections::HashMap::new();
+    entries.insert(
+        String::from("zoxide"),
+        format!("{}/zoxide", environment::home_local_bin()),
     );
 
     download_and_extract(uri, entries).await?;
