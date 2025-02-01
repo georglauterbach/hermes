@@ -94,7 +94,7 @@ function main() {
       ;;
 
     ( * )
-      log_error_and_exit "Argument '${1}' is invalid - use 'light|l' or 'dark|d'"
+      log_error_and_exit "Argument '${1:-}' is invalid - use 'light|l' or 'dark|d'"
       ;;
   esac
 
