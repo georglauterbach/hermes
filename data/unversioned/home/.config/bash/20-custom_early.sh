@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
-# sourced by  ${HOME}/.bashrc
-#       task  user-customizable loading of _hermes_
+#          task  user-customizable early shell setup
+#    sourced by  ${HOME}/.bashrc
 
 # ! You can edit this file to change the behavior of _hermes_.
 
@@ -32,6 +32,7 @@ export HERMES_OVERRIDE_CAT_WITH_BAT=${HERMES_OVERRIDE_CAT_WITH_BAT:-false}
 export HERMES_OVERRIDE_CD_WITH_ZOXIDE=${HERMES_OVERRIDE_CD_WITH_ZOXIDE:-false}
 export HERMES_OVERRIDE_FIND_WITH_FD=${HERMES_OVERRIDE_FIND_WITH_FD:-false}
 export HERMES_OVERRIDE_GREP_WITH_RIPGREP=${HERMES_OVERRIDE_GREP_WITH_RIPGREP:-false}
+export HERMES_OVERRIDE_LESS_WITH_BAT=${HERMES_OVERRIDE_LESS_WITH_BAT:-false}
 export HERMES_OVERRIDE_LS_WITH_EZA=${HERMES_OVERRIDE_LS_WITH_EZA:-false}
 
 # -----------------------------------------------
@@ -49,5 +50,8 @@ export HERMES_LOAD_GLOBAL_ALIASES=${HERMES_LOAD_GLOBAL_ALIASES:-false}
 export HERMES_CONFIG_ATUIN_DB_FILE=${HERMES_CONFIG_ATUIN_DB_FILE:-}
 # Enable a fallback history file even when Atuin is enabled
 export HERMES_CONFIG_ATUIN_WITH_HISTFILE=${HERMES_CONFIG_ATUIN_WITH_HISTFILE:-/dev/null}
+# Controls whether "`CTRL+f` to open the history" should be disabled for Atuin; if
+# this option is disabled, `CTRL+e` is used
+export HERMES_CONFIG_ATUIN_DISABLE_CTRL_F=${HERMES_CONFIG_ATUIN_DISABLE_CTRL_F:-true}
 # Controls whether "up-arrow to open the history" should be disabled for Atuin
 export HERMES_CONFIG_ATUIN_DISABLE_UP_ARROW=${HERMES_CONFIG_ATUIN_DISABLE_UP_ARROW:-false}
