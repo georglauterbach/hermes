@@ -181,10 +181,9 @@ async fn bat() -> ::anyhow::Result<()> {
 
 /// Install `ble.sh` (<https://github.com/akinomyoga/ble.sh>)
 async fn blesh() -> ::anyhow::Result<()> {
-    let file = format!("ble-nightly");
-    let uri = format!(
-        "https://github.com/akinomyoga/ble.sh/releases/download/nightly/{file}.tar.xz"
-    );
+    let file = "ble-nightly";
+    let uri =
+        format!("https://github.com/akinomyoga/ble.sh/releases/download/nightly/{file}.tar.xz");
 
     let target_dir = format!("{}/.local/share", environment::home_str());
     let _ = ::async_std::fs::create_dir_all(&target_dir).await;
@@ -201,12 +200,15 @@ async fn blesh() -> ::anyhow::Result<()> {
         .await
         .context("Could not unpack ble.sh archive")?;
 
-    ::async_std::fs::rename(format!("{target_dir}/{file}"), format!("{target_dir}/blesh"))
-        .await
-        .context("Could not move unpacked ble.sh archive to final location")?;
+    ::async_std::fs::rename(
+        format!("{target_dir}/{file}"),
+        format!("{target_dir}/blesh"),
+    )
+    .await
+    .context("Could not move unpacked ble.sh archive to final location")?;
 
-
-    let _ = ::async_std::fs::remove_dir_all(format!("{}/.cache/blesh", environment::home_str())).await;
+    let _ =
+        ::async_std::fs::remove_dir_all(format!("{}/.cache/blesh", environment::home_str())).await;
     Ok(())
 }
 
