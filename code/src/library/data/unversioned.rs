@@ -24,7 +24,7 @@ pub const INDEX: ConfigurationFileIndex = &[
     ),
     (
         "home/.config/bash/50-hermes.sh",
-        "~/.config/bash/40-misc.sh",
+        "~/.config/bash/50-hermes.sh",
         FileOverride::Yes,
     ),
     (
