@@ -181,19 +181,13 @@ async fn bat() -> ::anyhow::Result<()> {
 
 /// Install `ble.sh` (<https://github.com/akinomyoga/ble.sh>)
 async fn blesh() -> ::anyhow::Result<()> {
-    /// Version of `blesh` to install
-    const BLESH_VERSION: &str = "0.4.0-devel3";
-    let file = format!("ble-{BLESH_VERSION}");
+    let file = format!("ble-nightly");
     let uri = format!(
-        "https://github.com/akinomyoga/ble.sh/releases/download/v{BLESH_VERSION}/{file}-2.tar.xz"
+        "https://github.com/akinomyoga/ble.sh/releases/download/nightly/{file}.tar.xz"
     );
 
     let target_dir = format!("{}/.local/share", environment::home_str());
-    ::async_std::fs::create_dir_all(&target_dir)
-        .await
-        .context(format!(
-            "Could not create ble.sh target directory '{target_dir}'"
-        ))?;
+    let _ = ::async_std::fs::create_dir_all(&target_dir).await;
     let _ = ::async_std::fs::remove_dir_all(format!("/tmp/{file}")).await;
     let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/blesh")).await;
 
@@ -203,14 +197,16 @@ async fn blesh() -> ::anyhow::Result<()> {
     let mut archive = ::tokio_tar::Archive::new(xz_decoder);
 
     archive
-        .unpack("/tmp")
+        .unpack(&target_dir)
         .await
         .context("Could not unpack ble.sh archive")?;
 
-    ::async_std::fs::rename(format!("/tmp/{file}"), format!("{target_dir}/blesh"))
+    ::async_std::fs::rename(format!("{target_dir}/{file}"), format!("{target_dir}/blesh"))
         .await
         .context("Could not move unpacked ble.sh archive to final location")?;
 
+
+    let _ = ::async_std::fs::remove_dir_all(format!("{}/.cache/blesh", environment::home_str())).await;
     Ok(())
 }
 
