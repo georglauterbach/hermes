@@ -1,5 +1,8 @@
 #! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
 
+set -eE -u -o pipefail
+shopt -s inherit_errexit
+
 if ! command -v git &>/dev/null; then
   echo "ERROR Command 'git' is required but not installed or in PATH" >&2
   exit 1

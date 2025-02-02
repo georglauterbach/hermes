@@ -1,5 +1,8 @@
 #! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
 
+set -eE -u -o pipefail
+shopt -s inherit_errexit
+
 if [[ ${EUID} -ne 0 ]]; then
   echo "ERROR: This script needs to run with superuser privileges" >&2
   exit 1
@@ -22,4 +25,5 @@ function download_extract_place() {
 download_extract_place 'FiraCode'
 download_extract_place 'JetBrainsMono'
 
-fc-cache -fv
+# we update the font cache and try again if the first time failed
+fc-cache -f &>/dev/null || fc-cache -f

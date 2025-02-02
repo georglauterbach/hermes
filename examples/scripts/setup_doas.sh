@@ -1,5 +1,8 @@
 #! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
 
+set -eE -u -o pipefail
+shopt -s inherit_errexit
+
 sudo apt-get --yes install --no-install-recommends doas
 
 readonly DOAS_CONFIG_FILE='/etc/doas.conf'
