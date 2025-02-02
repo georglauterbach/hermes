@@ -28,11 +28,6 @@ impl super::UbuntuVersion for Ubuntu24_04 {
             ),
             // Custom PPAs
             (
-                "flatpak.sources",
-                "/etc/apt/sources.list.d/flatpak.sources",
-                FileOverride::Yes,
-            ),
-            (
                 "git.sources",
                 "/etc/apt/sources.list.d/git.sources",
                 FileOverride::Yes,
@@ -50,11 +45,6 @@ impl super::UbuntuVersion for Ubuntu24_04 {
             (
                 "alacritty.sources",
                 "/etc/apt/sources.list.d/alacritty.sources",
-                FileOverride::Yes,
-            ),
-            (
-                "cryptomator.sources",
-                "/etc/apt/sources.list.d/cryptomator.sources",
                 FileOverride::Yes,
             ),
             (
