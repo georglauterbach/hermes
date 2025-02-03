@@ -189,7 +189,7 @@ fi
 # -----------------------------------------------
 
 if __evaluates_to_true HERMES_OVERRIDE_CAT_WITH_BAT && __is_command 'bat'; then
-  alias cat="bat ${BAT_COMMON_ARGUMENTS}"
+  alias cat="bat --paging=never ${BAT_COMMON_ARGUMENTS}"
 fi
 
 if __evaluates_to_true HERMES_OVERRIDE_CD_WITH_ZOXIDE && __is_command 'zoxide'; then
