@@ -2,7 +2,6 @@
 
 readonly EXTENSIONS=(
   'aaron-bond.better-comments'
-  'adpyke.codesnap'
   'asciidoctor.asciidoctor-vscode'
   'editorconfig.editorconfig'
   'maattdd.gitless'
@@ -11,8 +10,9 @@ readonly EXTENSIONS=(
   'ms-vscode-remote.remote-ssh'
   'ms-vscode-remote.remote-ssh-edit'
   'ms-vscode.remote-explorer'
-  'pkief.material-icon-theme'
+  'jonathanharty.gruvbox-material-icon-theme'
   'sainnhe.gruvbox-material'
+  'sainnhe.everforest'
   'streetsidesoftware.code-spell-checker'
   'timonwong.shellcheck'
   'usernamehw.errorlens'

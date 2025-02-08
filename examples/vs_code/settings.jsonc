@@ -1,7 +1,7 @@
 {
   // cSpell:enable
   // ? miscellaneous / general
-  "telemetry.telemetryLevel": "error",
+  "telemetry.telemetryLevel": "all",
   "update.mode": "none",
   // ? search & window
   "window.titleBarStyle": "custom",
@@ -30,9 +30,9 @@
   "workbench.activityBar.location": "top",
   "workbench.sideBar.location": "right",
   // * workbench::theme
-  "workbench.iconTheme": "material-icon-theme",
-  "workbench.preferredDarkColorTheme": "Gruvbox Material Dark",
+  "workbench.iconTheme": "gruvbox-material-icon-theme",
   "workbench.preferredLightColorTheme": "Everforest Light",
+  "workbench.preferredDarkColorTheme": "Gruvbox Material Dark",
   "window.autoDetectColorScheme": true,
   "window.autoDetectHighContrast": false,
   // * workbench::theme::gruvbox-material-dark
@@ -44,10 +44,10 @@
   "gruvboxMaterial.diagnosticTextBackgroundOpacity": "12.5%",
   // * workbench::theme::everforest-light
   "everforest.lightContrast": "hard",
-  "everforest.lightWorkbench": "material",
+  "everforest.lightWorkbench": "high-contrast",
   "everforest.lightCursor": "green",
   "everforest.lightSelection": "aqua",
-  "everforest.diagnosticTextBackgroundOpacity": "25%",
+  "everforest.diagnosticTextBackgroundOpacity": "12.5%",
   // * workbench::color-customization
   "workbench.colorCustomizations": {
     // https://github.com/sainnhe/gruvbox-material-vscode
@@ -132,6 +132,7 @@
     "**/.git": true
   },
   // ? extensions
+  "extensions.ignoreRecommendations": true,
   // * extensions::asciidoctor.asciidoctor-vscode
   "asciidoc.antora.showEnableAntoraPrompt": false,
   // * extensions::aaron-bond.better-comments
@@ -213,10 +214,10 @@
   "errorLens.codeLensEnabled": false,
   "errorLens.problemRangeDecorationEnabled": true,
   "errorLens.severityText": [
-    "🔥",
-    "⚠️",
-    "❕",
-    "❔"
+    "",
+    "",
+    "",
+    ""
   ],
   "errorLens.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
   "errorLens.messageTemplate": "$severity [$source] $message",
