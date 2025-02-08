@@ -27,6 +27,10 @@ input type:keyboard {
     xkb_numlock enabled
 }
 
+input type:touchpad {
+  natural_scroll enabled
+}
+
 # -----------------------------------------------
 # ----  Meta Key Mappings  ----------------------
 # -----------------------------------------------
