@@ -215,7 +215,7 @@ async fn blesh() -> ::anyhow::Result<()> {
 /// Install `eza` (<https://github.com/eza-community/eza>)
 async fn eza() -> ::anyhow::Result<()> {
     /// The version `eza` to install
-    const EZA_VERSION: &str = "0.20.19";
+    const EZA_VERSION: &str = "0.20.20";
     let file = format!("eza_{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri = format!(
         "https://github.com/eza-community/eza/releases/download/v{EZA_VERSION}/{file}.tar.gz"
