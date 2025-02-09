@@ -3,6 +3,11 @@
 set -eE -u -o pipefail
 shopt -s inherit_errexit
 
+if [[ ${EUID} -eq 0 ]]; then
+  echo "ERROR: This script must NOT be run with superuser privileges" >&2
+  exit 1
+fi
+
 if ! command -v git &>/dev/null; then
   echo "ERROR Command 'git' is required but not installed or in PATH" >&2
   exit 1
