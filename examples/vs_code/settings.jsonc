@@ -116,13 +116,14 @@
   // ? terminal
   "terminal.external.linuxExec": "alacritty",
   "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
-  "terminal.integrated.fontLigatures": true,
+  "terminal.integrated.fontLigatures.enabled": true,
   "terminal.integrated.tabs.enabled": true,
   "terminal.integrated.showExitAlert": false,
   "terminal.integrated.enableMultiLinePasteWarning": "auto",
   // ? files
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
+  "files.readonlyFromPermissions": true,
   "files.defaultLanguage": "txt",
   "files.associations": {
     "*.env": "bash",
@@ -177,7 +178,7 @@
   "gitlens.defaultDateShortFormat": "DD.MM.YY",
   "gitlens.defaultDateFormat": "DD.MM.YY | HH:mm",
   // * extensions::timonwong.shellcheck
-  "shellcheck.useWorkspaceRootAsCwd": true,
+  "shellcheck.useWorkspaceRootAsCwd": false,
   "shellcheck.exclude": [
     "SC2310",
     "SC2312"
@@ -187,8 +188,8 @@
   "shellcheck.run": "onSave",
   "shellcheck.customArgs": [
     "--shell=bash",
-    "--check-sourced",
     "--external-sources",
+    "--source-path=SCRIPTDIR",
     "--color=auto",
     "--severity=style",
     "--enable=all"
@@ -284,7 +285,6 @@
 
     === Rust
 
-    - fill-labs.dependi
     - rust-lang.rust-analyzer
     - tamasfe.even-better-toml
     - vadimcn.vscode-lldb
