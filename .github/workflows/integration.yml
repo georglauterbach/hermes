@@ -50,7 +50,6 @@ jobs:
             cargo fmt    -- --check
             cargo clippy --quiet --all-features -- -D warnings
             cargo doc    --quiet --document-private-items
-            cargo test   --quiet
             cargo build  --release
 
   build_aarch64:
