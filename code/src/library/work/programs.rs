@@ -178,7 +178,7 @@ async fn bat() -> ::anyhow::Result<()> {
     Ok(())
 }
 
-// Install `bottom` (<https://github.com/ClementTsang/bottom>)
+/// Install `bottom` (<https://github.com/ClementTsang/bottom>)
 async fn bottom() -> ::anyhow::Result<()> {
     /// Version of `bat` to install
     const BOTTOM_VERSION: &str = "nightly";
