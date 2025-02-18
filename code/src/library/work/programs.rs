@@ -22,8 +22,6 @@ pub(super) const ARCHITECTURE: &str = "aarch64";
 #[cfg(target_arch = "aarch64")]
 const LINK_LIBRARY: &str = "gnu";
 
-// use async_std::prelude::*;
-
 /// Download custom programs (so that we can unpack them later if required)
 ///
 /// This function is mainly an optimization. [`super::apt::configure_system_with_apt`]
@@ -161,7 +159,7 @@ async fn atuin() -> ::anyhow::Result<()> {
 async fn bat() -> ::anyhow::Result<()> {
     /// Version of `bat` to install
     const BAT_VERSION: &str = "0.25.0";
-    let file = format!("bat-v{BAT_VERSION}-{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
+    let file = format!("bat-v{BAT_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
     let uri =
         format!("https://github.com/sharkdp/bat/releases/download/v{BAT_VERSION}/{file}.tar.gz");
 
