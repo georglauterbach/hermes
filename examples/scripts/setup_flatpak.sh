@@ -26,7 +26,7 @@ if [[ ${REPONSE,,} =~ ^(y(es)?)$ ]]; then
     'eu.betterbird.Betterbird'
     'net.lutris.Lutris'
     'org.cryptomator.Cryptomator'
-    'org.libreoffice.LibreOffice'
+    'org.onlyoffice.desktopeditors'
     'org.mozilla.firefox'
   )
 
