@@ -36,6 +36,7 @@ pub(super) async fn install_additional_programs() -> ::anyhow::Result<()> {
 
     join_set.spawn(atuin());
     join_set.spawn(bat());
+    join_set.spawn(bottom());
     join_set.spawn(blesh());
     join_set.spawn(eza());
     join_set.spawn(fd());
@@ -171,6 +172,29 @@ async fn bat() -> ::anyhow::Result<()> {
     entries.insert(
         format!("{file}/autocomplete/bat.bash"),
         String::from("/etc/bash_completion.d/bat.bash"),
+    );
+
+    download_and_extract(uri, entries).await?;
+    Ok(())
+}
+
+// Install `bottom` (<https://github.com/ClementTsang/bottom>)
+async fn bottom() -> ::anyhow::Result<()> {
+    /// Version of `bat` to install
+    const BOTTOM_VERSION: &str = "nightly";
+    let file = format!("bottom_{ARCHITECTURE}-unknown-linux-musl");
+    let uri = format!(
+        "https://github.com/ClementTsang/bottom/releases/download/{BOTTOM_VERSION}/{file}.tar.gz"
+    );
+
+    let mut entries = collections::HashMap::new();
+    entries.insert(
+        String::from("btm"),
+        format!("{}/btm", environment::home_local_bin()),
+    );
+    entries.insert(
+        String::from("completion/btm.bash"),
+        String::from("/etc/bash_completion.d/btm.bash"),
     );
 
     download_and_extract(uri, entries).await?;
