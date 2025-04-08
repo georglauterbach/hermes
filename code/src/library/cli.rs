@@ -52,7 +52,7 @@ impl Arguments {
               ::tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
                   format!("polling=warn,reqwest=warn,reqwest=warn,hyper_util::client::legacy=warn,async_io=warn,async_std=warn,{}", self.verbosity).into()
               })
-            ).with(tracing_subscriber::fmt::layer())
+            ) .with(tracing_subscriber::fmt::layer().with_target(false))
             .init();
     }
 }

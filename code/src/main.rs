@@ -13,6 +13,7 @@ async fn main() -> anyhow::Result<()> {
     if let Err(error) = if arguments.assume_correct_invocation {
         Box::pin(hermes::work::run(arguments)).await
     } else {
+        ::tracing::info!("This is hermes {}", env!("CARGO_PKG_VERSION"));
         match hermes::prepare::call_again(&arguments).context("Initial conditions could not be met")
         {
             Ok(true) => {

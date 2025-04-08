@@ -27,9 +27,9 @@ const LINK_LIBRARY: &str = "gnu";
 /// This function is mainly an optimization. [`super::packages::install`]
 /// runs much longer than the other functions that perform work. Hence, we can use our
 /// time more efficiently if we already start the download of custom programs.
-#[::tracing::instrument(skip_all, name = "iap")]
+#[::tracing::instrument(name = "additional programs", skip_all)]
 pub(super) async fn install() -> ::anyhow::Result<()> {
-    ::tracing::info!(target: "work", "Installing additional programs");
+    ::tracing::info!("Installing");
 
     let results = ::tokio::join!(
         atuin(),

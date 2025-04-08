@@ -3,8 +3,9 @@
 use ::anyhow::Context as _;
 
 /// Updates _hermes_ itself.
+#[::tracing::instrument(name = "update", skip_all)]
 pub(super) async fn run() -> ::anyhow::Result<()> {
-    ::tracing::info!(target: "update", "Updating myself now");
+    ::tracing::info!("Updating myself now");
 
     let url = ::reqwest::get("https://github.com/georglauterbach/hermes/releases/latest").await?;
     let url = url.url();
@@ -14,7 +15,7 @@ pub(super) async fn run() -> ::anyhow::Result<()> {
         .last()
         .context("Could not acquire the latest version name")?;
 
-    ::tracing::info!(target: "update", "The latest version is {latest_version}");
+    ::tracing::info!("The latest version is {latest_version}");
 
     let hermes_tmp_path = std::path::PathBuf::from("/tmp/hermes_updated");
     if hermes_tmp_path.exists() {

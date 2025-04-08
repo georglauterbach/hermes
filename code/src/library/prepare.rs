@@ -40,7 +40,7 @@ fn check_etc_environment() -> ::anyhow::Result<String> {
         ))?
         .as_str();
 
-    ::tracing::info!(target: "preparation", "Distribution ID is '{distribution_id}'");
+    ::tracing::info!("Distribution ID is '{distribution_id}'");
     Ok(distribution_id.to_string())
 }
 
@@ -106,7 +106,7 @@ fn get_user_information() -> ::anyhow::Result<(String, u32, String, u32, String)
         ::anyhow::bail!("Could not determine user name from UID {uid}");
     }
     let user_name = std::str::from_utf8(&output.stdout)?.trim().to_string();
-    ::tracing::info!(target: "preparation", "Current user name is '{user_name}' with UID '{uid}'");
+    ::tracing::info!("Current user name is '{user_name}' with UID '{uid}'");
 
     let output = ::std::process::Command::new("id").arg("--group").output()?;
     if !output.status.success() {
@@ -122,11 +122,11 @@ fn get_user_information() -> ::anyhow::Result<(String, u32, String, u32, String)
         ::anyhow::bail!("Could not determine group name from UID {uid} and GID {gid}");
     }
     let group_name = std::str::from_utf8(&output.stdout)?.trim().to_string();
-    ::tracing::info!(target: "preparation", "Current user's group name is '{group_name}' with GID '{gid}'");
+    ::tracing::info!("Current user's group name is '{group_name}' with GID '{gid}'");
 
     let home_dir =
         ::std::env::var("HOME").context("Required environment variable 'HOME' is not set")?;
-    ::tracing::info!(target: "preparation", "Current user's home directory is '{home_dir}'");
+    ::tracing::info!("Current user's home directory is '{home_dir}'");
 
     Ok((user_name, uid, group_name, gid, home_dir))
 }
@@ -160,15 +160,15 @@ fn get_http_proxies() -> (String, String, String) {
     let no_proxy = env::var("no_proxy").unwrap_or_default();
 
     if !http_proxy.is_empty() {
-        ::tracing::info!(target: "preparation", "Using HTTP proxy '{http_proxy}'");
+        ::tracing::info!("Using HTTP proxy '{http_proxy}'");
     }
 
     if !http_secure_proxy.is_empty() {
-        ::tracing::info!(target: "preparation", "Using HTTP proxy '{http_secure_proxy}'");
+        ::tracing::info!("Using HTTP proxy '{http_secure_proxy}'");
     }
 
     if !http_secure_proxy.is_empty() {
-        ::tracing::info!(target: "preparation", "Addresses not proxied are '{no_proxy}'");
+        ::tracing::info!("Addresses not proxied are '{no_proxy}'");
     }
 
     (http_proxy, http_secure_proxy, no_proxy)
@@ -183,10 +183,9 @@ fn get_http_proxies() -> (String, String, String) {
 /// to return such an error early. If performing the actual work failed, we return
 /// [`Ok`] with a value of `false`. If everything worked, we return [`Ok`] with a
 /// value of `true`.
+#[::tracing::instrument(name = "preparation", skip_all)]
 pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
-    ::tracing::info!(target: "preparation", "This is hermes {}", env!("CARGO_PKG_VERSION"));
     ::tracing::info!(
-        target: "preparation",
         "Preparing environment and arguments to call myself again - this is expected and correct"
     );
 
@@ -225,7 +224,7 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
         match user_input.as_str() {
             "" | "y" | "ye" | "yes" => (),
             _ => {
-                ::tracing::warn!(target: "preparation", "Setup interrupted - not proceeding");
+                ::tracing::warn!("Setup interrupted - not proceeding");
                 return Ok(true);
             }
         }

@@ -41,7 +41,7 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
 
     match arguments.command {
         super::cli::Command::Run { install_packages } => {
-            ::tracing::info!(target: "work", "Starting installation");
+            ::tracing::info!("Starting installation");
 
             let results = ::tokio::join!(
                 configuration_files::place(),
@@ -53,7 +53,7 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
             final_chown()
         }
         super::cli::Command::Update => {
-            ::tracing::info!(target: "work", "Starting self-update");
+            ::tracing::info!("Starting self-update");
             update::run().await
         }
     }

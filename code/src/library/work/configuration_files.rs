@@ -9,9 +9,9 @@ use ::std::path;
 
 /// This function takes care of placing all unversioned configuration files
 /// onto the local file system.
-#[::tracing::instrument(skip_all, name = "pcf")]
+#[::tracing::instrument(name = "configuration files", skip_all)]
 pub(super) async fn place() -> ::anyhow::Result<()> {
-    ::tracing::info!(target: "work", "Placing configuration files");
+    ::tracing::info!("Placing files");
 
     let mut join_set = ::tokio::task::JoinSet::new();
     let mut results = vec![];
