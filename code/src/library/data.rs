@@ -5,9 +5,6 @@
 /// canonical or absolute), and whether to override the file if it exists already.
 pub type ConfigurationFileIndex = &'static [(&'static str, &'static str, FileOverride)];
 
-/// A list of packages that are to be installed.
-pub type PackageIndex = &'static [&'static str];
-
 /// Indicates whether to override an existing file on the local file system
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum FileOverride {

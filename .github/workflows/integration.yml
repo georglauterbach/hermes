@@ -49,7 +49,7 @@ jobs:
 
             cargo fmt    -- --check
             cargo clippy --quiet --all-features -- -D warnings
-            cargo doc    --quiet --document-private-items
+            cargo doc    --quiet --no-deps --document-private-items
             cargo build  --release
 
   build_aarch64:

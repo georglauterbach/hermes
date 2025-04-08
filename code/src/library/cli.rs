@@ -1,52 +1,22 @@
 //! Contains CLI parameter definition using [`clap`]
 //! and helper structures tied to CLI input.
 
-use ::std::path::Display;
-
-/// The Linux distribution we're running on
-#[derive(Debug)]
-pub enum Distribution {
-    /// Arch Linux
-    Arch,
-    /// Debian GNU/Linux
-    Debian,
-    /// Fedora
-    Fedora,
-    /// Ubuntu
-    Ubuntu,
-    /// Distribution not recognized
-    Unknown,
+/// TODO
+#[derive(Debug, ::clap::Subcommand)]
+pub enum Command {
+    /// TODO
+    Run {
+        /// TODO
+        #[clap(short, long, default_value_t = false)]
+        install_packages: bool,
+    },
+    /// TODO
+    Update,
 }
 
-impl From<&str> for Distribution {
-    fn from(input: &str) -> Self {
-        match input {
-            "arch" => Self::Arch,
-            "debian" => Self::Debian,
-            "fedora" => Self::Fedora,
-            "ubuntu" => Self::Ubuntu,
-            _ => Self::Unknown,
-        }
-    }
-}
-
-impl ::std::fmt::Display for Distribution {
-    fn fmt(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        let name = match self {
-            Self::Arch => "Arch",
-            Self::Debian => "Debian",
-            Self::Fedora => "Fedora",
-            Self::Ubuntu => "Ubuntu",
-            Self::Unknown => "unknown",
-        };
-
-        write!(formatter, "{name}")
-    }
-}
-
-/// Workspace member that eases working with `unCORE`.
+/// TODO
 #[allow(clippy::struct_excessive_bools)]
-#[derive(Debug, clap::Parser, Clone)]
+#[derive(Debug, clap::Parser)]
 #[command(
   bin_name=clap::crate_name!(),
   author=clap::crate_authors!(),
@@ -62,22 +32,14 @@ pub struct Arguments {
     #[clap(short, long, default_value_t = false)]
     pub non_interactive: bool,
 
-    /// Install GUI programs
-    #[clap(short, long, default_value_t = false)]
-    pub gui: bool,
-
-    /// Install new APT sources
-    #[clap(short, long, default_value_t = false)]
-    pub change_apt_sources: bool,
-
-    /// Update hermes itself
-    #[clap(short, long, default_value_t = false)]
-    pub update: bool,
-
     /// Used when calling _hermes_ again in the correct environment.
     /// Indicates whether _hermes_ was called again.
     #[clap(long, hide = true, default_value_t = false)]
     pub assume_correct_invocation: bool,
+
+    /// TODO
+    #[command(subcommand)]
+    pub command: Command,
 }
 
 impl Arguments {

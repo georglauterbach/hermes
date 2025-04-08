@@ -6,13 +6,11 @@ use ::std::env;
 use ::anyhow::Context as _;
 use ::std::io::Write as _;
 
-use crate::cli;
-
 /// The path to `/etc/os-release`
 const PATH_ETC_OSRELEASE: &str = "/etc/os-release";
 
 /// Checks `/etc/environment`
-fn check_etc_environment() -> ::anyhow::Result<cli::Distribution> {
+fn check_etc_environment() -> ::anyhow::Result<String> {
     ::tracing::trace!("Checking '{}'", PATH_ETC_OSRELEASE);
     let etc_osrelease = ::std::path::Path::new(PATH_ETC_OSRELEASE);
     ::anyhow::ensure!(
@@ -42,9 +40,8 @@ fn check_etc_environment() -> ::anyhow::Result<cli::Distribution> {
         ))?
         .as_str();
 
-    let distribution = cli::Distribution::from(distribution_id);
-    ::tracing::info!(target: "preparation", "Distribution is {distribution}");
-    Ok(distribution)
+    ::tracing::info!(target: "preparation", "Distribution ID is '{distribution_id}'");
+    Ok(distribution_id.to_string())
 }
 
 /// Takes care of finding the path with which _hermes_ has been called
@@ -204,28 +201,6 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
     let (user_name, uid, user_primary_group_name, gid, user_home_dir) = get_user_information()?;
 
     let mut command = get_invocation_command(uid)?;
-
-    // ? Noting GUI options
-    if !arguments.update {
-        ::tracing::info!(
-            target: "preparation",
-            "GUI will {}be installed",
-            if arguments.gui { "" } else { "not " }
-        );
-    }
-
-    // ? Noting APT options
-    if !arguments.update {
-        ::tracing::info!(
-            target: "preparation",
-            "APT sources will {}be changed",
-            if arguments.change_apt_sources {
-                ""
-            } else {
-                "not "
-            }
-        );
-    }
 
     let (http_proxy, http_secure_proxy, no_proxy) = get_http_proxies();
     let env_lang = env::var("LANG").unwrap_or_else(|_| String::from("C"));

@@ -3,9 +3,9 @@
 //! perform work depending on the Ubuntu version.
 
 mod additional_programs;
-mod apt;
 mod configuration_files;
 mod download;
+mod packages;
 mod update;
 
 use crate::prepare::environment;
@@ -39,16 +39,24 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
         ::tracing::trace!("  {var_key}={var_name}");
     }
 
-    if arguments.update {
-        return update::run().await;
+    match arguments.command {
+        super::cli::Command::Run { install_packages } => {
+            ::tracing::info!(target: "work", "Starting installation");
+
+            let results = ::tokio::join!(
+                configuration_files::place(),
+                additional_programs::install(),
+                packages::install(install_packages)
+            );
+
+            super::evaluate_results(<[Result<(), ::anyhow::Error>; 3]>::from(results))?;
+            final_chown()
+        }
+        super::cli::Command::Update => {
+            ::tracing::info!(target: "work", "Starting self-update");
+            update::run().await
+        }
     }
-
-    ::tracing::info!(target: "work", "Starting actual work now");
-
-    let (pcf, iap) = ::tokio::join!(configuration_files::place(), additional_programs::install());
-
-    super::evaluate_results([pcf, iap])?;
-    final_chown()
 }
 
 /// Perform a final `chown` on the calling user's home directory to

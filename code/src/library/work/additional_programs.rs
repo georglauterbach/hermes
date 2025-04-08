@@ -24,43 +24,29 @@ const LINK_LIBRARY: &str = "gnu";
 
 /// Download custom programs (so that we can unpack them later if required)
 ///
-/// This function is mainly an optimization. [`super::apt::configure_system_with_apt`]
+/// This function is mainly an optimization. [`super::packages::install`]
 /// runs much longer than the other functions that perform work. Hence, we can use our
 /// time more efficiently if we already start the download of custom programs.
 #[::tracing::instrument(skip_all, name = "iap")]
 pub(super) async fn install() -> ::anyhow::Result<()> {
-    ::tracing::info!(target: "work", "Installing additional programs (IAP)");
+    ::tracing::info!(target: "work", "Installing additional programs");
 
-    let mut join_set = ::tokio::task::JoinSet::new();
-    let mut errors = vec![];
+    let results = ::tokio::join!(
+        atuin(),
+        bat(),
+        btm(),
+        blesh(),
+        eza(),
+        fd(),
+        fzf(),
+        gitui(),
+        ripgrep(),
+        starship(),
+        zellij(),
+        zoxide(),
+    );
 
-    join_set.spawn(atuin());
-    join_set.spawn(bat());
-    join_set.spawn(bottom());
-    join_set.spawn(blesh());
-    join_set.spawn(eza());
-    join_set.spawn(fd());
-    join_set.spawn(fzf());
-    join_set.spawn(gitui());
-    join_set.spawn(ripgrep());
-    join_set.spawn(starship());
-    join_set.spawn(zellij());
-    join_set.spawn(zoxide());
-
-    while let Some(handler) = join_set.join_next().await {
-        match handler {
-            Ok(actual_result) => match actual_result {
-                Ok(()) => (),
-                Err(error) => errors.push(error),
-            },
-            Err(error) => errors.push(::anyhow::anyhow!(error)),
-        }
-    }
-
-    super::super::evaluate_errors_vector!(
-        errors,
-        "Could not acquire all additional programs from GitHub successfully"
-    )
+    super::super::evaluate_results(<[Result<(), ::anyhow::Error>; 12]>::from(results))
 }
 
 /// Recursively extracts files from an archive and places them in the local
@@ -179,7 +165,7 @@ async fn bat() -> ::anyhow::Result<()> {
 }
 
 /// Install `bottom` (<https://github.com/ClementTsang/bottom>)
-async fn bottom() -> ::anyhow::Result<()> {
+async fn btm() -> ::anyhow::Result<()> {
     /// Version of `bat` to install
     const BOTTOM_VERSION: &str = "nightly";
     let file = format!("bottom_{ARCHITECTURE}-unknown-linux-musl");

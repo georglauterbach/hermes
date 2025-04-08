@@ -7,8 +7,6 @@ use super::{
 };
 use ::std::path;
 
-use ::anyhow::Context as _;
-
 /// This function takes care of placing all unversioned configuration files
 /// onto the local file system.
 #[::tracing::instrument(skip_all, name = "pcf")]
@@ -16,7 +14,7 @@ pub(super) async fn place() -> ::anyhow::Result<()> {
     ::tracing::info!(target: "work", "Placing configuration files");
 
     let mut join_set = ::tokio::task::JoinSet::new();
-    let mut errors = vec![];
+    let mut results = vec![];
 
     for (remote_part, local_path, overwrite) in super::super::data::INDEX {
         ::tracing::debug!("handling configuration file path '{local_path}' now");
@@ -24,7 +22,7 @@ pub(super) async fn place() -> ::anyhow::Result<()> {
         let canonical_local_path = match path::absolute(path::Path::new(&local_path)) {
             Ok(path) => path,
             Err(error) => {
-                errors.push(::anyhow::anyhow!(error));
+                results.push(Err(::anyhow::anyhow!(error)));
                 continue;
             }
         };
@@ -42,19 +40,12 @@ pub(super) async fn place() -> ::anyhow::Result<()> {
 
     while let Some(result) = join_set.join_next().await {
         match result {
-            Ok(actual_result) => match actual_result {
-                Ok(()) => (),
-                Err(error) => {
-                    ::tracing::warn!("Something went wrong placing a configuration file: {error}");
-                    errors.push(error);
-                }
-            },
+            Ok(actual_result) => results.push(actual_result),
             Err(error) => {
                 ::tracing::warn!("Could not join an async handle (bug?): {error}");
-                errors.push(::anyhow::anyhow!(error));
             }
         }
     }
 
-    super::super::evaluate_errors_vector!(errors, "Placing configuration files failed")
+    super::super::evaluate_results(results)
 }

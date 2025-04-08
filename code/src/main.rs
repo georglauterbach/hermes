@@ -11,7 +11,7 @@ async fn main() -> anyhow::Result<()> {
     ::tracing::trace!("Dumping CLI arguments: \n{arguments:#?}");
 
     if let Err(error) = if arguments.assume_correct_invocation {
-        hermes::work::run(arguments).await
+        Box::pin(hermes::work::run(arguments)).await
     } else {
         match hermes::prepare::call_again(&arguments).context("Initial conditions could not be met")
         {
