@@ -47,7 +47,9 @@ fn check_etc_environment() -> ::anyhow::Result<String> {
 /// Takes care of finding the path with which _hermes_ has been called
 fn get_path_to_self() -> ::anyhow::Result<String> {
     let Some(hermes_binary_path) = env::args().next() else {
-        anyhow::bail!("Weird! On UNIX-like operating systems, the first argument to a program is always itself - but this was just violated. I can break rules too. Goodbye!");
+        anyhow::bail!(
+            "Weird! On UNIX-like operating systems, the first argument to a program is always itself - but this was just violated. I can break rules too. Goodbye!"
+        );
     };
 
     let hermes_binary_path = ::std::path::Path::new(&hermes_binary_path);
@@ -142,8 +144,8 @@ fn get_invocation_command(uid: u32) -> ::anyhow::Result<::std::process::Command>
         ::tracing::debug!("UID is not 0 - checking for 'sudo'");
         if ::which::which("sudo").is_err() {
             anyhow::bail!(
-            "Cannot run commands with 'sudo' (not installed or not in PATH?), and calling user does not have UID 0"
-        );
+                "Cannot run commands with 'sudo' (not installed or not in PATH?), and calling user does not have UID 0"
+            );
         }
 
         let mut command = ::std::process::Command::new("sudo");

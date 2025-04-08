@@ -7,8 +7,8 @@
 # General information about the keys below can be found under
 # https://rust-lang.github.io/rustup/concepts/index.html
 [toolchain]
-channel = '1.84.0'
-components = [ 'cargo', 'rustc', 'rust-std', 'clippy', 'rustfmt' ]
+channel = '1.85.0'
+components = [ 'cargo', 'rustc', 'clippy', 'rustfmt' ]
 targets = [
   'x86_64-unknown-linux-musl',
   'aarch64-unknown-linux-musl',
