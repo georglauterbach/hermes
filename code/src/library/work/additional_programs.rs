@@ -34,7 +34,7 @@ pub(super) async fn install() -> ::anyhow::Result<()> {
     let results = ::tokio::join!(
         atuin(),
         bat(),
-        btm(),
+        bottom(),
         blesh(),
         eza(),
         fd(),
@@ -165,7 +165,7 @@ async fn bat() -> ::anyhow::Result<()> {
 }
 
 /// Install `bottom` (<https://github.com/ClementTsang/bottom>)
-async fn btm() -> ::anyhow::Result<()> {
+async fn bottom() -> ::anyhow::Result<()> {
     /// Version of `bat` to install
     const BOTTOM_VERSION: &str = "nightly";
     let file = format!("bottom_{ARCHITECTURE}-unknown-linux-musl");
@@ -223,7 +223,7 @@ async fn blesh() -> ::anyhow::Result<()> {
 /// Install `eza` (<https://github.com/eza-community/eza>)
 async fn eza() -> ::anyhow::Result<()> {
     /// The version `eza` to install
-    const EZA_VERSION: &str = "0.20.21";
+    const EZA_VERSION: &str = "0.21.0";
     let file = format!("eza_{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri = format!(
         "https://github.com/eza-community/eza/releases/download/v{EZA_VERSION}/{file}.tar.gz"
@@ -264,7 +264,7 @@ async fn fd() -> ::anyhow::Result<()> {
 /// Install `fzf` (<https://github.com/junegunn/fzf>)
 async fn fzf() -> ::anyhow::Result<()> {
     /// Version of `fzf` to install
-    const FZF_VERSION: &str = "0.60.0";
+    const FZF_VERSION: &str = "0.61.1";
     #[cfg(target_arch = "x86_64")]
     let file = format!("fzf-{FZF_VERSION}-linux_amd64");
     #[cfg(target_arch = "aarch64")]
@@ -345,7 +345,7 @@ async fn starship() -> ::anyhow::Result<()> {
 /// Install `zoxide` (<https://github.com/zellij-org/zellij>)
 async fn zellij() -> ::anyhow::Result<()> {
     /// Version of `zoxide` to install
-    const ZOXIDE_VERSION: &str = "0.41.2";
+    const ZOXIDE_VERSION: &str = "0.42.1";
     let file = format!("zellij-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
         "https://github.com/zellij-org/zellij/releases/download/v{ZOXIDE_VERSION}/{file}.tar.gz"
@@ -364,7 +364,7 @@ async fn zellij() -> ::anyhow::Result<()> {
 /// Install `zoxide` (<https://github.com/ajeetdsouza/zoxide>)
 async fn zoxide() -> ::anyhow::Result<()> {
     /// Version of `zoxide` to install
-    const ZOXIDE_VERSION: &str = "0.9.6";
+    const ZOXIDE_VERSION: &str = "0.9.7";
     let file = format!("zoxide-{ZOXIDE_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
         "https://github.com/ajeetdsouza/zoxide/releases/download/v{ZOXIDE_VERSION}/{file}.tar.gz"
