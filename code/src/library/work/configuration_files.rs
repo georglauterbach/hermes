@@ -9,17 +9,16 @@ use ::std::path;
 
 use ::anyhow::Context as _;
 
-/// Given an `index`, iterates over the index asynchronously using
-/// [`super::download::download_and_place`] to download and place
-/// said configuration files.
-pub(super) async fn download_and_place_configuration_files(
-    index: data::ConfigurationFileIndex,
-    base_uri: String,
-) -> ::anyhow::Result<()> {
+/// This function takes care of placing all unversioned configuration files
+/// onto the local file system.
+#[::tracing::instrument(skip_all, name = "pcf")]
+pub(super) async fn place() -> ::anyhow::Result<()> {
+    ::tracing::info!(target: "work", "Placing configuration files");
+
     let mut join_set = ::tokio::task::JoinSet::new();
     let mut errors = vec![];
 
-    for (remote_part, local_path, overwrite) in index {
+    for (remote_part, local_path, overwrite) in super::super::data::INDEX {
         ::tracing::debug!("handling configuration file path '{local_path}' now");
         let local_path = local_path.replace('~', &environment::home_str());
         let canonical_local_path = match path::absolute(path::Path::new(&local_path)) {
@@ -36,7 +35,7 @@ pub(super) async fn download_and_place_configuration_files(
         }
 
         join_set.spawn(super::download::download_and_place_configuration_file(
-            format!("{base_uri}/{remote_part}"),
+            format!("{GITHUB_RAW_URI}/data/{remote_part}"),
             canonical_local_path,
         ));
     }
@@ -51,31 +50,11 @@ pub(super) async fn download_and_place_configuration_files(
                 }
             },
             Err(error) => {
-                ::tracing::warn!(
-                    "Could not join an async handle (this should not have happened): {error}"
-                );
+                ::tracing::warn!("Could not join an async handle (bug?): {error}");
                 errors.push(::anyhow::anyhow!(error));
             }
         }
     }
 
-    super::super::evaluate_errors_vector!(errors, "Placing configuration files from index failed")
-}
-
-/// This function takes care of placing all unversioned configuration files
-/// onto the local file system.
-#[::tracing::instrument(skip_all, name = "pucf")]
-pub(super) async fn set_up_unversioned_configuration_files() -> ::anyhow::Result<()> {
-    ::tracing::info!(target: "work", "Placing unversioned configuration files (PUCF)");
-
-    let result = download_and_place_configuration_files(
-        super::super::data::unversioned::INDEX,
-        format!("{GITHUB_RAW_URI}/data/unversioned"),
-    )
-    .await;
-
-    match result {
-        Ok(()) => Ok(()),
-        Err(error) => Err(error).context("Finished PUCF with errors"),
-    }
+    super::super::evaluate_errors_vector!(errors, "Placing configuration files failed")
 }

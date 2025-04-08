@@ -3,7 +3,7 @@
 use ::anyhow::Context as _;
 
 /// Updates _hermes_ itself.
-pub(super) async fn update_self() -> ::anyhow::Result<()> {
+pub(super) async fn run() -> ::anyhow::Result<()> {
     ::tracing::info!(target: "update", "Updating myself now");
 
     let url = ::reqwest::get("https://github.com/georglauterbach/hermes/releases/latest").await?;
@@ -26,7 +26,7 @@ pub(super) async fn update_self() -> ::anyhow::Result<()> {
     ::tracing::debug!("Placing new file at {hermes_tmp_path:?}");
 
     super::download::download_and_place(
-      format!("https://github.com/georglauterbach/hermes/releases/download/{latest_version}/hermes-{latest_version}-{}-unknown-linux-musl", super::programs::ARCHITECTURE),
+      format!("https://github.com/georglauterbach/hermes/releases/download/{latest_version}/hermes-{latest_version}-{}-unknown-linux-musl", super::additional_programs::ARCHITECTURE),
       hermes_tmp_path.clone()
     )
     .await

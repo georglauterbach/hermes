@@ -4,46 +4,47 @@
 use ::std::env;
 
 use ::anyhow::Context as _;
-use ::clap::ValueEnum;
 use ::std::io::Write as _;
 
 use crate::cli;
 
 /// The path to `/etc/os-release`
-const ETC_OSRELEASE_STR: &str = "/etc/os-release";
+const PATH_ETC_OSRELEASE: &str = "/etc/os-release";
 
 /// Checks `/etc/environment`
-fn check_etc_environment() -> ::anyhow::Result<String> {
-    ::tracing::trace!("Checking '{}'", ETC_OSRELEASE_STR);
-    let etc_osrelease = ::std::path::Path::new(ETC_OSRELEASE_STR);
-    ::anyhow::ensure!(etc_osrelease.exists(), "{ETC_OSRELEASE_STR} does not exist");
-    ::anyhow::ensure!(etc_osrelease.is_file(), "{ETC_OSRELEASE_STR} is not a file");
+fn check_etc_environment() -> ::anyhow::Result<cli::Distribution> {
+    ::tracing::trace!("Checking '{}'", PATH_ETC_OSRELEASE);
+    let etc_osrelease = ::std::path::Path::new(PATH_ETC_OSRELEASE);
+    ::anyhow::ensure!(
+        etc_osrelease.exists(),
+        "File '{PATH_ETC_OSRELEASE}' does not exist"
+    );
+    ::anyhow::ensure!(
+        etc_osrelease.is_file(),
+        "'{PATH_ETC_OSRELEASE}' is not a file"
+    );
 
-    ::tracing::trace!("Checking Ubuntu version");
-    let etc_osrelease_contents = ::std::fs::read_to_string(ETC_OSRELEASE_STR)
-        .context(format!("Could not read contents of {ETC_OSRELEASE_STR}"))?;
-    let ubuntu_version_id = if let Some(capture) = ::regex::Regex::new(r#"VERSION_ID="(.*)""#)
-        .context("BUG! Ubuntu version ID regex should be constructible")?
-        .captures(&etc_osrelease_contents)
-    {
-        if let Some(capture_result) = capture.get(1) {
-            capture_result.as_str()
-        } else {
-            ::anyhow::bail!("Could not match on 'VERSION_ID' in file '{ETC_OSRELEASE_STR}'");
-        }
-    } else {
-        ::anyhow::bail!("Could not acquire 'VERSION_ID' in file '{ETC_OSRELEASE_STR}'");
-    };
+    ::tracing::debug!("Checking distribution flavor");
+    let etc_osrelease_content = ::std::fs::read_to_string(PATH_ETC_OSRELEASE)
+        .context(format!("Could not read contents of '{PATH_ETC_OSRELEASE}'"))?;
 
-    ::tracing::info!(target: "preparation", "Ubuntu version ID is '{ubuntu_version_id}'");
-    Ok(format!(
-        "{}",
-        cli::UbuntuVersion::from_str(ubuntu_version_id, true)
-            .map_err(::std::io::Error::other)
-            .context(
-                "'UbuntuVersion::from_str' should always yield 'Ok()' with fallback if necessary"
-            )?
-    ))
+    let distribution_id = ::regex::RegexBuilder::new(r"^ID=(.*)$")
+        .multi_line(true)
+        .build()
+        .context("Could not build regex for matching distribution ID")?
+        .captures(&etc_osrelease_content)
+        .context(format!(
+            "Could not capture 'ID=<DISTRIBUTION ID>' in '{PATH_ETC_OSRELEASE}'"
+        ))?
+        .get(1)
+        .context(format!(
+            "Could not acquire distribution ID from '{PATH_ETC_OSRELEASE}'"
+        ))?
+        .as_str();
+
+    let distribution = cli::Distribution::from(distribution_id);
+    ::tracing::info!(target: "preparation", "Distribution is {distribution}");
+    Ok(distribution)
 }
 
 /// Takes care of finding the path with which _hermes_ has been called
@@ -196,7 +197,7 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
     let environment_variable_path =
         env::var("PATH").context("Required environment variable 'PATH' is not set")?;
 
-    let ubuntu_version_id = check_etc_environment()?;
+    let distribution_id = check_etc_environment()?;
     let path_to_self = get_path_to_self()?;
 
     // ? Acquiring user name, group name, UID, GID, and home directory
@@ -238,10 +239,10 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
         print!("\nProceed? [Y/n] ");
         ::std::io::stdout()
             .flush()
-            .context("Weird! Could not flush stdout, which should be possible")?;
+            .context("Could not flush stdout")?;
         ::std::io::stdin()
             .read_line(&mut user_input)
-            .context("Weird! Could not read line, which should be possible")?;
+            .context("Could not read line")?;
         let user_input = user_input.trim().to_lowercase();
         println!();
         ::tracing::trace!("Input was: '{user_input}'");
@@ -267,9 +268,9 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
             format!("GID={gid}"),
             format!("LANG={env_lang}"),
             format!("LC_ALL={env_lc_all}"),
-            format!("UBUNTU_VERSION_ID={ubuntu_version_id}"),
-            String::from("DEBIAN_FRONTEND=noninteractive"),
-            String::from("DEBCONF_NONINTERACTIVE_SEEN=true"),
+            format!("DISTRIBUTION_ID={distribution_id}"),
+            // TODO String::from("DEBIAN_FRONTEND=noninteractive"),
+            // TODO String::from("DEBCONF_NONINTERACTIVE_SEEN=true"),
             format!("http_proxy={http_proxy}"),
             format!("https_proxy={http_secure_proxy}"),
             format!("no_proxy={no_proxy}"),
@@ -387,23 +388,5 @@ pub mod environment {
             .expect("Could not determine GID")
             .parse()
             .expect("Could not parse GID")
-    }
-
-    /// Get the Ubuntu version ID [`String`] of the currently
-    /// installed version of Ubuntu
-    ///
-    /// #### Panics
-    ///
-    /// This function assumes _hermes_ has been called again already
-    /// and hence that the environment variable `UBUNTU_VERSION_ID`
-    /// is set correctly.
-    #[must_use]
-    pub fn ubuntu_version_id() -> super::super::cli::UbuntuVersion {
-        use clap::ValueEnum as _;
-        super::super::cli::UbuntuVersion::from_str(
-            &::std::env::var("UBUNTU_VERSION_ID").expect("Could not determine Ubuntu version ID"),
-            false,
-        )
-        .expect("Could not parse Ubuntu version ID")
     }
 }

@@ -2,13 +2,14 @@
 //! perform the actual work, or call other subroutines that
 //! perform work depending on the Ubuntu version.
 
-use crate::prepare::environment;
-
+mod additional_programs;
 mod apt;
 mod configuration_files;
 mod download;
-mod programs;
 mod update;
+
+use crate::prepare::environment;
+use ::anyhow::Context as _;
 
 /// The common base part of URI that we fetch file from.
 const GITHUB_RAW_URI_COMMON: &str =
@@ -33,69 +34,42 @@ const GITHUB_RAW_URI: &str =
 pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
     ::tracing::debug!("I was now called correctly");
 
-    if arguments.update {
-        return update::update_self().await;
-    }
-
     ::tracing::trace!("Here is my environment:");
     for (var_key, var_name) in ::std::env::vars() {
         ::tracing::trace!("  {var_key}={var_name}");
     }
 
-    ::tracing::info!(target: "work", "Starting actual work now");
-
-    let mut task_handler = ::tokio::task::JoinSet::new();
-    ::tracing::debug!("Spawning tasks in async runtime");
-    task_handler.spawn(apt::configure_system_with_apt(
-        arguments.change_apt_sources,
-        arguments.gui,
-    ));
-    task_handler.spawn(configuration_files::set_up_unversioned_configuration_files());
-    task_handler.spawn(programs::install_additional_programs());
-
-    let mut errors = vec![];
-    while let Some(handler) = task_handler.join_next().await {
-        match handler {
-            Ok(actual_result) => match actual_result {
-                Ok(()) => (),
-                Err(error) => {
-                    errors.push(error);
-                }
-            },
-            Err(error) => {
-                errors.push(::anyhow::anyhow!(error));
-            }
-        }
+    if arguments.update {
+        return update::run().await;
     }
 
-    final_chown(&mut errors);
+    ::tracing::info!(target: "work", "Starting actual work now");
 
-    super::evaluate_errors_vector!(errors, "Errors occurred during execution")
+    let (pcf, iap) = ::tokio::join!(configuration_files::place(), additional_programs::install());
+
+    super::evaluate_results([pcf, iap])?;
+    final_chown()
 }
 
 /// Perform a final `chown` on the calling user's home directory to
 /// adjust the permissions once, which is most effective.
-fn final_chown(errors: &mut Vec<::anyhow::Error>) {
-    ::tracing::debug!(
-        "Running final 'chown' on users directory '{}'",
-        environment::home_str()
-    );
+fn final_chown() -> ::anyhow::Result<()> {
+    ::tracing::debug!("Running final 'chown'");
 
-    let output = ::std::process::Command::new("chown")
+    let files_to_be_changed: Vec<String> = super::data::INDEX
+        .iter()
+        .map(|(_, local_path, _)| local_path.replace('~', &environment::home_str()))
+        .collect();
+
+    ::std::process::Command::new("chown")
         .arg("-R")
         .arg(format!("{}:{}", environment::user(), environment::group()))
-        .arg(environment::home())
-        .output();
-
-    match output {
-        Ok(output) => {
-            if !output.status.success() {
-                errors.push(::anyhow::anyhow!("Final 'chown' on user directory failed"));
-            }
-        }
-        Err(error) => errors.push(
-            ::anyhow::anyhow!(error)
-                .context("Could not generate output from final 'chown' on user directory"),
-        ),
-    }
+        .args(files_to_be_changed)
+        .arg(environment::home_str() + "/.local/bin")
+        .output()
+        .context("Could not generate output from final 'chown' on user directory")?
+        .status
+        .success()
+        .then(|| Ok(()))
+        .context("Final 'chown' on user directory failed")?
 }

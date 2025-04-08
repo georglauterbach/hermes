@@ -42,9 +42,6 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 which = "7.0"
 
 [profile.release]
-codegen-units = 2
-incremental = true
-lto = true
 overflow-checks = true
 strip = true
 

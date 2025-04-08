@@ -4,6 +4,7 @@ pub mod cli;
 mod data;
 mod fs;
 pub mod prepare;
+mod settings;
 pub mod work;
 
 /// Given a vector of [`anyhow::Error`]s, this macro evaluates the vector and returns an [`anyhow::Result`].
@@ -29,3 +30,26 @@ macro_rules! evaluate_errors_vector {
 }
 
 use evaluate_errors_vector;
+
+pub fn evaluate_results(
+    results: impl IntoIterator<Item = Result<(), ::anyhow::Error>>,
+) -> Result<(), anyhow::Error> {
+    let mut errors = vec![];
+
+    let _: Vec<_> = results
+        .into_iter()
+        .filter_map(|result| result.map_err(|error| errors.push(error)).ok())
+        .collect();
+
+    let mut error = if let Some(error) = errors.pop() {
+        error
+    } else {
+        return Ok(());
+    };
+
+    for context in errors {
+        error = error.context(context);
+    }
+
+    Err(error)
+}
