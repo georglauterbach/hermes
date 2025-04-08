@@ -25,7 +25,7 @@ color:
       blue: 7DAEA3
       purple(magenta,violet): D3869B
 
-  light:
+  light: # TODO
     name: Everforest
     link: https://github.com/sainnhe/everforest
     coolors: https://coolors.co/F2EFDF-FFFBEF-5C6A72-F85552-F57D26-DFA000-8DA101-35A77C-3A94C5-DF69BA
