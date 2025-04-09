@@ -1,15 +1,18 @@
 {
   "name": "development",
-  "image": "ghcr.io/georglauterbach/dev-container-base:5.4.0",
+  "image": "docker.io/ubuntu:24.04",
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/rust:5.11.2": {
+    "ghcr.io/georglauterbach/dev-container-features/rust:6.2.0": {
       "system.packages.additional-packages": "pkg-config,musl-tools",
-      "rust.rustup.default-toolchain-file": "code/rust-toolchain.toml",
-      "linker.mold.install": "true"
+      "rust.rustup.default-toolchain-file": "${containerWorkspaceFolder}/rust-toolchain.toml",
+      "linker.mold.install": true
     },
-    "ghcr.io/georglauterbach/dev-container-features/cache-vscode-extensions:0.3.6": {}
+    "ghcr.io/georglauterbach/dev-container-features/cache-vscode-extensions:0.3.6": {},
+    "ghcr.io/georglauterbach/dev-container-features/hermes:0.1.0": {}
   },
   "updateRemoteUserUID": true,
+  "remoteUser": "ubuntu",
+  "containerUser": "ubuntu",
   "containerEnv": {
     // ? Rust
     "CARGO_TARGET_DIR": "${containerWorkspaceFolder}/code/target",
