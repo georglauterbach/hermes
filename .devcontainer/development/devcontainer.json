@@ -2,28 +2,29 @@
   "name": "development",
   "image": "ghcr.io/georglauterbach/dev-container-base:5.4.0",
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/rust:5.10.0": {
+    "ghcr.io/georglauterbach/dev-container-features/rust:5.11.2": {
       "system.packages.additional-packages": "pkg-config,musl-tools",
+      "rust.rustup.default-toolchain-file": "code/rust-toolchain.toml",
       "linker.mold.install": "true"
-    }
+    },
+    "ghcr.io/georglauterbach/dev-container-features/cache-vscode-extensions:0.3.6": {}
   },
   "updateRemoteUserUID": true,
-  "remoteUser": "ubuntu",
-  "containerUser": "ubuntu",
   "containerEnv": {
+    // ? Rust
     "CARGO_TARGET_DIR": "${containerWorkspaceFolder}/code/target",
     "CARGO_HOME": "${containerWorkspaceFolder}/code/.rust/cargo/home",
     "RUSTUP_HOME": "${containerWorkspaceFolder}/code/.rust/rustup",
-    "HERMES_INIT_BAT": "true",
+    "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER": "aarch64-linux-gnu-gcc",
+    "CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER": "x86_64-linux-musl-gcc",
+    // ? hermes
     "HERMES_INIT_FZF": "true",
     "HERMES_INIT_STARSHIP": "true",
     "HERMES_INIT_ZOXIDE": "true",
     "HERMES_OVERRIDE_CAT_WITH_BAT": "true",
     "HERMES_OVERRIDE_CD_WITH_ZOXIDE": "true",
     "HERMES_OVERRIDE_LS_WITH_EZA": "true",
-    "HERMES_CONFIG_ATUIN_DB_FILE": "/home/ubuntu/.cache/atuin_history.db",
-    "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER": "aarch64-linux-gnu-gcc",
-    "CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER": "x86_64-linux-musl-gcc"
+    "HERMES_CONFIG_ATUIN_DB_FILE": "/home/ubuntu/.cache/atuin_history.db"
   },
   "remoteEnv": {
     "PATH": "${containerEnv:CARGO_HOME}/bin:${containerEnv:PATH}"
