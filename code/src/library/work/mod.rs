@@ -64,16 +64,11 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
 fn final_chown() -> ::anyhow::Result<()> {
     ::tracing::debug!("Running final 'chown'");
 
-    let files_to_be_changed: Vec<String> = super::data::INDEX
-        .iter()
-        .map(|(_, local_path, _)| local_path.replace('~', &environment::home_str()))
-        .collect();
-
     ::std::process::Command::new("chown")
         .arg("-R")
         .arg(format!("{}:{}", environment::user(), environment::group()))
-        .args(files_to_be_changed)
-        .arg(environment::home_str() + "/.local/bin")
+        .arg(environment::home_str() + "/.local")
+        .arg(environment::home_str() + "/.config")
         .output()
         .context("Could not generate output from final 'chown' on user directory")?
         .status
