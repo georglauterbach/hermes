@@ -1,10 +1,10 @@
 //! TODO
 
 /// TODO
-#[::tracing::instrument(name = "install packages", skip_all)]
+#[::tracing::instrument(name = "additional packages", skip_all)]
 pub(super) async fn install(install: bool) -> ::anyhow::Result<()> {
     if !install {
-        ::tracing::info!("Installing");
+        ::tracing::info!("Not installing additional packages");
         return Ok(());
     }
 
@@ -26,7 +26,7 @@ mod ubuntu_debian {
     /// 1. updating package signatures (version-specific)
     /// 2. installing packages
     pub(super) async fn install() -> ::anyhow::Result<()> {
-        ::tracing::info!("Installing packages (IP)");
+        ::tracing::info!("Installing");
 
         ::tracing::debug!("Updating APT package signatures");
         if !::async_std::process::Command::new("apt-get")
