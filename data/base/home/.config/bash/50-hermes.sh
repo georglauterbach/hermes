@@ -65,9 +65,9 @@ function __hermes__setup_variables() {
   if [[ ! -v LANG ]]; then
     # shellcheck source=/dev/null
     [[ -e /etc/locale.conf ]] && source /etc/locale.conf
-    export LANG=${LANG:-en_US.UTF-8}
-    export LANGUAGE=${LANGUAGE:-en_US.UTF-8}
-    export LC_ALL=${LC_ALL:-en_US.UTF-8}
+    export LANG=${LANG:-C}
+    export LANGUAGE=${LANGUAGE:-${LANG}}
+    export LC_ALL=${LC_ALL:-${LANG}}
   fi
 }
 
