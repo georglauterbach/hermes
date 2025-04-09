@@ -1,7 +1,8 @@
-//! TODO
+//! This modules takes care of installing a set of
+//! core packages every system might want to have.
 
-/// TODO
-#[::tracing::instrument(name = "additional packages", skip_all)]
+/// Installs the packages depending on the distribution
+#[::tracing::instrument(name = "core packages", skip_all)]
 pub(super) async fn install(install: bool) -> ::anyhow::Result<()> {
     if !install {
         ::tracing::info!("Not installing additional packages");
@@ -21,6 +22,8 @@ pub(super) async fn install(install: bool) -> ::anyhow::Result<()> {
 }
 
 mod ubuntu_debian {
+    //! Code forDebian-based distributions
+
     /// Configures the system with APT, which boils down to
     ///
     /// 1. updating package signatures (version-specific)
@@ -33,6 +36,10 @@ mod ubuntu_debian {
             .args(["--yes", "update"])
             .stdout(::std::process::Stdio::null())
             .stderr(::std::process::Stdio::inherit())
+            .envs([
+                ("DEBIAN_FRONTEND", "noninteractive"),
+                ("DEBCONF_NONINTERACTIVE_SEEN", "true"),
+            ])
             .output()
             .await?
             .status
@@ -60,6 +67,10 @@ mod ubuntu_debian {
             ])
             .stdout(::std::process::Stdio::null())
             .stderr(::std::process::Stdio::inherit())
+            .envs([
+                ("DEBIAN_FRONTEND", "noninteractive"),
+                ("DEBCONF_NONINTERACTIVE_SEEN", "true"),
+            ])
             .output()
             .await?
             .status

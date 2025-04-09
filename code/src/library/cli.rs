@@ -1,25 +1,25 @@
 //! Contains CLI parameter definition using [`clap`]
 //! and helper structures tied to CLI input.
 
-/// TODO
+/// The command to run
 #[derive(Debug, ::clap::Subcommand)]
 pub enum Command {
-    /// TODO
+    /// Install configuration files, packages & programs
     Run {
-        /// TODO
+        /// Whether to install a set of core packages
         #[clap(short, long, default_value_t = false)]
         install_packages: bool,
     },
-    /// TODO
+    /// Update hermes itself (to the latest available version)
     Update,
 }
 
-/// TODO
-#[allow(clippy::struct_excessive_bools)]
+/// The set of arguments parsed and evaluated by [`::clap`]
 #[derive(Debug, clap::Parser)]
 #[command(
   bin_name=clap::crate_name!(),
   author=clap::crate_authors!(),
+  about=clap::crate_description!(),
   long_about=clap::crate_description!(),
   version=clap::crate_version!(),
   propagate_version=true)]
@@ -37,7 +37,7 @@ pub struct Arguments {
     #[clap(long, hide = true, default_value_t = false)]
     pub assume_correct_invocation: bool,
 
-    /// TODO
+    /// The command to run
     #[command(subcommand)]
     pub command: Command,
 }

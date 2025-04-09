@@ -4,7 +4,7 @@ version = "7.0.0"
 edition = "2024"
 publish = false
 
-description = "Configure Ubuntu by installing various packages and placing (new) configuration files"
+description = "Configures Ubuntu by installing various packages and placing (new) configuration files"
 
 repository = "https://github.com/georglauterbach/hermes"
 license-file = "../LICENSE"

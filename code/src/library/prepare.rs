@@ -245,8 +245,6 @@ pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
             format!("LANG={env_lang}"),
             format!("LC_ALL={env_lc_all}"),
             format!("DISTRIBUTION_ID={distribution_id}"),
-            // TODO String::from("DEBIAN_FRONTEND=noninteractive"),
-            // TODO String::from("DEBCONF_NONINTERACTIVE_SEEN=true"),
             format!("http_proxy={http_proxy}"),
             format!("https_proxy={http_secure_proxy}"),
             format!("no_proxy={no_proxy}"),
