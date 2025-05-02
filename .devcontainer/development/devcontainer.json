@@ -8,7 +8,7 @@
       "linker.mold.install": true
     },
     "ghcr.io/georglauterbach/dev-container-features/cache-vscode-extensions:0.3.6": {},
-    "ghcr.io/georglauterbach/dev-container-features/hermes:0.1.1": {}
+    "ghcr.io/georglauterbach/dev-container-features/hermes:0.2.0": {}
   },
   "updateRemoteUserUID": true,
   "remoteUser": "ubuntu",
