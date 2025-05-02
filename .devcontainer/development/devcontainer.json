@@ -2,7 +2,7 @@
   "name": "development",
   "image": "docker.io/ubuntu:24.04",
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/rust:6.2.1": {
+    "ghcr.io/georglauterbach/dev-container-features/rust:6.5.1": {
       "system.packages.additional-packages": "pkg-config,musl-tools",
       "rust.rustup.default-toolchain-file": "${containerWorkspaceFolder}/rust-toolchain.toml",
       "linker.mold.install": true
