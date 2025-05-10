@@ -13,6 +13,8 @@ x-scheme-handler/chrome=org.mozilla.firefox.desktop;
 x-scheme-handler/http=org.mozilla.firefox.desktop;
 x-scheme-handler/https=org.mozilla.firefox.desktop;
 
+inode/directory=nautilus.desktop
+
 [Added Associations]
 application/x-extension-htm=org.mozilla.firefox.desktop;
 application/x-extension-html=org.mozilla.firefox.desktop;

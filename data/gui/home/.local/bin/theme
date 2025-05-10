@@ -64,33 +64,25 @@ function set_theme_zellij() {
   fi
 }
 
-function set_theme_regolith() {
-  log_info "Updating Regolith look to $(tput bold)${THEME_NAME}$(tput sgr0)"
-  regolith-look set "${THEME_NAME_COMPLETE}" >/dev/null &
-  readonly REGOLITH_LOOK_PID=${!}
-
-  log_info "Updating preferred color palette to $(tput bold)${THEME_PALETTE}$(tput sgr0)"
-  gsettings set 'org.gnome.desktop.interface' 'color-scheme' "prefer-${THEME_PALETTE}"
-}
-
 function main() {
-  local FLAG_FORCE=0
-  local THEME_PALETTE THEME_NAME THEME_NAME_COMPLETE
-
-  while [[ ${#} -gt 1 ]]; do
-    [[ ${1} == --force ]] && { FLAG_FORCE=1 ; shift 1 ; continue ; }
-    log_error_and_exit "Option '${1}' is unknown (valid: --force)"
-  done
+  local THEME_PALETTE THEME_NAME THEME_NAME_COMPLETE GTK_THEME ICON_THEME
+  local WALLPAPER="${HOME}/.config/sway/looks/"
 
   case "${1:-}" in
     ( 'd' | 'dark' )
       readonly THEME_PALETTE='dark'
       readonly THEME_NAME='gruvbox-material'
+      readonly GTK_THEME="Gruvbox-Material-${THEME_PALETTE^}"
+      readonly ICON_THEME='gruvbox-plus-dark'
+      WALLPAPER+='gruvbox-material-dark/wallpaper.svg'
       ;;
 
     ( 'l' | 'light' )
       readonly THEME_PALETTE='light'
       readonly THEME_NAME='everforest'
+      readonly GTK_THEME="${THEME_NAME^}-${THEME_PALETTE^}"
+      readonly ICON_THEME='everforest-light'
+      WALLPAPER+='everforest-light/wallpaper.png'
       ;;
 
     ( * )
@@ -99,20 +91,18 @@ function main() {
   esac
 
   readonly THEME_NAME_COMPLETE="${THEME_NAME}-${THEME_PALETTE}"
+  readonly WALLPAPER
 
-  set_theme_regolith
+  log_info "Updating preferred color palette to $(tput bold)${THEME_PALETTE}$(tput sgr0)"
+  gsettings set org.gnome.desktop.interface color-scheme "prefer-${THEME_PALETTE}"
+  gsettings set org.gnome.desktop.interface gtk-theme    "${GTK_THEME}"
+  gsettings set org.gnome.desktop.interface icon-theme   "${ICON_THEME}"
+  swaymsg output '*' bg "${WALLPAPER}" fill
 
   set_theme_alacritty
   set_theme_rofi
   set_theme_swaylock
   set_theme_zellij
-
-  wait -f "${REGOLITH_LOOK_PID}" || :
-
-  if [[ ${FLAG_FORCE} -eq 1 ]]; then
-    log_info 'Restarting kanshi (forced)'
-    systemctl --user restart 'regolith-init-kanshi'
-  fi
 
   if ${ERROR_OCCURRED:-false}; then
     exit 1

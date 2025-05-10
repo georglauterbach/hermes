@@ -72,6 +72,11 @@ tooltip label {
   color: #DDC7A1;
 }
 
+#custom-audio_idle_inhibitor {
+  background: #504945;
+  color: #DDC7A1;
+}
+
 #window {
   color: #DDC7A1;
 }

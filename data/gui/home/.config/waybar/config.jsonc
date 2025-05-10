@@ -12,6 +12,7 @@
   "modules-left": [
     "tray",
     "idle_inhibitor",
+    "custom/audio_idle_inhibitor",
     "custom/notifications",
     "sway/window",
     "sway/mode"
@@ -44,6 +45,19 @@
     "tooltip-format-deactivated": "idle inhibitor {status}",
     "timeout": 180
   },
+  "custom/audio_idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "output": "  ",
+      "input": "  ",
+      "output-input": "  ",
+      "none": "  "
+    },
+    "tooltip": false,
+    "exec-if": "which sway-audio-idle-inhibit",
+    "exec": "sway-audio-idle-inhibit --dry-print-both-waybar",
+    "return-type": "json"
+  },
   "custom/notifications": {
     "format": "{icon} {:>2}",
     "format-icons": {
@@ -56,9 +70,9 @@
       "dnd-inhibited-notification": " ",
       "dnd-inhibited-none": " "
     },
-    "return-type": "json",
     "exec-if": "which swaync-client",
     "exec": "swaync-client --subscribe-waybar",
+    "return-type": "json",
     "on-click": "swaync-client --toggle-panel --skip-wait",
     "on-click-right": "swaync-client --toggle-dnd --skip-wait",
     "escape": true,
@@ -86,7 +100,7 @@
   "memory": {
     "interval": 10,
     "format": " {used:4.1f}/{total:4.1f}GiB", // (󰯍 {swapUsed:3.1f}/{swapTotal:3.1f}GiB)
-    "tooltip-format": ""
+    "tooltip": false
   },
   "network": {
     "interval": 5,
