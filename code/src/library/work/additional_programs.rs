@@ -126,7 +126,7 @@ async fn download_and_extract(
 /// Install `atuin` (<https://github.com/atuinsh/atuin>)
 async fn atuin() -> ::anyhow::Result<()> {
     /// Version of `atuin` to install
-    const ATUIN_VERSION: &str = "18.4.0";
+    const ATUIN_VERSION: &str = "18.6.1";
     let file = format!("atuin-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
         "https://github.com/atuinsh/atuin/releases/download/v{ATUIN_VERSION}/{file}.tar.gz"
@@ -223,7 +223,7 @@ async fn blesh() -> ::anyhow::Result<()> {
 /// Install `eza` (<https://github.com/eza-community/eza>)
 async fn eza() -> ::anyhow::Result<()> {
     /// The version `eza` to install
-    const EZA_VERSION: &str = "0.21.0";
+    const EZA_VERSION: &str = "0.21.3";
     let file = format!("eza_{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri = format!(
         "https://github.com/eza-community/eza/releases/download/v{EZA_VERSION}/{file}.tar.gz"
@@ -264,7 +264,7 @@ async fn fd() -> ::anyhow::Result<()> {
 /// Install `fzf` (<https://github.com/junegunn/fzf>)
 async fn fzf() -> ::anyhow::Result<()> {
     /// Version of `fzf` to install
-    const FZF_VERSION: &str = "0.61.1";
+    const FZF_VERSION: &str = "0.62.0";
     #[cfg(target_arch = "x86_64")]
     let file = format!("fzf-{FZF_VERSION}-linux_amd64");
     #[cfg(target_arch = "aarch64")]
@@ -326,7 +326,7 @@ async fn ripgrep() -> ::anyhow::Result<()> {
 /// Install `starship` (<https://github.com/starship/starship>)
 async fn starship() -> ::anyhow::Result<()> {
     /// Version of `starship` to install
-    const STARSHIP_VERSION: &str = "1.22.1";
+    const STARSHIP_VERSION: &str = "1.23.0";
     let file = format!("starship-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
         "https://github.com/starship/starship/releases/download/v{STARSHIP_VERSION}/{file}.tar.gz"
@@ -345,7 +345,7 @@ async fn starship() -> ::anyhow::Result<()> {
 /// Install `zoxide` (<https://github.com/zellij-org/zellij>)
 async fn zellij() -> ::anyhow::Result<()> {
     /// Version of `zoxide` to install
-    const ZOXIDE_VERSION: &str = "0.42.1";
+    const ZOXIDE_VERSION: &str = "0.42.2";
     let file = format!("zellij-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
         "https://github.com/zellij-org/zellij/releases/download/v{ZOXIDE_VERSION}/{file}.tar.gz"
