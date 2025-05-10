@@ -1,0 +1,42 @@
+version: "0.2"
+ignorePaths: []
+dictionaryDefinitions: []
+dictionaries: []
+import: []
+
+words: []
+
+ignoreWords:
+  - Alacritty
+  - bindsym
+  - combi
+  - dbus
+  - drun
+  - Everforest
+  - getwindowfocus
+  - getwindowpid
+  - grimshot
+  - Gruvbox
+  - gsettings
+  - lightctl
+  - lockscreen
+  - nodeadkeys
+  - numlock
+  - pango
+  - pkexec
+  - policykit
+  - polkitd
+  - rasi
+  - rofi
+  - wpctl
+  - swayidle
+  - swaylock
+  - swaymsg
+  - swaynag
+  - swaync
+  - SWAYSOCK
+  - validationlayers
+  - volumectl
+  - waybar
+  - XCURSOR
+
