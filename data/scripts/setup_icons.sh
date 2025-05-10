@@ -42,7 +42,7 @@ function setup_icons_light() {
     cd "${GIT_ICONS_DIR}"
     git pull
   else
-    git clone 'https://github.com/SylEleuth/gruvbox-plus-icon-pack.git' "${GIT_ICONS_DIR}"
+    git clone 'https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme.git' "${GIT_ICONS_DIR}"
   fi
 
   cd "${LOCAL_ICONS_DIR}"
