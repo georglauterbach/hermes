@@ -4,7 +4,7 @@ Delivers setup and configuration for _Ubuntu_ like a god.
 
 ## About
 
-_hermes_ configures _Ubuntu_ by installing various packages and (re-)placing configuration files. The setup is mostly unopinionated, non-intrusive, and tries to enhance the out-of-the-box experience of _Ubuntu_. Optionally, configuration of the GUI is supported. _hermes_ is built for `x86_64` (full support) and `aarch64` (only non-GUI).
+_hermes_ configures _Ubuntu_ by installing various packages and (re-)placing configuration files. The setup is mostly unopinionated, non-intrusive, and tries to enhance the out-of-the-box experience of _Ubuntu_. _hermes_ is built for `x86_64` and `aarch64`.
 
 ## Usage
 
@@ -24,14 +24,14 @@ To see the help message and **install** _hermes_, run the following commands:
 
 ```bash
 hermes --help
-hermes
+hermes run
 ```
 
 To **update** _hermes_, run the following command
 
 ```bash
 hermes --version
-sudo hermes --update --non-interactive # works since v4.0.0
+hermes update --non-interactive # works since v4.0.0
 ```
 
 > [!CAUTION]
@@ -42,7 +42,7 @@ sudo hermes --update --non-interactive # works since v4.0.0
 
 ### Bash
 
-The setup of Bash is performed by `${HOME}/.bashrc` and scripts in `${HOME}/.config/bash/`. These setup files can be found [here](data/unversioned/home/.config/).
+The setup of Bash is performed by `${HOME}/.bashrc` and scripts in `${HOME}/.config/bash/`. These setup files can be found [here](data/core/home/.config/bash/).
 
 If you want to modify the behavior of _hermes_, take a look at `{HOME}/.config/bash/20-custom_early.sh`. This file contains variables that control the initialization of programs and their overrides as well as other configurations. The "[Programs](#programs)" section below refers to these variables.
 
@@ -86,42 +86,10 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 - [_zellij_](https://github.com/zellij-org/zellij)
   - terminal workspace with batteries included
 
-### Changing APT Sources
-
-To change and add APT sources (including PPAs), run _hermes_ with the `--change-apt-sources` (or `-c`) flag. This option installs a new `ubuntu.sources` file in `/etc/apt/sources.list.d/` and adds additional PPAs for `git`, `neovim`, and `flatpak`.
-
-### GUI
-
-To set up a GUI with [_Regolith Linux_](https://regolith-desktop.com/), run _hermes_ with the `--gui` flag. This option installs new PPAs for _Regolith Linux_ ([_Alacritty_](https://github.com/alacritty/alacritty), _Regolith_ itself, and [_Visual Studio Code_](https://github.com/microsoft/vscode). Configurations for these packages is **not** provided automatically. In [`examples/gui/`](./examples/gui/), you will find directories that are typically located in `${HOME}`. You can copy the subdirectories of the directories to `${HOME}/.config/` to acquire my configurations.
-
-<details>
-<summary>Manual Setup Steps</summary>
-
-There are programs and configuration files that you may want to install manually. These include:
-
-1. GTK: Set up GTK by following [this release](https://github.com/georglauterbach/hermes/releases/tag/gtk-v0.1.0)
-2. Icons: Set up icon packs with the [`scripts/setup_icons.sh` script](./scripts/setup_icons.sh)
-3. Rofi: A [patched version of `rofi`](https://github.com/georglauterbach/hermes/releases/tag/rofi-v1.7.7%2Bwayland) that better integrates into Wayland
-
-</details>
-
 ### Supplementary Setup Scripts
 
 You can find additional setup scripts that aid in setting up machines under the [`scripts/` directory](./scripts/).
 
 ### Examples
 
-You can find setup examples in the [`examples/`](./examples/) directory, e.g. for a custom post-hermes Bash setup, the GUI setup (including a Regolith, Waybar, and Alacritty configuration), VS Code configuration files, etc.
-
-## Architecture
-
-_hermes_ is written in the [Rust programming language](https://www.rust-lang.org/). As it performs a lot of network requests and disk I/O, it utilizes asynchronous programming with the [_tokio_](https://tokio.rs/) runtime. _hermes_ performs four main tasks:
-
-1. Downloading and placing [unversioned configuration files](./data/unversioned/).
-2. Downloading and placing [versioned configuration files](./data/versioned/).
-3. Setting up APT (optionally) and installing additional programs with it.
-4. Installing [additional programs](#programs) by downloading them from GitHub and unpacking them.
-
-All of these tasks are performed asynchronously, which gives the illusion of parallelism (especially in the log). This makes _hermes_ extremely fast.
-
-Most configuration is stored in the [`data/`](./code/src/library/data/) directory and is downloaded onto the target system.
+You can find setup examples in the [`data/examples/`](./data/examples/) directory. A custom GUI setup can be found there too.
