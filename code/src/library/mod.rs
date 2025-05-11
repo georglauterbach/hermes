@@ -1,6 +1,6 @@
 //! This private module hosts modules that perform work in _hermes_.
 
-pub mod cli;
+pub mod arguments;
 mod data;
 mod fs;
 pub mod prepare;

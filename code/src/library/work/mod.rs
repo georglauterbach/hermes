@@ -31,7 +31,7 @@ const GITHUB_RAW_URI: &str =
 /// If any of the function implementing the actual work fails, the error
 /// is propagated. This is done for all functions, so that the context
 /// is complete and the user is informed about all errors and issues.
-pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
+pub async fn run(arguments: super::arguments::Arguments) -> ::anyhow::Result<()> {
     ::tracing::debug!("I was now called correctly");
 
     ::tracing::trace!("Here is my environment:");
@@ -40,7 +40,7 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
     }
 
     match arguments.command {
-        super::cli::Command::Run { install_packages } => {
+        super::arguments::Command::Run { install_packages } => {
             ::tracing::info!("Starting installation");
 
             let results = ::tokio::join!(
@@ -52,7 +52,7 @@ pub async fn run(arguments: super::cli::Arguments) -> ::anyhow::Result<()> {
             super::evaluate_results(<[Result<(), ::anyhow::Error>; 3]>::from(results))?;
             final_chown()
         }
-        super::cli::Command::Update => {
+        super::arguments::Command::Update => {
             ::tracing::info!("Starting self-update");
             update::run().await
         }

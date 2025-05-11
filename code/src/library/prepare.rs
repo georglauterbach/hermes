@@ -186,7 +186,7 @@ fn get_http_proxies() -> (String, String, String) {
 /// [`Ok`] with a value of `false`. If everything worked, we return [`Ok`] with a
 /// value of `true`.
 #[::tracing::instrument(name = "preparation", skip_all)]
-pub fn call_again(arguments: &crate::cli::Arguments) -> anyhow::Result<bool> {
+pub fn call_again(arguments: &crate::arguments::Arguments) -> anyhow::Result<bool> {
     ::tracing::info!(
         "Preparing environment and arguments to call myself again - this is expected and correct"
     );
