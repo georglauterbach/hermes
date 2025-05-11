@@ -120,6 +120,7 @@
   "terminal.integrated.tabs.enabled": true,
   "terminal.integrated.showExitAlert": false,
   "terminal.integrated.enableMultiLinePasteWarning": "auto",
+  "terminal.integrated.shellIntegration.enabled": false,
   // ? files
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
