@@ -25,3 +25,5 @@ switch_case_indent   = true
 space_redirects      = false
 keep_padding         = false
 function_next_line   = true
+
+tab_width            = 2

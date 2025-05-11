@@ -18,6 +18,8 @@ ignoreWords:
   - grimshot
   - Gruvbox
   - gsettings
+  - gwaddr
+  - ifname
   - lightctl
   - lockscreen
   - nodeadkeys
@@ -38,5 +40,7 @@ ignoreWords:
   - validationlayers
   - volumectl
   - waybar
+  - wireplumber
   - XCURSOR
+  - xwayland
 
