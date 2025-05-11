@@ -1,6 +1,6 @@
 [package]
 name = "hermes"
-version = "7.1.1"
+version = "8.0.0"
 edition = "2024"
 publish = false
 
@@ -8,7 +8,7 @@ description = "Configures Ubuntu by installing various packages and placing (new
 
 repository = "https://github.com/georglauterbach/hermes"
 license-file = "../LICENSE"
-readme = "../README.adoc"
+readme = "../README.md"
 
 keywords = ["setup", "linux"]
 categories = ["command-line-utilities"]
