@@ -1,4 +1,4 @@
-#! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
+#! /usr/bin/env bash
 
 # ref: https://flatpak.org/setup/Ubuntu
 

@@ -1,4 +1,4 @@
-#! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
+#! /usr/bin/env bash
 
 # shellcheck disable=SC2154
 

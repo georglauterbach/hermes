@@ -1,4 +1,7 @@
-#! /usr/bin/env -S bash -eE -u -o pipefail -O inherit_errexit
+#! /usr/bin/env bash
+
+set -eE -u -o pipefail
+shopt -s inherit_errexit
 
 function log_info() {
   echo -e "\033[1;34mINFO\033[0m  ${1:?Log info message required}"
