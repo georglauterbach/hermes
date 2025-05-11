@@ -2,7 +2,7 @@
   "name": "development",
   "image": "docker.io/ubuntu:24.04",
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/rust:6.6.1": {
+    "ghcr.io/georglauterbach/dev-container-features/rust:7.0.1": {
       "system.packages.additional-packages": "pkg-config,musl-tools",
       "rust.rustup.default-toolchain-file": "${containerWorkspaceFolder}/rust-toolchain.toml",
       "linker.mold.install": true
@@ -74,6 +74,10 @@
           "**/.git": true,
           "code/.rust": true
         },
+        // * extensions::vadimcn.vscode-lldb
+        "lldb.launch.preRunCommands": [
+          "command script import ${containerEnv:RUST_PRETTIFIER_FOR_LLDB_FILE}"
+        ],
         // * extensions::asciidoctor.asciidoctor-vscode
         "asciidoc.antora.showEnableAntoraPrompt": false
       }
