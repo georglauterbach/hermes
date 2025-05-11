@@ -1,7 +1,26 @@
-// Waybar Configuration
-//   - GitHub wiki: https://github.com/Alexays/Waybar/wiki/Configuration
-// Nerd Font Icons
-//   - cheat sheet: https://www.nerdfonts.com/cheat-sheet
+// ----------------------------------------------
+// ----  Waybar Configuration  ------------------
+// ---- https://github.com/Alexays/Waybar  ------
+// ----------------------------------------------
+//
+// ----------------------------------------------
+// ----  About This Configuration  --------------
+// ----------------------------------------------
+//
+// Font Cheat Sheet:
+// https://www.nerdfonts.com/cheat-sheet
+//
+// Packages required for this configuration
+// to work properly:
+//
+// - sway-audio-idle-inhibit (optional)
+//   https://github.com/ErikReider/SwayAudioIdleInhibit
+// - swaync-client [Sway Notification Center] (optional)
+//   https://github.com/ErikReider/SwayNotificationCenter
+// - gpu-usage-waybar (optional)
+//   https://github.com/PolpOnline/gpu-usage-waybar
+// - wpctl [WirePlumber for PipeWire]
+//   https://wiki.archlinux.org/title/WirePlumber
 {
   // -------------------------------------------
   // ----  General  ----------------------------
@@ -22,6 +41,7 @@
   ],
   "modules-right": [
     "cpu",
+    "custom/gpu",
     "memory",
     "network",
     "battery",
@@ -46,6 +66,9 @@
     "timeout": 180
   },
   "custom/audio_idle_inhibitor": {
+    "exec-if": "which sway-audio-idle-inhibit",
+    "exec": "sway-audio-idle-inhibit --dry-print-both-waybar",
+    "return-type": "json",
     "format": "{icon}",
     "format-icons": {
       "output": "  ",
@@ -53,12 +76,13 @@
       "output-input": "  ",
       "none": "  "
     },
-    "tooltip": false,
-    "exec-if": "which sway-audio-idle-inhibit",
-    "exec": "sway-audio-idle-inhibit --dry-print-both-waybar",
-    "return-type": "json"
+    "tooltip": false
   },
   "custom/notifications": {
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client --subscribe-waybar",
+    "return-type": "json",
+    "escape": true,
     "format": "{icon} {:>2}",
     "format-icons": {
       "notification": " ",
@@ -70,13 +94,9 @@
       "dnd-inhibited-notification": " ",
       "dnd-inhibited-none": " "
     },
-    "exec-if": "which swaync-client",
-    "exec": "swaync-client --subscribe-waybar",
-    "return-type": "json",
+    "tooltip": false,
     "on-click": "swaync-client --toggle-panel --skip-wait",
-    "on-click-right": "swaync-client --toggle-dnd --skip-wait",
-    "escape": true,
-    "tooltip": false
+    "on-click-right": "swaync-client --toggle-dnd --skip-wait"
   },
   "sway/window": {
     "max-length": 90
@@ -97,6 +117,13 @@
     "interval": 5,
     "format": " {usage:3}%"
   },
+  "custom/gpu": {
+    "exec-if": "which gpu-usage-waybar",
+    "exec": "gpu-usage-waybar --interval 5000",
+    "return-type": "json",
+    "format": "󰍹 {:>9}",
+    "tooltip": true
+  },
   "memory": {
     "interval": 10,
     "format": " {used:4.1f}/{total:4.1f}GiB", // (󰯍 {swapUsed:3.1f}/{swapTotal:3.1f}GiB)
@@ -107,6 +134,7 @@
     "family": "ipv4",
     "format": "󰌘 {bandwidthDownBytes:>}  |{bandwidthUpBytes:>} ",
     "format-disconnected": "󰌙",
+    "tooltip": true,
     "tooltip-format-wifi": "  WIFI\n󰩟 {ipaddr}/{cidr}@{ifname} via {gwaddr}\n {signalStrength}%",
     "tooltip-format-ethernet": "󰈀 WIRED\n󰩟 {ipaddr}/{cidr}@{ifname} via {gwaddr}",
     "tooltip-format": "{ifname} via {gwaddr}"
@@ -119,6 +147,7 @@
       "warning": 30,
       "critical": 5
     },
+    "format": "{icon} {capacity:3}%",
     "format-icons": [
       "",
       "",
@@ -126,7 +155,6 @@
       "",
       ""
     ],
-    "format": "{icon} {capacity:3}%",
     "format-charging": "󰂅 {capacity:3}%",
     "format-plugged": " {capacity:3}%"
   },
@@ -139,12 +167,10 @@
     ],
     "max-volume": 100.0,
     "format-muted": "󰝟 HUSH",
-    // "on-click-middle": "wpctl set-volume '@DEFAULT_AUDIO_SOURCE@' toggle",
+    //"on-click-middle": "wpctl set-volume '@DEFAULT_AUDIO_SOURCE@' toggle",
     "on-click": "__wpctl_hush_toggle"
   },
   "clock": {
-    "format": "󱑂 {:%H:%M}", // %d.%m
-    "tooltip-format": "<tt>{calendar}</tt>",
     "locale": "de_DE.UTF-8",
     "calendar": {
       "mode": "month",
@@ -152,6 +178,8 @@
       "format": {
         "today": "<span color='#EA6962'>{}</span>"
       }
-    }
+    },
+    "format": "󱑂 {:%H:%M}", // %d.%m
+    "tooltip-format": "<tt>{calendar}</tt>"
   }
 }

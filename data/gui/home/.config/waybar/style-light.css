@@ -138,6 +138,11 @@ tooltip label {
   color: #282828;
 }
 
+#custom-gpu {
+  background: #F57D26;
+  color: #282828;
+}
+
 #memory {
   background: #DFA000;
   color: #282828;
