@@ -4,7 +4,7 @@
   "features": {
     "ghcr.io/georglauterbach/dev-container-features/rust:7.0.1": {
       "system.packages.additional-packages": "pkg-config,musl-tools",
-      "rust.rustup.default-toolchain-file": "${containerWorkspaceFolder}/rust-toolchain.toml",
+      "rust.rustup.default-toolchain-file": "${containerWorkspaceFolder}/code/rust-toolchain.toml",
       "linker.mold.install": true
     },
     "ghcr.io/georglauterbach/dev-container-features/cache-vscode-extensions:0.3.6": {},
