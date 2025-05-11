@@ -33,7 +33,7 @@ pub(super) async fn place() -> ::anyhow::Result<()> {
         }
 
         join_set.spawn(super::download::download_and_place_configuration_file(
-            format!("{GITHUB_RAW_URI}/data/base/{remote_part}"),
+            format!("{GITHUB_RAW_URI}/data/core/{remote_part}"),
             canonical_local_path,
         ));
     }
