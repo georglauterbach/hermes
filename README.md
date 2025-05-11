@@ -88,7 +88,7 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 
 ### Supplementary Setup Scripts
 
-You can find additional setup scripts that aid in setting up machines under the [`scripts/` directory](./scripts/).
+You can find additional setup scripts that aid in setting up machines under the [`data/scripts/` directory](./data/scripts/).
 
 ### Examples
 
