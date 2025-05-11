@@ -222,7 +222,7 @@
   ],
   "errorLens.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
   "errorLens.messageTemplate": "$severity [$source] $message",
-  "errorLens.exclude": [
+  "errorLens.excludeByMessage": [
     "Unknown word"
   ],
   "errorLens.enabledDiagnosticLevels": [
