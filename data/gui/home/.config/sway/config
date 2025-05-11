@@ -11,15 +11,14 @@
 # Packages required for this Sway configuration
 # to work:
 #
-# - polkitd pkexec policykit-1-gnome
 # - grimshot
 # - waybar
 # - rofi (custom)
-# - sway-notification-center
 # - nautilus evince
+# - xwayland
 # - vulkan-validationlayers (optional)
-# - https://github.com/heyjuvi/avizo (optional)
-# - https://github.com/ErikReider/SwayAudioIdleInhibit (optional)
+# - Avizo (optional)
+#   https://github.com/heyjuvi/avizo
 # -----------------------------------------------
 
 # -----------------------------------------------
@@ -277,7 +276,6 @@ exec sway-audio-idle-inhibit \
 
 # ----  Colors
 
-set $color.background_dim #161611
 set $color.background     #282828
 set $color.foreground     #DDC7A1
 

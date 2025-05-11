@@ -7,16 +7,17 @@ import: []
 words: []
 
 ignoreWords:
-  - Alacritty
+  - alacritty
+  - avizo
   - bindsym
   - combi
   - dbus
   - drun
-  - Everforest
+  - everforest
   - getwindowfocus
   - getwindowpid
   - grimshot
-  - Gruvbox
+  - gruvbox
   - gsettings
   - gwaddr
   - ifname
@@ -36,11 +37,11 @@ ignoreWords:
   - swaymsg
   - swaynag
   - swaync
-  - SWAYSOCK
+  - swaysock
   - validationlayers
   - volumectl
   - waybar
   - wireplumber
-  - XCURSOR
+  - xcursor
   - xwayland
 
