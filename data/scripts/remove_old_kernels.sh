@@ -11,7 +11,8 @@ fi
 function purge_old_config_files() {
   local UNNECESSARY_CONFIG_FILES
   readarray -t UNNECESSARY_CONFIG_FILES < <(dpkg -l | awk '/^rc/{print $2}')
-  if [[ ${#UNNECESSARY_CONFIG_FILES} -gt 0 ]]; then
+
+  if [[ -v UNNECESSARY_CONFIG_FILES ]] && [[ ${#UNNECESSARY_CONFIG_FILES} -gt 0 ]]; then
     dpkg --purge "${UNNECESSARY_CONFIG_FILES[@]}"
   fi
 }
