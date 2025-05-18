@@ -1,0 +1,30 @@
+#############################################################################
+#
+# Ubuntu 25.04 (Plucky Puffin)
+# /etc/apt/sources.list
+#
+# main       => officially supported open-source software
+# restricted => officially supported closed-source software
+# universe   => community-maintained open-source software
+# multiverse => unsupported closed-source and patent-encumbered software
+#
+#############################################################################
+
+#############################################################################
+# AMD64
+#############################################################################
+
+Types: deb
+URIs: http://de.archive.ubuntu.com/ubuntu/
+Suites: plucky plucky-updates plucky-backports
+Components: main restricted universe multiverse
+Architectures: amd64
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+# Aside from URIs and Suites, this should mirror your choices in the previous section.
+Types: deb
+URIs: http://security.ubuntu.com/ubuntu
+Suites: plucky-security
+Components: main restricted universe multiverse
+Architectures: amd64
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
