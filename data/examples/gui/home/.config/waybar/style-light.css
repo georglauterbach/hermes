@@ -18,13 +18,20 @@
   padding: 0px 10px 0px 10px;
 
   transition: none;
+}
 
+window#waybar {
   color: #5C6A72;
   font-weight: 600;
 }
 
-window {
-  background: transparent;
+window#waybar.empty #window,
+window#waybar.solo #window,
+window#waybar.floating #window,
+window#waybar.stacked #window,
+window#waybar.tabbed #window,
+window#waybar.tiled #window {
+    color: #5C6A72;
 }
 
 window#waybar>box {

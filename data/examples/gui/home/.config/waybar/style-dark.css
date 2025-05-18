@@ -18,13 +18,20 @@
   padding: 0px 10px 0px 10px;
 
   transition: none;
+}
 
+window#waybar {
   color: #282828;
   font-weight: 600;
 }
 
-window {
-  background: transparent;
+window#waybar.empty #window,
+window#waybar.solo #window,
+window#waybar.floating #window,
+window#waybar.stacked #window,
+window#waybar.tabbed #window,
+window#waybar.tiled #window {
+    color: #DDC7A1;
 }
 
 window#waybar>box {
@@ -74,10 +81,6 @@ tooltip label {
 
 #custom-audio_idle_inhibitor {
   background: #504945;
-  color: #DDC7A1;
-}
-
-#window {
   color: #DDC7A1;
 }
 

@@ -1,6 +1,6 @@
 // ----------------------------------------------
 // ----  Waybar Configuration  ------------------
-// ---- https://github.com/Alexays/Waybar  ------
+// ----  https://github.com/Alexays/Waybar  -----
 // ----------------------------------------------
 //
 // ----------------------------------------------
@@ -10,17 +10,6 @@
 // Font Cheat Sheet:
 // https://www.nerdfonts.com/cheat-sheet
 //
-// Packages required for this configuration
-// to work properly:
-//
-// - sway-audio-idle-inhibit (optional)
-//   https://github.com/ErikReider/SwayAudioIdleInhibit
-// - swaync-client [Sway Notification Center] (optional)
-//   https://github.com/ErikReider/SwayNotificationCenter
-// - gpu-usage-waybar (optional)
-//   https://github.com/PolpOnline/gpu-usage-waybar
-// - wpctl [WirePlumber for PipeWire]
-//   https://wiki.archlinux.org/title/WirePlumber
 {
   // -------------------------------------------
   // ----  General  ----------------------------
@@ -66,7 +55,6 @@
     "timeout": 180
   },
   "custom/audio_idle_inhibitor": {
-    "exec-if": "which sway-audio-idle-inhibit",
     "exec": "sway-audio-idle-inhibit --dry-print-both-waybar",
     "return-type": "json",
     "format": "{icon}",
@@ -79,7 +67,6 @@
     "tooltip": false
   },
   "custom/notifications": {
-    "exec-if": "which swaync-client",
     "exec": "swaync-client --subscribe-waybar",
     "return-type": "json",
     "escape": true,
@@ -118,7 +105,6 @@
     "format": " {usage:3}%"
   },
   "custom/gpu": {
-    "exec-if": "which gpu-usage-waybar",
     "exec": "gpu-usage-waybar --interval 5000",
     "return-type": "json",
     "format": "󰍹 {:>9}",
@@ -167,8 +153,7 @@
     ],
     "max-volume": 100.0,
     "format-muted": "󰝟 HUSH",
-    //"on-click-middle": "wpctl set-volume '@DEFAULT_AUDIO_SOURCE@' toggle",
-    "on-click": "__wpctl_hush_toggle"
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
   },
   "clock": {
     "locale": "de_DE.UTF-8",
