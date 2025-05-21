@@ -13,9 +13,7 @@ exec_always systemctl --user import-environment HOME
 # https://github.com/swaywm/sway/wiki#systemd-and-dbus-activation-environments
 exec systemctl --user import-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP
 exec hash dbus-update-activation-environment 2>/dev/null && \
-    dbus-update-activation-environment                      \
-    WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP             \
-    SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
+    dbus-update-activation-environment --all --systemd
 
 exec --no-startup-id gnome-keyring-daemon --start --components="pkcs11,secrets,ssh"
 
@@ -307,6 +305,23 @@ bar {
     swaybar_command waybar
     position top
 }
+
+# -----------------------------------------------
+# ----  Common Key Bindings  --------------------
+# -----------------------------------------------
+
+# terminate a window
+bindsym $spr+q [con_id="__focused__"] kill
+
+# application launcher
+bindsym $spr+$ctl+Space exec --no-startup-id rofi -show drun
+bindsym $spr+Space      exec --no-startup-id rofi -show combi
+
+# notification center
+bindsym $spr+$sft+n     exec swaync-client --toggle-panel --skip-wait
+
+# terminal
+bindsym $spr+Return     exec --no-startup-id systemd-run --user --scope /usr/bin/x-terminal-emulator
 
 # -----------------------------------------------
 # ----  Epilogue  -------------------------------

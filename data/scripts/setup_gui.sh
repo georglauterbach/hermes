@@ -29,7 +29,7 @@ case "${ID}" in
       gnome-keyring
       fonts-font-awesome
       pipewire pipewire-audio-client-libraries pulseaudio-utils rtkit wireplumber
-      polkitd pkexec
+      polkitd pkexec policykit-1-gnome
       at-spi2-core librsvg2-2
     )
 
