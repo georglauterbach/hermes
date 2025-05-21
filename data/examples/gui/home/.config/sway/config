@@ -8,14 +8,11 @@
 # ----  Prologue  -------------------------------
 # -----------------------------------------------
 
-exec_always systemctl --user import-environment HOME
+exec systemctl --user import-environment
+exec dbus-update-activation-environment --all
 
-# https://github.com/swaywm/sway/wiki#systemd-and-dbus-activation-environments
-exec systemctl --user import-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP
-exec hash dbus-update-activation-environment 2>/dev/null && \
-    dbus-update-activation-environment --all --systemd
-
-exec --no-startup-id gnome-keyring-daemon --start --components="pkcs11,secrets,ssh"
+exec --no-startup-id swaync
+exec --no-startup-id sway-audio-idle-inhibit
 
 include "${HOME}/.config/sway/user_early.conf"
 
@@ -225,10 +222,6 @@ bindsym XF86MonBrightnessDown         exec lightctl - $5
 # ---- Screenshots
 
 bindsym $spr+s exec "grimshot copy anything"
-
-# ---- Audio Idle Inhibitor
-
-exec sway-audio-idle-inhibit
 
 # -----------------------------------------------
 # ----  Design  ---------------------------------

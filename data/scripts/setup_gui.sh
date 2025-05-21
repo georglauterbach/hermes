@@ -22,22 +22,21 @@ case "${ID}" in
     readonly PACKAGES=(
       sway sway-backgrounds swayidle swaylock sway-notification-center xwayland
       libvulkan1 mesa-vulkan-drivers vulkan-tools
-      xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk
+      xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr
       waybar
       alacritty
-      evince feh grimshot nautilus
-      gnome-keyring
+      evince grimshot
       fonts-font-awesome
       pipewire pipewire-audio-client-libraries pulseaudio-utils rtkit wireplumber
-      polkitd pkexec policykit-1-gnome
-      at-spi2-core librsvg2-2
+      polkitd pkexec
+      librsvg2-2
     )
 
     apt-get --yes install --no-install-recommends --no-install-suggests "${PACKAGES[@]}"
 
-    rm --force /etc/systemd/user/graphical-session.target.wants/waybar.service
+    rm --force /etc/systemd/user/graphical-session.target.wants/{waybar,swaync}.service
     apt-get --yes purge wmenu
-    systemctl --user disable waybar.service || :
+    systemctl --user disable swaync.service waybar.service || :
     systemctl --user enable --now pipewire-pulse.service
     ;;
 
