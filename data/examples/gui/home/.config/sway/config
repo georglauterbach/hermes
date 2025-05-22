@@ -8,11 +8,12 @@
 # ----  Prologue  -------------------------------
 # -----------------------------------------------
 
-exec systemctl --user import-environment
-exec dbus-update-activation-environment --all
+# https://github.com/swaywm/sway/wiki#systemd-and-dbus-activation-environments
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+#exec dbus-update-activation-environment --all
 
-exec --no-startup-id swaync
-exec --no-startup-id sway-audio-idle-inhibit
+exec swaync >/tmp/swaync.log 2>&1
+exec sway-audio-idle-inhibit >/tmp/sway-audio-idle-inhibit.log 2>&1
 
 include "${HOME}/.config/sway/user_early.conf"
 
@@ -34,9 +35,6 @@ bindsym $spr+$sft+r exec swaymsg reload
 
 # exit Sway
 bindsym $spr+$sft+e exec swaynag -t warning -m 'Exit Sway?' -B 'Yes' 'swaymsg exit'
-
-# suspend the system
-bindsym --locked $spr+$sft+s exec systemctl suspend
 
 # -----------------------------------------------
 # ----  Workspaces  -----------------------------

@@ -20,7 +20,7 @@ source /etc/os-release || { echo "ERROR: Could not source '/etc/os-release'" ; e
 case "${ID}" in
   ( 'ubuntu' )
     readonly PACKAGES=(
-      sway sway-backgrounds swayidle swaylock sway-notification-center xwayland
+      sway sway-backgrounds swayidle swaylock sway-notification-center xwayland jq
       libvulkan1 mesa-vulkan-drivers vulkan-tools
       xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr
       waybar
@@ -29,7 +29,7 @@ case "${ID}" in
       fonts-font-awesome
       pipewire pipewire-audio-client-libraries pulseaudio-utils rtkit wireplumber
       polkitd pkexec
-      librsvg2-2
+      at-spi2-core librsvg2-2
     )
 
     apt-get --yes install --no-install-recommends --no-install-suggests "${PACKAGES[@]}"
