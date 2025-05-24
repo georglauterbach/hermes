@@ -37,6 +37,7 @@ pub(super) async fn install() -> ::anyhow::Result<()> {
         ::tokio::spawn(bottom()),
         ::tokio::spawn(blesh()),
         ::tokio::spawn(delta()),
+        ::tokio::spawn(dust()),
         ::tokio::spawn(eza()),
         ::tokio::spawn(fd()),
         ::tokio::spawn(fzf()),
@@ -245,6 +246,25 @@ async fn delta() -> ::anyhow::Result<()> {
     entries.insert(
         format!("{file}/delta"),
         format!("{}/delta", environment::home_local_bin()),
+    );
+
+    download_and_extract(uri, entries).await?;
+    Ok(())
+}
+
+/// Install `dust` (<https://github.com/bootandy/dust>)
+async fn dust() -> ::anyhow::Result<()> {
+    /// The version of `dust` to install
+    const DUST_VERSION: &str = "1.2.0";
+
+    let file = format!("dust-v{DUST_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
+    let uri =
+        format!("https://github.com/bootandy/dust/releases/download/v{DUST_VERSION}/{file}.tar.gz");
+
+    let mut entries = collections::HashMap::new();
+    entries.insert(
+        format!("{file}/dust"),
+        format!("{}/dust", environment::home_local_bin()),
     );
 
     download_and_extract(uri, entries).await?;
