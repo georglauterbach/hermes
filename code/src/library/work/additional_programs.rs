@@ -43,6 +43,7 @@ pub(super) async fn install() -> ::anyhow::Result<()> {
         ::tokio::spawn(fd()),
         ::tokio::spawn(fzf()),
         ::tokio::spawn(gitui()),
+        ::tokio::spawn(just()),
         ::tokio::spawn(ripgrep()),
         ::tokio::spawn(starship()),
         ::tokio::spawn(zellij()),
@@ -372,6 +373,29 @@ async fn gitui() -> ::anyhow::Result<()> {
     entries.insert(
         String::from("./gitui"),
         format!("{}/gitui", environment::home_local_bin()),
+    );
+
+    download_and_extract(uri, entries).await?;
+    Ok(())
+}
+
+/// Install `just` (<https://github.com/casey/just>)
+async fn just() -> ::anyhow::Result<()> {
+    /// The version of `just` to install
+    const JUST_VERSION: &str = "1.40.0";
+
+    let file = format!("just-{JUST_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
+    let uri =
+        format!("https://github.com/casey/just/releases/download/{JUST_VERSION}/{file}.tar.gz");
+
+    let mut entries = collections::HashMap::new();
+    entries.insert(
+        String::from("just"),
+        format!("{}/just", environment::home_local_bin()),
+    );
+    entries.insert(
+        String::from("completions/just.bash"),
+        user_completions_dir("just.bash"),
     );
 
     download_and_extract(uri, entries).await?;

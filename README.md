@@ -80,6 +80,8 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
   - enabled with `HERMES_INIT_FZF`
 - [_gitui_](https://github.com/extrawurst/gitui)
   - a fast, modern TUI for `git`
+- [_just_](https://github.com/casey/just)
+  - just a command runner
 - [_ripgrep_](https://github.com/BurntSushi/ripgrep)
   - fast, modern alternative to `grep`
   - override `grep` with `HERMES_OVERRIDE_GREP_WITH_RIPGREP`
