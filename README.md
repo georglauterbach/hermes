@@ -67,6 +67,7 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
   - enabled with `HERMES_INIT_BLE_SH`
 - [_delta_](https://github.com/dandavison/delta)
   - syntax-highlighting pager for `git`, `diff`, `grep`, and `blame` output
+  - override `diff` with `HERMES_OVERRIDE_DIFF_WITH_DELTA`
 - [_dust_](https://github.com/bootandy/dust)
   - a more intuitive version of `du`
 - [_dysk_](https://github.com/Canop/dysk)

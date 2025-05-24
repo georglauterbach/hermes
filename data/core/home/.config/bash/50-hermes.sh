@@ -198,6 +198,10 @@ if __evaluates_to_true HERMES_OVERRIDE_CD_WITH_ZOXIDE && __is_command 'zoxide'; 
   alias cd='z'
 fi
 
+if __evaluates_to_true HERMES_OVERRIDE_DIFF_WITH_DELTA && __is_command 'delta'; then
+  alias diff='delta --line-numbers'
+fi
+
 if __evaluates_to_true HERMES_OVERRIDE_FIND_WITH_FD && __is_command 'fd'; then
   alias find='fd'
 fi
@@ -214,8 +218,6 @@ if __evaluates_to_true HERMES_OVERRIDE_LS_WITH_EZA && __is_command 'eza'; then
   alias ls='eza --header --long --binary --group --classify --extended --group-directories-first'
 fi
 
-if __is_command 'delta'; then
-  alias diff='delta --line-numbers'
 fi
 
 # -----------------------------------------------
