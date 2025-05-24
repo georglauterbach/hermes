@@ -63,6 +63,8 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 - [_ble.sh_](https://github.com/akinomyoga/ble.sh)
   - command line editor written in pure Bash which replaces the default GNU Readline
   - enabled with `HERMES_INIT_BLE_SH`
+- [_delta_](https://github.com/dandavison/delta)
+  - syntax-highlighting pager for `git`, `diff`, `grep`, and `blame` output
 - [_eza_](https://github.com/eza-community/eza)
   - fast, modern alternative to `ls`
   - override `ls` with `HERMES_OVERRIDE_LS_WITH_EZA`

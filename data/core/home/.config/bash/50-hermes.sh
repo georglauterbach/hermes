@@ -214,6 +214,10 @@ if __evaluates_to_true HERMES_OVERRIDE_LS_WITH_EZA && __is_command 'eza'; then
   alias ls='eza --header --long --binary --group --classify --extended --group-directories-first'
 fi
 
+if __is_command 'delta'; then
+  alias diff='delta --line-numbers'
+fi
+
 # -----------------------------------------------
 # ----  Global Aliases  -------------------------
 # -----------------------------------------------

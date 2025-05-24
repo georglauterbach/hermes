@@ -35,9 +35,19 @@ alias gcs='git commit --signoff --gpg-sign'
 function git() {
   case "${1:-}" in
     ( 'update' )
-      git fetch -apt
-      git pull
+      command git fetch -apt
+      command git pull
       ;;
+
+    ( 'diff' )
+      if __is_command fzf && __is_command delta; then
+        command git diff --name-only | \
+          fzf --ansi --preview "git diff --color=always -- {-1} | delta"
+      else
+        command git "${@}"
+      fi
+      ;;
+
     ( * )
       command git "${@}"
       ;;

@@ -3,6 +3,11 @@
 	safecrlf = true
 	eol = lf
 
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
 [gpg]
 	program = gpg2
 
@@ -15,6 +20,14 @@
 [push]
 	default = simple
 	autoSetupRemote = true
+
+[merge]
+	conflictstyle = zdiff3
+
+[delta]
+	line-numbers = true
+	true-color = auto
+	hyperlinks = true
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f

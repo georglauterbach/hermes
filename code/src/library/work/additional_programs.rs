@@ -36,6 +36,7 @@ pub(super) async fn install() -> ::anyhow::Result<()> {
         ::tokio::spawn(bat()),
         ::tokio::spawn(bottom()),
         ::tokio::spawn(blesh()),
+        ::tokio::spawn(delta()),
         ::tokio::spawn(eza()),
         ::tokio::spawn(fd()),
         ::tokio::spawn(fzf()),
@@ -227,6 +228,26 @@ async fn blesh() -> ::anyhow::Result<()> {
 
     let _ =
         ::async_std::fs::remove_dir_all(format!("{}/.cache/blesh", environment::home_str())).await;
+    Ok(())
+}
+
+/// Install `delta` (<https://github.com/dandavison/delta>)
+async fn delta() -> ::anyhow::Result<()> {
+    /// The version of `delta` to install
+    const DELTA_VERSION: &str = "0.18.2";
+
+    let file = format!("delta-{DELTA_VERSION}-{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
+    let uri = format!(
+        "https://github.com/dandavison/delta/releases/download/{DELTA_VERSION}/{file}.tar.gz"
+    );
+
+    let mut entries = collections::HashMap::new();
+    entries.insert(
+        format!("{file}/delta"),
+        format!("{}/delta", environment::home_local_bin()),
+    );
+
+    download_and_extract(uri, entries).await?;
     Ok(())
 }
 
