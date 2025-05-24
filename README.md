@@ -94,6 +94,7 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 - [_yazi_](https://github.com/sxyazi/yazi)
   - blazing fast terminal file manager
   - set/override `y` with `HERMES_OVERRIDE_Y_WITH_YAZI`
+  - for optional extensions, take a look at [the installation documentation](https://yazi-rs.github.io/docs/installation)
 - [_zoxide_](https://github.com/ajeetdsouza/zoxide)
   - smarter cd command
   - enabled with `HERMES_INIT_ZOXIDE`, override `cd` with `HERMES_OVERRIDE_CD_WITH_ZOXIDE`

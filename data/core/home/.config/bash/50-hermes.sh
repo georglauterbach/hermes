@@ -219,7 +219,15 @@ if __evaluates_to_true HERMES_OVERRIDE_LS_WITH_EZA && __is_command 'eza'; then
 fi
 
 if __evaluates_to_true HERMES_OVERRIDE_Y_WITH_YAZI && __is_command 'yazi'; then
-  alias y='yazi'
+  function y() {
+    local YAZI_TMP_FILE YAZI_CWD
+    YAZI_TMP_FILE="$(mktemp -t "yazi-cwd.XXXXXX")"
+    yazi "${@}" --cwd-file="${YAZI_TMP_FILE}"
+    IFS= read -r -d '' YAZI_CWD < "${YAZI_TMP_FILE}"
+    [[ -n ${YAZI_CWD:-} ]] && [[ ${YAZI_CWD} != "${PWD}" ]] && { builtin cd -- "${YAZI_CWD}" || return 1 ; }
+    rm --force -- "${YAZI_TMP_FILE}"
+  }
+
 fi
 
 # -----------------------------------------------
