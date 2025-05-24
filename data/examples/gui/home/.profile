@@ -1,4 +1,4 @@
-# shellcheck disable=SC2155,SC2292
+# shellcheck shell=sh disable=SC2155,SC2292
 
 # add this to ${HOME}/.profile to execute Sway without a login manager
 # ref: https://www.reddit.com/r/swaywm/comments/lv2336/launch_sway_without_a_display_manager_on_login/

@@ -8,15 +8,19 @@ words: []
 
 ignoreWords:
   - alacritty
+  - atuin
   - avizo
   - bindsym
+  - blesh
   - combi
   - dbus
   - drun
+  - dysk
   - everforest
   - flathub
   - getwindowfocus
   - getwindowpid
+  - gitui
   - grimshot
   - gruvbox
   - gsettings

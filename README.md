@@ -60,6 +60,8 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 - [_bat_](https://github.com/sharkdp/bat)
   - `cat` with syntax highlighting and git integration
   - enabled with `HERMES_INIT_BAT`, override `cat` with `HERMES_OVERRIDE_CAT_WITH_BAT`
+- [_bottom_](https://github.com/ClementTsang/bottom)
+  - cross-platform graphical process/system monitor and `<X>top` replacement
 - [_ble.sh_](https://github.com/akinomyoga/ble.sh)
   - command line editor written in pure Bash which replaces the default GNU Readline
   - enabled with `HERMES_INIT_BLE_SH`
