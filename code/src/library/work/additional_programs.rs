@@ -47,6 +47,15 @@ pub(super) async fn install() -> ::anyhow::Result<()> {
     );
 
     super::super::evaluate_results(<[Result<(), ::anyhow::Error>; 12]>::from(results))
+
+
+/// Returns the string `~/.local/share/bash-completion/completions/<completion_file_name>`
+fn user_completions_dir(completion_file_name: impl AsRef<str>) -> String {
+    format!(
+        "{}/.local/share/bash-completion/completions/{}",
+        environment::home_str(),
+        completion_file_name.as_ref()
+    )
 }
 
 /// Recursively extracts files from an archive and places them in the local
@@ -146,6 +155,7 @@ async fn atuin() -> ::anyhow::Result<()> {
 async fn bat() -> ::anyhow::Result<()> {
     /// Version of `bat` to install
     const BAT_VERSION: &str = "0.25.0";
+
     let file = format!("bat-v{BAT_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
     let uri =
         format!("https://github.com/sharkdp/bat/releases/download/v{BAT_VERSION}/{file}.tar.gz");
@@ -157,7 +167,7 @@ async fn bat() -> ::anyhow::Result<()> {
     );
     entries.insert(
         format!("{file}/autocomplete/bat.bash"),
-        String::from("/etc/bash_completion.d/bat.bash"),
+        user_completions_dir("bat.bash"),
     );
 
     download_and_extract(uri, entries).await?;
@@ -180,7 +190,7 @@ async fn bottom() -> ::anyhow::Result<()> {
     );
     entries.insert(
         String::from("completion/btm.bash"),
-        String::from("/etc/bash_completion.d/btm.bash"),
+        user_completions_dir("btm.bash"),
     );
 
     download_and_extract(uri, entries).await?;
@@ -222,7 +232,7 @@ async fn blesh() -> ::anyhow::Result<()> {
 
 /// Install `eza` (<https://github.com/eza-community/eza>)
 async fn eza() -> ::anyhow::Result<()> {
-    /// The version `eza` to install
+    /// The version of `eza` to install
     const EZA_VERSION: &str = "0.21.3";
     let file = format!("eza_{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri = format!(
@@ -241,7 +251,7 @@ async fn eza() -> ::anyhow::Result<()> {
 
 /// Install `fd` (<https://github.com/sharkdp/fd>)
 async fn fd() -> ::anyhow::Result<()> {
-    /// The version `fd` to install
+    /// The version of `fd` to install
     const FD_VERSION: &str = "10.2.0";
     let file = format!("fd-v{FD_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
     let uri =
@@ -254,7 +264,7 @@ async fn fd() -> ::anyhow::Result<()> {
     );
     entries.insert(
         format!("{file}/autocomplete/fd.bash"),
-        String::from("/etc/bash_completion.d/fd.bash"),
+        user_completions_dir("fd.bash"),
     );
 
     download_and_extract(uri, entries).await?;
@@ -316,7 +326,7 @@ async fn ripgrep() -> ::anyhow::Result<()> {
     );
     entries.insert(
         format!("{file}/complete/rg.bash"),
-        String::from("/etc/bash_completion.d/rg.bash"),
+        user_completions_dir("rg.bash"),
     );
 
     download_and_extract(uri, entries).await?;

@@ -74,12 +74,14 @@ function __hermes__setup_variables() {
 function __hermes__setup_completion() {
   shopt -oq posix && return 0
 
-  if [[ -f /etc/profile.d/bash_completion.sh ]]; then
+  if [[ -r ${XDG_CONFIG_HOME:-${HOME}/.config}/bash_completion ]]; then
     # shellcheck source=/dev/null
-    source /etc/profile.d/bash_completion.sh
-  elif [[ -f /etc/bash_completion ]]; then
+    source "${XDG_CONFIG_HOME:-${HOME}/.config}/bash_completion"
+  fi
+
+  if [[ -r /usr/share/bash-completion/bash_completion ]]; then
     # shellcheck source=/dev/null
-    source /etc/bash_completion
+    source /usr/share/bash-completion/bash_completion
   fi
 }
 
@@ -226,4 +228,3 @@ if __evaluates_to_true HERMES_LOAD_GLOBAL_ALIASES; then
   alias ......='cd ../../../../..'
   alias .......='cd ../../../../../..'
 fi
-
