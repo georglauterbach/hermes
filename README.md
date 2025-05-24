@@ -67,6 +67,8 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
   - syntax-highlighting pager for `git`, `diff`, `grep`, and `blame` output
 - [_dust_](https://github.com/bootandy/dust)
   - a more intuitive version of `du`
+- [_dysk_](https://github.com/Canop/dysk)
+  - get information on filesystems, like `df`, but better
 - [_eza_](https://github.com/eza-community/eza)
   - fast, modern alternative to `ls`
   - override `ls` with `HERMES_OVERRIDE_LS_WITH_EZA`

@@ -38,6 +38,7 @@ pub(super) async fn install() -> ::anyhow::Result<()> {
         ::tokio::spawn(blesh()),
         ::tokio::spawn(delta()),
         ::tokio::spawn(dust()),
+        ::tokio::spawn(dysk()),
         ::tokio::spawn(eza()),
         ::tokio::spawn(fd()),
         ::tokio::spawn(fzf()),
@@ -265,6 +266,32 @@ async fn dust() -> ::anyhow::Result<()> {
     entries.insert(
         format!("{file}/dust"),
         format!("{}/dust", environment::home_local_bin()),
+    );
+
+    download_and_extract(uri, entries).await?;
+    Ok(())
+}
+
+/// Install `dysk` (<https://github.com/Canop/dysk>)
+async fn dysk() -> ::anyhow::Result<()> {
+    /// The version of `dysk` to install
+    const DYSK_VERSION: &str = "2.10.1";
+
+    let uri = format!(
+        "https://github.com/Canop/dysk/releases/download/v{DYSK_VERSION}/dysk_{DYSK_VERSION}.zip"
+    );
+
+    let mut entries = collections::HashMap::new();
+    entries.insert(
+        #[cfg(target_arch = "x86_64")]
+        String::from("build/x86_64-unknown-linux-musl/dysk"),
+        #[cfg(target_arch = "aarch64")]
+        String::from("build/aarch64-unknown-linux-musl/dysk"),
+        format!("{}/dysk", environment::home_local_bin()),
+    );
+    entries.insert(
+        String::from("build/completion/dysk.bash"),
+        user_completions_dir("dysk.bash"),
     );
 
     download_and_extract(uri, entries).await?;
