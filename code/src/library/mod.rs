@@ -13,7 +13,7 @@ pub mod work;
 /// All errors are recorded by using [`::anyhow::Context`].
 pub fn evaluate_results(
     results: impl IntoIterator<Item = Result<(), ::anyhow::Error>>,
-) -> Result<(), anyhow::Error> {
+) -> Result<(), ::anyhow::Error> {
     let mut errors = vec![];
 
     let _: Vec<_> = results

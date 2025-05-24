@@ -32,18 +32,18 @@ pub(super) async fn install() -> ::anyhow::Result<()> {
     ::tracing::info!("Installing");
 
     let results = ::tokio::join!(
-        atuin(),
-        bat(),
-        bottom(),
-        blesh(),
-        eza(),
-        fd(),
-        fzf(),
-        gitui(),
-        ripgrep(),
-        starship(),
-        zellij(),
-        zoxide(),
+        ::tokio::spawn(atuin()),
+        ::tokio::spawn(bat()),
+        ::tokio::spawn(bottom()),
+        ::tokio::spawn(blesh()),
+        ::tokio::spawn(eza()),
+        ::tokio::spawn(fd()),
+        ::tokio::spawn(fzf()),
+        ::tokio::spawn(gitui()),
+        ::tokio::spawn(ripgrep()),
+        ::tokio::spawn(starship()),
+        ::tokio::spawn(zellij()),
+        ::tokio::spawn(zoxide()),
     );
 
     super::super::evaluate_results(<[Result<(), ::anyhow::Error>; 12]>::from(results))
