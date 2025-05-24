@@ -60,6 +60,7 @@ mod ubuntu_debian {
                 "curl",
                 "gawk",
                 "git",
+                "less",
                 "locales",
                 "tar",
                 "wget",
