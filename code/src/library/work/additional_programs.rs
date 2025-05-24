@@ -50,8 +50,17 @@ pub(super) async fn install() -> ::anyhow::Result<()> {
         ::tokio::spawn(zoxide()),
     );
 
-    super::super::evaluate_results(<[Result<(), ::anyhow::Error>; 12]>::from(results))
+    let results = [
+        results.0, results.1, results.2, results.3, results.4, results.5, results.6, results.7,
+        results.8, results.9, results.10, results.11, results.12, results.13, results.14,
+        results.15,
+    ]
+    .into_iter()
+    .flat_map(|result| result.map_err(::anyhow::Error::from))
+    .collect::<Vec<Result<(), ::anyhow::Error>>>();
 
+    super::super::evaluate_results(results)
+}
 
 /// Returns the string `~/.local/share/bash-completion/completions/<completion_file_name>`
 fn user_completions_dir(completion_file_name: impl AsRef<str>) -> String {
