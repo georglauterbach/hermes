@@ -124,13 +124,42 @@ async fn download_and_extract(
     entry_path_mappings: collections::HashMap<String, String>,
 ) -> ::anyhow::Result<()> {
     let response = super::download::download(&uri).await?;
+    let uri_extension = std::path::Path::new(&uri).extension();
 
-    if uri.ends_with(".tar.gz") {
+    if uri_extension.is_some_and(|extension| extension.eq_ignore_ascii_case("gz")) {
         let gz_decoder = ::async_compression::tokio::bufread::GzipDecoder::new(&response[..]);
         extract_from_archive(::tokio_tar::Archive::new(gz_decoder), entry_path_mappings).await
-    } else if uri.ends_with("tar.xz") {
+    } else if uri_extension.is_some_and(|extension| extension.eq_ignore_ascii_case("xz")) {
         let xz_decoder = ::async_compression::tokio::bufread::XzDecoder::new(&response[..]);
         extract_from_archive(::tokio_tar::Archive::new(xz_decoder), entry_path_mappings).await
+    } else if uri_extension.is_some_and(|extension| extension.eq_ignore_ascii_case("zip")) {
+        use std::io::Read as _;
+        use std::os::unix::fs::PermissionsExt as _;
+
+        tokio::task::spawn_blocking(move || -> ::anyhow::Result<()> {
+            let mut decoder_archive =
+                ::zip::ZipArchive::new(std::io::Cursor::new(&response[..]))
+                    .context("Could not build ZIP archive reader - ZIP malformed?")?;
+
+            for (filename_in_archive, path_on_fs) in &entry_path_mappings {
+                let mut zip_file = decoder_archive
+                    .by_name(filename_in_archive)
+                    .context(format!("File '{filename_in_archive}' could not be found"))?;
+
+                let mut content = Vec::with_capacity(4096);
+                zip_file
+                    .read_to_end(&mut content)
+                    .context(format!("Could not read file '{filename_in_archive}'"))?;
+
+                std::fs::write(path_on_fs, content).context(format!("Could not write file '{filename_in_archive}' from archive to file system location '{path_on_fs}'"))?;
+
+                std::fs::set_permissions(path_on_fs, std::fs::Permissions::from_mode(zip_file.unix_mode().unwrap_or(0o755))).context(format!("Could not set correct permissions for file '{path_on_fs}'"))?;
+            }
+
+            Ok(())
+        })
+        .await
+        .context("")?
     } else {
         anyhow::bail!("Unknown archive format for URI '{uri}'");
     }
