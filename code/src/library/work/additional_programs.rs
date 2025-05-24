@@ -46,6 +46,7 @@ pub(super) async fn install() -> ::anyhow::Result<()> {
         ::tokio::spawn(just()),
         ::tokio::spawn(ripgrep()),
         ::tokio::spawn(starship()),
+        ::tokio::spawn(yazi()),
         ::tokio::spawn(zellij()),
         ::tokio::spawn(zoxide()),
     );
@@ -53,7 +54,7 @@ pub(super) async fn install() -> ::anyhow::Result<()> {
     let results = [
         results.0, results.1, results.2, results.3, results.4, results.5, results.6, results.7,
         results.8, results.9, results.10, results.11, results.12, results.13, results.14,
-        results.15,
+        results.15, results.16,
     ]
     .into_iter()
     .flat_map(|result| result.map_err(::anyhow::Error::from))
@@ -178,6 +179,7 @@ async fn download_and_extract(
 async fn atuin() -> ::anyhow::Result<()> {
     /// Version of `atuin` to install
     const ATUIN_VERSION: &str = "18.6.1";
+
     let file = format!("atuin-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
         "https://github.com/atuinsh/atuin/releases/download/v{ATUIN_VERSION}/{file}.tar.gz"
@@ -220,6 +222,7 @@ async fn bat() -> ::anyhow::Result<()> {
 async fn bottom() -> ::anyhow::Result<()> {
     /// Version of `bat` to install
     const BOTTOM_VERSION: &str = "nightly";
+
     let file = format!("bottom_{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
         "https://github.com/ClementTsang/bottom/releases/download/{BOTTOM_VERSION}/{file}.tar.gz"
@@ -341,6 +344,7 @@ async fn dysk() -> ::anyhow::Result<()> {
 async fn eza() -> ::anyhow::Result<()> {
     /// The version of `eza` to install
     const EZA_VERSION: &str = "0.21.3";
+
     let file = format!("eza_{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri = format!(
         "https://github.com/eza-community/eza/releases/download/v{EZA_VERSION}/{file}.tar.gz"
@@ -360,6 +364,7 @@ async fn eza() -> ::anyhow::Result<()> {
 async fn fd() -> ::anyhow::Result<()> {
     /// The version of `fd` to install
     const FD_VERSION: &str = "10.2.0";
+
     let file = format!("fd-v{FD_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
     let uri =
         format!("https://github.com/sharkdp/fd/releases/download/v{FD_VERSION}/{file}.tar.gz");
@@ -382,6 +387,7 @@ async fn fd() -> ::anyhow::Result<()> {
 async fn fzf() -> ::anyhow::Result<()> {
     /// Version of `fzf` to install
     const FZF_VERSION: &str = "0.62.0";
+
     #[cfg(target_arch = "x86_64")]
     let file = format!("fzf-{FZF_VERSION}-linux_amd64");
     #[cfg(target_arch = "aarch64")]
@@ -403,6 +409,7 @@ async fn fzf() -> ::anyhow::Result<()> {
 async fn gitui() -> ::anyhow::Result<()> {
     /// Version of `gitui` to install
     const GITUI_VERSION: &str = "0.27.0";
+
     let file = format!("gitui-linux-{ARCHITECTURE}.tar.gz");
     let uri =
         format!("https://github.com/extrawurst/gitui/releases/download/v{GITUI_VERSION}/{file}");
@@ -444,6 +451,7 @@ async fn just() -> ::anyhow::Result<()> {
 async fn ripgrep() -> ::anyhow::Result<()> {
     /// Version of `ripgrep` to install
     const RIPGREP_VERSION: &str = "14.1.1";
+
     let file = format!("ripgrep-{RIPGREP_VERSION}-{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri = format!(
         "https://github.com/BurntSushi/ripgrep/releases/download/{RIPGREP_VERSION}/{file}.tar.gz"
@@ -467,6 +475,7 @@ async fn ripgrep() -> ::anyhow::Result<()> {
 async fn starship() -> ::anyhow::Result<()> {
     /// Version of `starship` to install
     const STARSHIP_VERSION: &str = "1.23.0";
+
     let file = format!("starship-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
         "https://github.com/starship/starship/releases/download/v{STARSHIP_VERSION}/{file}.tar.gz"
@@ -482,10 +491,42 @@ async fn starship() -> ::anyhow::Result<()> {
     Ok(())
 }
 
+/// Install `yazi` (<https://github.com/sxyazi/yazi>)
+async fn yazi() -> ::anyhow::Result<()> {
+    /// Version of `starship` to install
+    const YAZI_VERSION: &str = "25.4.8";
+
+    let file = format!("yazi-{ARCHITECTURE}-unknown-linux-musl");
+    let uri =
+        format!("https://github.com/sxyazi/yazi/releases/download/v{YAZI_VERSION}/{file}.zip");
+
+    let mut entries = collections::HashMap::new();
+    entries.insert(
+        format!("{file}/ya"),
+        format!("{}/ya", environment::home_local_bin()),
+    );
+    entries.insert(
+        format!("{file}/yazi"),
+        format!("{}/yazi", environment::home_local_bin()),
+    );
+    entries.insert(
+        format!("{file}/completions/ya.bash"),
+        user_completions_dir("ya.bash"),
+    );
+    entries.insert(
+        format!("{file}/completions/yazi.bash"),
+        user_completions_dir("yazi.bash"),
+    );
+
+    download_and_extract(uri, entries).await?;
+    Ok(())
+}
+
 /// Install `zoxide` (<https://github.com/zellij-org/zellij>)
 async fn zellij() -> ::anyhow::Result<()> {
     /// Version of `zoxide` to install
     const ZOXIDE_VERSION: &str = "0.42.2";
+
     let file = format!("zellij-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
         "https://github.com/zellij-org/zellij/releases/download/v{ZOXIDE_VERSION}/{file}.tar.gz"
@@ -505,6 +546,7 @@ async fn zellij() -> ::anyhow::Result<()> {
 async fn zoxide() -> ::anyhow::Result<()> {
     /// Version of `zoxide` to install
     const ZOXIDE_VERSION: &str = "0.9.7";
+
     let file = format!("zoxide-{ZOXIDE_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
         "https://github.com/ajeetdsouza/zoxide/releases/download/v{ZOXIDE_VERSION}/{file}.tar.gz"

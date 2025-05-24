@@ -91,6 +91,9 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 - [_starship_](https://github.com/starship/starship)
   - minimal, blazing-fast, and infinitely customizable prompt for any shell
   - enabled with `HERMES_INIT_STARSHIP`
+- [_yazi_](https://github.com/sxyazi/yazi)
+  - blazing fast terminal file manager
+  - set/override `y` with `HERMES_OVERRIDE_Y_WITH_YAZI`
 - [_zoxide_](https://github.com/ajeetdsouza/zoxide)
   - smarter cd command
   - enabled with `HERMES_INIT_ZOXIDE`, override `cd` with `HERMES_OVERRIDE_CD_WITH_ZOXIDE`
