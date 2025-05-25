@@ -45,6 +45,7 @@ ignoreWords:
   - swaysock
   - validationlayers
   - volumectl
+  - walkdir
   - waybar
   - wireplumber
   - xcursor

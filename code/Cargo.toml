@@ -32,13 +32,14 @@ reqwest = { version = "0.12", default-features = false, features = [
   "rustls-tls",
   "socks",
 ] }
-tokio = { version = "1.44", default-features = false, features = [
+tokio = { version = "1.45", default-features = false, features = [
   "rt-multi-thread",
   "macros",
 ] }
 tokio-tar = "0.3"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+walkdir = "2.5"
 which = "7.0"
 zip = "4.0"
 
