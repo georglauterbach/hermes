@@ -85,7 +85,7 @@ fn final_chown() -> ::anyhow::Result<()> {
                 Err(error) => {
                     tracing::warn!(
                         "Iterating over a file or directory in '{subdirectory}' not possible: {error}"
-                    )
+                    );
                 }
             }
         }
