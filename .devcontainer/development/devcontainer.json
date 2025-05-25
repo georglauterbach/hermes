@@ -2,13 +2,13 @@
   "name": "development",
   "image": "docker.io/ubuntu:24.04",
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/rust:7.0.2": {
-      "system.packages.additional-packages": "pkg-config,musl-tools",
+    "ghcr.io/georglauterbach/dev-container-features/rust:7.1.3": {
+      "system.packages.additional-packages": "pkg-config,musl-tools,ssh",
       "rust.rustup.default-toolchain-file": "${containerWorkspaceFolder}/code/rust-toolchain.toml",
       "linker.mold.install": true
     },
     "ghcr.io/georglauterbach/dev-container-features/cache-vscode-extensions:0.3.6": {},
-    "ghcr.io/georglauterbach/dev-container-features/hermes:0.3.0": {}
+    "ghcr.io/georglauterbach/dev-container-features/hermes:0.4.2": {}
   },
   "updateRemoteUserUID": true,
   "remoteUser": "ubuntu",
@@ -26,14 +26,16 @@
     "HERMES_INIT_ZOXIDE": "true",
     "HERMES_OVERRIDE_CAT_WITH_BAT": "true",
     "HERMES_OVERRIDE_CD_WITH_ZOXIDE": "true",
+    "HERMES_OVERRIDE_DIFF_WITH_DELTA": "true",
     "HERMES_OVERRIDE_LS_WITH_EZA": "true",
-    "HERMES_CONFIG_ATUIN_DB_FILE": "/home/ubuntu/.cache/atuin_history.db"
+    "HERMES_CONFIG_ATUIN_DB_FILE": "/home/ubuntu/.cache/atuin_history.db",
+    "HERMES_LOAD_GLOBAL_ALIASES": "true"
   },
   "remoteEnv": {
     "PATH": "${containerEnv:CARGO_HOME}/bin:${containerEnv:PATH}"
   },
-  "initializeCommand": "mkdir -p \"${HOME}/.gnupg\" \"${HOME}/.ssh\"",
-  "postCreateCommand": "sudo chown -R ubuntu:ubuntu \"${HOME}/.cache\"",
+  "initializeCommand": "mkdir --parents \"${HOME}/.gnupg\" \"${HOME}/.ssh\"",
+  "postStartCommand": "sudo chown --recursive ubuntu:ubuntu \"${HOME}/.cache\"",
   "mounts": [
     {
       // We bind the GPG directory because signing seems to be
