@@ -74,10 +74,10 @@ fn final_chown() -> ::anyhow::Result<()> {
         }
     }
 
+    ::tracing::debug!("Adjusting permissions of touched directories and files");
+
     let uid = environment::uid();
     let gid = environment::gid();
-
-    ::tracing::debug!("Adjusting permissions of touched directories and files");
 
     chown(environment::home_str() + "/.cache", uid, gid)?;
 
@@ -85,7 +85,8 @@ fn final_chown() -> ::anyhow::Result<()> {
         ".bashrc",
         ".config",
         ".local/bin",
-        ".local/share/bash-completion",
+        ".local/share",
+        ".local/state",
     ] {
         for file in ::walkdir::WalkDir::new(format!("{}/{}", environment::home_str(), subdirectory))
         {
