@@ -80,6 +80,7 @@ fn final_chown() -> ::anyhow::Result<()> {
     let gid = environment::gid();
 
     chown(environment::home_str() + "/.cache", uid, gid)?;
+    chown(environment::home_str() + "/.local", uid, gid)?;
 
     for subdirectory in [
         ".bashrc",
