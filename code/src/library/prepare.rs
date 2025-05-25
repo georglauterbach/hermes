@@ -108,7 +108,6 @@ fn get_user_information() -> ::anyhow::Result<(String, u32, String, u32, String)
         ::anyhow::bail!("Could not determine user name from UID {uid}");
     }
     let user_name = std::str::from_utf8(&output.stdout)?.trim().to_string();
-    ::tracing::info!("Current user name is '{user_name}' with UID '{uid}'");
 
     let output = ::std::process::Command::new("id").arg("--group").output()?;
     if !output.status.success() {
@@ -124,12 +123,11 @@ fn get_user_information() -> ::anyhow::Result<(String, u32, String, u32, String)
         ::anyhow::bail!("Could not determine group name from UID {uid} and GID {gid}");
     }
     let group_name = std::str::from_utf8(&output.stdout)?.trim().to_string();
-    ::tracing::info!("Current user's group name is '{group_name}' with GID '{gid}'");
 
     let home_dir =
         ::std::env::var("HOME").context("Required environment variable 'HOME' is not set")?;
-    ::tracing::info!("Current user's home directory is '{home_dir}'");
 
+    ::tracing::info!("Target user is '{user_name}' (UID={uid} GID={gid} HOME={home_dir})");
     Ok((user_name, uid, group_name, gid, home_dir))
 }
 

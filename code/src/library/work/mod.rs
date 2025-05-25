@@ -62,11 +62,16 @@ pub async fn run(arguments: super::arguments::Arguments) -> ::anyhow::Result<()>
 /// Perform a final `chown` on the calling user's home directory to
 /// adjust the permissions once, which is most effective.
 fn final_chown() -> ::anyhow::Result<()> {
-    fn change_owner(path: impl AsRef<std::path::Path>, uid: u32, gid: u32) -> ::anyhow::Result<()> {
-        std::os::unix::fs::chown(path.as_ref(), Some(uid), Some(gid)).context(format!(
-            "Could not change permissions of {:?}",
-            path.as_ref()
-        ))
+    fn chown(path: impl AsRef<std::path::Path>, uid: u32, gid: u32) -> ::anyhow::Result<()> {
+        let path = path.as_ref();
+
+        if path.exists() {
+            std::os::unix::fs::chown(path, Some(uid), Some(gid))
+                .context(format!("Could not change permissions of {path:?}"))
+        } else {
+            tracing::debug!("Path {path:?} does not exist - not adjusting permissions");
+            Ok(())
+        }
     }
 
     let uid = environment::uid();
@@ -74,14 +79,18 @@ fn final_chown() -> ::anyhow::Result<()> {
 
     ::tracing::debug!("Adjusting permissions of touched directories and files");
 
-    change_owner(environment::home_str() + "/.cache", uid, gid)
-        .context("Could not adjust permissions of '~/.cache'")?;
+    chown(environment::home_str() + "/.cache", uid, gid)?;
 
-    for subdirectory in [".local/bin", ".local/share/bash-completion", ".cache"] {
+    for subdirectory in [
+        ".bashrc",
+        ".config",
+        ".local/bin",
+        ".local/share/bash-completion",
+    ] {
         for file in ::walkdir::WalkDir::new(format!("{}/{}", environment::home_str(), subdirectory))
         {
             match file {
-                Ok(file) => change_owner(file.path(), uid, gid)?,
+                Ok(file) => chown(file.path(), uid, gid)?,
                 Err(error) => {
                     tracing::warn!(
                         "Iterating over a file or directory in '{subdirectory}' not possible: {error}"
