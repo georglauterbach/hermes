@@ -164,7 +164,7 @@ fn get_http_proxies() -> (String, String, String) {
     }
 
     if !http_secure_proxy.is_empty() {
-        ::tracing::info!("Using HTTP proxy '{http_secure_proxy}'");
+        ::tracing::info!("Using HTTPS proxy '{http_secure_proxy}'");
     }
 
     if !http_secure_proxy.is_empty() {
