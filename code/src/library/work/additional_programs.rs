@@ -153,6 +153,7 @@ async fn extract_from_zip_archive(
                 .read_to_end(&mut content)
                 .context(format!("Could not read file '{filename_in_archive}'"))?;
 
+            fs::create_parent_dir(path_on_fs).await?;
             std::fs::write(path_on_fs, content).context(format!("Could not write file '{filename_in_archive}' from archive to file system location '{path_on_fs}'"))?;
 
             std::fs::set_permissions(path_on_fs, std::fs::Permissions::from_mode(zip_file.unix_mode().unwrap_or(0o755))).context(format!("Could not set correct permissions for file '{path_on_fs}'"))?;
