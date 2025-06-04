@@ -356,7 +356,7 @@ async fn dysk() -> ::anyhow::Result<()> {
 /// Install `eza` (<https://github.com/eza-community/eza>)
 async fn eza() -> ::anyhow::Result<()> {
     /// The version of `eza` to install
-    const EZA_VERSION: &str = "0.21.3";
+    const EZA_VERSION: &str = "0.21.4";
 
     let file = format!("eza_{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri = format!(
@@ -507,7 +507,7 @@ async fn starship() -> ::anyhow::Result<()> {
 /// Install `yazi` (<https://github.com/sxyazi/yazi>)
 async fn yazi() -> ::anyhow::Result<()> {
     /// Version of `starship` to install
-    const YAZI_VERSION: &str = "25.4.8";
+    const YAZI_VERSION: &str = "25.5.31";
 
     let file = format!("yazi-{ARCHITECTURE}-unknown-linux-musl");
     let uri =
@@ -558,7 +558,7 @@ async fn zellij() -> ::anyhow::Result<()> {
 /// Install `zoxide` (<https://github.com/ajeetdsouza/zoxide>)
 async fn zoxide() -> ::anyhow::Result<()> {
     /// Version of `zoxide` to install
-    const ZOXIDE_VERSION: &str = "0.9.7";
+    const ZOXIDE_VERSION: &str = "0.9.8";
 
     let file = format!("zoxide-{ZOXIDE_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
