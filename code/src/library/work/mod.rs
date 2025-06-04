@@ -79,23 +79,21 @@ fn final_chown() -> ::anyhow::Result<()> {
     let uid = environment::uid();
     let gid = environment::gid();
 
-    chown(environment::home_str() + "/.cache", uid, gid)?;
-    chown(environment::home_str() + "/.local", uid, gid)?;
+    for subdirectory_non_recursive in [".cache", ".local", ".local/state"] {
+        let path = environment::home_and(subdirectory_non_recursive);
+        let path = std::path::Path::new(&path);
+        if path.exists() {
+            chown(path, uid, gid)?;
+        }
+    }
 
-    for subdirectory in [
-        ".bashrc",
-        ".config",
-        ".local/bin",
-        ".local/share",
-        ".local/state",
-    ] {
-        for file in ::walkdir::WalkDir::new(format!("{}/{}", environment::home_str(), subdirectory))
-        {
+    for subdirectory_recursive in [".bashrc", ".config", ".local/bin", ".local/share"] {
+        for file in ::walkdir::WalkDir::new(environment::home_and(subdirectory_recursive)) {
             match file {
                 Ok(file) => chown(file.path(), uid, gid)?,
                 Err(error) => {
                     tracing::warn!(
-                        "Iterating over a file or directory in '{subdirectory}' not possible: {error}"
+                        "Iterating over a file or directory in '{subdirectory_recursive}' not possible: {error}"
                     );
                 }
             }
