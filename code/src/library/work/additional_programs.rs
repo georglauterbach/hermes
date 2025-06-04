@@ -1,10 +1,12 @@
 //! This module handles installing additional programs from GitHub.
 
-use super::super::{fs, prepare::environment};
+use super::super::{
+    fs::{download, extract},
+    prepare::environment,
+};
 use ::std::collections;
 
 use ::anyhow::Context as _;
-use ::async_std::stream::StreamExt as _;
 
 /// The architecture string for the amd64 (`x86_64`) architecture
 #[cfg(target_arch = "x86_64")]
@@ -13,14 +15,6 @@ pub(super) const ARCHITECTURE: &str = "x86_64";
 /// support `musl`, especially on `aarch64`.
 #[cfg(target_arch = "x86_64")]
 const LINK_LIBRARY: &str = "musl";
-
-/// The architecture string for the arm64 (`aarch64`) architecture
-#[cfg(target_arch = "aarch64")]
-pub(super) const ARCHITECTURE: &str = "aarch64";
-/// The library that is linked against by programs. Not all programs
-/// support `musl`, especially on `aarch64`.
-#[cfg(target_arch = "aarch64")]
-const LINK_LIBRARY: &str = "gnu";
 
 /// Download custom programs (so that we can unpack them later if required)
 ///
@@ -72,122 +66,6 @@ fn user_completions_dir(completion_file_name: impl AsRef<str>) -> String {
     )
 }
 
-/// Extracts files from an TAR archive and places them in the local
-/// file system. Paths to extract are given in `entry_path_mappings` key set,
-/// and their corresponding local paths are in the value of the map.
-async fn extract_from_tar_archive<R>(
-    mut archive: ::tokio_tar::Archive<R>,
-    mut entry_path_mappings: collections::HashMap<String, String>,
-) -> anyhow::Result<()>
-where
-    R: ::tokio::io::AsyncRead + Unpin + Send,
-{
-    let mut entries = archive
-        .entries()
-        .context("Could not turn archive into iterator over entries")?;
-    while let Some(entry) = entries.next().await {
-        let mut entry = match entry {
-            Ok(entry) => entry,
-            Err(error) => {
-                ::tracing::warn!("Could not get entry from archive: {error}");
-                continue;
-            }
-        };
-
-        let entry_path_str = match entry.path() {
-            Ok(path) => path.to_string_lossy().to_string(),
-            Err(error) => {
-                ::tracing::warn!("Could get acquire path of entry '{error}'");
-                continue;
-            }
-        };
-
-        if let Some(local_path) = entry_path_mappings.remove(&entry_path_str) {
-            fs::create_parent_dir(&local_path).await?;
-            ::tracing::trace!("Unpacking {entry_path_str} from archive to {local_path}");
-            if let Err(error) = entry.unpack(&local_path).await {
-                ::tracing::warn!(
-                    "Could not unpack entry '{entry_path_str}' to '{local_path}': {error}"
-                );
-                continue;
-            }
-
-            if entry_path_mappings.is_empty() {
-                break;
-            }
-        }
-    }
-
-    if !entry_path_mappings.is_empty() {
-        ::tracing::warn!(
-            "Not all desired entries from the archive were unpacked: {:?}",
-            entry_path_mappings.keys()
-        );
-    }
-
-    Ok(())
-}
-
-/// Extracts files from an ZIP archive and places them in the local
-/// file system. Paths to extract are given in `entry_path_mappings` key set,
-/// and their corresponding local paths are in the value of the map.
-async fn extract_from_zip_archive(
-    archive: ::bytes::Bytes,
-    entry_path_mappings: collections::HashMap<String, String>,
-) -> anyhow::Result<()> {
-    use std::io::Read as _;
-    use std::os::unix::fs::PermissionsExt as _;
-
-    tokio::task::spawn( async move {
-        let mut decoder_archive =
-            ::zip::ZipArchive::new(std::io::Cursor::new(&archive[..]))
-            .context("Could not build ZIP archive reader - ZIP malformed?")?;
-
-        for (filename_in_archive, path_on_fs) in &entry_path_mappings {
-            let mut zip_file = decoder_archive
-                .by_name(filename_in_archive)
-                .context(format!("File '{filename_in_archive}' could not be found"))?;
-
-            let mut content = Vec::with_capacity(4096);
-            zip_file
-                .read_to_end(&mut content)
-                .context(format!("Could not read file '{filename_in_archive}'"))?;
-
-            fs::create_parent_dir(path_on_fs).await?;
-            std::fs::write(path_on_fs, content).context(format!("Could not write file '{filename_in_archive}' from archive to file system location '{path_on_fs}'"))?;
-
-            std::fs::set_permissions(path_on_fs, std::fs::Permissions::from_mode(zip_file.unix_mode().unwrap_or(0o755))).context(format!("Could not set correct permissions for file '{path_on_fs}'"))?;
-        }
-
-        Ok(())
-    })
-    .await
-    .context("Unzipping archive did not succeed")?
-}
-
-/// Download an archive and extract it with [`extract_from_archive`].
-async fn download_and_extract(
-    uri: String,
-    entry_path_mappings: collections::HashMap<String, String>,
-) -> ::anyhow::Result<()> {
-    let response = super::download::download(&uri).await?;
-    let uri_extension = std::path::Path::new(&uri)
-        .extension()
-        .ok_or_else(|| anyhow::Error::msg("Could not identify archive format"))?;
-
-    if uri_extension.eq_ignore_ascii_case("gz") {
-        let gz_decoder = ::async_compression::tokio::bufread::GzipDecoder::new(&response[..]);
-        extract_from_tar_archive(::tokio_tar::Archive::new(gz_decoder), entry_path_mappings).await
-    } else if uri_extension.eq_ignore_ascii_case("xz") {
-        let xz_decoder = ::async_compression::tokio::bufread::XzDecoder::new(&response[..]);
-        extract_from_tar_archive(::tokio_tar::Archive::new(xz_decoder), entry_path_mappings).await
-    } else if uri_extension.eq_ignore_ascii_case("zip") {
-        extract_from_zip_archive(response, entry_path_mappings).await
-    } else {
-        anyhow::bail!("Unknown archive format for URI '{uri}'");
-    }
-}
-
 /// Install `atuin` (<https://github.com/atuinsh/atuin>)
 async fn atuin() -> ::anyhow::Result<()> {
     /// Version of `atuin` to install
@@ -204,7 +82,7 @@ async fn atuin() -> ::anyhow::Result<()> {
         format!("{}/atuin", environment::home_local_bin()),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -227,7 +105,7 @@ async fn bat() -> ::anyhow::Result<()> {
         user_completions_dir("bat.bash"),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -251,7 +129,7 @@ async fn bottom() -> ::anyhow::Result<()> {
         user_completions_dir("btm.bash"),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -267,7 +145,7 @@ async fn blesh() -> ::anyhow::Result<()> {
     let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/blesh")).await;
 
     // We download and unpack the archive to `${HOME}/.local/share`
-    let response = super::download::download(uri).await?;
+    let response = download::download(uri).await?;
     let xz_decoder = ::async_compression::tokio::bufread::XzDecoder::new(&response[..]);
     let mut archive = ::tokio_tar::Archive::new(xz_decoder);
 
@@ -304,7 +182,7 @@ async fn delta() -> ::anyhow::Result<()> {
         format!("{}/delta", environment::home_local_bin()),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -323,7 +201,7 @@ async fn dust() -> ::anyhow::Result<()> {
         format!("{}/dust", environment::home_local_bin()),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -349,7 +227,7 @@ async fn dysk() -> ::anyhow::Result<()> {
         user_completions_dir("dysk.bash"),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -369,7 +247,7 @@ async fn eza() -> ::anyhow::Result<()> {
         format!("{}/eza", environment::home_local_bin()),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -392,7 +270,7 @@ async fn fd() -> ::anyhow::Result<()> {
         user_completions_dir("fd.bash"),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -414,7 +292,7 @@ async fn fzf() -> ::anyhow::Result<()> {
         format!("{}/fzf", environment::home_local_bin()),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -433,7 +311,7 @@ async fn gitui() -> ::anyhow::Result<()> {
         format!("{}/gitui", environment::home_local_bin()),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -456,7 +334,7 @@ async fn just() -> ::anyhow::Result<()> {
         user_completions_dir("just.bash"),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -480,7 +358,7 @@ async fn ripgrep() -> ::anyhow::Result<()> {
         user_completions_dir("rg.bash"),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -500,7 +378,7 @@ async fn starship() -> ::anyhow::Result<()> {
         format!("{}/starship", environment::home_local_bin()),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -531,7 +409,7 @@ async fn yazi() -> ::anyhow::Result<()> {
         user_completions_dir("yazi.bash"),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -551,7 +429,7 @@ async fn zellij() -> ::anyhow::Result<()> {
         format!("{}/zellij", environment::home_local_bin()),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }
 
@@ -571,6 +449,6 @@ async fn zoxide() -> ::anyhow::Result<()> {
         format!("{}/zoxide", environment::home_local_bin()),
     );
 
-    download_and_extract(uri, entries).await?;
+    extract::download_and_extract(uri, entries).await?;
     Ok(())
 }

@@ -4,7 +4,6 @@
 
 mod additional_programs;
 mod configuration_files;
-mod download;
 mod packages;
 mod update;
 

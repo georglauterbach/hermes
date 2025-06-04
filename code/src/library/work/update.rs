@@ -26,9 +26,9 @@ pub(super) async fn run() -> ::anyhow::Result<()> {
     let hermes_tmp_path = hermes_tmp_path.to_string_lossy().to_string();
     ::tracing::debug!("Placing new file at {hermes_tmp_path:?}");
 
-    super::download::download_and_place(
+    super::super::fs::download::download_and_place(
       format!("https://github.com/georglauterbach/hermes/releases/download/{latest_version}/hermes-{latest_version}-{}-unknown-linux-musl", super::additional_programs::ARCHITECTURE),
-      hermes_tmp_path.clone()
+      &hermes_tmp_path
     )
     .await
     .context("Could not download latest version")?;
