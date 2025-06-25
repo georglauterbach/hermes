@@ -17,7 +17,7 @@ function __evaluates_to_true() {
 
 export -f __is_command __evaluates_to_true
 
-if [[ ${-} == *i* ]] && __evaluates_to_true "${HERMES_INIT:-true}"; then
+if [[ ${-} == *i* ]]; then
   if [[ -f ${HOME}/.config/bash/91-hermes_settings.sh ]]; then
     # shellcheck source=91-hermes_settings.sh
     source "${HOME}/.config/bash/91-hermes_settings.sh"
