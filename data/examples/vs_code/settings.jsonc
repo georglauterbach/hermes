@@ -4,10 +4,10 @@
   "telemetry.telemetryLevel": "all",
   "update.mode": "none",
   // ? search & window
-  "window.titleBarStyle": "custom",
+  "window.titleBarStyle": "native",
+  "window.menuBarVisibility": "hidden",
+  "window.customTitleBarVisibility": "never",
   "window.commandCenter": false,
-  "window.customTitleBarVisibility": "auto",
-  "window.menuBarVisibility": "compact",
   "search.useIgnoreFiles": true,
   // ? git
   "git.confirmSync": false,
@@ -29,6 +29,7 @@
   "workbench.editor.limit.perEditorGroup": true,
   "workbench.activityBar.location": "top",
   "workbench.sideBar.location": "right",
+  "workbench.layoutControl.enabled": false,
   // * workbench::theme
   "workbench.iconTheme": "gruvbox-material-icon-theme",
   "workbench.preferredLightColorTheme": "Everforest Light",
@@ -133,6 +134,11 @@
   "files.exclude": {
     "**/.git": true
   },
+  // ? chat / copilot
+  // in conjunction with https://stackoverflow.com/a/79534407
+  "chat.agent.enabled": false,
+  "chat.extensionTools.enabled": false,
+  "chat.commandCenter.enabled": false,
   // ? extensions
   "extensions.ignoreRecommendations": true,
   // * extensions::asciidoctor.asciidoctor-vscode
@@ -154,30 +160,21 @@
     }
   ],
   // * extensions::github.copilot
-  "github.copilot.chat.localeOverride": "en",
-  "github.copilot.editor.enableAutoCompletions": true,
-  "github.copilot.editor.enableCodeActions": true,
-  "github.copilot.enable": {
-    "*": false,
-    "asciidoc": true,
-    "json": true,
-    "jsonc": true,
-    "git-commit": true,
-    "git-rebase": true,
-    "markdown": true,
-    "rust": true,
-    "shellscript": true,
-    "yaml": true
-  },
-  // * extensions::maattdd.gitless
-  "gitlens.hovers.enabled": false,
-  "gitlens.codeLens.enabled": false,
-  "gitlens.currentLine.enabled": false,
-  "gitlens.statusBar.enabled": false,
-  "gitlens.integrations.enabled": false,
-  "gitlens.defaultTimeFormat": "HH:mm",
-  "gitlens.defaultDateShortFormat": "DD.MM.YY",
-  "gitlens.defaultDateFormat": "DD.MM.YY | HH:mm",
+  //"github.copilot.chat.localeOverride": "en",
+  //"github.copilot.editor.enableAutoCompletions": true,
+  //"github.copilot.editor.enableCodeActions": true,
+  //"github.copilot.enable": {
+  //  "*": false,
+  //  "asciidoc": true,
+  //  "json": true,
+  //  "jsonc": true,
+  //  "git-commit": true,
+  //  "git-rebase": true,
+  //  "markdown": true,
+  //  "rust": true,
+  //  "shellscript": true,
+  //  "yaml": true
+  //},
   // * extensions::timonwong.shellcheck
   "shellcheck.useWorkspaceRootAsCwd": false,
   "shellcheck.exclude": [
@@ -188,7 +185,7 @@
   "shellcheck.enable": true,
   "shellcheck.run": "onSave",
   "shellcheck.customArgs": [
-    "--shell=bash",
+    // "--shell=bash",
     "--external-sources",
     "--source-path=SCRIPTDIR",
     "--color=auto",
