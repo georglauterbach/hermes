@@ -58,17 +58,9 @@ pub const INDEX: ConfigurationFileIndex = &[
         FileOverride::No,
     ),
     // ble.sh
-    (
-        "blesh/init.sh",
-        "~/.config/blesh/init.sh",
-        FileOverride::No,
-    ),
+    ("blesh/init.sh", "~/.config/blesh/init.sh", FileOverride::No),
     // NeoVim
-    (
-        "nvim/init.lua",
-        "~/.config/nvim/init.lua",
-        FileOverride::No,
-    ),
+    ("nvim/init.lua", "~/.config/nvim/init.lua", FileOverride::No),
     // Zellij
     (
         "zellij/config.kdl",
