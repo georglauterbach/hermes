@@ -2,13 +2,13 @@
   "name": "development",
   "image": "docker.io/ubuntu:24.04",
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/rust:7.1.3": {
+    "ghcr.io/georglauterbach/dev-container-features/rust:7.1": {
       "system.packages.additional-packages": "pkg-config,musl-tools,ssh",
       "rust.rustup.default-toolchain-file": "${containerWorkspaceFolder}/code/rust-toolchain.toml",
       "linker.mold.install": true
     },
-    "ghcr.io/georglauterbach/dev-container-features/cache-vscode-extensions:0.3.6": {},
-    "ghcr.io/georglauterbach/dev-container-features/hermes:0.4.4": {}
+    "ghcr.io/georglauterbach/dev-container-features/cache-vscode-extensions:0.3": {},
+    "ghcr.io/georglauterbach/dev-container-features/hermes:0.5": {}
   },
   "updateRemoteUserUID": true,
   "remoteUser": "ubuntu",
