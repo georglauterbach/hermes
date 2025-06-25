@@ -1,15 +1,13 @@
 #! /usr/bin/env bash
 
-#          task  user-customizable early shell setup
-#    sourced by  ${HOME}/.bashrc
-
-# ! You can edit this file to change the behavior of _hermes_.
+#          task  customize hermes
+#    sourced by  ${HOME}/.config/bash/90-hermes.sh
 
 # -----------------------------------------------
 # ----  Extra Program Initialization  -----------
 # -----------------------------------------------
 
-# The variables control whether additional programs ought to be initialized.
+# These variables control whether additional programs ought to be initialized.
 
 export HERMES_INIT_ATUIN=${HERMES_INIT_ATUIN:-false}
 export HERMES_INIT_BAT=${HERMES_INIT_BAT:-false}
@@ -22,8 +20,8 @@ export HERMES_INIT_ZOXIDE=${HERMES_INIT_ZOXIDE:-false}
 # ----  System Command Overrides  ---------------
 # -----------------------------------------------
 
-# These variables control whether you want to have default commands (like
-# `ls`) overridden by another, more advanced command (like `eza`).
+# These variables control whether you want to have default commands (like `ls`)
+# overridden by another, more advanced command (like `eza`).
 #
 # Initialization of additional programs previously is independent
 # of overriding system commands.

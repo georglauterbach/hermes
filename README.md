@@ -31,22 +31,15 @@ To **update** _hermes_, run the following command
 
 ```bash
 hermes --version
-hermes update --non-interactive # works since v4.0.0
+hermes update # --non-interactive
 ```
 
-> [!CAUTION]
->
-> _hermes_ overwrites files like `.bashrc`. You should make a backup of your Bash configuration files before running _hermes_. You can later re-introduce the code from your `.bashrc` into a new file \[[1](#bash)\].
-
-## Optional Additional Setup
+## Additional Setup
 
 ### Bash
 
-The setup of Bash is performed by `${HOME}/.bashrc` and scripts in `${HOME}/.config/bash/`. These setup files can be found [here](data/core/home/.config/bash/).
-
-If you want to modify the behavior of _hermes_, take a look at `{HOME}/.config/bash/20-custom_early.sh`. This file contains variables that control the initialization of programs and their overrides as well as other configurations. The "[Programs](#programs)" section below refers to these variables.
-
-To add code that would normally go to `.bashrc`, edit `${HOME}/.config/bash/99-custom_late.sh`. These two files are not overwritten by _hermes_ if you run _hermes_ again.
+1. **To enable _hermes_**: add `source "${HOME}/.config/bash/90-hermes.sh"` to the end of your `${HOME}/.bashrc`.
+2. **To modify _hermes_**: edit the file `${HOME}/.config/bash/90-hermes.sh`.
 
 ### Programs
 

@@ -36,21 +36,15 @@ pub const INDEX: ConfigurationFileIndex = &[
         FileOverride::No,
     ),
     // Bash
-    ("home/.bashrc", "~/.bashrc", FileOverride::Yes),
     (
-        "home/.config/bash/20-custom_early.sh",
-        "~/.config/bash/20-custom_early.sh",
-        FileOverride::No,
-    ),
-    (
-        "home/.config/bash/50-hermes.sh",
-        "~/.config/bash/50-hermes.sh",
+        "home/.config/bash/90-hermes.sh",
+        "~/.config/bash/90-hermes.sh",
         FileOverride::Yes,
     ),
     (
-        "home/.config/bash/99-custom_late.sh",
-        "~/.config/bash/99-custom_late.sh",
-        FileOverride::No,
+        "home/.config/bash/91-hermes_settings.sh",
+        "~/.config/bash/91-hermes_settings.sh",
+        FileOverride::Yes,
     ),
     // bat
     (
