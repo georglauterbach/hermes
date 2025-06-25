@@ -15,8 +15,12 @@ insert_final_newline = true
 charset              = utf-8
 indent_style         = space
 indent_size          = 2
-tab_width            = 4
+tab_width            = 2
 insert_final_newline = true
+
+[*.rs]
+indent_size          = 4
+tab_width            = 4
 
 [*.sh]
 shell_variant        = bash
@@ -25,5 +29,3 @@ switch_case_indent   = true
 space_redirects      = false
 keep_padding         = false
 function_next_line   = true
-
-tab_width            = 2

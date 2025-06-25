@@ -8,8 +8,4 @@
 # https://rust-lang.github.io/rustup/concepts/index.html
 [toolchain]
 channel = '1.85.0'
-components = [ 'cargo', 'rustc', 'clippy', 'rustfmt' ]
-targets = [
-  'x86_64-unknown-linux-musl',
-  'aarch64-unknown-linux-musl',
-]
+targets = ['x86_64-unknown-linux-musl', 'aarch64-unknown-linux-musl']
