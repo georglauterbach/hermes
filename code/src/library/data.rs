@@ -31,47 +31,47 @@ impl From<FileOverride> for bool {
 pub const INDEX: ConfigurationFileIndex = &[
     // Starship
     (
-        "home/.config/starship/starship.toml",
+        "starship/starship.toml",
         "~/.config/starship/starship.toml",
         FileOverride::No,
     ),
     // Bash
     (
-        "home/.config/bash/90-hermes.sh",
+        "bash/90-hermes.sh",
         "~/.config/bash/90-hermes.sh",
         FileOverride::Yes,
     ),
     (
-        "home/.config/bash/91-hermes_settings.sh",
+        "bash/91-hermes_settings.sh",
         "~/.config/bash/91-hermes_settings.sh",
         FileOverride::Yes,
     ),
     // bat
     (
-        "home/.config/bat/themes/everforest-light.tmTheme",
+        "bat/themes/everforest-light.tmTheme",
         "~/.config/bat/themes/everforest-light.tmTheme",
         FileOverride::No,
     ),
     (
-        "home/.config/bat/themes/gruvbox-material-dark.tmTheme",
+        "bat/themes/gruvbox-material-dark.tmTheme",
         "~/.config/bat/themes/gruvbox-material-dark.tmTheme",
         FileOverride::No,
     ),
     // ble.sh
     (
-        "home/.config/blesh/init.sh",
+        "blesh/init.sh",
         "~/.config/blesh/init.sh",
         FileOverride::No,
     ),
     // NeoVim
     (
-        "home/.config/nvim/init.lua",
+        "nvim/init.lua",
         "~/.config/nvim/init.lua",
         FileOverride::No,
     ),
     // Zellij
     (
-        "home/.config/zellij/config.kdl",
+        "zellij/config.kdl",
         "~/.config/zellij/config.kdl",
         FileOverride::No,
     ),
