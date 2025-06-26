@@ -43,7 +43,7 @@ export HERMES_OVERRIDE_Y_WITH_YAZI=${HERMES_OVERRIDE_Y_WITH_YAZI:-false}
 export HERMES_LOAD_GLOBAL_ALIASES=${HERMES_LOAD_GLOBAL_ALIASES:-false}
 
 # -----------------------------------------------
-# ----  Individual program Configurations  ------
+# ----  Individual Program Configurations  ------
 # -----------------------------------------------
 
 # Configures the location of Atuin's SQLite database file
