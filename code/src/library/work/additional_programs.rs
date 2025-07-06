@@ -197,7 +197,7 @@ async fn delta() -> ::anyhow::Result<()> {
 /// Install `dust` (<https://github.com/bootandy/dust>)
 async fn dust() -> ::anyhow::Result<()> {
     /// The version of `dust` to install
-    const DUST_VERSION: &str = "1.2.0";
+    const DUST_VERSION: &str = "1.2.2";
 
     let file = format!("dust-v{DUST_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
     let uri =
@@ -242,7 +242,7 @@ async fn dysk() -> ::anyhow::Result<()> {
 /// Install `eza` (<https://github.com/eza-community/eza>)
 async fn eza() -> ::anyhow::Result<()> {
     /// The version of `eza` to install
-    const EZA_VERSION: &str = "0.21.4";
+    const EZA_VERSION: &str = "0.22.0";
 
     let file = format!("eza_{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri = format!(
@@ -285,7 +285,7 @@ async fn fd() -> ::anyhow::Result<()> {
 /// Install `fzf` (<https://github.com/junegunn/fzf>)
 async fn fzf() -> ::anyhow::Result<()> {
     /// Version of `fzf` to install
-    const FZF_VERSION: &str = "0.62.0";
+    const FZF_VERSION: &str = "0.63.0";
 
     #[cfg(target_arch = "x86_64")]
     let file = format!("fzf-{FZF_VERSION}-linux_amd64");
@@ -326,7 +326,7 @@ async fn gitui() -> ::anyhow::Result<()> {
 /// Install `just` (<https://github.com/casey/just>)
 async fn just() -> ::anyhow::Result<()> {
     /// The version of `just` to install
-    const JUST_VERSION: &str = "1.40.0";
+    const JUST_VERSION: &str = "1.41.0";
 
     let file = format!("just-{JUST_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
     let uri =
