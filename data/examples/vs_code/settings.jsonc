@@ -205,23 +205,23 @@
     "**/devcontainer.json"
   ],
   // * extensions::usernamehw.errorlens
-  "errorLens.margin": "1ch",
-  "errorLens.gutterIconSize": "70%",
+  "errorLens.margin": "1.5ch",
+  "errorLens.gutterIconSize": "85%",
   "errorLens.gutterIconSet": "circle",
   "errorLens.gutterIconsEnabled": true,
   "errorLens.messageBackgroundMode": "line",
   "errorLens.codeLensEnabled": false,
+  "errorLens.statusBarIconsEnabled": false,
+  "errorLens.scrollbarHackEnabled": true,
   "errorLens.problemRangeDecorationEnabled": true,
-  "errorLens.severityText": [
-    "",
-    "",
-    "",
-    ""
-  ],
+  "errorLens.fontWeight": "300",
   "errorLens.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
-  "errorLens.messageTemplate": "$severity [$source] $message",
-  "errorLens.excludeByMessage": [
-    "Unknown word"
+  "errorLens.messageTemplate": "$source: $message",
+  "errorLens.replace": [
+    {
+      "matcher": "(.*?)\\n.*",
+      "message": "$1"
+    }
   ],
   "errorLens.enabledDiagnosticLevels": [
     "error",
@@ -229,8 +229,9 @@
     "info",
     "hint"
   ],
-  "errorLens.statusBarIconsEnabled": true,
-  "errorLens.statusBarColorsEnabled": true,
+  "errorLens.excludeByMessage": [
+    "Unknown word"
+  ],
   // ? language-specific
   // * language-specific::asciidoc
   "[asciidoc]": {
