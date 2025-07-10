@@ -7,6 +7,7 @@
   "window.titleBarStyle": "native",
   "window.menuBarVisibility": "hidden",
   "window.customTitleBarVisibility": "never",
+  "window.menuStyle": "inherit",
   "window.commandCenter": false,
   "search.useIgnoreFiles": true,
   // ? git
