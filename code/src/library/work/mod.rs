@@ -65,8 +65,10 @@ fn final_chown() -> ::anyhow::Result<()> {
         let path = path.as_ref();
 
         if path.exists() {
-            std::os::unix::fs::chown(path, Some(uid), Some(gid))
-                .context(format!("Could not change permissions of {path:?}"))
+            std::os::unix::fs::chown(path, Some(uid), Some(gid)).context(format!(
+                "Could not change permissions of '{}'",
+                path.display()
+            ))
         } else {
             tracing::debug!("Path {path:?} does not exist - not adjusting permissions");
             Ok(())

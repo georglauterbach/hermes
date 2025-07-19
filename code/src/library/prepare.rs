@@ -55,9 +55,10 @@ fn get_path_to_self() -> ::anyhow::Result<String> {
     let hermes_binary_path = ::std::path::Path::new(&hermes_binary_path);
 
     let hermes_binary_path = if hermes_binary_path.is_absolute() {
-        hermes_binary_path
-            .canonicalize()
-            .context(format!("Could not canonicalize path '{hermes_binary_path:?}' to myself - this is weird and should not happen"))?
+        hermes_binary_path.canonicalize().context(format!(
+            "Could not canonicalize path '{}' to myself - this is weird and should not happen",
+            hermes_binary_path.display()
+        ))?
     } else {
         // If the path is not absolute, then we have three options:
         //

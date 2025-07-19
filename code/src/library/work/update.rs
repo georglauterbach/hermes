@@ -12,7 +12,7 @@ pub(super) async fn run() -> ::anyhow::Result<()> {
     let latest_version = url
         .as_str()
         .split('/')
-        .last()
+        .next_back()
         .context("Could not acquire the latest version name")?;
 
     ::tracing::info!("The latest version is {latest_version}");
@@ -20,7 +20,8 @@ pub(super) async fn run() -> ::anyhow::Result<()> {
     let hermes_tmp_path = std::path::PathBuf::from("/tmp/hermes_updated");
     if hermes_tmp_path.exists() {
         ::std::fs::remove_file(hermes_tmp_path.clone()).context(format!(
-            "Could not remove existing temporary file {hermes_tmp_path:?}"
+            "Could not remove existing temporary file '{}'",
+            hermes_tmp_path.display()
         ))?;
     }
     let hermes_tmp_path = hermes_tmp_path.to_string_lossy().to_string();

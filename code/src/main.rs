@@ -35,7 +35,7 @@ async fn main() -> anyhow::Result<()> {
         }
 
         std::process::exit(1);
-    };
+    }
 
     Ok(())
 }
