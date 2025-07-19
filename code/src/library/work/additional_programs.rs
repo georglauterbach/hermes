@@ -77,7 +77,7 @@ fn user_completions_dir(completion_file_name: impl AsRef<str>) -> String {
 /// Install `atuin` (<https://github.com/atuinsh/atuin>)
 async fn atuin() -> ::anyhow::Result<()> {
     /// Version of `atuin` to install
-    const ATUIN_VERSION: &str = "18.6.1";
+    const ATUIN_VERSION: &str = "18.7.1";
 
     let file = format!("atuin-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
@@ -242,7 +242,7 @@ async fn dysk() -> ::anyhow::Result<()> {
 /// Install `eza` (<https://github.com/eza-community/eza>)
 async fn eza() -> ::anyhow::Result<()> {
     /// The version of `eza` to install
-    const EZA_VERSION: &str = "0.22.0";
+    const EZA_VERSION: &str = "0.23.0";
 
     let file = format!("eza_{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
     let uri = format!(
@@ -285,7 +285,7 @@ async fn fd() -> ::anyhow::Result<()> {
 /// Install `fzf` (<https://github.com/junegunn/fzf>)
 async fn fzf() -> ::anyhow::Result<()> {
     /// Version of `fzf` to install
-    const FZF_VERSION: &str = "0.63.0";
+    const FZF_VERSION: &str = "0.64.0";
 
     #[cfg(target_arch = "x86_64")]
     let file = format!("fzf-{FZF_VERSION}-linux_amd64");
@@ -326,7 +326,7 @@ async fn gitui() -> ::anyhow::Result<()> {
 /// Install `just` (<https://github.com/casey/just>)
 async fn just() -> ::anyhow::Result<()> {
     /// The version of `just` to install
-    const JUST_VERSION: &str = "1.41.0";
+    const JUST_VERSION: &str = "1.42.3";
 
     let file = format!("just-{JUST_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
     let uri =
