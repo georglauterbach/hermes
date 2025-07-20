@@ -5,7 +5,7 @@
 #[::tracing::instrument(name = "core packages", skip_all)]
 pub(super) async fn install(install: bool) -> ::anyhow::Result<()> {
     if !install {
-        ::tracing::info!("Not installing additional packages");
+        ::tracing::info!("Not installing packages via APT");
         return Ok(());
     }
 
