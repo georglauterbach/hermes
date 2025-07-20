@@ -1,7 +1,7 @@
 {
   // cSpell:enable
   // ? miscellaneous / general
-  "telemetry.telemetryLevel": "all",
+  "telemetry.telemetryLevel": "off",
   "update.mode": "none",
   // ? search & window
   "window.titleBarStyle": "native",
