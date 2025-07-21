@@ -29,12 +29,6 @@ impl From<FileOverride> for bool {
 /// 1. the remote part (a part of the request URL), and
 /// 2. the non-canonical path on the local file system.
 pub const INDEX: ConfigurationFileIndex = &[
-    // Starship
-    (
-        "starship/starship.toml",
-        "~/.config/starship/starship.toml",
-        FileOverride::No,
-    ),
     // Bash
     (
         "bash/90-hermes.sh",
@@ -59,8 +53,20 @@ pub const INDEX: ConfigurationFileIndex = &[
     ),
     // ble.sh
     ("blesh/init.sh", "~/.config/blesh/init.sh", FileOverride::No),
+    // bottom
+    (
+        "bottom/config.toml",
+        "~/.config/bottom/config.toml",
+        FileOverride::Yes,
+    ),
     // NeoVim
     ("nvim/init.lua", "~/.config/nvim/init.lua", FileOverride::No),
+    // Starship
+    (
+        "starship/starship.toml",
+        "~/.config/starship/starship.toml",
+        FileOverride::No,
+    ),
     // Zellij
     (
         "zellij/config.kdl",
