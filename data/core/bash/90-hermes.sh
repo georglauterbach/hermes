@@ -69,10 +69,11 @@ if [[ ${-} == *i* ]]; then
 
     # miscellaneous environment variables
     if [[ ! -v VISUAL ]]; then
-      if   __is_command 'nvim'; then VISUAL='nvim'
-      elif __is_command 'vim' ; then VISUAL='vim'
-      elif __is_command 'vi'  ; then VISUAL='vi'
-      else VISUAL=nano
+      if   __is_command 'nvim' ; then VISUAL='nvim'
+      elif __is_command 'vim'  ; then VISUAL='vim'
+      elif __is_command 'vi'   ; then VISUAL='vi'
+      elif __is_command 'nano' ; then VISUAL='nano'
+      else VISUAL=
       fi
     fi
 
