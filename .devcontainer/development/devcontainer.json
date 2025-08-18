@@ -2,10 +2,9 @@
   "name": "development",
   "image": "docker.io/ubuntu:24.04",
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/rust:7.1": {
+    "ghcr.io/georglauterbach/dev-container-features/rust:8.0": {
       "system.packages.additional-packages": "pkg-config,musl-tools,ssh",
-      "rust.rustup.default-toolchain-file": "${containerWorkspaceFolder}/code/rust-toolchain.toml",
-      "linker.mold.install": true
+      "rust.rustup.default-toolchain-file": "${containerWorkspaceFolder}/code/rust-toolchain.toml"
     },
     "ghcr.io/georglauterbach/dev-container-features/cache-vscode-extensions:0.3": {},
     "ghcr.io/georglauterbach/dev-container-features/hermes:0.5": {}
@@ -34,13 +33,11 @@
   "remoteEnv": {
     "PATH": "${containerEnv:CARGO_HOME}/bin:${containerEnv:PATH}"
   },
-  "initializeCommand": "mkdir --parents \"${HOME}/.gnupg\" \"${HOME}/.ssh\"",
   "postStartCommand": "sudo chown --recursive ubuntu:ubuntu \"${HOME}/.cache\"",
   "mounts": [
     {
-    {
       // Persist the `${HOME}/.cache` directory
-      "source": "github.georglauterbach.hermes.cache",
+      "source": "com.github.georglauterbach.hermes.cache",
       "target": "/home/ubuntu/.cache",
       "type": "volume"
     }
