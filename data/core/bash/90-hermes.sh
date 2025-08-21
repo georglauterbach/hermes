@@ -191,10 +191,18 @@ if [[ ${-} == *i* ]]; then
   fi
 
   if __evaluates_to_true HERMES_INIT_FZF && __is_command 'fzf'; then
+    # bash-completion was loaded before we load `fzf` now, which is what we want
+    #
     # ref: https://github.com/akinomyoga/blesh-contrib/blob/master/integration/fzf.md
     if [[ -v BLE_VERSION ]]; then
       ble-import --delay 'integration/fzf-completion'
-      ble-import --delay 'integration/fzf-key-bindings'
+      if [[ -v FZF_CTRL_T_COMMAND ]]; then
+        ble-import --delay 'integration/fzf-key-bindings'
+      else
+        # no delayed loading to unbind CTRL+t immediately
+        ble-import 'integration/fzf-key-bindings'
+        ble-bind -x C-t -
+      fi
     else
       # shellcheck source=/dev/null
       source <(fzf --bash)
