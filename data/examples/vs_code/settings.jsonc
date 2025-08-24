@@ -28,9 +28,11 @@
   "workbench.editor.limit.value": 5,
   "workbench.editor.limit.enabled": true,
   "workbench.editor.limit.perEditorGroup": true,
+  "workbench.editor.empty.hint": "hidden",
   "workbench.activityBar.location": "top",
   "workbench.sideBar.location": "right",
   "workbench.layoutControl.enabled": false,
+  "workbench.startupEditor": "none",
   // * workbench::theme
   "workbench.iconTheme": "gruvbox-material-icon-theme",
   "workbench.preferredLightColorTheme": "Everforest Light",
