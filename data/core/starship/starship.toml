@@ -5,7 +5,7 @@
 # ███████║   ██║   ██║  ██║██║  ██║███████║██║  ██║██║██║         used by  shell
 # ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝            link  https://starship.rs
 
-format='''$username$hostname$directory$git_branch$rust$python
+format='''$username$hostname$container$directory$git_branch$rust$python
 $character'''
 add_newline = true
 
@@ -21,6 +21,11 @@ format = "@[$hostname]($style) "
 style = "green"
 
 ssh_only = true
+
+[container]
+format = '[$symbol]($style) '
+style = "green"
+symbol = " "
 
 [directory]
 format = "[$read_only]($read_only_style)[$path]($style)"
