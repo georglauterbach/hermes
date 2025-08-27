@@ -216,7 +216,7 @@ async fn dust() -> ::anyhow::Result<()> {
 /// Install `dysk` (<https://github.com/Canop/dysk>)
 async fn dysk() -> ::anyhow::Result<()> {
     /// The version of `dysk` to install
-    const DYSK_VERSION: &str = "2.0.0";
+    const DYSK_VERSION: &str = "3.0.0";
 
     let uri = format!(
         "https://github.com/Canop/dysk/releases/download/v{DYSK_VERSION}/dysk_{DYSK_VERSION}.zip"
@@ -262,7 +262,7 @@ async fn eza() -> ::anyhow::Result<()> {
 /// Install `fd` (<https://github.com/sharkdp/fd>)
 async fn fd() -> ::anyhow::Result<()> {
     /// The version of `fd` to install
-    const FD_VERSION: &str = "10.2.0";
+    const FD_VERSION: &str = "10.3.0";
 
     let file = format!("fd-v{FD_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
     let uri =
@@ -285,7 +285,7 @@ async fn fd() -> ::anyhow::Result<()> {
 /// Install `fzf` (<https://github.com/junegunn/fzf>)
 async fn fzf() -> ::anyhow::Result<()> {
     /// Version of `fzf` to install
-    const FZF_VERSION: &str = "0.64.1";
+    const FZF_VERSION: &str = "0.65.1";
 
     #[cfg(target_arch = "x86_64")]
     let file = format!("fzf-{FZF_VERSION}-linux_amd64");
