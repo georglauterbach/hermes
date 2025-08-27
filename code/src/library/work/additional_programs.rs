@@ -77,7 +77,7 @@ fn user_completions_dir(completion_file_name: impl AsRef<str>) -> String {
 /// Install `atuin` (<https://github.com/atuinsh/atuin>)
 async fn atuin() -> ::anyhow::Result<()> {
     /// Version of `atuin` to install
-    const ATUIN_VERSION: &str = "18.7.1";
+    const ATUIN_VERSION: &str = "18.8.0";
 
     let file = format!("atuin-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
@@ -197,7 +197,7 @@ async fn delta() -> ::anyhow::Result<()> {
 /// Install `dust` (<https://github.com/bootandy/dust>)
 async fn dust() -> ::anyhow::Result<()> {
     /// The version of `dust` to install
-    const DUST_VERSION: &str = "1.2.2";
+    const DUST_VERSION: &str = "1.2.3";
 
     let file = format!("dust-v{DUST_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
     let uri =
@@ -216,7 +216,7 @@ async fn dust() -> ::anyhow::Result<()> {
 /// Install `dysk` (<https://github.com/Canop/dysk>)
 async fn dysk() -> ::anyhow::Result<()> {
     /// The version of `dysk` to install
-    const DYSK_VERSION: &str = "2.10.1";
+    const DYSK_VERSION: &str = "2.0.0";
 
     let uri = format!(
         "https://github.com/Canop/dysk/releases/download/v{DYSK_VERSION}/dysk_{DYSK_VERSION}.zip"
@@ -285,7 +285,7 @@ async fn fd() -> ::anyhow::Result<()> {
 /// Install `fzf` (<https://github.com/junegunn/fzf>)
 async fn fzf() -> ::anyhow::Result<()> {
     /// Version of `fzf` to install
-    const FZF_VERSION: &str = "0.64.0";
+    const FZF_VERSION: &str = "0.64.1";
 
     #[cfg(target_arch = "x86_64")]
     let file = format!("fzf-{FZF_VERSION}-linux_amd64");
@@ -326,7 +326,7 @@ async fn gitui() -> ::anyhow::Result<()> {
 /// Install `just` (<https://github.com/casey/just>)
 async fn just() -> ::anyhow::Result<()> {
     /// The version of `just` to install
-    const JUST_VERSION: &str = "1.42.3";
+    const JUST_VERSION: &str = "1.42.4";
 
     let file = format!("just-{JUST_VERSION}-{ARCHITECTURE}-unknown-linux-musl");
     let uri =
@@ -424,7 +424,7 @@ async fn yazi() -> ::anyhow::Result<()> {
 /// Install `zoxide` (<https://github.com/zellij-org/zellij>)
 async fn zellij() -> ::anyhow::Result<()> {
     /// Version of `zoxide` to install
-    const ZOXIDE_VERSION: &str = "0.42.2";
+    const ZOXIDE_VERSION: &str = "0.43.1";
 
     let file = format!("zellij-{ARCHITECTURE}-unknown-linux-musl");
     let uri = format!(
@@ -455,6 +455,10 @@ async fn zoxide() -> ::anyhow::Result<()> {
     entries.insert(
         String::from("zoxide"),
         format!("{}/zoxide", environment::home_local_bin()),
+    );
+    entries.insert(
+        String::from("completions/zoxide.bash"),
+        user_completions_dir("zoxide.bash"),
     );
 
     extract::download_and_extract(uri, entries).await?;
