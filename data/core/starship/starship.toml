@@ -11,25 +11,25 @@ add_newline = true
 
 [username]
 format = '[$user]($style)'
-style_user = "yellow"
-style_root = "yellow"
+style_user = 'yellow'
+style_root = 'yellow'
 
-detect_env_vars = ["SSH_TTY"]
+detect_env_vars = ['SSH_TTY']
 
 [hostname]
-format = "@[$hostname]($style) "
-style = "green"
+format = '@[$hostname]($style) '
+style = 'green'
 
 ssh_only = true
 
 [container]
 format = '[$symbol]($style) '
-style = "green"
-symbol = " "
+style = 'green'
+symbol = ' '
 
 [directory]
-format = "[$read_only]($read_only_style)[$path]($style)"
-style = "blue"
+format = '[$read_only]($read_only_style)[$path]($style)'
+style = 'blue'
 
 truncation_length = 4
 truncation_symbol = '.../'
@@ -39,23 +39,23 @@ read_only_style = 'red bold'
 read_only = ' '
 
 repo_root_format = '[$read_only]($read_only_style)[ $repo_root]($repo_root_style)[$path]($style)'
-repo_root_style = "blue bold"
+repo_root_style = 'blue bold'
 
 [git_branch]
 format = ' [\[$symbol $branch\]]($style)'
-style = "purple"
+style = 'purple'
 
 symbol = ''
 
 [rust]
 format = ' [\[$symbol $version\]]($style)'
-style = "purple"
+style = 'purple'
 
 symbol = '󱘗'
 
 [python]
 format = ' [\[$symbol $version  $virtualenv\]]($style)'
-style = "purple"
+style = 'purple'
 
 symbol = '󰌠'
 
