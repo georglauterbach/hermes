@@ -39,7 +39,7 @@ hermes update # --non-interactive
 ### Bash
 
 1. **To enable _hermes_**: add `source "${HOME}/.config/bash/90-hermes.sh"` to (the end of) your `${HOME}/.bashrc`
-2. **To modify _hermes_**: edit the file [`${HOME}/.config/bash/90-hermes_settings.sh`](./data/core/bash/91-hermes_settings.sh)
+2. **To modify _hermes_**: edit the file [`${HOME}/.config/bash/91-hermes_settings.sh`](./data/core/bash/91-hermes_settings.sh)
 
 ### Programs
 
