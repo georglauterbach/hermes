@@ -6,6 +6,7 @@
   // ? search & window
   "window.titleBarStyle": "native",
   "window.menuBarVisibility": "hidden",
+  "window.menuStyle": "custom",
   "window.customTitleBarVisibility": "never",
   "window.menuStyle": "inherit",
   "window.commandCenter": false,
