@@ -85,6 +85,8 @@ fi
 
 unset __LOCALE
 
+uncomment_in_locale_gen C.UTF-8
+
 echo "INFO New locales: ${NEW_LOCALES[*]}"
 
 echo "INFO  Generating new locales"
