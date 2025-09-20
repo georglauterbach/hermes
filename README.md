@@ -4,11 +4,11 @@ Delivers setup and configuration for _Ubuntu_ like a god.
 
 ## About
 
-_hermes_ configures _Ubuntu_ by installing various packages and (re-)placing configuration files. The setup is mostly unopinionated, non-intrusive, and tries to enhance the out-of-the-box experience of _Ubuntu_. _hermes_ is built for `x86_64` and `aarch64`.
+_hermes_ configures _Ubuntu_ by optionally installing various packages, downloading programs related to the shell, and placing configuration files. The setup is mostly unopinionated, non-intrusive, and tries to enhance the out-of-the-box experience of _Ubuntu_. _hermes_ is built for `x86_64` and `aarch64`.
 
 ## Usage
 
-> [!NOTE]
+> [!TIP]
 >
 > While optional, I recommend running `sudo apt-get --yes update && sudo apt-get --yes upgrade` before using _hermes_.
 
