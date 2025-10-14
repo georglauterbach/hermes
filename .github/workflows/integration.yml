@@ -14,7 +14,7 @@ on: # yamllint disable-line rule:truthy
 
 defaults:
   run:
-    shell: bash
+    shell: ash
 
 jobs:
   build:
