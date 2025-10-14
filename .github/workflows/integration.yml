@@ -85,12 +85,16 @@ jobs:
         with:
           key: ${{ github.ref }}-x86_64
           path: code/target/release
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
 
       - name: Load Cache for Build-Output (aarch64)
         uses: actions/cache@v4
         with:
           key: ${{ github.ref }}-aarch64
           path: code/target/aarch64-unknown-linux-musl/release
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
 
       - name: Prepare Binaries
         run: |
