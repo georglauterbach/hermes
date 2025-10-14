@@ -84,13 +84,13 @@ jobs:
         uses: actions/cache@v4
         with:
           key: ${{ github.ref }}-x86_64
-          path: code/target_x86_64/
+          path: code/target/release
 
       - name: Load Cache for Build-Output (aarch64)
         uses: actions/cache@v4
         with:
           key: ${{ github.ref }}-aarch64
-          path: code/target_aarch64/
+          path: code/target/aarch64-unknown-linux-musl/release
 
       - name: Prepare Binaries
         run: |
