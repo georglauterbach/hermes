@@ -50,6 +50,9 @@ jobs:
             apt-get --yes --quiet=2 update
             apt-get --yes install binutils-aarch64-linux-gnu gcc gcc-aarch64-linux-gnu musl-tools pkg-config
 
+            export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-gnu-gcc
+            export CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=x86_64-linux-musl-gcc
+
             export CARGO_BUILD_TARGET=x86_64-unknown-linux-musl
             export CARGO_TARGET_DIR=target_x86_64
             export CARGO_HOME=target_x86_64/cargo_home
