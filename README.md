@@ -1,22 +1,26 @@
 # _hermes_
 
-Delivers setup and configuration for _Ubuntu_ like a god.
+Delivers setup and configuration for your CLI like a god. But actually a glorified tar-decompressor.
 
 ## About
 
-_hermes_ configures _Ubuntu_ by optionally installing various packages, downloading programs related to the shell, and placing configuration files. The setup is mostly unopinionated, non-intrusive, and tries to enhance the out-of-the-box experience of _Ubuntu_. _hermes_ is built for `x86_64` and `aarch64`.
+_hermes_ places [selected programs and configuration files](#programs) for your user. The configuration is mostly unopinionated, non-intrusive, and tries to enhance the out-of-the-box experience of your CLI. _hermes_ is built for `x86_64` and `aarch64`.
 
 ## Usage
 
 To **download** the latest version of _hermes_, run the following commands:
 
 ```bash
-HERMES_VERSION="$(curl -sSIL -w '%{url_effective}' -o /dev/null "https://github.com/georglauterbach/hermes/releases/latest" | sed 's|.*/||')"
-sudo curl --silent --show-error --fail --location --output /usr/local/bin/hermes "https://github.com/georglauterbach/hermes/releases/download/${HERMES_VERSION}/hermes-${HERMES_VERSION}-$(uname -m)-unknown-linux-musl"
-sudo chmod +x /usr/local/bin/hermes
-```
+HERMES_LOCATION=${HOME}/.local/bin/hermes
+mkdir -p "$(dirname "${HERMES_LOCATION}")"
 
-You can then simply run `hermes`. `hermes` does not accept any parameters or options.
+HERMES_VERSION="$(curl -sSIL -w '%{url_effective}' -o /dev/null "https://github.com/georglauterbach/hermes/releases/latest" | sed 's|.*/||')"
+
+curl --silent --show-error --fail --location --output "${HERMES_LOCATION}" "https://github.com/georglauterbach/hermes/releases/download/${HERMES_VERSION}/hermes-${HERMES_VERSION}-$(uname -m)-unknown-linux-musl"
+
+chmod +x "${HERMES_LOCATION}"
+hermes # does not accept any parameters or options
+```
 
 ## Additional Setup
 

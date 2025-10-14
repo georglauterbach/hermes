@@ -1,6 +1,11 @@
 //! A glorified tar-decompressor
 
 /// The `.tar.xz` archive created by `cupid`
+#[cfg(debug_assertions)]
+const ARCHIVE: &[u8] = &[];
+
+/// The `.tar.xz` archive created by `cupid`
+#[cfg(not(debug_assertions))]
 const ARCHIVE: &[u8] = include_bytes!("../../.assets/archive.tar.xz");
 
 /// _hermes_' entrypoint
