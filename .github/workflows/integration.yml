@@ -33,16 +33,15 @@ jobs:
         uses: actions/cache@v4
         with:
           key: ${{ github.ref }}-x86_64
-          path: code/target_x86_64/
+          path: code/target/release
 
       - name: Cache Build-Output
         uses: actions/cache@v4
         with:
           key: ${{ github.ref }}-aarch64
-          path: code/target_aarch64/
+          path: code/target/aarch64-unknown-linux-musl/release
 
       - name: Build and Test
-
         run: |
             set -e
             cd code
@@ -50,13 +49,8 @@ jobs:
             apt-get --yes --quiet=2 update
             apt-get --yes install binutils-aarch64-linux-gnu gcc gcc-aarch64-linux-gnu musl-tools pkg-config
 
-            export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-gnu-gcc
-            export CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=x86_64-linux-musl-gcc
-
             export CARGO_BUILD_TARGET=x86_64-unknown-linux-musl
-            export CARGO_TARGET_DIR=target_x86_64
-            export CARGO_HOME=target_x86_64/cargo_home
-            export RUSTUP_HOME=target_x86_64/rustup_home
+            export CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=x86_64-linux-musl-gcc
 
             cargo fmt    --all                              -- --check
             cargo clippy --workspace --quiet --all-features -- -D warnings
@@ -65,12 +59,10 @@ jobs:
             cargo run              --package cupid
             cargo build  --release --package hermes
 
-            cp ../.assets/archive.tar.xz "${CARGO_TARGET_DIR}"
+            cp ../.assets/archive.tar.xz target/release/
 
             export CARGO_BUILD_TARGET=aarch64-unknown-linux-musl
-            export CARGO_TARGET_DIR=target_aarch64
-            export CARGO_HOME=target_aarch64/cargo_home
-            export RUSTUP_HOME=target_aarch64/rustup_home
+            export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-gnu-gcc
 
             cargo build --release --package hermes
 
@@ -102,19 +94,16 @@ jobs:
 
       - name: Prepare Binaries
         run: |
-          cp code/target_aarch64/aarch64-unknown-linux-musl/release/hermes \
-            code/target_aarch64/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
-
-          cp code/target_x86_64/x86_64-unknown-linux-musl/release/hermes \
-            code/target_x86_64/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
-
-          cp code/target_x86_64/archive.tar.xz \
-            code/target_x86_64/hermes-${{ github.ref_name }}.tar.xz
+          cd code/target
+          mv release/hermes release/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
+          mv release/archive.tar.xz release/hermes-${{ github.ref_name }}.tar.xz
+          mv aarch64-unknown-linux-musl/release/hermes \
+            aarch64-unknown-linux-musl/release/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
 
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            code/target_aarch64/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
-            code/target_x86_64/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
-            code/target_x86_64/hermes-${{ github.ref_name }}.tar.xz
+            code/target/release/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
+            code/target/release/hermes-${{ github.ref_name }}.tar.xz
+            code/target/aarch64-unknown-linux-musl/release/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
