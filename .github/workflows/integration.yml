@@ -14,13 +14,13 @@ on: # yamllint disable-line rule:truthy
 
 defaults:
   run:
-    shell: sh
+    shell: bash
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    container: docker.io/rust:1.90.0-alpine3.22
+    container: docker.io/rust:1.90.0-slim-trixie
 
     permissions:
       contents: read
