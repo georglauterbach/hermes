@@ -20,6 +20,7 @@ jobs:
   build_x86_64:
     name: Build x86_64
     runs-on: ubuntu-latest
+    container: docker.io/rust/1.90.0-alpine3.22
 
     permissions:
       contents: read
@@ -34,18 +35,21 @@ jobs:
           key: ${{ github.ref }}-x86_64
           path: code/target_x86_64/
 
-      - name: Build and Test
-        uses: devcontainers/ci@v0.3
+      - name: Cache Build-Output
+        uses: actions/cache@v4
         with:
-          push: never
-          configFile: .devcontainer/development/devcontainer.json
-          env: |
-            CARGO_BUILD_TARGET=x86_64-unknown-linux-musl
-            CARGO_TARGET_DIR=target_x86_64
-            CARGO_HOME=target_x86_64/cargo_home
-            RUSTUP_HOME=target_x86_64/rustup_home
-          runCmd: |
+          key: ${{ github.ref }}-aarch64
+          path: code/target_aarch64/
+
+      - name: Build and Test
+
+        run: |
             set -e ; cd code ; mkdir -p ${CARGO_HOME}
+
+            export CARGO_BUILD_TARGET=x86_64-unknown-linux-musl
+            export CARGO_TARGET_DIR=target_x86_64
+            export CARGO_HOME=target_x86_64/cargo_home
+            export RUSTUP_HOME=target_x86_64/rustup_home
 
             cargo fmt    --all                              -- --check
             cargo clippy --workspace --quiet --all-features -- -D warnings
@@ -56,49 +60,13 @@ jobs:
 
             cp ../.assets/archive.tar.xz "${CARGO_TARGET_DIR}"
 
-  build_aarch64:
-    name: Build aarch64
-    runs-on: ubuntu-latest
-
-    needs: [ build_x86_64 ]
-
-    permissions:
-      contents: read
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Cache Build-Output
-        uses: actions/cache@v4
-        with:
-          key: ${{ github.ref }}-aarch64
-          path: code/target_aarch64/
-
-      - name: Load Cache for Build-Output (x86_64)
-        uses: actions/cache@v4
-        with:
-          key: ${{ github.ref }}-x86_64
-          path: code/target_x86_64/
-
-      - name: Build
-        uses: devcontainers/ci@v0.3
-        with:
-          push: never
-          configFile: .devcontainer/development/devcontainer.json
-          env: |
-            CARGO_BUILD_TARGET=aarch64-unknown-linux-musl
-            CARGO_TARGET_DIR=target_aarch64
-            CARGO_HOME=target_aarch64/cargo_home
-            RUSTUP_HOME=target_aarch64/rustup_home
-          runCmd: |
-            set -e ; cd code ; mkdir -p ${CARGO_HOME}
-
             sudo apt-get --yes --quiet=2 update
             sudo apt-get --yes install gcc gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
 
-            mkdir -p ../.assets
-            cp target_x86_64/archive.tar.xz ../.assets/
+            export CARGO_BUILD_TARGET=aarch64-unknown-linux-musl
+            export CARGO_TARGET_DIR=target_aarch64
+            export CARGO_HOME=target_aarch64/cargo_home
+            export RUSTUP_HOME=target_aarch64/rustup_home
 
             cargo build --release --package hermes
 

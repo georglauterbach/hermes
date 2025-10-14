@@ -48,6 +48,7 @@ pub async fn symlink_configuration_directory() -> ::anyhow::Result<()> {
 /// All encountered errors are immediately propagated.
 pub async fn create_archive() -> ::anyhow::Result<()> {
     {
+        println!("Creating final archive");
         let mut builder = ::tokio_tar::Builder::new(Vec::with_capacity(1_000_000 * 50));
         builder.append_dir_all("", archive_directory()).await?;
 
