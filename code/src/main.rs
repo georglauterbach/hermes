@@ -11,6 +11,8 @@ const ARCHIVE: &[u8] = include_bytes!("../../.assets/archive.tar.xz");
 /// _hermes_' entrypoint
 #[tokio::main(flavor = "multi_thread")]
 async fn main() {
+    println!("Starting hermes {}", env!("CARGO_PKG_VERSION"));
+
     let Some(home_directory) = std::env::home_dir() else {
         eprintln!("Could not locate home directory");
         std::process::exit(1);

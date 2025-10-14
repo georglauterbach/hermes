@@ -105,7 +105,7 @@ pub mod programs {
     #[cfg(target_arch = "aarch64")]
     const LINK_LIBRARY: &str = "gnu";
 
-    /// The type of archive we download in [`Download`]
+    /// The type of archive we download in [`Program`]
     #[derive(Debug, Clone, Copy)]
     pub enum ArchiveType {
         /// A `.tar.gz` archive
@@ -144,7 +144,7 @@ pub mod programs {
     }
 
     impl Program {
-        /// Create a new instance of [`Download`]
+        /// Create a new instance of [`Program`]
         #[must_use]
         pub const fn new(
             name: &'static str,
@@ -162,7 +162,7 @@ pub mod programs {
             }
         }
 
-        /// Process a [`Download`]
+        /// Process a [`Program`]
         ///
         /// 1. Download and / or read it
         /// 2. Extract the archive
@@ -189,7 +189,7 @@ pub mod programs {
                 .context("Could not place archive files for packing")
         }
 
-        /// Download the archive described by a [`Download`] and / or read it
+        /// Download the archive described by a [`Program`] and / or read it
         async fn download_or_read(
             &self,
             asset_directory: &::std::path::Path,
@@ -245,7 +245,7 @@ pub mod programs {
             Ok(archive)
         }
 
-        /// Extract a downloaded archive described by a [`Download`]
+        /// Extract a downloaded archive described by a [`Program`]
         async fn extract(
             &self,
             archive: ::bytes::Bytes,
