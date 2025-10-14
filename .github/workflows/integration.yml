@@ -17,8 +17,8 @@ defaults:
     shell: bash
 
 jobs:
-  build_x86_64:
-    name: Build x86_64
+  build:
+    name: Build
     runs-on: ubuntu-latest
     container: docker.io/rust/1.90.0-alpine3.22
 
@@ -74,7 +74,7 @@ jobs:
     name: Publish
     runs-on: ubuntu-latest
 
-    needs: [ build_aarch64 ]
+    needs: [ build ]
     if: startsWith(github.ref, 'refs/tags/v')
 
     permissions:
