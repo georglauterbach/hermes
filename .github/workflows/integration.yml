@@ -47,6 +47,9 @@ jobs:
             set -e
             cd code
 
+            sudo apt-get --yes --quiet=2 update
+            sudo apt-get --yes install gcc gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
+
             export CARGO_BUILD_TARGET=x86_64-unknown-linux-musl
             export CARGO_TARGET_DIR=target_x86_64
             export CARGO_HOME=target_x86_64/cargo_home
@@ -60,9 +63,6 @@ jobs:
             cargo build  --release --package hermes
 
             cp ../.assets/archive.tar.xz "${CARGO_TARGET_DIR}"
-
-            sudo apt-get --yes --quiet=2 update
-            sudo apt-get --yes install gcc gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
 
             export CARGO_BUILD_TARGET=aarch64-unknown-linux-musl
             export CARGO_TARGET_DIR=target_aarch64
