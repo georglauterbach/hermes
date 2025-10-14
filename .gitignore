@@ -7,6 +7,7 @@
 # https://www.toptal.com/developers/gitignore
 
 tmp/
+.assets/
 
 # -----------------------------------------------
 # ----  IDEs  -----------------------------------

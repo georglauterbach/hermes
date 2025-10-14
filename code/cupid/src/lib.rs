@@ -1,0 +1,766 @@
+//! The library part of `cupid`
+
+use ::anyhow::Context as _;
+
+/// Copy the project configuration into the archive that is packed for `hermes`
+///
+/// ### Errors
+///
+/// All encountered errors are immediately propagated.
+pub async fn symlink_configuration_directory() -> ::anyhow::Result<()> {
+    let asset_directory = asset_base_directory();
+    let archive_directory = asset_directory.join("archive");
+    let config_directory = archive_directory.join(".config");
+
+    let existing_config_directory = asset_directory
+        .parent()
+        .context("Could not get repository root directory (parent of asset directory)")?
+        .join("data")
+        .join("config");
+
+    if !archive_directory.exists() {
+        ::tokio::fs::create_dir_all(archive_directory)
+            .await
+            .context("Could not create archive directory")?;
+    }
+
+    if config_directory.exists() {
+        ::tokio::fs::remove_dir_all(&config_directory)
+            .await
+            .context(format!("Could not delete {}", config_directory.display()))?;
+    }
+
+    ::tokio::fs::symlink(&existing_config_directory, &config_directory)
+        .await
+        .context(format!(
+            "Could not symlink '{}' -> '{}'",
+            config_directory.display(),
+            existing_config_directory.display()
+        ))?;
+
+    Ok(())
+}
+
+/// Create the final `.tar.xz` archive
+///
+/// ### Errors
+///
+/// All encountered errors are immediately propagated.
+pub async fn create_archive() -> ::anyhow::Result<()> {
+    {
+        let mut builder = ::tokio_tar::Builder::new(Vec::with_capacity(1_000_000 * 50));
+        builder.append_dir_all("", archive_directory()).await?;
+
+        let data = builder.into_inner().await?;
+        let tar_reader = ::tokio::io::BufReader::new(&data[..]);
+        let mut encoder = ::async_compression::tokio::bufread::XzEncoder::new(tar_reader);
+
+        let mut out_file =
+            ::tokio::fs::File::create(asset_base_directory().join("archive.tar.xz")).await?;
+        ::tokio::io::copy(&mut encoder, &mut out_file).await?;
+
+        Ok::<(), ::tokio::io::Error>(())
+    }
+    .context("Could not build final archive for hermes")
+}
+
+/// Get the path to the `.asset/` directory in this repository
+#[must_use]
+pub fn asset_base_directory() -> ::std::path::PathBuf {
+    let cargo_manifest_directory = ::std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    cargo_manifest_directory
+        .parent()
+        .unwrap_or(&cargo_manifest_directory)
+        .parent()
+        .unwrap_or(&cargo_manifest_directory)
+        .join(".assets")
+}
+
+/// [`asset_base_directory`] + `/archive`
+#[must_use]
+pub fn archive_directory() -> ::std::path::PathBuf {
+    asset_base_directory().join("archive")
+}
+
+pub mod programs {
+    //! This module handles all programs and their associated data
+
+    use ::std::collections;
+
+    use ::anyhow::Context as _;
+
+    /// The architecture string for the amd64 (`x86_64`) architecture
+    #[cfg(target_arch = "x86_64")]
+    const ARCHITECTURE: &str = "x86_64";
+    /// The library that is linked against by programs. Not all programs
+    /// support `musl`, especially on `aarch64`.
+    #[cfg(target_arch = "x86_64")]
+    const LINK_LIBRARY: &str = "musl";
+
+    /// The architecture string for the arm64 (`aarch64`) architecture
+    #[cfg(target_arch = "aarch64")]
+    const ARCHITECTURE: &str = "aarch64";
+    /// The library that is linked against by programs. Not all programs
+    /// support `musl`, especially on `aarch64`.
+    #[cfg(target_arch = "aarch64")]
+    const LINK_LIBRARY: &str = "gnu";
+
+    /// The type of archive we download in [`Download`]
+    #[derive(Debug, Clone, Copy)]
+    pub enum ArchiveType {
+        /// A `.tar.gz` archive
+        TarGz,
+        /// A `.tar.xz` archive
+        TarXz,
+        /// A `.zip` archive
+        Zip,
+    }
+
+    impl ::std::fmt::Display for ArchiveType {
+        fn fmt(&self, formatter: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            let ending = match self {
+                Self::TarGz => ".tar.gz",
+                Self::TarXz => ".tar.xz",
+                Self::Zip => ".zip",
+            };
+            write!(formatter, "{ending}")
+        }
+    }
+
+    /// A structure that groups properties of a program
+    #[derive(Debug)]
+    pub struct Program {
+        /// The program name
+        name: &'static str,
+        /// The program version
+        version: &'static str,
+        /// The [`ArchiveType`] that the program is packaged in
+        download_archive_type: ArchiveType,
+        /// The URI from which to download the archive that
+        /// contains the program and its associated data
+        download_uri: String,
+        /// The entries inside the archive to copy into the archive
+        archive_entries: ::std::collections::HashMap<String, String>,
+    }
+
+    impl Program {
+        /// Create a new instance of [`Download`]
+        #[must_use]
+        pub const fn new(
+            name: &'static str,
+            version: &'static str,
+            archive_type: ArchiveType,
+            uri: String,
+            archive_entries: ::std::collections::HashMap<String, String>,
+        ) -> Self {
+            Self {
+                name,
+                version,
+                download_archive_type: archive_type,
+                download_uri: uri,
+                archive_entries,
+            }
+        }
+
+        /// Process a [`Download`]
+        ///
+        /// 1. Download and / or read it
+        /// 2. Extract the archive
+        /// 3. Place the correct files for packing later
+        ///
+        /// ### Errors
+        ///
+        /// All encountered errors are immediately propagated.
+        pub async fn process(self) -> ::anyhow::Result<()> {
+            let asset_directory = super::asset_base_directory();
+
+            let archive = self
+                .download_or_read(&asset_directory)
+                .await
+                .context("Could not download or read archive")?;
+
+            let extracted_directory = self
+                .extract(archive, &asset_directory)
+                .await
+                .context("Could not extract archive")?;
+
+            self.symlink_files(&extracted_directory)
+                .await
+                .context("Could not place archive files for packing")
+        }
+
+        /// Download the archive described by a [`Download`] and / or read it
+        async fn download_or_read(
+            &self,
+            asset_directory: &::std::path::Path,
+        ) -> ::anyhow::Result<::bytes::Bytes> {
+            let download_directory = asset_directory
+                .join("downloads")
+                .join(self.name)
+                .join(self.version);
+
+            if !download_directory.exists() {
+                ::tokio::fs::create_dir_all(&download_directory)
+                    .await
+                    .context(format!(
+                        "Could not create asset directory '{}'",
+                        download_directory.display()
+                    ))?;
+            }
+
+            let archive_file =
+                download_directory.join(format!("{}{}", self.name, self.download_archive_type));
+
+            let archive = if archive_file.exists() {
+                println!("Reading already existing archive for '{}'", self.name);
+                ::tokio::fs::read(archive_file)
+                    .await
+                    .context("Could not read archive")?
+                    .into()
+            } else {
+                println!("Downloading and reading archive for '{}'", self.name);
+                let response = ::reqwest::get(&self.download_uri)
+                    .await
+                    .context("Could not download archive")?;
+
+                if !response.status().is_success() {
+                    ::anyhow::bail!(
+                        "Request to '{}' failed: {}",
+                        self.download_uri,
+                        response.status()
+                    );
+                }
+                let response = response
+                    .bytes()
+                    .await
+                    .context("Could not convert response into bytes")?;
+
+                ::tokio::fs::write(archive_file, &response)
+                    .await
+                    .context("Could not write archive to disk")?;
+
+                response
+            };
+
+            Ok(archive)
+        }
+
+        /// Extract a downloaded archive described by a [`Download`]
+        async fn extract(
+            &self,
+            archive: ::bytes::Bytes,
+            asset_directory: &::std::path::Path,
+        ) -> ::anyhow::Result<::std::path::PathBuf> {
+            let directory_extracted = asset_directory
+                .join("extracted")
+                .join(self.name)
+                .join(self.version);
+
+            if directory_extracted.exists() {
+                println!("Archive for '{}' already unpacked", self.name);
+                return Ok(directory_extracted);
+            }
+
+            println!("Unpacking archive for '{}'", self.name);
+
+            match self.download_archive_type {
+                ArchiveType::TarGz => {
+                    let decoder =
+                        ::async_compression::tokio::bufread::GzipDecoder::new(&archive[..]);
+                    ::tokio_tar::Archive::new(decoder)
+                        .unpack(&directory_extracted)
+                        .await
+                        .context("Could not unpack .tar.gz archive")
+                }
+                ArchiveType::TarXz => {
+                    let decoder = ::async_compression::tokio::bufread::XzDecoder::new(&archive[..]);
+                    ::tokio_tar::Archive::new(decoder)
+                        .unpack(&directory_extracted)
+                        .await
+                        .context("Could not unpack .tar.xz archive")
+                }
+                ArchiveType::Zip => ::zip::ZipArchive::new(std::io::Cursor::new(&archive[..]))
+                    .context("Could not build ZIP archive reader - ZIP malformed?")?
+                    .extract(&directory_extracted)
+                    .context("Could not unpack .zip archive"),
+            }
+            .map_err(|error| {
+                if let Err(error) = ::std::fs::remove_dir_all(&directory_extracted)
+                    .context("Could not clean up extracted directory after error")
+                {
+                    error
+                } else {
+                    error
+                }
+            })?;
+
+            Ok(directory_extracted)
+        }
+
+        /// Symlink files into the archive directory that is later packaged
+        async fn symlink_files(
+            &self,
+            extracted_directory: &::std::path::Path,
+        ) -> ::anyhow::Result<()> {
+            let archive_directory = super::archive_directory();
+            println!("Symlinking files for {}", self.name);
+
+            if !archive_directory.exists() {
+                ::tokio::fs::create_dir_all(&archive_directory)
+                    .await
+                    .context(format!(
+                        "Could not create archive directory '{}'",
+                        archive_directory.display()
+                    ))?;
+            }
+
+            for (from, to) in &self.archive_entries {
+                let from = extracted_directory.join(from);
+                let to = archive_directory.join(to);
+
+                if !from.exists() {
+                    ::anyhow::bail!(
+                        "File '{}' from archive for '{}' does not exist",
+                        from.display(),
+                        self.name
+                    );
+                }
+
+                to.parent()
+                    .map(::std::fs::create_dir_all)
+                    .transpose()
+                    .context(format!(
+                        "Could not create directory to put '{}' in",
+                        to.display()
+                    ))?;
+
+                ::tokio::fs::symlink(&from, &to).await.context(format!(
+                    "Could not create symbolic link from archive entry '{}' to '{}'",
+                    from.display(),
+                    to.display()
+                ))?;
+            }
+
+            Ok(())
+        }
+    }
+
+    /// A helper to easily compute `.local/bin/` + `and`
+    fn local_bin(and: &str) -> String {
+        format!(".local/bin/{and}")
+    }
+
+    /// A helper to easily compute
+    /// `.local/share/bash-completion/completions/` + `and`
+    fn bash_completion(and: &str) -> String {
+        format!(".local/share/bash-completion/completions/{and}")
+    }
+
+    /// Process all programs and their associated archived and files
+    ///
+    /// ### Errors
+    ///
+    /// All encountered errors are immediately propagated.
+    pub async fn process() -> ::anyhow::Result<()> {
+        let mut join_set = ::tokio::task::JoinSet::new();
+        join_set.spawn(atuin());
+        join_set.spawn(bat());
+        join_set.spawn(bottom());
+        join_set.spawn(delta());
+        join_set.spawn(dust());
+        join_set.spawn(dysk());
+        join_set.spawn(eza());
+        join_set.spawn(fd());
+        join_set.spawn(fzf());
+        join_set.spawn(gitui());
+        join_set.spawn(just());
+        join_set.spawn(ripgrep());
+        join_set.spawn(starship());
+        join_set.spawn(yazi());
+        join_set.spawn(zellij());
+        join_set.spawn(zoxide());
+
+        while let Some(result) = join_set.join_next().await {
+            match result {
+                Err(join_error) => {
+                    return Err(join_error).context("Could not join program-processing handle");
+                }
+                Ok(Err(download_error)) => {
+                    return Err(download_error)
+                        .context("An error occurred processing a program download");
+                }
+                Ok(Ok(())) => (),
+            }
+        }
+
+        Ok(())
+    }
+
+    /// <https://github.com/atuinsh/atuin>
+    async fn atuin() -> ::anyhow::Result<()> {
+        let name = "atuin";
+        let version = "18.8.0";
+        let file = format!("{name}-{ARCHITECTURE}-unknown-linux-musl");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/atuinsh/atuin/releases/download/v{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(format!("{file}/{name}"), local_bin(name));
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    /// <https://github.com/sharkdp/bat>
+    async fn bat() -> ::anyhow::Result<()> {
+        let name = "bat";
+        let version = "0.25.0";
+        let file = format!("{name}-v{version}-{ARCHITECTURE}-unknown-linux-musl");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/sharkdp/bat/releases/download/v{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(format!("{file}/{name}"), local_bin(name));
+        entries.insert(
+            format!("{file}/autocomplete/bat.bash"),
+            bash_completion("bat.bash"),
+        );
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    /// <https://github.com/ClementTsang/bottom>
+    async fn bottom() -> ::anyhow::Result<()> {
+        let name = "bottom";
+        let version = "nightly";
+        let file = format!("{name}_{ARCHITECTURE}-unknown-linux-musl");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/ClementTsang/bottom/releases/download/{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert("btm".to_string(), local_bin("btm"));
+        entries.insert(
+            "completion/btm.bash".to_string(),
+            bash_completion("btm.bash"),
+        );
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    // // TODO
+    // /// Install `ble.sh` (<https://github.com/akinomyoga/ble.sh>)
+    // async fn blesh() -> ::anyhow::Result<()> {
+    //     let file = "ble-nightly";
+    //     let uri =
+    //         format!("https://github.com/akinomyoga/ble.sh/releases/download/nightly/{file}.tar.xz");
+
+    //     let target_dir = format!("{}/.local/share", environment::home_str());
+    //     let _ = ::async_std::fs::create_dir_all(&target_dir).await;
+    //     let _ = ::async_std::fs::remove_dir_all(format!("/tmp/{file}")).await;
+    //     let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/blesh")).await;
+
+    //     // We download and unpack the archive to `${HOME}/.local/share`
+    //     let response = download::download(uri).await?;
+    //     let xz_decoder = ::async_compression::tokio::bufread::XzDecoder::new(&response[..]);
+    //     let mut archive = ::tokio_tar::Archive::new(xz_decoder);
+
+    //     archive
+    //         .unpack(&target_dir)
+    //         .await
+    //         .context("Could not unpack ble.sh archive")?;
+
+    //     ::async_std::fs::rename(
+    //         format!("{target_dir}/{file}"),
+    //         format!("{target_dir}/blesh"),
+    //     )
+    //     .await
+    //     .context("Could not move unpacked ble.sh archive to final location")?;
+
+    //     let _ =
+    //         ::async_std::fs::remove_dir_all(format!("{}/.cache/blesh", environment::home_str()))
+    //             .await;
+    //     Ok(())
+    // }
+
+    /// <https://github.com/dandavison/delta>
+    async fn delta() -> ::anyhow::Result<()> {
+        let name = "delta";
+        let version = "0.18.2";
+        let file = format!("{name}-{version}-{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/dandavison/delta/releases/download/{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(format!("{file}/{name}"), local_bin(name));
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    /// <https://github.com/bootandy/dust>
+    async fn dust() -> ::anyhow::Result<()> {
+        let name = "dust";
+        let version = "1.2.3";
+        let file = format!("{name}-v{version}-{ARCHITECTURE}-unknown-linux-musl");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/bootandy/dust/releases/download/v{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(format!("{file}/{name}"), local_bin(name));
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    /// <https://github.com/Canop/dysk>
+    async fn dysk() -> ::anyhow::Result<()> {
+        let name = "dysk";
+        let version = "3.0.0";
+        let archive_type = ArchiveType::Zip;
+        let uri = format!(
+            "https://github.com/Canop/dysk/releases/download/v{version}/dysk_{version}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(
+            #[cfg(target_arch = "x86_64")]
+            "build/x86_64-unknown-linux-musl/dysk".to_string(),
+            #[cfg(target_arch = "aarch64")]
+            "build/aarch64-unknown-linux-musl/dysk".to_string(),
+            local_bin(name),
+        );
+        entries.insert(
+            String::from("build/completion/dysk.bash"),
+            bash_completion("dysk.bash"),
+        );
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    /// <https://github.com/eza-community/eza>
+    async fn eza() -> ::anyhow::Result<()> {
+        let name = "eza";
+        let version = "0.23.0";
+        let file = format!("{name}_{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/eza-community/eza/releases/download/v{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(format!("./{name}"), local_bin(name));
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    /// <https://github.com/sharkdp/fd>
+    async fn fd() -> ::anyhow::Result<()> {
+        let name = "fd";
+        let version = "10.3.0";
+        let file = format!("{name}-v{version}-{ARCHITECTURE}-unknown-linux-musl");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/sharkdp/fd/releases/download/v{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(format!("{file}/{name}"), local_bin(name));
+        entries.insert(
+            format!("{file}/autocomplete/fd.bash"),
+            bash_completion("fd.bash"),
+        );
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    /// <https://github.com/junegunn/fzf>
+    async fn fzf() -> ::anyhow::Result<()> {
+        let name = "fzf";
+        let version = "0.65.1";
+        #[cfg(target_arch = "x86_64")]
+        let file = format!("{name}-{version}-linux_amd64");
+        #[cfg(target_arch = "aarch64")]
+        let file = format!("{name}-{version}-linux_arm64");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/junegunn/fzf/releases/download/v{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(name.to_string(), local_bin(name));
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    /// <https://github.com/extrawurst/gitui>
+    async fn gitui() -> ::anyhow::Result<()> {
+        let name = "gitui";
+        let version = "0.27.0";
+        let file = format!("{name}-linux-{ARCHITECTURE}");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/extrawurst/gitui/releases/download/v{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(format!("./{name}"), local_bin(name));
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    /// <https://github.com/casey/just>
+    async fn just() -> ::anyhow::Result<()> {
+        let name = "just";
+        let version = "1.42.4";
+        let file = format!("{name}-{version}-{ARCHITECTURE}-unknown-linux-musl");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/casey/just/releases/download/{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(name.to_string(), local_bin(name));
+        entries.insert(
+            String::from("completions/just.bash"),
+            bash_completion("just.bash"),
+        );
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    /// <https://github.com/BurntSushi/ripgrep>
+    async fn ripgrep() -> ::anyhow::Result<()> {
+        let name = "ripgrep";
+        let version = "14.1.1";
+        let file = format!("{name}-{version}-{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/BurntSushi/ripgrep/releases/download/{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(format!("{file}/rg"), local_bin("rg"));
+        entries.insert(
+            format!("{file}/complete/rg.bash"),
+            bash_completion("rg.bash"),
+        );
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    /// <https://github.com/starship/starship>
+    async fn starship() -> ::anyhow::Result<()> {
+        let name = "starship";
+        let version = "1.23.0";
+        let file = format!("{name}-{ARCHITECTURE}-unknown-linux-musl");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/starship/starship/releases/download/v{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(name.to_string(), local_bin(name));
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    /// <https://github.com/sxyazi/yazi>
+    async fn yazi() -> ::anyhow::Result<()> {
+        let name = "yazi";
+        let version = "25.5.31";
+        let file = format!("{name}-{ARCHITECTURE}-unknown-linux-musl");
+        let archive_type = ArchiveType::Zip;
+        let uri = format!(
+            "https://github.com/sxyazi/yazi/releases/download/v{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(format!("{file}/ya"), local_bin("ya"));
+        entries.insert(format!("{file}/{name}"), local_bin(name));
+        entries.insert(
+            format!("{file}/completions/ya.bash"),
+            bash_completion("ya.bash"),
+        );
+        entries.insert(
+            format!("{file}/completions/yazi.bash"),
+            bash_completion("yazi.bash"),
+        );
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    /// <https://github.com/zellij-org/zellij>
+    async fn zellij() -> ::anyhow::Result<()> {
+        let name = "zellij";
+        let version = "0.43.1";
+        let file = format!("{name}-{ARCHITECTURE}-unknown-linux-musl");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/zellij-org/zellij/releases/download/v{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(name.to_string(), local_bin(name));
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+
+    /// <https://github.com/ajeetdsouza/zoxide>
+    async fn zoxide() -> ::anyhow::Result<()> {
+        let name = "zoxide";
+        let version = "0.9.8";
+        let file = format!("{name}-{version}-{ARCHITECTURE}-unknown-linux-musl");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/ajeetdsouza/zoxide/releases/download/v{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(name.to_string(), local_bin(name));
+        entries.insert(
+            "completions/zoxide.bash".to_string(),
+            bash_completion("zoxide.bash"),
+        );
+
+        Program::new(name, version, archive_type, uri, entries)
+            .process()
+            .await
+    }
+}

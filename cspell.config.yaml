@@ -7,47 +7,14 @@ import: []
 words: []
 
 ignoreWords:
-  - alacritty
   - atuin
-  - avizo
-  - bindsym
-  - blesh
-  - combi
-  - dbus
-  - drun
+  - atuinsh
+  - bufread
+  - clippy
   - dysk
-  - everforest
-  - flathub
-  - getwindowfocus
-  - getwindowpid
   - gitui
-  - grimshot
-  - gruvbox
-  - gsettings
-  - gwaddr
-  - ifname
-  - lightctl
-  - lockscreen
-  - nodeadkeys
-  - numlock
-  - pango
-  - pkexec
-  - policykit
-  - polkitd
-  - rasi
-  - rofi
-  - wpctl
-  - swayidle
-  - swaylock
-  - swaymsg
-  - swaynag
-  - swaync
-  - swaysock
-  - validationlayers
-  - volumectl
-  - walkdir
-  - waybar
-  - wireplumber
-  - xcursor
-  - xwayland
+  - reqwest
+  - rustdoc
+  - rustls
+  - sharkdp
   - yazi

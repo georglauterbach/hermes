@@ -1,0 +1,31 @@
+[package]
+name = "cupid"
+version = "0.1.0"
+edition = "2024"
+
+workspace = ".."
+
+description = "aids hermes by packing an archive for hermes' offline installation"
+
+[dependencies]
+anyhow = { version = "1.0", default-features = false }
+async-compression = { version = "0.4", default-features = false, features = [
+	"gzip",
+	"tokio",
+	"xz-parallel",
+] }
+bytes = { version = "1.10", default-features = false }
+reqwest = { version = "0.12", default-features = false, features = [
+	"rustls-tls",
+	"socks",
+] }
+tokio = { version = "1.48", default-features = false, features = [
+	"macros",
+	"process",
+	"rt-multi-thread",
+] }
+tokio-tar = { version = "0.3", default-features = false }
+zip = { version = "6.0", default-features = true }
+
+[lints]
+workspace = true

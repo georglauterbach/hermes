@@ -8,10 +8,6 @@ _hermes_ configures _Ubuntu_ by optionally installing various packages, download
 
 ## Usage
 
-> [!TIP]
->
-> While optional, I recommend running `sudo apt-get --yes update && sudo apt-get --yes upgrade` before using _hermes_.
-
 To **download** the latest version of _hermes_, run the following commands:
 
 ```bash
@@ -20,19 +16,7 @@ sudo curl --silent --show-error --fail --location --output /usr/local/bin/hermes
 sudo chmod +x /usr/local/bin/hermes
 ```
 
-To see the help message and **install** _hermes_, run the following commands:
-
-```bash
-hermes --help
-hermes run
-```
-
-To **update** _hermes_, run the following command
-
-```bash
-hermes --version
-hermes update # --non-interactive
-```
+You can then simply run `hermes`. `hermes` does not accept any parameters or options.
 
 ## Additional Setup
 

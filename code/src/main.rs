@@ -1,41 +1,22 @@
-//! _hermes_ binary part that uses [`lib.rs`](./lib.rs).
+//! A glorified tar-decompressor
 
-use ::anyhow::Context as _;
+/// The `.tar.xz` archive created by `cupid`
+const ARCHIVE: &[u8] = include_bytes!("../../.assets/archive.tar.xz");
 
-/// _hermes_' entrypoint.
+/// _hermes_' entrypoint
 #[tokio::main(flavor = "multi_thread")]
-async fn main() -> anyhow::Result<()> {
-    let arguments = <hermes::arguments::Arguments as clap::Parser>::parse();
-    arguments.init_tracing();
+async fn main() {
+    let Some(home_directory) = std::env::home_dir() else {
+        eprintln!("Could not locate home directory");
+        std::process::exit(1);
+    };
 
-    ::tracing::trace!("Dumping CLI arguments: \n{arguments:#?}");
+    let mut decoder =
+        ::async_compression::tokio::bufread::XzDecoder::new(::tokio::io::BufReader::new(ARCHIVE));
+    let mut archive = ::tokio_tar::Archive::new(&mut decoder);
 
-    if let Err(error) = if arguments.assume_correct_invocation {
-        Box::pin(hermes::work::run(arguments)).await
-    } else {
-        ::tracing::info!("This is hermes {}", env!("CARGO_PKG_VERSION"));
-        match hermes::prepare::call_again(&arguments).context("Initial conditions could not be met")
-        {
-            Ok(true) => {
-                ::tracing::info!("Finished without errors");
-                Ok(())
-            }
-            Ok(false) => ::std::process::exit(1),
-            Err(error) => Err(error),
-        }
-    } {
-        let mut chain = error.chain();
-        ::tracing::error!("{}", chain.next().unwrap());
-
-        if chain.len() > 0 {
-            println!("Caused by:");
-            for (number, error) in chain.enumerate() {
-                println!("    {number}: {error}");
-            }
-        }
-
+    if let Err(error) = archive.unpack(home_directory).await {
+        eprintln!("Unpacking archive failed: {error}");
         std::process::exit(1);
     }
-
-    Ok(())
 }

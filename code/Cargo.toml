@@ -1,84 +1,63 @@
 [package]
 name = "hermes"
-version = "10.2.1"
+version = "11.0.0"
 edition = "2024"
 publish = false
 
-description = "Configures Ubuntu by installing various packages and placing (new) configuration files"
-
+description = "CLI utilities and configuration files delivered like a god"
 repository = "https://github.com/georglauterbach/hermes"
-license-file = "../LICENSE"
-readme = "../README.md"
-
-keywords = ["setup", "linux"]
-categories = ["command-line-utilities"]
+license-file = "../../LICENSE"
+readme = "../../README.md"
 
 [dependencies]
-anyhow = "1.0"
 async-compression = { version = "0.4", default-features = false, features = [
   "gzip",
   "tokio",
-  "xz",
+  "xz-parallel",
 ] }
-async-std = { version = "1.13", features = ["unstable"] }
-bytes = "1.10"
-clap = { version = "4.5", features = ["cargo", "derive", "env"] }
-clap-verbosity-flag = { version = "3.0", default-features = false, features = [
-  "tracing",
-] }
-const_format = "0.2"
-regex = "1.11"
-reqwest = { version = "0.12", default-features = false, features = [
-  "rustls-tls",
-  "socks",
-] }
-tokio = { version = "1.47", default-features = false, features = [
-  "rt-multi-thread",
+tokio = { version = "1.48", default-features = false, features = [
   "macros",
+  "process",
+  "rt-multi-thread",
 ] }
-tokio-tar = "0.3"
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-walkdir = "2.5"
-which = "8.0"
-zip = "4.3"
-
-[profile.release]
-overflow-checks = true
-strip = true
+tokio-tar = { version = "0.3", default-features = false }
 
 [lints]
+workspace = true
 
-# General lints "inherent" in Rustlang.
-[lints.rust]
-# We require docs on all items
+[profile.release]
+opt-level = "z"
+lto = "fat"
+
+[workspace]
+members = ["cupid"]
+resolver = "3"
+
+[workspace.lints]
+
+[workspace.lints.rust]
 missing_docs = "deny"
-# We require a debug implementation on all items
 missing_debug_implementations = "deny"
 
-# Lint target for code documentation. When running `rustdoc`,
-# show an error when using broken links.
-[lints.rustdoc]
+# Rustdoc: https://doc.rust-lang.org/rustdoc/index.html
+[workspace.lints.rustdoc]
 all = "deny"
 broken_intra_doc_links = "deny"
 private_intra_doc_links = "allow"
 
-# Lint target for Clippy ("A collection of lints to catch common
-# mistakes and improve your Rust code.", ref:
-# https://doc.rust-lang.org/nightly/clippy/)
-[lints.clippy]
-# Clippy lint target one. Enables all lints that are on by
-# default (correctness, suspicious, style, complexity, perf).
+# Clippy: https://doc.rust-lang.org/stable/clippy/index.html
+[workspace.lints.clippy]
+# enable all lints that are on by default
+# (correctness, suspicious, style, complexity, perf)
 all = "deny"
-# Clippy lint target two. Enables lints which are rather strict
-# or have occasional false positives.
+# enable lints which are rather strict
+# or have occasional false positives
 nursery = "deny"
-# Clippy lint target three. Enables new lints that are still
-# under development
+# enable new lints that are still under development
 pedantic = "deny"
-# Clippy lint target four. Enable lints for the cargo manifest
-# file, a.k.a. Cargo.toml.
+# enable lints for the Cargo manifest file, a.k.a. Cargo.toml.
 cargo = { level = "deny", priority = 0 }
 multiple_crate_versions = { level = "allow", priority = 1 }
-# Individual lints go here now:
+cargo_common_metadata = { level = "allow", priority = 1 }
+# enable lints for missing documentation on private items
 missing_docs_in_private_items = "deny"
