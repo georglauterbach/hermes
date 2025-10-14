@@ -14,7 +14,7 @@ on: # yamllint disable-line rule:truthy
 
 defaults:
   run:
-    shell: ash
+    shell: sh
 
 jobs:
   build:
@@ -44,7 +44,8 @@ jobs:
       - name: Build and Test
 
         run: |
-            set -e ; cd code ; mkdir -p ${CARGO_HOME}
+            set -e
+            cd code
 
             export CARGO_BUILD_TARGET=x86_64-unknown-linux-musl
             export CARGO_TARGET_DIR=target_x86_64
