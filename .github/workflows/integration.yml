@@ -59,12 +59,15 @@ jobs:
             cargo run              --package cupid
             cargo build  --release --package hermes
 
-            cp ../.assets/archive.tar.xz target/release/
+            cargo run --package cupid -- --architecture aarch64
 
             export CARGO_BUILD_TARGET=aarch64-unknown-linux-musl
             export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-gnu-gcc
 
             cargo build --release --package hermes
+
+            cp ../.assets/x86_64/archive.tar.xz target/release/
+            cp ../.assets/aarch64/archive.tar.xz target/aarch64-unknown-linux-musl/release/
 
   publish:
     name: Publish

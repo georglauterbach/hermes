@@ -9,6 +9,7 @@ words: []
 ignoreWords:
   - atuin
   - atuinsh
+  - blesh
   - bufread
   - clippy
   - dysk

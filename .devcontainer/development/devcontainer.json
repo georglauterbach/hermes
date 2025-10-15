@@ -7,7 +7,7 @@
       "rust.rustup.default-toolchain-file": "${containerWorkspaceFolder}/code/rust-toolchain.toml"
     },
     "ghcr.io/georglauterbach/dev-container-features/cache-vscode-extensions:0.4": {},
-    "ghcr.io/georglauterbach/dev-container-features/hermes:0.5": {}
+    "ghcr.io/georglauterbach/dev-container-features/hermes:11.0.1": {}
   },
   "updateRemoteUserUID": true,
   "remoteUser": "ubuntu",

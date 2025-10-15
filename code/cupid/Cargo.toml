@@ -5,7 +5,7 @@ edition = "2024"
 
 workspace = ".."
 
-description = "aids hermes by packing an archive for hermes' offline installation"
+description = "Helps hermes by packing an archive for hermes' offline installation"
 
 [dependencies]
 anyhow = { version = "1.0", default-features = false }
@@ -15,8 +15,10 @@ async-compression = { version = "0.4", default-features = false, features = [
 	"xz-parallel",
 ] }
 bytes = { version = "1.10", default-features = false }
+clap = { version = "4.5", default-features = true, features = ["cargo", "derive"] }
 reqwest = { version = "0.12", default-features = false, features = [
 	"rustls-tls",
+  "socks"
 ] }
 tokio = { version = "1.48", default-features = false, features = [
 	"macros",

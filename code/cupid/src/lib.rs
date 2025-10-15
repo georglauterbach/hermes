@@ -2,19 +2,73 @@
 
 use ::anyhow::Context as _;
 
+pub mod arguments {
+    //! Argument parsing
+
+    /// Information about the architecture that we
+    /// pack `hermes`'s archive for
+    #[derive(Debug, Clone, Copy, ::clap::ValueEnum)]
+    pub enum Architecture {
+        /// AMD64
+        X86_64,
+        /// ARM64
+        Aarch64,
+    }
+
+    impl Architecture {
+        /// The link-library of a
+        /// [target triple](https://mcyoung.xyz/2025/04/14/target-triples/)
+        pub const fn link_library(&self) -> &'static str {
+            match self {
+                Architecture::X86_64 => "musl",
+                Architecture::Aarch64 => "gnu",
+            }
+        }
+    }
+
+    impl ::std::fmt::Display for Architecture {
+        fn fmt(&self, formatter: &mut ::std::fmt::Formatter<'_>) -> std::fmt::Result {
+            match self {
+                Architecture::X86_64 => write!(formatter, "x86_64"),
+                Architecture::Aarch64 => write!(formatter, "aarch64"),
+            }
+        }
+    }
+
+    /// Arguments accepted by `cupid`
+    #[derive(Debug, clap::Parser)]
+    #[command(
+        bin_name=clap::crate_name!(),
+        author=clap::crate_authors!(),
+        about=clap::crate_description!(),
+        long_about=clap::crate_description!(),
+        version=clap::crate_version!(),
+        propagate_version=true
+    )]
+    pub struct Arguments {
+        /// The architecture to be used
+        #[clap(short, long, default_value = "x86-64")]
+        pub architecture: Architecture,
+    }
+}
+
 /// Copy the project configuration into the archive that is packed for `hermes`
 ///
 /// ### Errors
 ///
 /// All encountered errors are immediately propagated.
-pub async fn symlink_configuration_directory() -> ::anyhow::Result<()> {
-    let asset_directory = asset_base_directory();
-    let archive_directory = asset_directory.join("archive");
+pub async fn symlink_configuration_directory(
+    architecture: arguments::Architecture,
+) -> ::anyhow::Result<()> {
+    let asset_directory = asset_base_directory(architecture);
+    let archive_directory = archive_directory(architecture);
     let config_directory = archive_directory.join(".config");
 
     let existing_config_directory = asset_directory
         .parent()
-        .context("Could not get repository root directory (parent of asset directory)")?
+        .context("Could not get parent of asset directory")?
+        .parent()
+        .context("Could not get repository root directory (parent parent of asset directory)")?
         .join("data")
         .join("config");
 
@@ -25,8 +79,7 @@ pub async fn symlink_configuration_directory() -> ::anyhow::Result<()> {
     }
 
     if config_directory.exists() {
-        ::tokio::fs::remove_dir_all(&config_directory)
-            .await
+        ::std::fs::remove_file(&config_directory)
             .context(format!("Could not delete {}", config_directory.display()))?;
     }
 
@@ -46,18 +99,22 @@ pub async fn symlink_configuration_directory() -> ::anyhow::Result<()> {
 /// ### Errors
 ///
 /// All encountered errors are immediately propagated.
-pub async fn create_archive() -> ::anyhow::Result<()> {
+pub async fn create_archive(architecture: arguments::Architecture) -> ::anyhow::Result<()> {
     {
         println!("Creating final archive");
         let mut builder = ::tokio_tar::Builder::new(Vec::with_capacity(1_000_000 * 50));
-        builder.append_dir_all("", archive_directory()).await?;
+        builder
+            .append_dir_all("", archive_directory(architecture))
+            .await
+            .context("Appending archive directory to archive builder failed")?;
 
         let data = builder.into_inner().await?;
         let tar_reader = ::tokio::io::BufReader::new(&data[..]);
         let mut encoder = ::async_compression::tokio::bufread::XzEncoder::new(tar_reader);
 
         let mut out_file =
-            ::tokio::fs::File::create(asset_base_directory().join("archive.tar.xz")).await?;
+            ::tokio::fs::File::create(asset_base_directory(architecture).join("archive.tar.xz"))
+                .await?;
         ::tokio::io::copy(&mut encoder, &mut out_file).await?;
 
         Ok::<(), ::tokio::io::Error>(())
@@ -67,7 +124,7 @@ pub async fn create_archive() -> ::anyhow::Result<()> {
 
 /// Get the path to the `.asset/` directory in this repository
 #[must_use]
-pub fn asset_base_directory() -> ::std::path::PathBuf {
+pub fn asset_base_directory(architecture: arguments::Architecture) -> ::std::path::PathBuf {
     let cargo_manifest_directory = ::std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     cargo_manifest_directory
         .parent()
@@ -75,36 +132,22 @@ pub fn asset_base_directory() -> ::std::path::PathBuf {
         .parent()
         .unwrap_or(&cargo_manifest_directory)
         .join(".assets")
+        .join(architecture.to_string())
 }
 
 /// [`asset_base_directory`] + `/archive`
 #[must_use]
-pub fn archive_directory() -> ::std::path::PathBuf {
-    asset_base_directory().join("archive")
+pub fn archive_directory(architecture: arguments::Architecture) -> ::std::path::PathBuf {
+    asset_base_directory(architecture).join("archive")
 }
 
 pub mod programs {
     //! This module handles all programs and their associated data
 
+    use super::arguments::Architecture;
     use ::std::collections;
 
     use ::anyhow::Context as _;
-
-    /// The architecture string for the amd64 (`x86_64`) architecture
-    #[cfg(target_arch = "x86_64")]
-    const ARCHITECTURE: &str = "x86_64";
-    /// The library that is linked against by programs. Not all programs
-    /// support `musl`, especially on `aarch64`.
-    #[cfg(target_arch = "x86_64")]
-    const LINK_LIBRARY: &str = "musl";
-
-    /// The architecture string for the arm64 (`aarch64`) architecture
-    #[cfg(target_arch = "aarch64")]
-    const ARCHITECTURE: &str = "aarch64";
-    /// The library that is linked against by programs. Not all programs
-    /// support `musl`, especially on `aarch64`.
-    #[cfg(target_arch = "aarch64")]
-    const LINK_LIBRARY: &str = "gnu";
 
     /// The type of archive we download in [`Program`]
     #[derive(Debug, Clone, Copy)]
@@ -172,8 +215,8 @@ pub mod programs {
         /// ### Errors
         ///
         /// All encountered errors are immediately propagated.
-        pub async fn process(self) -> ::anyhow::Result<()> {
-            let asset_directory = super::asset_base_directory();
+        pub async fn process(self, architecture: Architecture) -> ::anyhow::Result<()> {
+            let asset_directory = super::asset_base_directory(architecture);
 
             let archive = self
                 .download_or_read(&asset_directory)
@@ -185,7 +228,7 @@ pub mod programs {
                 .await
                 .context("Could not extract archive")?;
 
-            self.symlink_files(&extracted_directory)
+            self.symlink_files(&extracted_directory, architecture)
                 .await
                 .context("Could not place archive files for packing")
         }
@@ -302,8 +345,9 @@ pub mod programs {
         async fn symlink_files(
             &self,
             extracted_directory: &::std::path::Path,
+            architecture: Architecture,
         ) -> ::anyhow::Result<()> {
-            let archive_directory = super::archive_directory();
+            let archive_directory = super::archive_directory(architecture);
             println!("Symlinking files for {}", self.name);
 
             if !archive_directory.exists() {
@@ -362,24 +406,24 @@ pub mod programs {
     /// ### Errors
     ///
     /// All encountered errors are immediately propagated.
-    pub async fn process() -> ::anyhow::Result<()> {
+    pub async fn process(architecture: Architecture) -> ::anyhow::Result<()> {
         let mut join_set = ::tokio::task::JoinSet::new();
-        join_set.spawn(atuin());
-        join_set.spawn(bat());
-        join_set.spawn(bottom());
-        join_set.spawn(delta());
-        join_set.spawn(dust());
-        join_set.spawn(dysk());
-        join_set.spawn(eza());
-        join_set.spawn(fd());
-        join_set.spawn(fzf());
-        join_set.spawn(gitui());
-        join_set.spawn(just());
-        join_set.spawn(ripgrep());
-        join_set.spawn(starship());
-        join_set.spawn(yazi());
-        join_set.spawn(zellij());
-        join_set.spawn(zoxide());
+        join_set.spawn(atuin(architecture));
+        join_set.spawn(bat(architecture));
+        join_set.spawn(bottom(architecture));
+        join_set.spawn(delta(architecture));
+        join_set.spawn(dust(architecture));
+        join_set.spawn(dysk(architecture));
+        join_set.spawn(eza(architecture));
+        join_set.spawn(fd(architecture));
+        join_set.spawn(fzf(architecture));
+        join_set.spawn(gitui(architecture));
+        join_set.spawn(just(architecture));
+        join_set.spawn(ripgrep(architecture));
+        join_set.spawn(starship(architecture));
+        join_set.spawn(yazi(architecture));
+        join_set.spawn(zellij(architecture));
+        join_set.spawn(zoxide(architecture));
 
         while let Some(result) = join_set.join_next().await {
             match result {
@@ -398,10 +442,10 @@ pub mod programs {
     }
 
     /// <https://github.com/atuinsh/atuin>
-    async fn atuin() -> ::anyhow::Result<()> {
+    async fn atuin(architecture: super::arguments::Architecture) -> ::anyhow::Result<()> {
         let name = "atuin";
         let version = "18.8.0";
-        let file = format!("{name}-{ARCHITECTURE}-unknown-linux-musl");
+        let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/atuinsh/atuin/releases/download/v{version}/{file}{archive_type}"
@@ -411,15 +455,15 @@ pub mod programs {
         entries.insert(format!("{file}/{name}"), local_bin(name));
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
     /// <https://github.com/sharkdp/bat>
-    async fn bat() -> ::anyhow::Result<()> {
+    async fn bat(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "bat";
         let version = "0.25.0";
-        let file = format!("{name}-v{version}-{ARCHITECTURE}-unknown-linux-musl");
+        let file = format!("{name}-v{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/sharkdp/bat/releases/download/v{version}/{file}{archive_type}"
@@ -433,15 +477,15 @@ pub mod programs {
         );
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
     /// <https://github.com/ClementTsang/bottom>
-    async fn bottom() -> ::anyhow::Result<()> {
+    async fn bottom(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "bottom";
         let version = "nightly";
-        let file = format!("{name}_{ARCHITECTURE}-unknown-linux-musl");
+        let file = format!("{name}_{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/ClementTsang/bottom/releases/download/{version}/{file}{archive_type}"
@@ -455,7 +499,7 @@ pub mod programs {
         );
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
@@ -495,10 +539,13 @@ pub mod programs {
     // }
 
     /// <https://github.com/dandavison/delta>
-    async fn delta() -> ::anyhow::Result<()> {
+    async fn delta(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "delta";
         let version = "0.18.2";
-        let file = format!("{name}-{version}-{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
+        let file = format!(
+            "{name}-{version}-{architecture}-unknown-linux-{}",
+            architecture.link_library()
+        );
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/dandavison/delta/releases/download/{version}/{file}{archive_type}"
@@ -508,15 +555,15 @@ pub mod programs {
         entries.insert(format!("{file}/{name}"), local_bin(name));
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
     /// <https://github.com/bootandy/dust>
-    async fn dust() -> ::anyhow::Result<()> {
+    async fn dust(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "dust";
         let version = "1.2.3";
-        let file = format!("{name}-v{version}-{ARCHITECTURE}-unknown-linux-musl");
+        let file = format!("{name}-v{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/bootandy/dust/releases/download/v{version}/{file}{archive_type}"
@@ -526,12 +573,12 @@ pub mod programs {
         entries.insert(format!("{file}/{name}"), local_bin(name));
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
     /// <https://github.com/Canop/dysk>
-    async fn dysk() -> ::anyhow::Result<()> {
+    async fn dysk(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "dysk";
         let version = "3.0.0";
         let archive_type = ArchiveType::Zip;
@@ -541,10 +588,7 @@ pub mod programs {
 
         let mut entries = collections::HashMap::new();
         entries.insert(
-            #[cfg(target_arch = "x86_64")]
-            "build/x86_64-unknown-linux-musl/dysk".to_string(),
-            #[cfg(target_arch = "aarch64")]
-            "build/aarch64-unknown-linux-musl/dysk".to_string(),
+            format!("build/{architecture}-unknown-linux-musl/dysk"),
             local_bin(name),
         );
         entries.insert(
@@ -553,15 +597,18 @@ pub mod programs {
         );
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
     /// <https://github.com/eza-community/eza>
-    async fn eza() -> ::anyhow::Result<()> {
+    async fn eza(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "eza";
         let version = "0.23.0";
-        let file = format!("{name}_{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
+        let file = format!(
+            "{name}_{architecture}-unknown-linux-{}",
+            architecture.link_library()
+        );
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/eza-community/eza/releases/download/v{version}/{file}{archive_type}"
@@ -571,15 +618,15 @@ pub mod programs {
         entries.insert(format!("./{name}"), local_bin(name));
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
     /// <https://github.com/sharkdp/fd>
-    async fn fd() -> ::anyhow::Result<()> {
+    async fn fd(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fd";
         let version = "10.3.0";
-        let file = format!("{name}-v{version}-{ARCHITECTURE}-unknown-linux-musl");
+        let file = format!("{name}-v{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/sharkdp/fd/releases/download/v{version}/{file}{archive_type}"
@@ -593,18 +640,18 @@ pub mod programs {
         );
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
     /// <https://github.com/junegunn/fzf>
-    async fn fzf() -> ::anyhow::Result<()> {
+    async fn fzf(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fzf";
         let version = "0.65.1";
-        #[cfg(target_arch = "x86_64")]
-        let file = format!("{name}-{version}-linux_amd64");
-        #[cfg(target_arch = "aarch64")]
-        let file = format!("{name}-{version}-linux_arm64");
+        let file = match architecture {
+            Architecture::X86_64 => format!("{name}-{version}-linux_amd64"),
+            Architecture::Aarch64 => format!("{name}-{version}-linux_arm64"),
+        };
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/junegunn/fzf/releases/download/v{version}/{file}{archive_type}"
@@ -614,15 +661,15 @@ pub mod programs {
         entries.insert(name.to_string(), local_bin(name));
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
     /// <https://github.com/extrawurst/gitui>
-    async fn gitui() -> ::anyhow::Result<()> {
+    async fn gitui(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "gitui";
         let version = "0.27.0";
-        let file = format!("{name}-linux-{ARCHITECTURE}");
+        let file = format!("{name}-linux-{architecture}");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/extrawurst/gitui/releases/download/v{version}/{file}{archive_type}"
@@ -632,15 +679,15 @@ pub mod programs {
         entries.insert(format!("./{name}"), local_bin(name));
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
     /// <https://github.com/casey/just>
-    async fn just() -> ::anyhow::Result<()> {
+    async fn just(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "just";
         let version = "1.42.4";
-        let file = format!("{name}-{version}-{ARCHITECTURE}-unknown-linux-musl");
+        let file = format!("{name}-{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/casey/just/releases/download/{version}/{file}{archive_type}"
@@ -654,15 +701,18 @@ pub mod programs {
         );
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
     /// <https://github.com/BurntSushi/ripgrep>
-    async fn ripgrep() -> ::anyhow::Result<()> {
+    async fn ripgrep(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "ripgrep";
         let version = "14.1.1";
-        let file = format!("{name}-{version}-{ARCHITECTURE}-unknown-linux-{LINK_LIBRARY}");
+        let file = format!(
+            "{name}-{version}-{architecture}-unknown-linux-{}",
+            architecture.link_library()
+        );
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/BurntSushi/ripgrep/releases/download/{version}/{file}{archive_type}"
@@ -676,15 +726,15 @@ pub mod programs {
         );
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
     /// <https://github.com/starship/starship>
-    async fn starship() -> ::anyhow::Result<()> {
+    async fn starship(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "starship";
         let version = "1.23.0";
-        let file = format!("{name}-{ARCHITECTURE}-unknown-linux-musl");
+        let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/starship/starship/releases/download/v{version}/{file}{archive_type}"
@@ -694,15 +744,15 @@ pub mod programs {
         entries.insert(name.to_string(), local_bin(name));
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
     /// <https://github.com/sxyazi/yazi>
-    async fn yazi() -> ::anyhow::Result<()> {
+    async fn yazi(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "yazi";
         let version = "25.5.31";
-        let file = format!("{name}-{ARCHITECTURE}-unknown-linux-musl");
+        let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::Zip;
         let uri = format!(
             "https://github.com/sxyazi/yazi/releases/download/v{version}/{file}{archive_type}"
@@ -721,15 +771,15 @@ pub mod programs {
         );
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
     /// <https://github.com/zellij-org/zellij>
-    async fn zellij() -> ::anyhow::Result<()> {
+    async fn zellij(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "zellij";
         let version = "0.43.1";
-        let file = format!("{name}-{ARCHITECTURE}-unknown-linux-musl");
+        let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/zellij-org/zellij/releases/download/v{version}/{file}{archive_type}"
@@ -739,15 +789,15 @@ pub mod programs {
         entries.insert(name.to_string(), local_bin(name));
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 
     /// <https://github.com/ajeetdsouza/zoxide>
-    async fn zoxide() -> ::anyhow::Result<()> {
+    async fn zoxide(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "zoxide";
         let version = "0.9.8";
-        let file = format!("{name}-{version}-{ARCHITECTURE}-unknown-linux-musl");
+        let file = format!("{name}-{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/ajeetdsouza/zoxide/releases/download/v{version}/{file}{archive_type}"
@@ -761,7 +811,7 @@ pub mod programs {
         );
 
         Program::new(name, version, archive_type, uri, entries)
-            .process()
+            .process(architecture)
             .await
     }
 }
