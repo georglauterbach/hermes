@@ -7,7 +7,7 @@
   "Exclude": [
     "\\.sources$",
     "code/Cargo\\.lock$",
-    "**/*.tmTheme$"
+    "examples/git/gitconfig"
   ],
   "AllowedContentTypes": [],
   "PassedFiles": [],

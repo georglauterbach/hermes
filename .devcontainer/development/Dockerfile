@@ -3,17 +3,17 @@
 FROM docker.io/rust:1.90.0-slim-trixie
 
 RUN <<EOF
-	apt-get --yes update
-	# CI
-	apt-get --yes install binutils-aarch64-linux-gnu gcc gcc-aarch64-linux-gnu musl-tools pkg-config zstd
-	# development
-	apt-get --yes install git ssh
+    apt-get --yes update
+    # CI
+    apt-get --yes install binutils-aarch64-linux-gnu gcc gcc-aarch64-linux-gnu musl-tools pkg-config zstd
+    # development
+    apt-get --yes install git ssh
 
-	# create a custom user
-	useradd --create-home --shell /bin/bash user
+    # create a custom user
+    useradd --create-home --shell /bin/bash user
 
-	# ensure we can exercise elevated privileges
-	passwd --delete root
+    # ensure we can exercise elevated privileges
+    passwd --delete root
 EOF
 
 ENV CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-gnu-gcc
