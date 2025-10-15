@@ -19,6 +19,7 @@ ignoreWords:
   - rustdoc
   - rustls
   - sharkdp
+  - softprops
   - trixie
   - yazi
   - zstd
