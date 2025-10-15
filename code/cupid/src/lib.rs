@@ -18,10 +18,11 @@ pub mod arguments {
     impl Architecture {
         /// The link-library of a
         /// [target triple](https://mcyoung.xyz/2025/04/14/target-triples/)
+        #[must_use]
         pub const fn link_library(&self) -> &'static str {
             match self {
-                Architecture::X86_64 => "musl",
-                Architecture::Aarch64 => "gnu",
+                Self::X86_64 => "musl",
+                Self::Aarch64 => "gnu",
             }
         }
     }
@@ -29,8 +30,8 @@ pub mod arguments {
     impl ::std::fmt::Display for Architecture {
         fn fmt(&self, formatter: &mut ::std::fmt::Formatter<'_>) -> std::fmt::Result {
             match self {
-                Architecture::X86_64 => write!(formatter, "x86_64"),
-                Architecture::Aarch64 => write!(formatter, "aarch64"),
+                Self::X86_64 => write!(formatter, "x86_64"),
+                Self::Aarch64 => write!(formatter, "aarch64"),
             }
         }
     }
