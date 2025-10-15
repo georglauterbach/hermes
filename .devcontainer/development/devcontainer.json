@@ -1,24 +1,24 @@
 {
   "name": "development",
-  "image": "docker.io/ubuntu:24.04",
-  "features": {
-    "ghcr.io/georglauterbach/dev-container-features/rust:8.0": {
-      "system.packages.additional-packages": "pkg-config,musl-tools,ssh",
-      "rust.rustup.default-toolchain-file": "${containerWorkspaceFolder}/code/rust-toolchain.toml"
-    },
-    "ghcr.io/georglauterbach/dev-container-features/cache-vscode-extensions:0.4": {},
-    "ghcr.io/georglauterbach/dev-container-features/hermes:11.0.1": {}
+  "build": {
+    "dockerfile": "Dockerfile"
   },
+  "features": {
+    "ghcr.io/georglauterbach/dev-container-features/cache-vscode-extensions:0.4": {}
+    // "ghcr.io/georglauterbach/dev-container-features/rust:8.0": {
+    //   "system.packages.additional-packages": "pkg-config,musl-tools,ssh",
+    //   "rust.rustup.default-toolchain-file": "${containerWorkspaceFolder}/code/rust-toolchain.toml"
+    // },
+    // "ghcr.io/georglauterbach/dev-container-features/hermes:11.0.1": {}
+  },
+  "containerUser": "user",
+  "remoteUser": "user",
   "updateRemoteUserUID": true,
-  "remoteUser": "ubuntu",
-  "containerUser": "ubuntu",
   "containerEnv": {
     // ? Rust
     "CARGO_TARGET_DIR": "${containerWorkspaceFolder}/code/target",
     "CARGO_HOME": "${containerWorkspaceFolder}/code/.rust/cargo/home",
     "RUSTUP_HOME": "${containerWorkspaceFolder}/code/.rust/rustup",
-    "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER": "aarch64-linux-gnu-gcc",
-    "CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER": "x86_64-linux-musl-gcc",
     // ? hermes
     "HERMES_INIT_FZF": "true",
     "HERMES_INIT_STARSHIP": "true",
@@ -27,18 +27,18 @@
     "HERMES_OVERRIDE_CD_WITH_ZOXIDE": "true",
     "HERMES_OVERRIDE_DIFF_WITH_DELTA": "true",
     "HERMES_OVERRIDE_LS_WITH_EZA": "true",
-    "HERMES_CONFIG_ATUIN_DB_FILE": "/home/ubuntu/.cache/atuin_history.db",
+    "HERMES_CONFIG_ATUIN_DB_FILE": "/home/user/.cache/atuin_history.db",
     "HERMES_LOAD_GLOBAL_ALIASES": "true"
   },
   "remoteEnv": {
     "PATH": "${containerEnv:CARGO_HOME}/bin:${containerEnv:PATH}"
   },
-  "postStartCommand": "sudo chown --recursive ubuntu:ubuntu \"${HOME}/.cache\"",
+  "postStartCommand": "su - root bash -c \"chown --recursive user:user '${HOME}/.cache'\"",
   "mounts": [
     {
       // Persist the `${HOME}/.cache` directory
       "source": "com.github.georglauterbach.hermes.cache",
-      "target": "/home/ubuntu/.cache",
+      "target": "/home/user/.cache",
       "type": "volume"
     }
   ],
@@ -63,9 +63,7 @@
         // * extensions::vadimcn.vscode-lldb
         "lldb.launch.preRunCommands": [
           "command script import ${containerEnv:RUST_PRETTIFIER_FOR_LLDB_FILE}"
-        ],
-        // * extensions::asciidoctor.asciidoctor-vscode
-        "asciidoc.antora.showEnableAntoraPrompt": false
+        ]
       }
     }
   }

@@ -3,12 +3,8 @@
 /// The `.tar.xz` archive created by `cupid`
 #[cfg(debug_assertions)]
 const ARCHIVE: &[u8] = &[];
-
-/// The `.tar.xz` archive created by `cupid`
 #[cfg(all(not(debug_assertions), target_arch = "x86_64"))]
 const ARCHIVE: &[u8] = include_bytes!("../../.assets/x86_64/archive.tar.xz");
-
-/// The `.tar.xz` archive created by `cupid`
 #[cfg(all(not(debug_assertions), target_arch = "aarch64"))]
 const ARCHIVE: &[u8] = include_bytes!("../../.assets/aarch64/archive.tar.xz");
 

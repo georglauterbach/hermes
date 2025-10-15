@@ -29,9 +29,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install packages
+      - name: Install Packages
         run: |
-          set -e
           apt-get --yes --quiet=2 update
           apt-get --yes install binutils-aarch64-linux-gnu gcc gcc-aarch64-linux-gnu musl-tools pkg-config zstd
 
@@ -41,9 +40,9 @@ jobs:
           key: artifacts-${{ github.ref }}
           path: code/target/.artifacts
 
-      - name: Test
+      - name: Lint
         run: |
-          set -e ; cd code ;
+          cd code
 
           cargo fmt    --all                              -- --check
           cargo clippy --workspace --quiet --all-features -- -D warnings
@@ -51,7 +50,7 @@ jobs:
 
       - name: Build
         run: |
-          set -e ; cd code ;
+          cd code
 
           cargo run --package cupid -- --architecture x86-64
           cargo run --package cupid -- --architecture aarch64
@@ -67,7 +66,8 @@ jobs:
       - name: Place Artifacts in Cache
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
-          set -e ; cd code/target ; mkdir -p .artifacts ;
+          cd code/target ; mkdir -p .artifacts ;
+
           cp ../../.assets/x86_64/archive.tar.xz       .artifacts/hermes-${{ github.ref_name }}-x86_64.tar.xz
           cp aarch64-unknown-linux-musl/release/hermes .artifacts/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
           cp ../../.assets/aarch64/archive.tar.xz      .artifacts/hermes-${{ github.ref_name }}-aarch64.tar.xz
@@ -87,14 +87,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Load Cache for Build-Output (x86_64)
+      - name: Load Cache with Artifacts
         uses: actions/cache@v4
         with:
           key: artifacts-${{ github.ref }}
           path: code/target/.artifacts
           fail-on-cache-miss: true
 
-      - name: Release
+      - name: Publish Artifacts to Release
         uses: softprops/action-gh-release@v2
         with:
           files: |

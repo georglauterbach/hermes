@@ -10,6 +10,7 @@ ignoreWords:
   - atuin
   - atuinsh
   - blesh
+  - binutils
   - bufread
   - clippy
   - dysk
@@ -18,4 +19,6 @@ ignoreWords:
   - rustdoc
   - rustls
   - sharkdp
+  - trixie
   - yazi
+  - zstd
