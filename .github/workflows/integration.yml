@@ -37,8 +37,8 @@ jobs:
           apt-get --yes install binutils-aarch64-linux-gnu gcc gcc-aarch64-linux-gnu musl-tools pkg-config zstd
 
       - name: Cache Artifacts
-        uses: actions/cache@v4
         if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/cache@v4
         with:
           key: artifacts-${{ github.ref }}
           path: code/target/.artifacts
@@ -89,6 +89,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Load Cache with Artifacts
         uses: actions/cache@v4
