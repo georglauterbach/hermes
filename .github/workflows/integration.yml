@@ -29,6 +29,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install packages
+        run: |
+          set -e
+          apt-get --yes --quiet=2 update
+          apt-get --yes install binutils-aarch64-linux-gnu gcc gcc-aarch64-linux-gnu musl-tools pkg-config zstd
+
       - name: Cache Build-Output
         uses: actions/cache@v4
         with:
@@ -45,9 +51,6 @@ jobs:
         run: |
             set -e
             cd code
-
-            apt-get --yes --quiet=2 update
-            apt-get --yes install binutils-aarch64-linux-gnu gcc gcc-aarch64-linux-gnu musl-tools pkg-config
 
             export CARGO_BUILD_TARGET=x86_64-unknown-linux-musl
             export CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=x86_64-linux-musl-gcc
@@ -106,6 +109,8 @@ jobs:
           mv release/archive.tar.xz release/hermes-${{ github.ref_name }}.tar.xz
           mv aarch64-unknown-linux-musl/release/hermes \
             aarch64-unknown-linux-musl/release/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
+          mv aarch64-unknown-linux-musl/release/archive.tar.xz \
+            aarch64-unknown-linux-musl/release/hermes-${{ github.ref_name }}.tar.xz
 
       - name: Release
         uses: softprops/action-gh-release@v2
@@ -114,3 +119,4 @@ jobs:
             code/target/release/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
             code/target/release/hermes-${{ github.ref_name }}.tar.xz
             code/target/aarch64-unknown-linux-musl/release/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
+            code/target/aarch64-unknown-linux-musl/release/hermes-${{ github.ref_name }}.tar.xz
