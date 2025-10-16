@@ -36,8 +36,11 @@ jobs:
           apt-get --yes --quiet=2 update
           apt-get --yes install binutils-aarch64-linux-gnu gcc gcc-aarch64-linux-gnu musl-tools pkg-config zstd
 
-      - name: Lint
+      - name: Test & Lint Code
         run: |
+          mkdir --parents .assets/x86_64
+          touch           .assets/x86_64/archive.tar.xz
+
           cd code
 
           cargo fmt    --all                              -- --check
