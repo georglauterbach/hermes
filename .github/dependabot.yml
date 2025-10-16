@@ -18,6 +18,5 @@ updates:
     rebase-strategy: auto
     schedule:
       interval: monthly
-    reviewers: [ georglauterbach ]
     assignees: [ georglauterbach ]
     labels: [ area/ci, kind/update ]
