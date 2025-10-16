@@ -16,6 +16,9 @@ struct Arguments {
     /// Define the log verbosity
     #[clap(flatten)]
     verbosity: ::clap_verbosity_flag::Verbosity<::clap_verbosity_flag::InfoLevel>,
+    /// Whether to overwrite all files when unpacking
+    #[clap(short, long)]
+    force: bool,
 }
 
 impl Arguments {
@@ -56,45 +59,53 @@ async fn main() {
     let mut decoder = ::async_compression::tokio::bufread::XzDecoder::new(buffer_reader);
     let mut archive = ::tokio_tar::Archive::new(&mut decoder);
 
-    let Ok(mut entries) = archive.entries() else {
-        log_and_exit_with_error("Could not turn archive into iterator over entries");
-    };
-
-    while let Some(entry) = entries.next().await {
-        let mut entry = match entry {
-            Ok(entry) => entry,
-            Err(error) => {
-                log_and_exit_with_error(format!("Could not get entry from archive: {error}"));
-            }
-        };
-
-        let entry_path_str = match entry.path() {
-            Ok(path) => path.to_string_lossy().to_string(),
-            Err(error) => {
-                log_and_exit_with_error(format!("Could get acquire path of entry: '{error}'"));
-            }
-        };
-
-        let local_path = home_directory.join(&entry_path_str);
-
-        if local_path.exists() {
-            ::tracing::info!("Not overwriting '{}'", local_path.display());
-            continue;
-        }
-
-        if let Some(parent) = local_path.parent()
-            && let Err(error) = ::std::fs::create_dir_all(parent)
-        {
+    if arguments.force {
+        if let Err(error) = archive.unpack(home_directory).await {
             log_and_exit_with_error(format!(
-                "Could not create parent directory for new file '{error}'"
+                "Failed to unpack complete archive forcefully: {error}"
             ));
         }
+    } else {
+        let Ok(mut entries) = archive.entries() else {
+            log_and_exit_with_error("Could not turn archive into iterator over entries");
+        };
 
-        if let Err(error) = entry.unpack(&local_path).await {
-            log_and_exit_with_error(format!(
-                "Could not unpack entry '{entry_path_str}' to '{}': {error}",
-                local_path.display()
-            ));
+        while let Some(entry) = entries.next().await {
+            let mut entry = match entry {
+                Ok(entry) => entry,
+                Err(error) => {
+                    log_and_exit_with_error(format!("Could not get entry from archive: {error}"));
+                }
+            };
+
+            let entry_path_str = match entry.path() {
+                Ok(path) => path.to_string_lossy().to_string(),
+                Err(error) => {
+                    log_and_exit_with_error(format!("Could get acquire path of entry: '{error}'"));
+                }
+            };
+
+            let local_path = home_directory.join(&entry_path_str);
+
+            if local_path.exists() {
+                ::tracing::info!("Not overwriting '{}'", local_path.display());
+                continue;
+            }
+
+            if let Some(parent) = local_path.parent()
+                && let Err(error) = ::std::fs::create_dir_all(parent)
+            {
+                log_and_exit_with_error(format!(
+                    "Could not create parent directory for new file '{error}'"
+                ));
+            }
+
+            if let Err(error) = entry.unpack(&local_path).await {
+                log_and_exit_with_error(format!(
+                    "Could not unpack entry '{entry_path_str}' to '{}': {error}",
+                    local_path.display()
+                ));
+            }
         }
     }
 
