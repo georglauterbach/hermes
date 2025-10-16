@@ -195,7 +195,7 @@ pub mod programs {
 
     /// The type of archive we download in [`Program`]
     #[derive(Debug, Clone, Copy)]
-    pub enum ArchiveType {
+    enum ArchiveType {
         /// A `.tar.gz` archive
         TarGz,
         /// A `.tar.xz` archive
@@ -217,7 +217,7 @@ pub mod programs {
 
     /// TODO
     #[derive(Debug)]
-    pub enum Entries {
+    enum Entries {
         /// TODO
         Specific(::std::collections::HashMap<String, String>),
         /// TODO

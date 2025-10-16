@@ -82,12 +82,12 @@ async fn main() {
             continue;
         }
 
-        if let Some(parent) = local_path.parent() {
-            if let Err(error) = ::std::fs::create_dir_all(parent) {
-                log_and_exit_with_error(format!(
-                    "Could not create parent directory for new file '{error}'"
-                ));
-            }
+        if let Some(parent) = local_path.parent()
+            && let Err(error) = ::std::fs::create_dir_all(parent)
+        {
+            log_and_exit_with_error(format!(
+                "Could not create parent directory for new file '{error}'"
+            ));
         }
 
         if let Err(error) = entry.unpack(&local_path).await {
