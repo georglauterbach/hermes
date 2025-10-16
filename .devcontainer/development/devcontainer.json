@@ -4,12 +4,9 @@
     "dockerfile": "Dockerfile"
   },
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/cache-vscode-extensions:0.4": {}
-    // "ghcr.io/georglauterbach/dev-container-features/rust:8.0": {
-    //   "system.packages.additional-packages": "pkg-config,musl-tools,ssh",
-    //   "rust.rustup.default-toolchain-file": "${containerWorkspaceFolder}/code/rust-toolchain.toml"
-    // },
-    // "ghcr.io/georglauterbach/dev-container-features/hermes:11.0.1": {}
+    "ghcr.io/georglauterbach/dev-container-features/cache-vscode-extensions:0.4": {},
+    "ghcr.io/georglauterbach/dev-container-features/hermes:11.1.1": {},
+    "ghcr.io/georglauterbach/dev-container-features/lang-rust:0.1.4": {}
   },
   "containerUser": "user",
   "remoteUser": "user",
@@ -33,6 +30,7 @@
   "remoteEnv": {
     "PATH": "${containerEnv:CARGO_HOME}/bin:${containerEnv:PATH}"
   },
+  "postCreateCommand": "hermes",
   "postStartCommand": "su - root bash -c \"chown --recursive user:user '${HOME}/.cache'\"",
   "mounts": [
     {
