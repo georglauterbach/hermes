@@ -16,14 +16,14 @@ defaults:
   run:
     shell: bash
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     container: docker.io/rust:1.90.0-slim-trixie
-
-    permissions:
-      contents: read
 
     steps:
       - name: Checkout
