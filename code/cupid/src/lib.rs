@@ -16,7 +16,7 @@ pub mod arguments {
     }
 
     impl Architecture {
-        /// The link-library of a
+        /// The link-library name of a
         /// [target triple](https://mcyoung.xyz/2025/04/14/target-triples/)
         #[must_use]
         pub const fn link_library(&self) -> &'static str {
@@ -28,7 +28,7 @@ pub mod arguments {
     }
 
     impl ::std::fmt::Display for Architecture {
-        fn fmt(&self, formatter: &mut ::std::fmt::Formatter<'_>) -> std::fmt::Result {
+        fn fmt(&self, formatter: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match self {
                 Self::X86_64 => write!(formatter, "x86_64"),
                 Self::Aarch64 => write!(formatter, "aarch64"),
@@ -145,10 +145,53 @@ pub fn archive_directory(architecture: arguments::Architecture) -> ::std::path::
 pub mod programs {
     //! This module handles all programs and their associated data
 
+    use crate::asset_base_directory;
+
     use super::arguments::Architecture;
     use ::std::collections;
 
     use ::anyhow::Context as _;
+
+    /// Process all programs and their associated archived and files
+    ///
+    /// ### Errors
+    ///
+    /// All encountered errors are immediately propagated.
+    pub async fn process(architecture: Architecture) -> ::anyhow::Result<()> {
+        let mut join_set = ::tokio::task::JoinSet::new();
+        join_set.spawn(atuin(architecture));
+        join_set.spawn(bat(architecture));
+        join_set.spawn(blesh(architecture));
+        join_set.spawn(bottom(architecture));
+        join_set.spawn(delta(architecture));
+        join_set.spawn(dust(architecture));
+        join_set.spawn(dysk(architecture));
+        join_set.spawn(eza(architecture));
+        join_set.spawn(fd(architecture));
+        join_set.spawn(fzf(architecture));
+        join_set.spawn(gitui(architecture));
+        join_set.spawn(just(architecture));
+        join_set.spawn(ripgrep(architecture));
+        join_set.spawn(starship(architecture));
+        join_set.spawn(yazi(architecture));
+        join_set.spawn(zellij(architecture));
+        join_set.spawn(zoxide(architecture));
+
+        while let Some(result) = join_set.join_next().await {
+            match result {
+                Err(join_error) => {
+                    return Err(join_error).context("Could not join program-processing handle");
+                }
+                Ok(Err(download_error)) => {
+                    return Err(download_error)
+                        .context("An error occurred processing a program download");
+                }
+                Ok(Ok(())) => (),
+            }
+        }
+
+        Ok(())
+    }
 
     /// The type of archive we download in [`Program`]
     #[derive(Debug, Clone, Copy)]
@@ -172,9 +215,18 @@ pub mod programs {
         }
     }
 
+    /// TODO
+    #[derive(Debug)]
+    pub enum Entries {
+        /// TODO
+        Specific(::std::collections::HashMap<String, String>),
+        /// TODO
+        All(&'static str, &'static str),
+    }
+
     /// A structure that groups properties of a program
     #[derive(Debug)]
-    pub struct Program {
+    struct Program {
         /// The program name
         name: &'static str,
         /// The program version
@@ -185,7 +237,7 @@ pub mod programs {
         /// contains the program and its associated data
         download_uri: String,
         /// The entries inside the archive to copy into the archive
-        archive_entries: ::std::collections::HashMap<String, String>,
+        archive_entries: Entries,
     }
 
     impl Program {
@@ -194,15 +246,15 @@ pub mod programs {
         pub const fn new(
             name: &'static str,
             version: &'static str,
-            archive_type: ArchiveType,
-            uri: String,
-            archive_entries: ::std::collections::HashMap<String, String>,
+            download_archive_type: ArchiveType,
+            download_uri: String,
+            archive_entries: Entries,
         ) -> Self {
             Self {
                 name,
                 version,
-                download_archive_type: archive_type,
-                download_uri: uri,
+                download_archive_type,
+                download_uri,
                 archive_entries,
             }
         }
@@ -348,6 +400,42 @@ pub mod programs {
             extracted_directory: &::std::path::Path,
             architecture: Architecture,
         ) -> ::anyhow::Result<()> {
+            /// TODO
+            async fn symlink(
+                name: &str,
+                from: &::std::path::Path,
+                to: &::std::path::Path,
+            ) -> ::anyhow::Result<()> {
+                if !from.exists() {
+                    ::anyhow::bail!(
+                        "File '{}' from archive for '{}' does not exist",
+                        from.display(),
+                        name
+                    );
+                }
+
+                to.parent()
+                    .map(::std::fs::create_dir_all)
+                    .transpose()
+                    .context(format!(
+                        "Could not create directory to put '{}' in",
+                        to.display()
+                    ))?;
+
+                if to.exists() {
+                    println!("Symbolic link for '{}' already exists", to.display());
+                    return Ok(());
+                }
+
+                ::tokio::fs::symlink(&from, &to).await.context(format!(
+                    "Could not create symbolic link from archive entry '{}' to '{}'",
+                    from.display(),
+                    to.display()
+                ))?;
+
+                Ok(())
+            }
+
             let archive_directory = super::archive_directory(architecture);
             println!("Symlinking files for {}", self.name);
 
@@ -360,31 +448,19 @@ pub mod programs {
                     ))?;
             }
 
-            for (from, to) in &self.archive_entries {
-                let from = extracted_directory.join(from);
-                let to = archive_directory.join(to);
-
-                if !from.exists() {
-                    ::anyhow::bail!(
-                        "File '{}' from archive for '{}' does not exist",
-                        from.display(),
-                        self.name
-                    );
+            match &self.archive_entries {
+                Entries::All(from, to) => {
+                    let from = extracted_directory.join(from);
+                    let to = archive_directory.join(to);
+                    symlink(self.name, &from, &to).await?;
                 }
-
-                to.parent()
-                    .map(::std::fs::create_dir_all)
-                    .transpose()
-                    .context(format!(
-                        "Could not create directory to put '{}' in",
-                        to.display()
-                    ))?;
-
-                ::tokio::fs::symlink(&from, &to).await.context(format!(
-                    "Could not create symbolic link from archive entry '{}' to '{}'",
-                    from.display(),
-                    to.display()
-                ))?;
+                Entries::Specific(entries) => {
+                    for (from, to) in entries {
+                        let from = extracted_directory.join(from);
+                        let to = archive_directory.join(to);
+                        symlink(self.name, &from, &to).await?;
+                    }
+                }
             }
 
             Ok(())
@@ -402,46 +478,6 @@ pub mod programs {
         format!(".local/share/bash-completion/completions/{and}")
     }
 
-    /// Process all programs and their associated archived and files
-    ///
-    /// ### Errors
-    ///
-    /// All encountered errors are immediately propagated.
-    pub async fn process(architecture: Architecture) -> ::anyhow::Result<()> {
-        let mut join_set = ::tokio::task::JoinSet::new();
-        join_set.spawn(atuin(architecture));
-        join_set.spawn(bat(architecture));
-        join_set.spawn(bottom(architecture));
-        join_set.spawn(delta(architecture));
-        join_set.spawn(dust(architecture));
-        join_set.spawn(dysk(architecture));
-        join_set.spawn(eza(architecture));
-        join_set.spawn(fd(architecture));
-        join_set.spawn(fzf(architecture));
-        join_set.spawn(gitui(architecture));
-        join_set.spawn(just(architecture));
-        join_set.spawn(ripgrep(architecture));
-        join_set.spawn(starship(architecture));
-        join_set.spawn(yazi(architecture));
-        join_set.spawn(zellij(architecture));
-        join_set.spawn(zoxide(architecture));
-
-        while let Some(result) = join_set.join_next().await {
-            match result {
-                Err(join_error) => {
-                    return Err(join_error).context("Could not join program-processing handle");
-                }
-                Ok(Err(download_error)) => {
-                    return Err(download_error)
-                        .context("An error occurred processing a program download");
-                }
-                Ok(Ok(())) => (),
-            }
-        }
-
-        Ok(())
-    }
-
     /// <https://github.com/atuinsh/atuin>
     async fn atuin(architecture: super::arguments::Architecture) -> ::anyhow::Result<()> {
         let name = "atuin";
@@ -455,7 +491,7 @@ pub mod programs {
         let mut entries = collections::HashMap::new();
         entries.insert(format!("{file}/{name}"), local_bin(name));
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }
@@ -477,9 +513,44 @@ pub mod programs {
             bash_completion("bat.bash"),
         );
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
+    }
+
+    // TODO
+    /// <https://github.com/akinomyoga/ble.sh>
+    async fn blesh(architecture: Architecture) -> ::anyhow::Result<()> {
+        let name = "blesh";
+        let version = "nightly";
+        let file = "ble-nightly";
+        let archive_type = ArchiveType::TarXz;
+        let uri = format!(
+            "https://github.com/akinomyoga/ble.sh/releases/download/{version}/{file}{archive_type}"
+        );
+
+        Program::new(
+            name,
+            version,
+            archive_type,
+            uri,
+            Entries::All("ble-nightly", ".local/share/blesh"),
+        )
+        .process(architecture)
+        .await?;
+
+        let ble_base_path = asset_base_directory(architecture)
+            .join("extracted")
+            .join(name)
+            .join(version)
+            .join(file);
+        let _ = ::std::fs::remove_dir_all(ble_base_path.join("cache.d"));
+        let _ = ::std::fs::remove_dir_all(ble_base_path.join("contrib").join("airline"));
+        let _ = ::std::fs::remove_dir_all(ble_base_path.join("doc"));
+        let _ = ::std::fs::remove_dir_all(ble_base_path.join("licenses"));
+        let _ = ::std::fs::remove_dir_all(ble_base_path.join("run"));
+
+        Ok(())
     }
 
     /// <https://github.com/ClementTsang/bottom>
@@ -499,45 +570,10 @@ pub mod programs {
             bash_completion("btm.bash"),
         );
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }
-
-    // // TODO
-    // /// Install `ble.sh` (<https://github.com/akinomyoga/ble.sh>)
-    // async fn blesh() -> ::anyhow::Result<()> {
-    //     let file = "ble-nightly";
-    //     let uri =
-    //         format!("https://github.com/akinomyoga/ble.sh/releases/download/nightly/{file}.tar.xz");
-
-    //     let target_dir = format!("{}/.local/share", environment::home_str());
-    //     let _ = ::async_std::fs::create_dir_all(&target_dir).await;
-    //     let _ = ::async_std::fs::remove_dir_all(format!("/tmp/{file}")).await;
-    //     let _ = ::async_std::fs::remove_dir_all(format!("{target_dir}/blesh")).await;
-
-    //     // We download and unpack the archive to `${HOME}/.local/share`
-    //     let response = download::download(uri).await?;
-    //     let xz_decoder = ::async_compression::tokio::bufread::XzDecoder::new(&response[..]);
-    //     let mut archive = ::tokio_tar::Archive::new(xz_decoder);
-
-    //     archive
-    //         .unpack(&target_dir)
-    //         .await
-    //         .context("Could not unpack ble.sh archive")?;
-
-    //     ::async_std::fs::rename(
-    //         format!("{target_dir}/{file}"),
-    //         format!("{target_dir}/blesh"),
-    //     )
-    //     .await
-    //     .context("Could not move unpacked ble.sh archive to final location")?;
-
-    //     let _ =
-    //         ::async_std::fs::remove_dir_all(format!("{}/.cache/blesh", environment::home_str()))
-    //             .await;
-    //     Ok(())
-    // }
 
     /// <https://github.com/dandavison/delta>
     async fn delta(architecture: Architecture) -> ::anyhow::Result<()> {
@@ -555,7 +591,7 @@ pub mod programs {
         let mut entries = collections::HashMap::new();
         entries.insert(format!("{file}/{name}"), local_bin(name));
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }
@@ -573,7 +609,7 @@ pub mod programs {
         let mut entries = collections::HashMap::new();
         entries.insert(format!("{file}/{name}"), local_bin(name));
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }
@@ -597,7 +633,7 @@ pub mod programs {
             bash_completion("dysk.bash"),
         );
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }
@@ -618,7 +654,7 @@ pub mod programs {
         let mut entries = collections::HashMap::new();
         entries.insert(format!("./{name}"), local_bin(name));
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }
@@ -640,7 +676,7 @@ pub mod programs {
             bash_completion("fd.bash"),
         );
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }
@@ -661,7 +697,7 @@ pub mod programs {
         let mut entries = collections::HashMap::new();
         entries.insert(name.to_string(), local_bin(name));
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }
@@ -679,7 +715,7 @@ pub mod programs {
         let mut entries = collections::HashMap::new();
         entries.insert(format!("./{name}"), local_bin(name));
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }
@@ -701,7 +737,7 @@ pub mod programs {
             bash_completion("just.bash"),
         );
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }
@@ -726,7 +762,7 @@ pub mod programs {
             bash_completion("rg.bash"),
         );
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }
@@ -744,7 +780,7 @@ pub mod programs {
         let mut entries = collections::HashMap::new();
         entries.insert(name.to_string(), local_bin(name));
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }
@@ -771,7 +807,7 @@ pub mod programs {
             bash_completion("yazi.bash"),
         );
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }
@@ -789,7 +825,7 @@ pub mod programs {
         let mut entries = collections::HashMap::new();
         entries.insert(name.to_string(), local_bin(name));
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }
@@ -811,7 +847,7 @@ pub mod programs {
             bash_completion("zoxide.bash"),
         );
 
-        Program::new(name, version, archive_type, uri, entries)
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
     }

@@ -1,26 +1,31 @@
 [package]
 name = "hermes"
-version = "11.0.0"
+version = "11.1.0"
 edition = "2024"
 publish = false
 
-description = "CLI utilities and configuration files delivered like a god"
+description = "CLI utilities and configuration files delivered like a god.\nBut actually just a glorified tar-decompressor."
 repository = "https://github.com/georglauterbach/hermes"
 license-file = "../../LICENSE"
 readme = "../../README.md"
 
 [dependencies]
+clap = { version = "4.5", default-features = true, features = ["cargo"] }
+clap-verbosity-flag = { version = "3.0", default-features = false, features = ["tracing"] }
 async-compression = { version = "0.4", default-features = false, features = [
   "gzip",
   "tokio",
   "xz-parallel",
 ] }
+async-std = { version = "1.13", default-features = false, features = ["unstable"] }
 tokio = { version = "1.48", default-features = false, features = [
   "macros",
   "process",
   "rt-multi-thread",
 ] }
 tokio-tar = { version = "0.3", default-features = false }
+tracing = { version = "0.1", default-features = false }
+tracing-subscriber = { version = "0.3", default-features = true }
 
 [lints]
 workspace = true

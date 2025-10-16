@@ -16,7 +16,7 @@ mkdir -p "$(dirname "${HERMES_LOCATION}")"
 HERMES_VERSION="$(curl -sSIL -w '%{url_effective}' -o /dev/null "https://github.com/georglauterbach/hermes/releases/latest" | sed 's|.*/||')"
 curl --silent --show-error --fail --location --output "${HERMES_LOCATION}" "https://github.com/georglauterbach/hermes/releases/download/${HERMES_VERSION}/hermes-${HERMES_VERSION}-$(uname -m)-unknown-linux-musl"
 chmod +x "${HERMES_LOCATION}"
-hermes # does not accept any parameters or options
+hermes
 ```
 
 ## Additional Setup

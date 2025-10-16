@@ -36,13 +36,6 @@ jobs:
           apt-get --yes --quiet=2 update
           apt-get --yes install binutils-aarch64-linux-gnu gcc gcc-aarch64-linux-gnu musl-tools pkg-config zstd
 
-      - name: Cache Artifacts
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/cache@v4
-        with:
-          key: artifacts-${{ github.ref }}
-          path: code/target/.artifacts
-
       - name: Lint
         run: |
           cd code
@@ -66,40 +59,19 @@ jobs:
           export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-gnu-gcc
           cargo build --release --package hermes
 
-      - name: Place Artifacts in Cache
+      - name: '[Release] Move Artifacts for Upload'
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
           cd code/target ; mkdir -p .artifacts ;
 
-          cp ../../.assets/x86_64/archive.tar.xz       .artifacts/hermes-${{ github.ref_name }}-x86_64.tar.xz
-          cp x86_64-unknown-linux-musl/release/hermes  .artifacts/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
-          cp ../../.assets/aarch64/archive.tar.xz      .artifacts/hermes-${{ github.ref_name }}-aarch64.tar.xz
-          cp aarch64-unknown-linux-musl/release/hermes .artifacts/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
+          mv ../../.assets/x86_64/archive.tar.xz       .artifacts/hermes-${{ github.ref_name }}-x86_64.tar.xz
+          mv x86_64-unknown-linux-musl/release/hermes  .artifacts/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
 
-  publish:
-    name: Publish
-    runs-on: ubuntu-latest
+          mv ../../.assets/aarch64/archive.tar.xz      .artifacts/hermes-${{ github.ref_name }}-aarch64.tar.xz
+          mv aarch64-unknown-linux-musl/release/hermes .artifacts/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
 
-    needs: [ build ]
-    if: startsWith(github.ref, 'refs/tags/v')
-
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          persist-credentials: false
-
-      - name: Load Cache with Artifacts
-        uses: actions/cache@v4
-        with:
-          key: artifacts-${{ github.ref }}
-          path: code/target/.artifacts
-          fail-on-cache-miss: true
-
-      - name: Publish Artifacts to Release
+      - name: '[Release] Publish Artifacts to Release'
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           files: |

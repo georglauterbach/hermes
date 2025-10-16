@@ -18,7 +18,7 @@ bytes = { version = "1.10", default-features = false }
 clap = { version = "4.5", default-features = true, features = ["cargo", "derive"] }
 reqwest = { version = "0.12", default-features = false, features = [
     "rustls-tls",
-  "socks"
+    "socks"
 ] }
 tokio = { version = "1.48", default-features = false, features = [
     "macros",

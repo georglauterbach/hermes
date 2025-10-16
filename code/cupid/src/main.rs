@@ -2,7 +2,7 @@
 //! archive that `hermes` uses for its (offline)
 //! installation
 
-/// The entrypoint of this build script
+/// The entrypoint of `cupid`
 #[::tokio::main(flavor = "multi_thread")]
 async fn main() {
     let arguments = <::cupid::arguments::Arguments as ::clap::Parser>::parse();

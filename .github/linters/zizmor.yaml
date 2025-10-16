@@ -1,7 +1,5 @@
 ---
 rules:
-  cache-poisoning:
-    disable: true
   template-injection:
     disable: true
   unpinned-uses:
