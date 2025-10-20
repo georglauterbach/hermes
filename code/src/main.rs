@@ -87,7 +87,7 @@ async fn main() {
 
             let local_path = home_directory.join(&entry_path_str);
 
-            if local_path.exists() {
+            if local_path.exists() && !local_path.is_dir() {
                 ::tracing::info!("Not overwriting '{}'", local_path.display());
                 continue;
             }
