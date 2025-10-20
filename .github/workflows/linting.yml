@@ -28,7 +28,7 @@ jobs:
           persist-credentials: false
 
       - name: Run Linter
-        uses: super-linter/super-linter/slim@v8.2.0
+        uses: super-linter/super-linter/slim@v8
         env:
           LOG_LEVEL: NOTICE
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
