@@ -5,7 +5,7 @@
   },
   "features": {
     "ghcr.io/georglauterbach/dev-container-features/vscode-cache-extensions:0.1": {},
-    "ghcr.io/georglauterbach/dev-container-features/hermes:11.1.1": {},
+    "ghcr.io/georglauterbach/dev-container-features/hermes:11.1.2": {},
     "ghcr.io/georglauterbach/dev-container-features/lang-rust:0.1.6": {}
   },
   "containerUser": "user",
