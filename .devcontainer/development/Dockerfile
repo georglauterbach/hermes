@@ -1,6 +1,6 @@
 # syntax=docker.io/docker/dockerfile:1
 
-FROM docker.io/rust:1.90.0-slim-trixie
+FROM docker.io/rust:1.91.0-slim-trixie
 
 RUN <<EOF
     apt-get --yes update
