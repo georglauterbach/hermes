@@ -103,8 +103,9 @@ pub async fn symlink_configuration_directory(
 pub async fn create_archive(architecture: arguments::Architecture) -> ::anyhow::Result<()> {
     {
         println!("Creating final archive");
-        let mut builder = ::tokio_tar::Builder::new(Vec::with_capacity(1_000_000 * 50));
+        let mut builder = ::tokio_tar::Builder::new(Vec::with_capacity(1_000_000 * 40));
         builder
+            .follow_symlinks(true)
             .append_dir_all("", archive_directory(architecture))
             .await
             .context("Appending archive directory to archive builder failed")?;

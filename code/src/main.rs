@@ -57,7 +57,11 @@ async fn main() {
 
     let buffer_reader = ::tokio::io::BufReader::new(ARCHIVE);
     let mut decoder = ::async_compression::tokio::bufread::XzDecoder::new(buffer_reader);
-    let mut archive = ::tokio_tar::Archive::new(&mut decoder);
+    let mut archive = ::tokio_tar::ArchiveBuilder::new(&mut decoder)
+        .set_preserve_permissions(true)
+        .set_preserve_mtime(true)
+        .set_unpack_xattrs(true)
+        .build();
 
     if arguments.force {
         if let Err(error) = archive.unpack(home_directory).await {
