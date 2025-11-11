@@ -480,7 +480,7 @@ pub mod programs {
     /// <https://github.com/atuinsh/atuin>
     async fn atuin(architecture: super::arguments::Architecture) -> ::anyhow::Result<()> {
         let name = "atuin";
-        let version = "18.8.0";
+        let version = "18.10.0";
         let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -498,7 +498,7 @@ pub mod programs {
     /// <https://github.com/sharkdp/bat>
     async fn bat(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "bat";
-        let version = "0.25.0";
+        let version = "0.26.0";
         let file = format!("{name}-v{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -616,7 +616,7 @@ pub mod programs {
     /// <https://github.com/Canop/dysk>
     async fn dysk(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "dysk";
-        let version = "3.0.0";
+        let version = "3.4.0";
         let archive_type = ArchiveType::Zip;
         let uri = format!(
             "https://github.com/Canop/dysk/releases/download/v{version}/dysk_{version}{archive_type}"
@@ -640,7 +640,7 @@ pub mod programs {
     /// <https://github.com/eza-community/eza>
     async fn eza(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "eza";
-        let version = "0.23.0";
+        let version = "0.23.4";
         let file = format!(
             "{name}_{architecture}-unknown-linux-{}",
             architecture.link_library()
@@ -683,7 +683,7 @@ pub mod programs {
     /// <https://github.com/junegunn/fzf>
     async fn fzf(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fzf";
-        let version = "0.65.1";
+        let version = "0.66.1";
         let file = match architecture {
             Architecture::X86_64 => format!("{name}-{version}-linux_amd64"),
             Architecture::Aarch64 => format!("{name}-{version}-linux_arm64"),
@@ -722,7 +722,7 @@ pub mod programs {
     /// <https://github.com/casey/just>
     async fn just(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "just";
-        let version = "1.42.4";
+        let version = "1.43.0";
         let file = format!("{name}-{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -744,7 +744,7 @@ pub mod programs {
     /// <https://github.com/BurntSushi/ripgrep>
     async fn ripgrep(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "ripgrep";
-        let version = "14.1.1";
+        let version = "15.1.0";
         let file = format!(
             "{name}-{version}-{architecture}-unknown-linux-{}",
             architecture.link_library()
@@ -769,7 +769,7 @@ pub mod programs {
     /// <https://github.com/starship/starship>
     async fn starship(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "starship";
-        let version = "1.23.0";
+        let version = "1.24.0";
         let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
