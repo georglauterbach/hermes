@@ -10,7 +10,7 @@ license-file = "../../LICENSE"
 readme = "../../README.md"
 
 [dependencies]
-clap = { version = "4.5", default-features = true, features = ["cargo"] }
+clap = { workspace = true }
 clap-verbosity-flag = { version = "3.0", default-features = false, features = ["tracing"] }
 async-compression = { version = "0.4", default-features = false, features = [
   "gzip",
@@ -18,12 +18,8 @@ async-compression = { version = "0.4", default-features = false, features = [
   "xz-parallel",
 ] }
 async-std = { version = "1.13", default-features = false, features = ["unstable"] }
-tokio = { version = "1.48", default-features = false, features = [
-  "macros",
-  "process",
-  "rt-multi-thread",
-] }
-tokio-tar = { version = "0.3", default-features = false }
+tokio = { workspace = true }
+astral-tokio-tar = { workspace = true }
 tracing = { version = "0.1", default-features = false }
 tracing-subscriber = { version = "0.3", default-features = true }
 
@@ -31,12 +27,20 @@ tracing-subscriber = { version = "0.3", default-features = true }
 workspace = true
 
 [profile.release]
-opt-level = "z"
 lto = "fat"
 
 [workspace]
 members = ["cupid"]
 resolver = "3"
+
+[workspace.dependencies]
+clap = { version = "4.5", default-features = true, features = ["cargo", "derive"] }
+tokio = { version = "1.48", default-features = false, features = [
+  "macros",
+  "process",
+  "rt-multi-thread",
+] }
+astral-tokio-tar = { version = "0.5", default-features = false }
 
 [workspace.lints]
 

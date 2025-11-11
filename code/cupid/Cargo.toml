@@ -15,17 +15,13 @@ async-compression = { version = "0.4", default-features = false, features = [
     "xz-parallel",
 ] }
 bytes = { version = "1.10", default-features = false }
-clap = { version = "4.5", default-features = true, features = ["cargo", "derive"] }
+clap = { workspace = true }
 reqwest = { version = "0.12", default-features = false, features = [
     "rustls-tls",
     "socks"
 ] }
-tokio = { version = "1.48", default-features = false, features = [
-    "macros",
-    "process",
-    "rt-multi-thread",
-] }
-tokio-tar = { version = "0.3", default-features = false }
+tokio = { workspace = true }
+astral-tokio-tar = { workspace = true }
 zip = { version = "6.0", default-features = true }
 
 [lints]
