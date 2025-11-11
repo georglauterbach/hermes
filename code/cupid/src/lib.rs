@@ -423,8 +423,7 @@ pub mod programs {
                     ))?;
 
                 if to.exists() {
-                    println!("Symbolic link for '{}' already exists", to.display());
-                    return Ok(());
+                    tokio::fs::remove_file(to).await.context("TODO")?;
                 }
 
                 ::tokio::fs::symlink(&from, &to).await.context(format!(
