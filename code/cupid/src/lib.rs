@@ -215,12 +215,12 @@ pub mod programs {
         }
     }
 
-    /// TODO
+    /// Which entries from a program's archive to unpack
     #[derive(Debug)]
     enum Entries {
-        /// TODO
+        /// Unpack only specific entries
         Specific(::std::collections::HashMap<String, String>),
-        /// TODO
+        /// Unpack all entries
         All(&'static str, &'static str),
     }
 
@@ -400,7 +400,7 @@ pub mod programs {
             extracted_directory: &::std::path::Path,
             architecture: Architecture,
         ) -> ::anyhow::Result<()> {
-            /// TODO
+            /// Actually create the symbolic link
             async fn symlink(
                 name: &str,
                 from: &::std::path::Path,
@@ -423,7 +423,9 @@ pub mod programs {
                     ))?;
 
                 if to.exists() {
-                    tokio::fs::remove_file(to).await.context("TODO")?;
+                    tokio::fs::remove_file(to)
+                        .await
+                        .context("Could not remove existing symbolic link")?;
                 }
 
                 ::tokio::fs::symlink(&from, &to).await.context(format!(
@@ -517,7 +519,6 @@ pub mod programs {
             .await
     }
 
-    // TODO
     /// <https://github.com/akinomyoga/ble.sh>
     async fn blesh(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "blesh";
