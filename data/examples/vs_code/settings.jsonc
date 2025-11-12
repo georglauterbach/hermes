@@ -146,9 +146,6 @@
     "*.env": "bash",
     "*.conf": "ini"
   },
-  "files.exclude": {
-    "**/.git": true
-  },
   // ? chat / copilot
   // in conjunction with https://stackoverflow.com/a/79534407
   "chat.agent.enabled": false,
