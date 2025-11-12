@@ -365,14 +365,22 @@ pub mod programs {
                 ArchiveType::TarGz => {
                     let decoder =
                         ::async_compression::tokio::bufread::GzipDecoder::new(&archive[..]);
-                    ::tokio_tar::Archive::new(decoder)
+                    ::tokio_tar::ArchiveBuilder::new(decoder)
+                        .set_preserve_permissions(true)
+                        .set_preserve_mtime(true)
+                        .set_unpack_xattrs(true)
+                        .build()
                         .unpack(&directory_extracted)
                         .await
                         .context("Could not unpack .tar.gz archive")
                 }
                 ArchiveType::TarXz => {
                     let decoder = ::async_compression::tokio::bufread::XzDecoder::new(&archive[..]);
-                    ::tokio_tar::Archive::new(decoder)
+                    ::tokio_tar::ArchiveBuilder::new(decoder)
+                        .set_preserve_permissions(true)
+                        .set_preserve_mtime(true)
+                        .set_unpack_xattrs(true)
+                        .build()
                         .unpack(&directory_extracted)
                         .await
                         .context("Could not unpack .tar.xz archive")
