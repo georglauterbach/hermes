@@ -4,56 +4,37 @@
   "telemetry.telemetryLevel": "off",
   "update.mode": "none",
   // ? search & window
-  "window.titleBarStyle": "native",
+  "window.menuStyle": "native",
   "window.menuBarVisibility": "hidden",
-  "window.menuStyle": "custom",
+  "window.titleBarStyle": "native",
   "window.customTitleBarVisibility": "never",
-  "window.menuStyle": "inherit",
-  "window.commandCenter": false,
   "search.useIgnoreFiles": true,
   // ? git
   "git.confirmSync": false,
   "git.autofetch": false,
   "git.ignoreMissingGitWarning": true,
   "git.openRepositoryInParentFolders": "never",
-  // ? workbench
-  // * workbench::miscellaneous
-  "workbench.editor.showTabs": "multiple",
-  "workbench.editor.wrapTabs": true,
-  "workbench.editor.enablePreview": true,
-  "workbench.editor.decorations.colors": true,
-  "workbench.editor.enablePreviewFromQuickOpen": true,
-  "workbench.editor.closeEmptyGroups": true,
-  "workbench.editor.pinnedTabSizing": "compact",
-  "workbench.editor.enablePreviewFromCodeNavigation": true,
-  "workbench.editor.limit.value": 5,
-  "workbench.editor.limit.enabled": true,
-  "workbench.editor.limit.perEditorGroup": true,
-  "workbench.editor.empty.hint": "hidden",
-  "workbench.activityBar.location": "top",
-  "workbench.sideBar.location": "right",
-  "workbench.layoutControl.enabled": false,
-  "workbench.startupEditor": "none",
-  // * workbench::theme
+  // ? color theme
+  // * color theme::general
   "workbench.iconTheme": "gruvbox-material-icon-theme",
   "workbench.preferredLightColorTheme": "Everforest Light",
   "workbench.preferredDarkColorTheme": "Gruvbox Material Dark",
   "window.autoDetectColorScheme": true,
   "window.autoDetectHighContrast": false,
-  // * workbench::theme::gruvbox-material-dark
+  // * color theme::gruvbox-material-dark
   "gruvboxMaterial.darkContrast": "hard",
   "gruvboxMaterial.darkWorkbench": "high-contrast",
   "gruvboxMaterial.darkPalette": "material",
   "gruvboxMaterial.darkCursor": "blue",
   "gruvboxMaterial.darkSelection": "aqua",
   "gruvboxMaterial.diagnosticTextBackgroundOpacity": "12.5%",
-  // * workbench::theme::everforest-light
+  // * color theme::everforest-light
   "everforest.lightContrast": "hard",
   "everforest.lightWorkbench": "high-contrast",
   "everforest.lightCursor": "green",
   "everforest.lightSelection": "aqua",
   "everforest.diagnosticTextBackgroundOpacity": "12.5%",
-  // * workbench::color-customization
+  // * color theme::customizations
   "workbench.colorCustomizations": {
     // https://github.com/sainnhe/gruvbox-material-vscode
     "[Gruvbox Material Dark]": {
@@ -72,35 +53,55 @@
       "gitDecoration.ignoredResourceForeground": "#A6B0A0"
     }
   },
+  // ? workbench
+  // * workbench::bars
+  "workbench.sideBar.location": "right",
+  "workbench.activityBar.location": "top",
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  // * workbench::editor
+  // * workbench::editor::limit
+  "workbench.editor.limit.value": 5,
+  "workbench.editor.limit.enabled": true,
+  "workbench.editor.limit.perEditorGroup": true,
+  // * workbench::editor::miscellaneous
+  "workbench.editor.decorations.colors": true,
+  "workbench.editor.closeEmptyGroups": true,
+  "workbench.editor.empty.hint": "hidden",
+  // * workbench::editor::preview
+  "workbench.editor.enablePreview": true,
+  "workbench.editor.enablePreviewFromQuickOpen": true,
+  "workbench.editor.enablePreviewFromCodeNavigation": true,
+  // * workbench::editor::tabs
+  "workbench.editor.showTabs": "multiple",
+  "workbench.editor.wrapTabs": true,
+  "workbench.editor.pinnedTabSizing": "compact",
+  // * workbench::miscellaneous
+  "workbench.startupEditor": "none",
   // ? editor
+  // * editor::brackets
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  // * editor::completion
+  "editor.tabCompletion": "on",
+  "editor.suggestSelection": "first",
+  // * editor::cursor
+  "editor.cursorSurroundingLines": 25,
+  "editor.cursorBlinking": "phase",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.hideCursorInOverviewRuler": true,
   // * editor::font
   "editor.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
   "editor.fontSize": 13,
   "editor.fontLigatures": true,
-  "editor.renderWhitespace": "all",
-  // * editor::scroll-bar
-  "editor.scrollbar.vertical": "hidden",
-  "editor.hideCursorInOverviewRuler": true,
-  "editor.scrollbar.verticalScrollbarSize": 0,
-  // * editor::general
-  "editor.cursorSurroundingLines": 25,
-  "editor.selectionHighlight": true,
-  "editor.tabCompletion": "on",
+  // * editor::indent & word wrap
+  "editor.autoIndent": "advanced",
   "editor.wordWrap": "bounded",
-  "editor.suggestSelection": "first",
-  "editor.insertSpaces": false,
   "editor.wordWrapColumn": 112,
   "editor.rulers": [
     88,
     100,
     112
   ],
-  "editor.renderControlCharacters": true,
-  "editor.suggest.snippetsPreventQuickSuggestions": false,
-  "editor.inlineSuggest.enabled": true,
-  "diffEditor.ignoreTrimWhitespace": false,
-  "diffEditor.diffAlgorithm": "advanced",
-  "editor.renderFinalNewline": "dimmed",
   // * editor::minimap
   "editor.minimap.enabled": true,
   "editor.minimap.renderCharacters": false,
@@ -108,13 +109,23 @@
   "editor.minimap.side": "left",
   "editor.minimap.maxColumn": 100,
   "editor.minimap.showSlider": "always",
-  "editor.minimap.autohide": false,
-  // * editor::brackets
-  "editor.bracketPairColorization.enabled": true,
-  "editor.guides.bracketPairs": "active",
-  // * editor::cursor
-  "editor.cursorBlinking": "phase",
-  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.minimap.autohide": "none",
+  // * editor::rendering
+  "editor.renderControlCharacters": true,
+  "editor.renderFinalNewline": "dimmed",
+  "editor.renderWhitespace": "all",
+  // * editor::scroll bars
+  "editor.scrollbar.vertical": "hidden",
+  "editor.scrollbar.verticalScrollbarSize": 0,
+  // * editor::selection
+  "editor.selectionHighlight": true,
+  // * editor::suggestions
+  "editor.suggest.filterGraceful": true,
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  "editor.inlineSuggest.enabled": true,
+  // ? diff editor
+  "diffEditor.diffAlgorithm": "advanced",
+  "diffEditor.ignoreTrimWhitespace": false,
   // ? explorer
   "explorer.confirmDragAndDrop": false,
   "explorer.confirmDelete": false,
