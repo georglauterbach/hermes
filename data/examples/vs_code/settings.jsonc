@@ -42,7 +42,8 @@
       "minimap.warningHighlight": "#D8A657",
       "minimap.infoHighlight": "#2E3B3B",
       "minimap.selectionHighlight": "#7C6F6480",
-      "minimap.findMatchHighlight": "#333E34D0"
+      "minimap.findMatchHighlight": "#333E34D0",
+      "editorRuler.foreground": "#282828"
     },
     // https://github.com/sainnhe/everforest-vscode
     "[Everforest Light]": {
@@ -78,6 +79,8 @@
   // * workbench::miscellaneous
   "workbench.startupEditor": "none",
   // ? editor
+  // ! editor::experimental
+  "editor.experimentalGpuAcceleration": "on",
   // * editor::brackets
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": "active",
@@ -96,11 +99,11 @@
   // * editor::indent & word wrap
   "editor.autoIndent": "advanced",
   "editor.wordWrap": "bounded",
-  "editor.wordWrapColumn": 112,
+  "editor.wordWrapColumn": 105,
   "editor.rulers": [
-    88,
-    100,
-    112
+    70,
+    90,
+    110 // for aligning the side bar
   ],
   // * editor::minimap
   "editor.minimap.enabled": true,
