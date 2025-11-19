@@ -77,7 +77,7 @@ if [[ ${-} == *i* ]]; then
       fi
     fi
 
-    command -v less &>/dev/null && PAGER=${PAGER:-$(command -v less) -R}
+    command -v less &>/dev/null && PAGER=${PAGER:-$(command -v less)}
     EDITOR=${EDITOR:-${VISUAL}}
     GPG_TTY=$(tty)
     HERMES_LOADED=true
@@ -182,12 +182,15 @@ if [[ ${-} == *i* ]]; then
   # -----------------------------------------------
 
   if __evaluates_to_true HERMES_INIT_BAT && __is_command 'bat'; then
-    [[ -v PAGER ]] && export BAT_PAGER=${PAGER}
-    BAT_COMMON_ARGUMENTS='--style=plain'
-    export MANPAGER="bash -c 'col -bx | bat ${BAT_COMMON_ARGUMENTS} --language=man'"
-    export MANROFFOPT='-c'
+    export BAT_STYLE='plain'
     export BAT_THEME_DARK='gruvbox-material-dark'
     export BAT_THEME_LIGHT='everforest-light'
+    export BAT_THEME=${BAT_THEME_DARK} # the default
+
+    if [[ -v PAGER ]]; then
+      export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat --plain --language=man'"
+      export MANROFFOPT='-c'
+    fi
   fi
 
   if __evaluates_to_true HERMES_INIT_FZF && __is_command 'fzf'; then
@@ -221,7 +224,7 @@ if [[ ${-} == *i* ]]; then
 
   if __evaluates_to_true HERMES_OVERRIDE_CAT_WITH_BAT && __is_command 'bat'; then
     # shellcheck disable=SC2139
-    alias cat="bat --paging=never ${BAT_COMMON_ARGUMENTS}"
+    alias cat="bat --paging=never"
   fi
 
   if __evaluates_to_true HERMES_OVERRIDE_CD_WITH_ZOXIDE && __is_command 'zoxide'; then
@@ -242,7 +245,7 @@ if [[ ${-} == *i* ]]; then
 
   if __evaluates_to_true HERMES_OVERRIDE_LESS_WITH_BAT && __is_command 'bat'; then
     # shellcheck disable=SC2139
-    alias less="bat ${BAT_COMMON_ARGUMENTS} --paging=always"
+    alias less="bat --paging=always"
   fi
 
   if __evaluates_to_true HERMES_OVERRIDE_LS_WITH_EZA && __is_command 'eza'; then

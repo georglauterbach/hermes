@@ -4,7 +4,7 @@
   "telemetry.telemetryLevel": "off",
   "update.mode": "none",
   // ? search & window
-  "window.menuStyle": "native",
+  "window.menuStyle": "custom",
   "window.menuBarVisibility": "hidden",
   "window.titleBarStyle": "native",
   "window.customTitleBarVisibility": "never",
@@ -79,8 +79,6 @@
   // * workbench::miscellaneous
   "workbench.startupEditor": "none",
   // ? editor
-  // ! editor::experimental
-  "editor.experimentalGpuAcceleration": "on",
   // * editor::brackets
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": "active",
