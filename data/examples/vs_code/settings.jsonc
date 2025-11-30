@@ -145,7 +145,8 @@
   "files.defaultLanguage": "txt",
   "files.associations": {
     "*.env": "bash",
-    "*.conf": "ini"
+    "*.conf": "ini",
+    "Justfile": "makefile"
   },
   // ? chat / copilot
   // in conjunction with https://stackoverflow.com/a/79534407
@@ -188,23 +189,27 @@
   //  "shellscript": true,
   //  "yaml": true
   //},
+  // * extensions::mads-hartmann.bash-ide-vscode
+  "bashIde.shellcheckPath": "",
   // * extensions::timonwong.shellcheck
+  "shellcheck.enable": true,
+  "shellcheck.enableQuickFix": true,
   "shellcheck.useWorkspaceRootAsCwd": false,
   "shellcheck.exclude": [
     "SC2310",
     "SC2312"
   ],
-  "shellcheck.enableQuickFix": true,
-  "shellcheck.enable": true,
   "shellcheck.run": "onSave",
-  "shellcheck.customArgs": [
-    // "--shell=bash",
-    "--external-sources",
-    "--source-path=SCRIPTDIR",
-    "--color=auto",
-    "--severity=style",
-    "--enable=all"
-  ],
+  // prefer the ShellCheck configuration file over these settings
+  //"shellcheck.customArgs": [
+  //  "--check-sourced",
+  //  "--color=auto",
+  //  "--enable=all",
+  //  "--external-sources",
+  //  "--severity=style",
+  //  "--source-path=SCRIPTDIR",
+  //  "--wiki-link-count=5"
+  //],
   // * extensions::streetsidesoftware.code-spell-checker
   "cSpell.language": "en",
   "cSpell.diagnosticLevel": "Information",
