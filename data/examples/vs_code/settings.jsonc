@@ -158,7 +158,7 @@
   // * extensions::asciidoctor.asciidoctor-vscode
   "asciidoc.antora.showEnableAntoraPrompt": false,
   "asciidoc.preview.scrollEditorWithPreview": false,
-	"asciidoc.preview.scrollPreviewWithEditor": false,
+  "asciidoc.preview.scrollPreviewWithEditor": false,
   // * extensions::aaron-bond.better-comments
   "better-comments.tags": [
     {
