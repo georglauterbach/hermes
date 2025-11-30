@@ -5,8 +5,9 @@
   },
   "features": {
     "ghcr.io/georglauterbach/dev-container-features/vscode-cache-extensions:0.1": {},
-    "ghcr.io/georglauterbach/dev-container-features/hermes:11.1.2": {},
-    "ghcr.io/georglauterbach/dev-container-features/lang-rust:0.1.6": {}
+    "ghcr.io/georglauterbach/dev-container-features/hermes:11.2": {},
+    "ghcr.io/georglauterbach/dev-container-features/lang-rust:0.1": {},
+    "ghcr.io/georglauterbach/dev-container-features/lang-sh:0.2": {}
   },
   "containerUser": "user",
   "remoteUser": "user",
@@ -15,17 +16,7 @@
     // ? Rust
     "CARGO_TARGET_DIR": "${containerWorkspaceFolder}/code/target",
     "CARGO_HOME": "${containerWorkspaceFolder}/code/.rust/cargo/home",
-    "RUSTUP_HOME": "${containerWorkspaceFolder}/code/.rust/rustup",
-    // ? hermes
-    "HERMES_INIT_FZF": "true",
-    "HERMES_INIT_STARSHIP": "true",
-    "HERMES_INIT_ZOXIDE": "true",
-    "HERMES_OVERRIDE_CAT_WITH_BAT": "true",
-    "HERMES_OVERRIDE_CD_WITH_ZOXIDE": "true",
-    "HERMES_OVERRIDE_DIFF_WITH_DELTA": "true",
-    "HERMES_OVERRIDE_LS_WITH_EZA": "true",
-    "HERMES_CONFIG_ATUIN_DB_FILE": "/home/user/.cache/atuin_history.db",
-    "HERMES_LOAD_GLOBAL_ALIASES": "true"
+    "RUSTUP_HOME": "${containerWorkspaceFolder}/code/.rust/rustup"
   },
   "remoteEnv": {
     "PATH": "${containerEnv:CARGO_HOME}/bin:${containerEnv:PATH}"
@@ -44,8 +35,6 @@
     "vscode": {
       "extensions": [
         "aaron-bond.better-comments",
-        "mads-hartmann.bash-ide-vscode",
-        "timonwong.shellcheck",
         "xshrim.txt-syntax"
       ],
       "settings": {

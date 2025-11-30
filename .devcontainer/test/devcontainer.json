@@ -1,10 +1,4 @@
 {
   "name": "test",
-  "image": "docker.io/ubuntu:24.04",
-  "containerEnv": {
-    "DEBIAN_FRONTEND": "noninteractive",
-    "DEBCONF_NONINTERACTIVE_SEEN": "true",
-    "USER": "root"
-  },
-  "postStartCommand": "apt-get --yes update && apt-get --yes install apt-utils ca-certificates"
+  "image": "docker.io/ubuntu:24.04"
 }
