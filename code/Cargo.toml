@@ -1,6 +1,6 @@
 [package]
 name = "hermes"
-version = "11.2.3"
+version = "11.2.4"
 edition = "2024"
 publish = false
 
