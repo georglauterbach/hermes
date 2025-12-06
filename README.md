@@ -11,12 +11,23 @@ _hermes_ places [selected programs and configuration files](#programs) for your 
 To **download** the latest version of _hermes_, run the following commands:
 
 ```bash
-HERMES_LOCATION=${HOME}/.local/bin/hermes
-mkdir -p "$(dirname "${HERMES_LOCATION}")"
-HERMES_VERSION="$(curl -sSIL -w '%{url_effective}' -o /dev/null "https://github.com/georglauterbach/hermes/releases/latest" | sed 's|.*/||')"
-curl --silent --show-error --fail --location --output "${HERMES_LOCATION}" "https://github.com/georglauterbach/hermes/releases/download/${HERMES_VERSION}/hermes-${HERMES_VERSION}-$(uname -m)-unknown-linux-musl"
-chmod +x "${HERMES_LOCATION}"
-hermes
+function download_hermes() {
+  local HERMES_LOCATION="${HOME}/.local/bin/hermes"
+  local HERMES_RELEASE_URI_BASE='https://github.com/georglauterbach/hermes/releases'
+  local HERMES_VERSION
+
+  HERMES_VERSION=$(curl --silent --show-error --fail --location --write-out '%{url_effective}' --output /dev/null \
+    "${HERMES_RELEASE_URI_BASE}/latest" | sed 's|.*/||')
+
+  mkdir --parents "$(dirname "${HERMES_LOCATION}")"
+  curl --silent --show-error --fail --location --output "${HERMES_LOCATION}" \
+    "${HERMES_RELEASE_URI_BASE}/download/${HERMES_VERSION}/hermes-${HERMES_VERSION}-$(uname -m)-unknown-linux-musl"
+
+  chmod +x "${HERMES_LOCATION}"
+}
+
+# to execute hermes, run
+"${HOME}/.local/bin/hermes"
 ```
 
 ## Additional Setup
