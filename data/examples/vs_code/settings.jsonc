@@ -3,6 +3,7 @@
   // ? miscellaneous / general
   "telemetry.telemetryLevel": "off",
   "update.mode": "none",
+  "chat.disableAIFeatures": true,
   // ? search & window
   "window.menuStyle": "custom",
   "window.menuBarVisibility": "hidden",
@@ -294,13 +295,6 @@
       "codesnap.target": "container",
       "codesnap.shutterAction": "save",
     - YAML: redhat.vscode-yaml
-
-    === Python
-
-    - ms-python.black-formatter
-    - ms-python.debugpy
-    - ms-python.python
-    - ms-python.vscode-pylance
 
     === Rust
 
