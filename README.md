@@ -26,7 +26,10 @@ function download_hermes() {
   chmod +x "${HERMES_LOCATION}"
 }
 
-# to execute hermes, run
+# download hermes
+download_hermes
+
+# execute hermes
 "${HOME}/.local/bin/hermes"
 ```
 
