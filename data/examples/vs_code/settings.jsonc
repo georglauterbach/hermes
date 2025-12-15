@@ -3,7 +3,6 @@
   // ? miscellaneous / general
   "telemetry.telemetryLevel": "off",
   "update.mode": "none",
-  "chat.disableAIFeatures": true,
   // ? search & window
   "window.menuStyle": "custom",
   "window.menuBarVisibility": "hidden",
@@ -15,6 +14,12 @@
   "git.autofetch": false,
   "git.ignoreMissingGitWarning": true,
   "git.openRepositoryInParentFolders": "never",
+  // ? chat / copilot
+  // in conjunction with https://stackoverflow.com/a/79534407
+  "chat.disableAIFeatures": true,
+  "chat.agent.enabled": false,
+  "chat.extensionTools.enabled": false,
+  "chat.commandCenter.enabled": false,
   // ? color theme
   // * color theme::general
   "workbench.iconTheme": "gruvbox-material-icon-theme",
@@ -149,11 +154,6 @@
     "*.conf": "ini",
     "Justfile": "makefile"
   },
-  // ? chat / copilot
-  // in conjunction with https://stackoverflow.com/a/79534407
-  "chat.agent.enabled": false,
-  "chat.extensionTools.enabled": false,
-  "chat.commandCenter.enabled": false,
   // ? extensions
   "extensions.ignoreRecommendations": true,
   // * extensions::asciidoctor.asciidoctor-vscode
