@@ -4,9 +4,9 @@
     "dockerfile": "Dockerfile"
   },
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/vscode-cache-extensions:0.1": {},
+    "ghcr.io/georglauterbach/dev-container-features/vscode-cache-extensions:0.2": {},
     "ghcr.io/georglauterbach/dev-container-features/hermes:11.2": {},
-    "ghcr.io/georglauterbach/dev-container-features/lang-rust:0.1": {},
+    "ghcr.io/georglauterbach/dev-container-features/lang-rust:0.1.7": {},
     "ghcr.io/georglauterbach/dev-container-features/lang-sh:0.2": {}
   },
   "containerUser": "user",
@@ -22,10 +22,8 @@
     "PATH": "${containerEnv:CARGO_HOME}/bin:${containerEnv:PATH}"
   },
   "postCreateCommand": "hermes",
-  "postStartCommand": "su - root bash -c \"chown --recursive user:user '${HOME}/.cache'\"",
   "mounts": [
     {
-      // Persist the `${HOME}/.cache` directory
       "source": "com.github.georglauterbach.hermes.cache",
       "target": "/home/user/.cache",
       "type": "volume"
