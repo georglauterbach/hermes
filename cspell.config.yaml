@@ -1,9 +1,16 @@
 ---
 version: '0.2'
+
+import: []
+
 ignorePaths: []
 dictionaryDefinitions: []
-dictionaries: []
-import: []
+
+dictionaries:
+  - en_US
+  - softwareTerms
+  - bash
+
 words: []
 
 ignoreWords:
