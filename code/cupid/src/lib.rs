@@ -565,7 +565,7 @@ pub mod programs {
     /// <https://github.com/ClementTsang/bottom>
     async fn bottom(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "bottom";
-        let version = "nightly";
+        let version = "0.12.3";
         let file = format!("{name}_{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
