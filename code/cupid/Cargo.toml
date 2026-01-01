@@ -16,13 +16,13 @@ async-compression = { version = "0.4", default-features = false, features = [
 ] }
 bytes = { version = "1.11", default-features = false }
 clap = { workspace = true }
-reqwest = { version = "0.12", default-features = false, features = [
-    "rustls-tls",
+reqwest = { version = "0.13", default-features = false, features = [
+    "rustls",
     "socks"
 ] }
 tokio = { workspace = true }
 astral-tokio-tar = { workspace = true }
-zip = { version = "6.0", default-features = true }
+zip = { version = "7.0", default-features = true }
 
 [lints]
 workspace = true
