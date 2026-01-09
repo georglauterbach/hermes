@@ -267,7 +267,22 @@ if [[ ${-} == *i* ]]; then
   # -----------------------------------------------
 
   if __evaluates_to_true HERMES_LOAD_GLOBAL_ALIASES; then
-    alias lsa='ls -a'
+    alias code='code --enable-features=UseOzonePlatform --ozone-platform=wayland'
+
+    alias gcs='git commit --signoff --gpg-sign'
+    alias gp='git pull'
+    alias gf='git fetch --prune --tags --force'
+    alias gp='git push'
+    alias gpf='git push --force-with-lease'
+
+    alias lsa='ls -A'
+
+    if [[ -n ${EDITOR} ]]; then
+      # shellcheck disable=SC2139
+      alias v="${EDITOR:-vi}"
+      # shellcheck disable=SC2139
+      alias sv="sudo $(which "${EDITOR:-vi}")"
+    fi
 
     alias ..='cd ..'
     alias ...='cd ../..'
@@ -281,7 +296,5 @@ if [[ ${-} == *i* ]]; then
   # ----  Finalization  ---------------------------
   # -----------------------------------------------
 
-  if [[ -v BLE_VERSION ]]; then
-    ble-attach
-  fi
+  [[ ! -v BLE_VERSION ]] || ble-attach
 fi
