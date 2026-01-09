@@ -172,6 +172,7 @@ pub mod programs {
         join_set.spawn(fzf(architecture));
         join_set.spawn(gitui(architecture));
         join_set.spawn(just(architecture));
+        join_set.spawn(nmtui_go(architecture));
         join_set.spawn(ripgrep(architecture));
         join_set.spawn(starship(architecture));
         join_set.spawn(yazi(architecture));
@@ -745,6 +746,27 @@ pub mod programs {
             String::from("completions/just.bash"),
             bash_completion("just.bash"),
         );
+
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
+            .process(architecture)
+            .await
+    }
+
+    /// <https://github.com/doeixd/nmtui-go>
+    async fn nmtui_go(architecture: Architecture) -> ::anyhow::Result<()> {
+        let name = "nmtui-go";
+        let version = "v0.2.5";
+        let file = match architecture {
+            Architecture::X86_64 => format!("{name}_{version}_linux_amd64"),
+            Architecture::Aarch64 => format!("{name}_{version}_linux_arm64"),
+        };
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/doeixd/nmtui-go/releases/download/{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(name.to_string(), local_bin(name));
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
