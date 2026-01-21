@@ -267,8 +267,6 @@ if [[ ${-} == *i* ]]; then
   # -----------------------------------------------
 
   if __evaluates_to_true HERMES_LOAD_GLOBAL_ALIASES; then
-    alias code='code --enable-features=UseOzonePlatform --ozone-platform=wayland'
-
     alias gcs='git commit --signoff --gpg-sign'
     alias gp='git pull'
     alias gf='git fetch --prune --tags --force'
