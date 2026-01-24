@@ -11,7 +11,7 @@ _hermes_ places [selected programs and configuration files](#programs) for your 
 To **download** the latest version of _hermes_, run the following commands:
 
 ```bash
-function download_hermes() {
+function download_hermes_latest() {
   local HERMES_LOCATION="${HOME}/.local/bin/hermes"
   local HERMES_RELEASE_URI_BASE='https://github.com/georglauterbach/hermes/releases'
   local HERMES_VERSION
@@ -27,7 +27,7 @@ function download_hermes() {
 }
 
 # download hermes
-download_hermes
+download_hermes_latest
 
 # execute hermes
 "${HOME}/.local/bin/hermes"
@@ -92,6 +92,13 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
   - enabled with `HERMES_INIT_ZOXIDE`, override `cd` with `HERMES_OVERRIDE_CD_WITH_ZOXIDE`
 - [_zellij_](https://github.com/zellij-org/zellij)
   - terminal workspace with batteries included
+
+The following statically-compiled programs are currently only available on `x86_64`:
+
+- [_git_](https://github.com/darkvertex/static-git)
+  - a distributed version control software system that is capable of managing versions of source code or data
+- [_Neovim_](https://github.com/neovim/neovim/blob/master/BUILD.md#build-static-binary-linux)
+  - modern, fast and feature-rich editor
 
 ### Supplementary Setup Scripts
 

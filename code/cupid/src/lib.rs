@@ -7,7 +7,7 @@ pub mod arguments {
 
     /// Information about the architecture that we
     /// pack `hermes`'s archive for
-    #[derive(Debug, Clone, Copy, ::clap::ValueEnum)]
+    #[derive(Debug, Clone, Copy, PartialEq, Eq, ::clap::ValueEnum)]
     pub enum Architecture {
         /// AMD64
         X86_64,
@@ -177,6 +177,8 @@ pub mod programs {
         join_set.spawn(yazi(architecture));
         join_set.spawn(zellij(architecture));
         join_set.spawn(zoxide(architecture));
+
+        join_set.spawn(hermes_custom(architecture));
 
         while let Some(result) = join_set.join_next().await {
             match result {
@@ -709,6 +711,37 @@ pub mod programs {
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
+    }
+
+    /// <https://github.com/georglauterbach/hermes/tree/lfs>
+    async fn hermes_custom(architecture: Architecture) -> ::anyhow::Result<()> {
+        if architecture == Architecture::Aarch64 {
+            eprintln!(
+                "Statically compiled git binaries are currently not available for '{architecture}'"
+            );
+            return Ok(());
+        }
+
+        let name = "hermes-custom";
+        let archive_type = ArchiveType::TarXz;
+        let file = format!("hermes-custom{archive_type}");
+        let uri = format!(
+            "https://github.com/georglauterbach/hermes/raw/refs/heads/lfs/{file}?download="
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(format!("{architecture}/git"), local_bin("git"));
+        entries.insert(format!("{architecture}/nvim"), local_bin("nvim"));
+
+        Program::new(
+            name,
+            "latest",
+            archive_type,
+            uri,
+            Entries::Specific(entries),
+        )
+        .process(architecture)
+        .await
     }
 
     /// <https://github.com/extrawurst/gitui>
