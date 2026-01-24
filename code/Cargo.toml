@@ -67,6 +67,7 @@ clap = { workspace = true }
 clap-verbosity-flag = { version = "3.0", default-features = false, features = [
   "tracing",
 ] }
+regex = { version = "1.12", default-features = false, features = ["std"] }
 tokio = { workspace = true }
 tracing = { version = "0.1", default-features = false }
 tracing-subscriber = { version = "0.3", default-features = true }

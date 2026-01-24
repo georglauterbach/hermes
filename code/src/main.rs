@@ -16,9 +16,12 @@ struct Arguments {
     /// Define the log verbosity
     #[clap(flatten)]
     verbosity: ::clap_verbosity_flag::Verbosity<::clap_verbosity_flag::InfoLevel>,
-    /// Whether to overwrite all files when unpacking
+    /// Overwrite existing files
     #[clap(short, long)]
     force: bool,
+    /// A regular expression to exclude files from being unpacked
+    #[clap(short, long)]
+    exclude: Option<String>,
 }
 
 impl Arguments {
@@ -49,6 +52,22 @@ async fn main() {
     let arguments = <Arguments as ::clap::Parser>::parse();
     arguments.init_tracing();
 
+    if arguments.force {
+        ::tracing::info!("Overwriting existing files as '--force' was specifid");
+    }
+
+    let exclude_pattern = arguments.exclude.as_ref().map_or_else(
+        || None,
+        |exclude_pattern| match <::regex::Regex as ::std::str::FromStr>::from_str(exclude_pattern) {
+            Ok(exclude_pattern) => Some(exclude_pattern),
+            Err(error) => {
+                log_and_exit_with_error(format!(
+                    "Exclude pattern is not a valid regular expression: {error}"
+                ));
+            }
+        },
+    );
+
     ::tracing::info!("Starting hermes {}", ::clap::crate_version!());
 
     let Some(home_directory) = ::std::env::home_dir() else {
@@ -63,53 +82,59 @@ async fn main() {
         .set_unpack_xattrs(true)
         .build();
 
-    if arguments.force {
-        if let Err(error) = archive.unpack(home_directory).await {
-            log_and_exit_with_error(format!(
-                "Failed to unpack complete archive forcefully: {error}"
-            ));
-        }
-    } else {
-        let Ok(mut entries) = archive.entries() else {
-            log_and_exit_with_error("Could not turn archive into iterator over entries");
+    let Ok(mut entries) = archive.entries() else {
+        log_and_exit_with_error("Could not turn archive into iterator over entries");
+    };
+
+    while let Some(entry) = entries.next().await {
+        let mut entry = match entry {
+            Ok(entry) => entry,
+            Err(error) => {
+                log_and_exit_with_error(format!("Could not get entry from archive: {error}"));
+            }
         };
 
-        while let Some(entry) = entries.next().await {
-            let mut entry = match entry {
-                Ok(entry) => entry,
-                Err(error) => {
-                    log_and_exit_with_error(format!("Could not get entry from archive: {error}"));
-                }
-            };
-
-            let entry_path_str = match entry.path() {
-                Ok(path) => path.to_string_lossy().to_string(),
-                Err(error) => {
-                    log_and_exit_with_error(format!("Could get acquire path of entry: '{error}'"));
-                }
-            };
-
-            let local_path = home_directory.join(&entry_path_str);
-
-            if local_path.exists() && !local_path.is_dir() {
-                ::tracing::info!("Not overwriting '{}'", local_path.display());
-                continue;
+        let entry_path_str = match entry.path() {
+            Ok(path) => path.to_string_lossy().to_string(),
+            Err(error) => {
+                log_and_exit_with_error(format!("Could get acquire path of entry: '{error}'"));
             }
+        };
 
-            if let Some(parent) = local_path.parent()
-                && let Err(error) = ::std::fs::create_dir_all(parent)
-            {
-                log_and_exit_with_error(format!(
-                    "Could not create parent directory for new file '{error}'"
-                ));
-            }
+        let local_path = home_directory.join(&entry_path_str);
 
-            if let Err(error) = entry.unpack(&local_path).await {
-                log_and_exit_with_error(format!(
-                    "Could not unpack entry '{entry_path_str}' to '{}': {error}",
-                    local_path.display()
-                ));
-            }
+        if local_path.is_dir() {
+            continue;
+        }
+
+        if let Some(exclude_pattern) = &exclude_pattern
+            && exclude_pattern.is_match(&local_path.to_string_lossy())
+        {
+            ::tracing::info!(
+                "Not unpacking '{}' because of exclude pattern",
+                local_path.display()
+            );
+            continue;
+        }
+
+        if !arguments.force && local_path.exists() {
+            ::tracing::info!("Not overwriting '{}'", local_path.display());
+            continue;
+        }
+
+        if let Some(parent) = local_path.parent()
+            && let Err(error) = ::std::fs::create_dir_all(parent)
+        {
+            log_and_exit_with_error(format!(
+                "Could not create parent directory for new file '{error}'"
+            ));
+        }
+
+        if let Err(error) = entry.unpack(&local_path).await {
+            log_and_exit_with_error(format!(
+                "Could not unpack entry '{entry_path_str}' to '{}': {error}",
+                local_path.display()
+            ));
         }
     }
 
