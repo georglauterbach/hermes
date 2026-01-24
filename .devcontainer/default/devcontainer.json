@@ -1,13 +1,13 @@
 {
-  "name": "development",
+  "name": "default",
   "build": {
     "dockerfile": "Dockerfile"
   },
   "features": {
     "ghcr.io/georglauterbach/dev-container-features/vscode-cache-extensions:0.2": {},
-    "ghcr.io/georglauterbach/dev-container-features/hermes:11.2": {},
-    "ghcr.io/georglauterbach/dev-container-features/lang-rust:0.1": {},
-    "ghcr.io/georglauterbach/dev-container-features/lang-sh:0.3": {}
+    "ghcr.io/georglauterbach/dev-container-features/hermes:12.0": {},
+    "ghcr.io/georglauterbach/dev-container-features/lang-rust:0.2": {},
+    "ghcr.io/georglauterbach/dev-container-features/lang-sh:0.4": {}
   },
   "containerUser": "user",
   "remoteUser": "user",
@@ -19,9 +19,9 @@
     "RUSTUP_HOME": "${containerWorkspaceFolder}/code/.rust/rustup"
   },
   "remoteEnv": {
-    "PATH": "${containerEnv:CARGO_HOME}/bin:${containerEnv:PATH}"
+    "PATH": "${containerEnv:CARGO_HOME}/bin:/home/user/.local/bin:${containerEnv:PATH}"
   },
-  "postCreateCommand": "hermes",
+  "postCreateCommand": "hermes --exclude=nvim",
   "mounts": [
     {
       "source": "com.github.georglauterbach.hermes.cache",
