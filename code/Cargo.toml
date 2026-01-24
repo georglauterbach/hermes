@@ -1,25 +1,73 @@
 [package]
 name = "hermes"
-version = "11.2.4"
+version = "12.0.0"
 edition = "2024"
-publish = false
-
 description = "CLI utilities and configuration files delivered like a god.\nBut actually just a glorified tar-decompressor."
+readme = "../../README.md"
 repository = "https://github.com/georglauterbach/hermes"
 license-file = "../../LICENSE"
-readme = "../../README.md"
+publish = false
 
-[dependencies]
-clap = { workspace = true }
-clap-verbosity-flag = { version = "3.0", default-features = false, features = ["tracing"] }
+[workspace]
+resolver = "3"
+members = ["cupid"]
+
+[workspace.dependencies]
+astral-tokio-tar = { version = "0.5", default-features = false }
 async-compression = { version = "0.4", default-features = false, features = [
   "gzip",
   "tokio",
   "xz-parallel",
 ] }
-async-std = { version = "1.13", default-features = false, features = ["unstable"] }
-tokio = { workspace = true }
+clap = { version = "4.5", default-features = true, features = [
+  "cargo",
+  "derive",
+] }
+tokio = { version = "1.49", default-features = false, features = [
+  "macros",
+  "process",
+  "rt-multi-thread",
+] }
+
+[workspace.lints]
+# Clippy: https://doc.rust-lang.org/stable/clippy/index.html
+[workspace.lints.clippy]
+# enable all lints that are on by default
+# (correctness, suspicious, style, complexity, perf)
+all = "deny"
+# enable lints for the Cargo manifest file, a.k.a. Cargo.toml.
+cargo = { level = "deny", priority = 0 }
+cargo_common_metadata = { level = "allow", priority = 1 }
+# enable lints for missing documentation on private items
+missing_docs_in_private_items = "deny"
+multiple_crate_versions = { level = "allow", priority = 1 }
+# enable lints which are rather strict
+# or have occasional false positives
+nursery = "deny"
+# enable new lints that are still under development
+pedantic = "deny"
+
+[workspace.lints.rust]
+missing_debug_implementations = "deny"
+missing_docs = "deny"
+
+# Rustdoc: https://doc.rust-lang.org/rustdoc/index.html
+[workspace.lints.rustdoc]
+all = "deny"
+broken_intra_doc_links = "deny"
+private_intra_doc_links = "allow"
+
+[dependencies]
 astral-tokio-tar = { workspace = true }
+async-compression = { workspace = true }
+async-std = { version = "1.13", default-features = false, features = [
+  "unstable",
+] }
+clap = { workspace = true }
+clap-verbosity-flag = { version = "3.0", default-features = false, features = [
+  "tracing",
+] }
+tokio = { workspace = true }
 tracing = { version = "0.1", default-features = false }
 tracing-subscriber = { version = "0.3", default-features = true }
 
@@ -28,45 +76,3 @@ workspace = true
 
 [profile.release]
 lto = "fat"
-
-[workspace]
-members = ["cupid"]
-resolver = "3"
-
-[workspace.dependencies]
-clap = { version = "4.5", default-features = true, features = ["cargo", "derive"] }
-tokio = { version = "1.48", default-features = false, features = [
-  "macros",
-  "process",
-  "rt-multi-thread",
-] }
-astral-tokio-tar = { version = "0.5", default-features = false }
-
-[workspace.lints]
-
-[workspace.lints.rust]
-missing_docs = "deny"
-missing_debug_implementations = "deny"
-
-# Rustdoc: https://doc.rust-lang.org/rustdoc/index.html
-[workspace.lints.rustdoc]
-all = "deny"
-broken_intra_doc_links = "deny"
-private_intra_doc_links = "allow"
-
-# Clippy: https://doc.rust-lang.org/stable/clippy/index.html
-[workspace.lints.clippy]
-# enable all lints that are on by default
-# (correctness, suspicious, style, complexity, perf)
-all = "deny"
-# enable lints which are rather strict
-# or have occasional false positives
-nursery = "deny"
-# enable new lints that are still under development
-pedantic = "deny"
-# enable lints for the Cargo manifest file, a.k.a. Cargo.toml.
-cargo = { level = "deny", priority = 0 }
-multiple_crate_versions = { level = "allow", priority = 1 }
-cargo_common_metadata = { level = "allow", priority = 1 }
-# enable lints for missing documentation on private items
-missing_docs_in_private_items = "deny"
