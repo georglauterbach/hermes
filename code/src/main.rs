@@ -53,7 +53,7 @@ async fn main() {
     arguments.init_tracing();
 
     if arguments.force {
-        ::tracing::info!("Overwriting existing files as '--force' was specifid");
+        ::tracing::info!("Overwriting existing files as '--force' was specified");
     }
 
     let exclude_pattern = arguments.exclude.as_ref().map_or_else(
