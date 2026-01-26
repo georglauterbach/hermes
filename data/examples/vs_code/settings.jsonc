@@ -21,45 +21,10 @@
   "chat.extensionTools.enabled": false,
   "chat.commandCenter.enabled": false,
   // ? color theme
-  // * color theme::general
-  "workbench.iconTheme": "gruvbox-material-icon-theme",
-  "workbench.preferredLightColorTheme": "Everforest Light",
-  "workbench.preferredDarkColorTheme": "Gruvbox Material Dark",
+  "workbench.preferredLightColorTheme": "Evergruv (Everforest) Light",
+  "workbench.preferredDarkColorTheme": "Evergruv (Gruvbox Material) Dark",
   "window.autoDetectColorScheme": true,
   "window.autoDetectHighContrast": false,
-  // * color theme::gruvbox-material-dark
-  "gruvboxMaterial.darkContrast": "hard",
-  "gruvboxMaterial.darkWorkbench": "high-contrast",
-  "gruvboxMaterial.darkPalette": "material",
-  "gruvboxMaterial.darkCursor": "blue",
-  "gruvboxMaterial.darkSelection": "aqua",
-  "gruvboxMaterial.diagnosticTextBackgroundOpacity": "12.5%",
-  // * color theme::everforest-light
-  "everforest.lightContrast": "hard",
-  "everforest.lightWorkbench": "high-contrast",
-  "everforest.lightCursor": "green",
-  "everforest.lightSelection": "aqua",
-  "everforest.diagnosticTextBackgroundOpacity": "12.5%",
-  // * color theme::customizations
-  "workbench.colorCustomizations": {
-    // https://github.com/sainnhe/gruvbox-material-vscode
-    "[Gruvbox Material Dark]": {
-      "minimap.errorHighlight": "#EA6962",
-      "minimap.warningHighlight": "#D8A657",
-      "minimap.infoHighlight": "#2E3B3B",
-      "minimap.selectionHighlight": "#7C6F6480",
-      "minimap.findMatchHighlight": "#333E34D0",
-      "editorRuler.foreground": "#282828"
-    },
-    // https://github.com/sainnhe/everforest-vscode
-    "[Everforest Light]": {
-      "minimap.errorHighlight": "#F85552",
-      "minimap.warningHighlight": "#DFA000",
-      "minimap.infoHighlight": "#3A94C5",
-      "sideBar.foreground": "#5C6A72",
-      "gitDecoration.ignoredResourceForeground": "#A6B0A0"
-    }
-  },
   // ? workbench
   // * workbench::bars
   "workbench.sideBar.location": "right",
@@ -161,19 +126,43 @@
   "asciidoc.preview.scrollEditorWithPreview": false,
   "asciidoc.preview.scrollPreviewWithEditor": false,
   // * extensions::aaron-bond.better-comments
+  "better-comments.strict": true,
+  "better-comments.preloadLines": 150,
+  "better-comments.fullHighlight": false,
   "better-comments.tags": [
-    {
-      "tag": "!",
-      "color": "#EA6962",
-      "bold": true
-    },
     {
       "tag": "?",
       "color": "#7DAEA3"
     },
     {
+      "tag": "!",
+      "color": "#EA6962"
+    },
+    {
       "tag": "todo",
       "color": "#D8A657"
+    },
+    {
+      "tag": "*",
+      "color": "#89B482"
+    }
+  ],
+  "better-comments.tagsLight": [
+    {
+      "tag": "?",
+      "color": "#3A94C5"
+    },
+    {
+      "tag": "!",
+      "color": "#F85552"
+    },
+    {
+      "tag": "todo",
+      "color": "#DFA000"
+    },
+    {
+      "tag": "*",
+      "color": "#35A77C"
     }
   ],
   // * extensions::github.copilot
@@ -194,6 +183,9 @@
   //},
   // * extensions::mads-hartmann.bash-ide-vscode
   "bashIde.shellcheckPath": "",
+  // * extensions::ms-vscode.remote*
+  //"remote.localPortHost": "allInterfaces",
+  "remote.autoForwardPorts": false,
   // * extensions::timonwong.shellcheck
   "shellcheck.enable": true,
   "shellcheck.enableQuickFix": true,
