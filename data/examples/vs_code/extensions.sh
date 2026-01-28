@@ -7,7 +7,6 @@ readonly EXTENSIONS=(
   'asciidoctor.asciidoctor-vscode'
   'editorconfig.editorconfig'
   'edwinhuish.better-comments-next'
-  'georglauterbach.evergruv'
   'mads-hartmann.bash-ide-vscode'
   'ms-vscode-remote.remote-containers'
   'ms-vscode-remote.remote-ssh'
@@ -16,7 +15,9 @@ readonly EXTENSIONS=(
   'streetsidesoftware.code-spell-checker'
   'timonwong.shellcheck'
   'usernamehw.errorlens'
-  'xshrim.txt-syntax'
+
+  'georglauterbach.evergruv'
+  'navernoedenis.gruvbox-material-icons'
 )
 
 for EXTENSION in "${EXTENSIONS[@]}"; do

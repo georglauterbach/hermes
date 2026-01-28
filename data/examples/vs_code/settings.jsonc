@@ -20,6 +20,7 @@
   "chat.agent.enabled": false,
   "chat.extensionTools.enabled": false,
   "chat.commandCenter.enabled": false,
+  "workbench.iconTheme": "gruvbox-material-icons",
   // ? color theme
   "workbench.preferredLightColorTheme": "Evergruv (Everforest) Light",
   "workbench.preferredDarkColorTheme": "Evergruv (Gruvbox Material) Dark",
