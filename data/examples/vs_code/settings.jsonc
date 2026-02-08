@@ -1,4 +1,6 @@
 {
+  // suitable for VS Code 1.109.0
+  //
   // cSpell:enable
   // ? miscellaneous / general
   "telemetry.telemetryLevel": "off",
@@ -19,9 +21,8 @@
   "chat.disableAIFeatures": true,
   "chat.agent.enabled": false,
   "chat.extensionTools.enabled": false,
-  "chat.commandCenter.enabled": false,
-  "workbench.iconTheme": "gruvbox-material-icons",
   // ? color theme
+  "workbench.iconTheme": "gruvbox-material-icons",
   "workbench.preferredLightColorTheme": "Evergruv (Everforest) Light",
   "workbench.preferredDarkColorTheme": "Evergruv (Gruvbox Material) Dark",
   "window.autoDetectColorScheme": true,
@@ -132,7 +133,10 @@
   "better-comments.fullHighlight": false,
   "better-comments.tags": [
     {
-      "tag": "?",
+      "tag": [
+        "?",
+        "NOTE"
+      ],
       "color": "#7DAEA3"
     },
     {
@@ -150,7 +154,10 @@
   ],
   "better-comments.tagsLight": [
     {
-      "tag": "?",
+      "tag": [
+        "?",
+        "NOTE"
+      ],
       "color": "#3A94C5"
     },
     {
@@ -274,8 +281,6 @@
     - BATS (Bash Tests): jetmartin.bats
     - Docker: ms-azuretools.vscode-docker
     - Encode-Decode: mitchdenny.ecdc
-    - LaTeX: james-yu.latex-workshop
-    - ProtoBuf (gRPC): pbkit.vscode-pbkit
     - Screenshots: adpyke.codesnap
       "codesnap.boxShadow": "none",
       "codesnap.roundedCorners": true,
@@ -287,6 +292,7 @@
       "codesnap.transparentBackground": true,
       "codesnap.target": "container",
       "codesnap.shutterAction": "save",
+    - Typst: myriad-dreamin.tinymist
     - YAML: redhat.vscode-yaml
 
     === Rust
