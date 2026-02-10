@@ -493,7 +493,7 @@ pub mod programs {
     /// <https://github.com/atuinsh/atuin>
     async fn atuin(architecture: super::arguments::Architecture) -> ::anyhow::Result<()> {
         let name = "atuin";
-        let version = "18.10.0";
+        let version = "18.12.0";
         let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -511,7 +511,7 @@ pub mod programs {
     /// <https://github.com/sharkdp/bat>
     async fn bat(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "bat";
-        let version = "0.26.0";
+        let version = "0.26.1";
         let file = format!("{name}-v{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -610,7 +610,7 @@ pub mod programs {
     /// <https://github.com/bootandy/dust>
     async fn dust(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "dust";
-        let version = "1.2.3";
+        let version = "1.2.4";
         let file = format!("{name}-v{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -628,7 +628,7 @@ pub mod programs {
     /// <https://github.com/Canop/dysk>
     async fn dysk(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "dysk";
-        let version = "3.4.0";
+        let version = "3.6.0";
         let archive_type = ArchiveType::Zip;
         let uri = format!(
             "https://github.com/Canop/dysk/releases/download/v{version}/dysk_{version}{archive_type}"
@@ -695,7 +695,7 @@ pub mod programs {
     /// <https://github.com/junegunn/fzf>
     async fn fzf(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fzf";
-        let version = "0.66.1";
+        let version = "0.67.0";
         let file = match architecture {
             Architecture::X86_64 => format!("{name}-{version}-linux_amd64"),
             Architecture::Aarch64 => format!("{name}-{version}-linux_arm64"),
@@ -747,7 +747,7 @@ pub mod programs {
     /// <https://github.com/extrawurst/gitui>
     async fn gitui(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "gitui";
-        let version = "0.27.0";
+        let version = "0.28.0";
         let file = format!("{name}-linux-{architecture}");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -765,7 +765,7 @@ pub mod programs {
     /// <https://github.com/casey/just>
     async fn just(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "just";
-        let version = "1.43.0";
+        let version = "1.46.0";
         let file = format!("{name}-{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -812,7 +812,7 @@ pub mod programs {
     /// <https://github.com/starship/starship>
     async fn starship(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "starship";
-        let version = "1.24.0";
+        let version = "1.24.2";
         let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -830,7 +830,7 @@ pub mod programs {
     /// <https://github.com/sxyazi/yazi>
     async fn yazi(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "yazi";
-        let version = "25.5.31";
+        let version = "26.1.22";
         let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::Zip;
         let uri = format!(
@@ -875,7 +875,7 @@ pub mod programs {
     /// <https://github.com/ajeetdsouza/zoxide>
     async fn zoxide(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "zoxide";
-        let version = "0.9.8";
+        let version = "0.9.9";
         let file = format!("{name}-{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
