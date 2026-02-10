@@ -1,0 +1,13 @@
+# docker compose up --build
+services:
+  neovim-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: neovim-builder
+    volumes:
+      - ./out:/out
+
+    #tty: true
+    #stdin_open: true
