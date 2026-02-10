@@ -185,7 +185,6 @@ if [[ ${-} == *i* ]]; then
     export BAT_STYLE='plain'
     export BAT_THEME_DARK='gruvbox-material-dark'
     export BAT_THEME_LIGHT='everforest-light'
-    export BAT_THEME=${BAT_THEME_DARK} # the default
 
     if [[ -v PAGER ]]; then
       export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat --plain --language=man'"
