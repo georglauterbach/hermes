@@ -95,8 +95,6 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 
 The following statically-compiled programs are currently only available on `x86_64`:
 
-- [_git_](https://github.com/darkvertex/static-git)
-  - a distributed version control software system that is capable of managing versions of source code or data
 - [_Neovim_](https://github.com/neovim/neovim/blob/master/BUILD.md#build-static-binary-linux)
   - modern, fast and feature-rich editor
 
