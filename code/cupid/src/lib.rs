@@ -731,7 +731,6 @@ pub mod programs {
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert(format!("{architecture}/git"), local_bin("git"));
         entries.insert(format!("{architecture}/nvim"), local_bin("nvim"));
 
         Program::new(
