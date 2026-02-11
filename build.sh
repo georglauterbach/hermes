@@ -5,7 +5,7 @@ set -e -u
 mkdir -p x86_64 aarch64
 
 cd programs
-for DIR in git neovim; do
+for DIR in neovim; do
   cd "${DIR}"
   docker compose up --build
   command find out -type f -executable | while read -r EXECUTABLE; do
