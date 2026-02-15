@@ -6,6 +6,7 @@
   "telemetry.telemetryLevel": "off",
   "update.mode": "none",
   // ? search & window
+  "window.zoomLevel": 1,
   "window.menuStyle": "custom",
   "window.menuBarVisibility": "hidden",
   "window.titleBarStyle": "native",
@@ -23,8 +24,8 @@
   "chat.extensionTools.enabled": false,
   // ? color theme
   "workbench.iconTheme": "gruvbox-material-icons",
-  "workbench.preferredLightColorTheme": "Evergruv (Everforest) Light",
   "workbench.preferredDarkColorTheme": "Evergruv (Gruvbox Material) Dark",
+  "workbench.preferredLightColorTheme": "Evergruv (Everforest) Light",
   "window.autoDetectColorScheme": true,
   "window.autoDetectHighContrast": false,
   // ? workbench
@@ -52,6 +53,9 @@
   // * workbench::miscellaneous
   "workbench.startupEditor": "none",
   // ? editor
+  // * editor::scrolling
+  "editor.smoothScrolling": false,
+  "editor.mouseWheelScrollSensitivity": 0.43,
   // * editor::brackets
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": "active",
@@ -131,25 +135,35 @@
   "better-comments.strict": true,
   "better-comments.preloadLines": 150,
   "better-comments.fullHighlight": false,
+  "better-comments.highlightPlainText": true,
   "better-comments.tags": [
     {
       "tag": [
         "?",
         "NOTE"
       ],
-      "color": "#7DAEA3"
+      "color": "#7DAEA3",
+      "multiline": true
     },
     {
       "tag": "!",
-      "color": "#EA6962"
+      "color": "#EA6962",
+      "multiline": true
     },
     {
       "tag": "todo",
-      "color": "#D8A657"
+      "color": "#D8A657",
+      "multiline": true
     },
     {
       "tag": "*",
-      "color": "#89B482"
+      "color": "#89B482",
+      "multiline": true
+    },
+    {
+      "tag": "ref",
+      "color": "#A9B665",
+      "multiline": true
     }
   ],
   "better-comments.tagsLight": [
@@ -171,6 +185,11 @@
     {
       "tag": "*",
       "color": "#35A77C"
+    },
+    {
+      "tag": "ref",
+      "color": "#8DA101",
+      "multiline": true
     }
   ],
   // * extensions::github.copilot
@@ -262,7 +281,8 @@
       "strings": true,
       "other": true
     }
-  },
+  }
+  // ? dynamic
   // ? comments
   /*
     = Additional Information
@@ -301,6 +321,4 @@
     - tamasfe.even-better-toml
     - vadimcn.vscode-lldb
   */
-  // ? dynamic
-  "window.zoomLevel": 1
 }
