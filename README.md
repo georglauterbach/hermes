@@ -8,7 +8,7 @@ _hermes_ places [selected programs and configuration files](#programs) for your 
 
 ## Usage
 
-To **download** the latest version of _hermes_, run the following commands:
+To download and run the latest version of _hermes_, run the following commands:
 
 ```bash
 function download_hermes_latest() {
