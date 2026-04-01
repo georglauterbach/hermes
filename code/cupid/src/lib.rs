@@ -493,7 +493,7 @@ pub mod programs {
     /// <https://github.com/atuinsh/atuin>
     async fn atuin(architecture: super::arguments::Architecture) -> ::anyhow::Result<()> {
         let name = "atuin";
-        let version = "18.12.0";
+        let version = "18.13.6";
         let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -589,7 +589,7 @@ pub mod programs {
     /// <https://github.com/dandavison/delta>
     async fn delta(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "delta";
-        let version = "0.18.2";
+        let version = "0.19.2";
         let file = format!(
             "{name}-{version}-{architecture}-unknown-linux-{}",
             architecture.link_library()
@@ -674,7 +674,7 @@ pub mod programs {
     /// <https://github.com/sharkdp/fd>
     async fn fd(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fd";
-        let version = "10.3.0";
+        let version = "10.4.2";
         let file = format!("{name}-v{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -696,7 +696,7 @@ pub mod programs {
     /// <https://github.com/junegunn/fzf>
     async fn fzf(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fzf";
-        let version = "0.67.0";
+        let version = "0.70.0";
         let file = match architecture {
             Architecture::X86_64 => format!("{name}-{version}-linux_amd64"),
             Architecture::Aarch64 => format!("{name}-{version}-linux_arm64"),
@@ -747,7 +747,7 @@ pub mod programs {
     /// <https://github.com/extrawurst/gitui>
     async fn gitui(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "gitui";
-        let version = "0.28.0";
+        let version = "0.28.1";
         let file = format!("{name}-linux-{architecture}");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -765,7 +765,7 @@ pub mod programs {
     /// <https://github.com/casey/just>
     async fn just(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "just";
-        let version = "1.46.0";
+        let version = "1.48.1";
         let file = format!("{name}-{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -857,7 +857,7 @@ pub mod programs {
     /// <https://github.com/zellij-org/zellij>
     async fn zellij(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "zellij";
-        let version = "0.43.1";
+        let version = "0.44.0";
         let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
