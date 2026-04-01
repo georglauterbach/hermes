@@ -1,11 +1,6 @@
 #! /usr/bin/env bash
 
-# ██████╗ ██╗     ███████╗   ███████╗██╗  ██╗
-# ██╔══██╗██║     ██╔════╝   ██╔════╝██║  ██║
-# ██████╔╝██║     █████╗     ███████╗███████║
-# ██╔══██╗██║     ██╔══╝     ╚════██║██╔══██║       what  line editor written in pure Bash
-# ██████╔╝███████╗███████╗██╗███████║██║  ██║    used by  shell
-# ╚═════╝ ╚══════╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝       link  https://github.com/akinomyoga/ble.sh
+# REF https://github.com/akinomyoga/ble.sh
 
 # shellcheck disable=SC2016,SC2034
 

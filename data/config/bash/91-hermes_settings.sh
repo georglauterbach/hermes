@@ -1,7 +1,6 @@
 #! /usr/bin/env bash
 
-#          task  customize hermes
-#    sourced by  ${HOME}/.config/bash/90-hermes.sh
+# sourced by ${HOME}/.config/bash/90-hermes.sh
 
 # -----------------------------------------------
 # ----  Extra Program Initialization  -----------
