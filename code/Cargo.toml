@@ -19,11 +19,11 @@ async-compression = { version = "0.4", default-features = false, features = [
   "tokio",
   "xz-parallel",
 ] }
-clap = { version = "4.5", default-features = true, features = [
+clap = { version = "4.6", default-features = true, features = [
   "cargo",
   "derive",
 ] }
-tokio = { version = "1.50", default-features = false, features = [
+tokio = { version = "1.51", default-features = false, features = [
   "macros",
   "process",
   "rt-multi-thread",
