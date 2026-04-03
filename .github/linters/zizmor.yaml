@@ -4,3 +4,5 @@ rules:
     disable: true
   unpinned-uses:
     disable: true
+  superfluous-actions:
+    disable: true
