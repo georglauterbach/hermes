@@ -55,7 +55,7 @@
   // ? editor
   // * editor::scrolling
   "editor.smoothScrolling": false,
-  "editor.mouseWheelScrollSensitivity": 0.43,
+  "editor.mouseWheelScrollSensitivity": 0.86,
   // * editor::brackets
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": "active",
@@ -172,19 +172,23 @@
         "?",
         "NOTE"
       ],
-      "color": "#3A94C5"
+      "color": "#3A94C5",
+      "multiline": true
     },
     {
       "tag": "!",
-      "color": "#F85552"
+      "color": "#F85552",
+      "multiline": true
     },
     {
       "tag": "todo",
-      "color": "#DFA000"
+      "color": "#DFA000",
+      "multiline": true
     },
     {
       "tag": "*",
-      "color": "#35A77C"
+      "color": "#35A77C",
+      "multiline": true
     },
     {
       "tag": "ref",
