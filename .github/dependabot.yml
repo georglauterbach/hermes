@@ -8,6 +8,7 @@ updates:
     directory: code/
     schedule:
       interval: monthly
+    assignees: [ georglauterbach ]
 
   - package-ecosystem: devcontainers
     cooldown:
@@ -15,6 +16,7 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    assignees: [ georglauterbach ]
 
   - package-ecosystem: github-actions
     cooldown:
