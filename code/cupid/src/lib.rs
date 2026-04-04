@@ -178,7 +178,7 @@ pub mod programs {
         join_set.spawn(zellij(architecture));
         join_set.spawn(zoxide(architecture));
 
-        join_set.spawn(hermes_custom(architecture));
+        join_set.spawn(neovim(architecture));
 
         while let Some(result) = join_set.join_next().await {
             match result {
@@ -714,17 +714,24 @@ pub mod programs {
             .await
     }
 
-    /// <https://github.com/georglauterbach/hermes/tree/lfs>
-    async fn hermes_custom(architecture: Architecture) -> ::anyhow::Result<()> {
-        let name = "hermes-custom";
+    /// <https://github.com/georglauterbach/hermes/releases/tag/custom>
+    async fn neovim(architecture: Architecture) -> ::anyhow::Result<()> {
+        if architecture != Architecture::X86_64 {
+            eprintln!(
+                "WARN  Packaging Neovim is currently only supported on x86_64 (but not on {architecture})"
+            );
+            return Ok(());
+        }
+
+        let name = "neovim";
         let archive_type = ArchiveType::TarXz;
-        let file = format!("hermes-custom{archive_type}");
+        let file = format!("nvim_{architecture}");
         let uri = format!(
-            "https://github.com/georglauterbach/hermes/raw/refs/heads/lfs/{file}?download="
+            "https://github.com/georglauterbach/hermes/releases/download/custom/{file}{archive_type}"
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert(format!("{architecture}/nvim"), local_bin("nvim"));
+        entries.insert(format!("{file}"), local_bin("nvim"));
 
         Program::new(
             name,
