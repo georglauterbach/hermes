@@ -716,13 +716,6 @@ pub mod programs {
 
     /// <https://github.com/georglauterbach/hermes/tree/lfs>
     async fn hermes_custom(architecture: Architecture) -> ::anyhow::Result<()> {
-        if architecture == Architecture::Aarch64 {
-            eprintln!(
-                "Statically compiled git binaries are currently not available for '{architecture}'"
-            );
-            return Ok(());
-        }
-
         let name = "hermes-custom";
         let archive_type = ArchiveType::TarXz;
         let file = format!("hermes-custom{archive_type}");
