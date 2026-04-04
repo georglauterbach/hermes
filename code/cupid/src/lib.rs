@@ -731,7 +731,7 @@ pub mod programs {
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert(format!("{file}"), local_bin("nvim"));
+        entries.insert(file, local_bin("nvim"));
 
         Program::new(
             name,
