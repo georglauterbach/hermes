@@ -1,6 +1,6 @@
 [package]
 name = "hermes"
-version = "12.3.1"
+version = "12.3.2"
 edition = "2024"
 description = "CLI utilities and configuration files delivered like a god.\nBut actually just a glorified tar-decompressor."
 readme = "../../README.md"
