@@ -271,7 +271,7 @@ if [[ ${-} == *i* ]]; then
       # shellcheck disable=SC2139
       alias v="${EDITOR:-vi}"
       # shellcheck disable=SC2139
-      alias sv="sudo $(which "${EDITOR:-vi}")"
+      alias sv="sudo $(command -v "${EDITOR:-vi}")"
     fi
 
     alias ..='cd ..'
