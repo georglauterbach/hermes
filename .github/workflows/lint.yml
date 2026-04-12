@@ -1,6 +1,6 @@
 ---
-name: Linting
-run-name: Linting
+name: Lint
+run-name: Lint
 
 on: # yamllint disable-line rule:truthy
   workflow_dispatch:
@@ -8,10 +8,12 @@ on: # yamllint disable-line rule:truthy
     branches: [ main ]
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
-  packages: read
-  statuses: write
 
 jobs:
   linting:

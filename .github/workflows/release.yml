@@ -1,6 +1,6 @@
 ---
-name: Integration
-run-name: Integration
+name: Release
+run-name: Release
 
 on: # yamllint disable-line rule:truthy
   workflow_dispatch:
@@ -12,18 +12,26 @@ on: # yamllint disable-line rule:truthy
     branches: [ '**' ]
     paths: [ code/**, .github/** ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 defaults:
   run:
     shell: bash
 
+# Restrict default permissions for all jobs to read-only
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
-    name: Build
+    name: Release
     runs-on: ubuntu-latest
     container: docker.io/rust:1.94.1-slim-trixie
+
+    permissions:
+      contents: write # Required to checkout the repository and push to a release
 
     steps:
       - name: Checkout

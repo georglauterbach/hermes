@@ -1,5 +1,10 @@
 # syntax=docker.io/docker/dockerfile:1
 
+# We accept the following hadolint issues because
+# this is a Development Container.
+#
+# hadolint global ignore=DL3008,DL3009
+
 FROM docker.io/rust:1.94.1-slim-trixie
 
 ENV CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-gnu-gcc
