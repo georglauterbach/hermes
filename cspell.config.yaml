@@ -21,6 +21,7 @@ ignoreWords:
   - bufread
   - clippy
   - dysk
+  - georglauterbach
   - gitui
   - reqwest
   - rustdoc
@@ -29,4 +30,5 @@ ignoreWords:
   - softprops
   - trixie
   - yazi
+  - zizmor
   - zstd
