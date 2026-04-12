@@ -725,13 +725,13 @@ pub mod programs {
 
         let name = "neovim";
         let archive_type = ArchiveType::TarXz;
-        let file = format!("nvim_{architecture}");
+        let file = "nvim";
         let uri = format!(
-            "https://github.com/georglauterbach/hermes/releases/download/custom/{file}{archive_type}"
+            "https://github.com/georglauterbach/hermes/releases/download/custom/{file}_{architecture}{archive_type}"
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert(file, local_bin("nvim"));
+        entries.insert(file.to_string(), local_bin("nvim"));
 
         Program::new(
             name,
