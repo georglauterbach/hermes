@@ -52,6 +52,11 @@
   "workbench.editor.pinnedTabSizing": "compact",
   // * workbench::miscellaneous
   "workbench.startupEditor": "none",
+  // ? breadcrumbs
+  "breadcrumbs.enabled": true,
+  "breadcrumbs.filePath": "on",
+  "breadcrumbs.symbolPath": "off",
+  "breadcrumbs.icons": true,
   // ? editor
   // * editor::scrolling
   "editor.smoothScrolling": false,
@@ -76,8 +81,7 @@
   "editor.wordWrap": "bounded",
   "editor.wordWrapColumn": 105,
   "editor.rulers": [
-    70,
-    90,
+    100,
     110 // for aligning the side bar
   ],
   // * editor::minimap
@@ -100,6 +104,8 @@
   // * editor::suggestions
   "editor.suggest.filterGraceful": true,
   "editor.suggest.snippetsPreventQuickSuggestions": false,
+  // * editor::inline hints & suggestions
+  "editor.inlayHints.enabled": "offUnlessPressed", // CTRL+TAB to reveal
   "editor.inlineSuggest.enabled": true,
   // ? diff editor
   "diffEditor.diffAlgorithm": "advanced",
@@ -182,7 +188,7 @@
     },
     {
       "tag": "todo",
-      "color": "#DFA000",
+      "color": "#D69A00",
       "multiline": true
     },
     {
