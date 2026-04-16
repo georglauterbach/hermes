@@ -5,9 +5,9 @@
   },
   "features": {
     "ghcr.io/georglauterbach/dev-container-features/vscode-cache-extensions:0.2": {},
-    "ghcr.io/georglauterbach/dev-container-features/hermes:12.0": {},
-    "ghcr.io/georglauterbach/dev-container-features/lang-rust:0.2": {},
-    "ghcr.io/georglauterbach/dev-container-features/lang-sh:0.4": {}
+    "ghcr.io/georglauterbach/dev-container-features/hermes:12.3": {},
+    "ghcr.io/georglauterbach/dev-container-features/lang-rust:0.4": {},
+    "ghcr.io/georglauterbach/dev-container-features/lang-sh:0.6": {}
   },
   "containerUser": "user",
   "remoteUser": "user",
