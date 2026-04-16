@@ -5,7 +5,7 @@
 #
 # hadolint global ignore=DL3008,DL3009
 
-FROM docker.io/rust:1.94.1-slim-trixie
+FROM docker.io/rust:1.95.0-slim-trixie
 
 ENV CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-gnu-gcc
 ENV CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=x86_64-linux-musl-gcc

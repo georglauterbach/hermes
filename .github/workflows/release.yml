@@ -28,7 +28,7 @@ jobs:
   build:
     name: Release
     runs-on: ubuntu-latest
-    container: docker.io/rust:1.94.1-slim-trixie
+    container: docker.io/rust:1.95.0-slim-trixie
 
     permissions:
       contents: write # Required to checkout the repository and push to a release
