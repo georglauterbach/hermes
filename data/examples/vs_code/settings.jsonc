@@ -1,33 +1,119 @@
 {
-  // suitable for VS Code 1.109.0
+  // suitable for VS Code 1.114.0
   //
   // cSpell:enable
-  // ? miscellaneous / general
-  "telemetry.telemetryLevel": "off",
-  "update.mode": "none",
-  // ? search & window
-  "window.zoomLevel": 1,
-  "window.menuStyle": "custom",
-  "window.menuBarVisibility": "hidden",
-  "window.titleBarStyle": "native",
-  "window.customTitleBarVisibility": "never",
-  "search.useIgnoreFiles": true,
-  // ? git
-  "git.confirmSync": false,
-  "git.autofetch": false,
-  "git.ignoreMissingGitWarning": true,
-  "git.openRepositoryInParentFolders": "never",
-  // ? chat / copilot
-  // in conjunction with https://stackoverflow.com/a/79534407
+  //
+  //
+  // ? AI (in conjunction with https://stackoverflow.com/a/79534407)
   "chat.disableAIFeatures": true,
   "chat.agent.enabled": false,
   "chat.extensionTools.enabled": false,
-  // ? color theme
+  // ? breadcrumbs
+  "breadcrumbs.enabled": true,
+  "breadcrumbs.filePath": "on",
+  "breadcrumbs.symbolPath": "off",
+  "breadcrumbs.icons": true,
+  // ? color & icon theme
   "workbench.iconTheme": "gruvbox-material-icons",
   "workbench.preferredDarkColorTheme": "Evergruv (Gruvbox Material) Dark",
   "workbench.preferredLightColorTheme": "Evergruv (Everforest) Light",
   "window.autoDetectColorScheme": true,
   "window.autoDetectHighContrast": false,
+  // ? diff editor
+  "diffEditor.diffAlgorithm": "advanced",
+  "diffEditor.ignoreTrimWhitespace": false,
+  // ? editor
+  // * editor::completion
+  "editor.tabCompletion": "on",
+  "editor.suggestSelection": "first",
+  // * editor::cursor
+  "editor.cursorSurroundingLines": 15,
+  "editor.cursorBlinking": "phase",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.hideCursorInOverviewRuler": true,
+  // * editor::font
+  "editor.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
+  "editor.fontSize": 13,
+  "editor.fontLigatures": true,
+  // * editor::guides
+  "editor.bracketPairColorization.enabled": false,
+  "editor.guides.highlightActiveBracketPair": true,
+  "editor.guides.highlightActiveIndentation": true,
+  "editor.guides.indentation": true,
+  "editor.guides.bracketPairsHorizontal": "active",
+  "editor.guides.bracketPairs": "active",
+  // * editor::indent
+  "editor.autoIndent": "advanced",
+  // * editor::inline hints & suggestions
+  "editor.inlayHints.enabled": "offUnlessPressed", // CTRL+TAB to reveal
+  "editor.inlineSuggest.enabled": true,
+  // * editor::minimap
+  "editor.minimap.enabled": true,
+  "editor.minimap.renderCharacters": false,
+  "editor.minimap.size": "proportional",
+  "editor.minimap.side": "left",
+  "editor.minimap.maxColumn": 100,
+  "editor.minimap.showSlider": "always",
+  "editor.minimap.autohide": "none",
+  // * editor::rendering
+  "editor.renderControlCharacters": true,
+  "editor.renderFinalNewline": "dimmed",
+  "editor.renderWhitespace": "all",
+  // * editor::scroll bar (vertical)
+  "editor.scrollbar.vertical": "hidden",
+  "editor.scrollbar.verticalScrollbarSize": 0,
+  // * editor::scrolling
+  "editor.smoothScrolling": false,
+  "editor.mouseWheelScrollSensitivity": 0.86,
+  // * editor::selection
+  "editor.selectionHighlight": true,
+  // * editor::suggestions
+  "editor.suggest.filterGraceful": true,
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  // * editor::word wrap
+  "editor.wordWrap": "bounded",
+  "editor.wordWrapColumn": 105,
+  "editor.rulers": [
+    100,
+    110 // for aligning the side bar
+  ],
+  // ? explorer
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+  // ? files
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "files.readonlyFromPermissions": true,
+  "files.defaultLanguage": "txt",
+  "files.associations": {
+    "*.env": "bash",
+    "*.conf": "ini",
+    "Justfile": "makefile"
+  },
+  // ? git
+  "git.confirmSync": false,
+  "git.autofetch": false,
+  "git.ignoreMissingGitWarning": true,
+  "git.openRepositoryInParentFolders": "never",
+  // ? search
+  "search.useIgnoreFiles": true,
+  // ? telemetry & updates
+  "telemetry.telemetryLevel": "off",
+  "update.mode": "none",
+  // ? terminal
+  "terminal.external.linuxExec": "alacritty",
+  "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
+  "terminal.integrated.fontLigatures.enabled": true,
+  "terminal.integrated.tabs.enabled": true,
+  "terminal.integrated.showExitAlert": false,
+  "terminal.integrated.enableMultiLinePasteWarning": "auto",
+  "terminal.integrated.shellIntegration.enabled": false,
+  // ? window
+  "window.zoomLevel": 1,
+  "window.menuStyle": "custom",
+  "window.menuBarVisibility": "hidden",
+  "window.titleBarStyle": "native",
+  "window.customTitleBarVisibility": "never",
   // ? workbench
   // * workbench::bars
   "workbench.sideBar.location": "right",
@@ -52,85 +138,8 @@
   "workbench.editor.pinnedTabSizing": "compact",
   // * workbench::miscellaneous
   "workbench.startupEditor": "none",
-  // ? breadcrumbs
-  "breadcrumbs.enabled": true,
-  "breadcrumbs.filePath": "on",
-  "breadcrumbs.symbolPath": "off",
-  "breadcrumbs.icons": true,
-  // ? editor
-  // * editor::scrolling
-  "editor.smoothScrolling": false,
-  "editor.mouseWheelScrollSensitivity": 0.86,
-  // * editor::brackets
-  "editor.bracketPairColorization.enabled": true,
-  "editor.guides.bracketPairs": "active",
-  // * editor::completion
-  "editor.tabCompletion": "on",
-  "editor.suggestSelection": "first",
-  // * editor::cursor
-  "editor.cursorSurroundingLines": 25,
-  "editor.cursorBlinking": "phase",
-  "editor.cursorSmoothCaretAnimation": "on",
-  "editor.hideCursorInOverviewRuler": true,
-  // * editor::font
-  "editor.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
-  "editor.fontSize": 13,
-  "editor.fontLigatures": true,
-  // * editor::indent & word wrap
-  "editor.autoIndent": "advanced",
-  "editor.wordWrap": "bounded",
-  "editor.wordWrapColumn": 105,
-  "editor.rulers": [
-    100,
-    110 // for aligning the side bar
-  ],
-  // * editor::minimap
-  "editor.minimap.enabled": true,
-  "editor.minimap.renderCharacters": false,
-  "editor.minimap.size": "proportional",
-  "editor.minimap.side": "left",
-  "editor.minimap.maxColumn": 100,
-  "editor.minimap.showSlider": "always",
-  "editor.minimap.autohide": "none",
-  // * editor::rendering
-  "editor.renderControlCharacters": true,
-  "editor.renderFinalNewline": "dimmed",
-  "editor.renderWhitespace": "all",
-  // * editor::scroll bars
-  "editor.scrollbar.vertical": "hidden",
-  "editor.scrollbar.verticalScrollbarSize": 0,
-  // * editor::selection
-  "editor.selectionHighlight": true,
-  // * editor::suggestions
-  "editor.suggest.filterGraceful": true,
-  "editor.suggest.snippetsPreventQuickSuggestions": false,
-  // * editor::inline hints & suggestions
-  "editor.inlayHints.enabled": "offUnlessPressed", // CTRL+TAB to reveal
-  "editor.inlineSuggest.enabled": true,
-  // ? diff editor
-  "diffEditor.diffAlgorithm": "advanced",
-  "diffEditor.ignoreTrimWhitespace": false,
-  // ? explorer
-  "explorer.confirmDragAndDrop": false,
-  "explorer.confirmDelete": false,
-  // ? terminal
-  "terminal.external.linuxExec": "alacritty",
-  "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
-  "terminal.integrated.fontLigatures.enabled": true,
-  "terminal.integrated.tabs.enabled": true,
-  "terminal.integrated.showExitAlert": false,
-  "terminal.integrated.enableMultiLinePasteWarning": "auto",
-  "terminal.integrated.shellIntegration.enabled": false,
-  // ? files
-  "files.insertFinalNewline": true,
-  "files.trimTrailingWhitespace": true,
-  "files.readonlyFromPermissions": true,
-  "files.defaultLanguage": "txt",
-  "files.associations": {
-    "*.env": "bash",
-    "*.conf": "ini",
-    "Justfile": "makefile"
-  },
+  //
+  //
   // ? extensions
   "extensions.ignoreRecommendations": true,
   // * extensions::asciidoctor.asciidoctor-vscode
@@ -282,28 +291,38 @@
   "errorLens.excludeByMessage": [
     "Unknown word"
   ],
-  // ? language-specific
-  // * language-specific::asciidoc
+  //
+  //
+  // ? languages
+  // * languages::asciidoc
   "[asciidoc]": {
     "editor.wordWrap": "bounded",
     "editor.quickSuggestions": {
       "comments": true,
-      "strings": true,
+      "strings": false,
       "other": true
     }
-  }
+  },
+  // * languages::markdown
+  "[markdown]": {
+    "editor.wordWrap": "bounded",
+    "editor.quickSuggestions": {
+      "comments": true,
+      "strings": false,
+      "other": true
+    }
+  },
+  //
+  //
   // ? dynamic
+  "shellcheck.executablePath": "/home/georglauterbach/.local/bin/shellcheck",
+  //
+  //
   // ? comments
   /*
     = Additional Information
 
     == Extensions
-
-    === Markdown
-
-    - bierner.markdown-emoji
-    - bierner.markdown-preview-github-styles
-    - davidanson.vscode-markdownlint
 
     === Miscellaneous
 
@@ -328,7 +347,7 @@
     === Rust
 
     - rust-lang.rust-analyzer
-    - tamasfe.even-better-toml
+    - tombi-toml.tombi
     - vadimcn.vscode-lldb
   */
 }
