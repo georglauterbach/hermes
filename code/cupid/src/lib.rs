@@ -493,7 +493,7 @@ pub mod programs {
     /// <https://github.com/atuinsh/atuin>
     async fn atuin(architecture: super::arguments::Architecture) -> ::anyhow::Result<()> {
         let name = "atuin";
-        let version = "18.15.1";
+        let version = "18.15.2";
         let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
