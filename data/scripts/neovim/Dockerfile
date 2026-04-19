@@ -3,15 +3,19 @@
 #
 # hadolint global ignore=DL3018,DL3059
 
-FROM docker.io/alpine:3.23
+FROM docker.io/ubuntu:24.04
 
-RUN apk add --no-cache build-base cmake coreutils curl gettext-tiny-dev git linux-headers tar xz
+RUN apt-get -qq update \
+    && apt-get -qq install build-essential ca-certificates cmake gettext git ninja-build
 
 RUN git clone --depth=1 --branch=v0.12.1 https://github.com/neovim/neovim.git
 WORKDIR /neovim
 
-RUN make -j"$(nproc)" CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DSTATIC_BUILD=1"
-RUN mv build/bin/nvim . && strip -s nvim && tar cJf "nvim_$(uname -m).tar.xz" nvim
+RUN make -j"$(nproc)" CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DSTATIC_BUILD=1 -DUSE_BUNDLED=1" \
+    && make install DESTDIR=/neovim/install
+
+RUN strip -s /neovim/install/usr/local/bin/nvim \
+    && tar cJf "nvim_$(uname -m).tar.xz" -C /neovim/install/usr/local .
 
 ENTRYPOINT ["/bin/sh", "-c"]
-CMD ["cp /neovim/nvim_*.tar.xz /out/"]
+CMD ["cp -rf /neovim/install /neovim/nvim_*.tar.xz /out/"]

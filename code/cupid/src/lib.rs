@@ -739,7 +739,9 @@ pub mod programs {
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert(file.to_string(), local_bin("nvim"));
+        entries.insert("./bin/nvim".to_owned(), local_bin("nvim"));
+        entries.insert("./lib/nvim".to_owned(), ".local/lib/nvim".to_owned());
+        entries.insert("./share/nvim".to_owned(), ".local/share/nvim".to_owned());
 
         Program::new(
             name,
