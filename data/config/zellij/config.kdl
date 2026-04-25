@@ -26,7 +26,7 @@ serialize_pane_viewport true
 scrollback_lines_to_serialize 0
 
 themes {
-    everforest-light-custom {
+    evergruv-light {
         bg "#FFFBEF"
         black "#FFFBEF"
 
@@ -42,7 +42,7 @@ themes {
         magenta "#DF69BA"
     }
 
-    gruvbox-material-dark-custom {
+    evergruv-dark {
         bg "#282828"
         black "#282828"
 
@@ -60,7 +60,7 @@ themes {
 }
 
 // Select a theme
-theme "gruvbox-material-dark"
+theme "evergruv-dark"
 
 // The name of the default layout to load on startup
 //
