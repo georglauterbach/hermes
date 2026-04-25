@@ -1,7 +1,7 @@
 # We accept the following hadolint issues because
 # this is a build container.
 #
-# hadolint global ignore=DL3018,DL3059
+# hadolint global ignore=DL3008,DL3009,DL3015
 
 FROM docker.io/ubuntu:24.04
 
