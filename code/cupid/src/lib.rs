@@ -587,7 +587,7 @@ pub mod programs {
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert("./btop/bin/btop".to_string(), local_bin("btop"));
+        entries.insert("./btop/bin/btop".to_owned(), local_bin("btop"));
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
@@ -715,7 +715,7 @@ pub mod programs {
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert(name.to_string(), local_bin(name));
+        entries.insert(name.to_owned(), local_bin(name));
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
@@ -783,7 +783,7 @@ pub mod programs {
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert(name.to_string(), local_bin(name));
+        entries.insert(name.to_owned(), local_bin(name));
         entries.insert(
             String::from("completions/just.bash"),
             bash_completion("just.bash"),
@@ -830,7 +830,7 @@ pub mod programs {
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert(name.to_string(), local_bin(name));
+        entries.insert(name.to_owned(), local_bin(name));
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
@@ -875,7 +875,7 @@ pub mod programs {
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert(name.to_string(), local_bin(name));
+        entries.insert(name.to_owned(), local_bin(name));
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
@@ -893,9 +893,9 @@ pub mod programs {
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert(name.to_string(), local_bin(name));
+        entries.insert(name.to_owned(), local_bin(name));
         entries.insert(
-            "completions/zoxide.bash".to_string(),
+            "completions/zoxide.bash".to_owned(),
             bash_completion("zoxide.bash"),
         );
 
