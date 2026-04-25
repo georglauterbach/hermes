@@ -62,10 +62,12 @@ jobs:
           cargo run --package cupid -- --architecture x86-64
           cargo run --package cupid -- --architecture aarch64
 
+          rustup target add x86_64-unknown-linux-musl
           export CARGO_BUILD_TARGET=x86_64-unknown-linux-musl
           export CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=x86_64-linux-musl-gcc
           cargo build --release --package hermes
 
+          rustup target add aarch64-unknown-linux-musl
           export CARGO_BUILD_TARGET=aarch64-unknown-linux-musl
           export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-gnu-gcc
           cargo build --release --package hermes
