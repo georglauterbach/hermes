@@ -4,8 +4,8 @@
     "dockerfile": "Dockerfile"
   },
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/hermes:12.4": {},
-    "ghcr.io/georglauterbach/dev-container-features/lang-rust:0.4": {},
+    "ghcr.io/georglauterbach/dev-container-features/hermes:13.0": {},
+    "ghcr.io/georglauterbach/dev-container-features/lang-rust:0.5": {},
     "ghcr.io/georglauterbach/dev-container-features/lang-sh:0.6": {}
   },
   "containerUser": "user",
@@ -17,7 +17,7 @@
   "remoteEnv": {
     "PATH": "${containerEnv:CARGO_HOME}/bin:/home/user/.local/bin:${containerEnv:PATH}"
   },
-  "postCreateCommand": "hermes --exclude=nvim",
+  "postCreateCommand": "hermes",
   "mounts": [
     {
       "source": "com.github.georglauterbach.hermes.cache",
