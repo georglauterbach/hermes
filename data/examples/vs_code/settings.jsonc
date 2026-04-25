@@ -311,11 +311,7 @@
       "strings": false,
       "other": true
     }
-  },
-  //
-  //
-  // ? dynamic
-  "shellcheck.executablePath": "/home/georglauterbach/.local/bin/shellcheck",
+  } // ? dynamic
   //
   //
   // ? comments
