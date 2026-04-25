@@ -103,7 +103,7 @@ pub async fn symlink_configuration_directory(
 pub async fn create_archive(architecture: arguments::Architecture) -> ::anyhow::Result<()> {
     {
         println!("Creating final archive");
-        let mut builder = ::tokio_tar::Builder::new(Vec::with_capacity(1_000_000 * 40));
+        let mut builder = ::tokio_tar::Builder::new(Vec::with_capacity(1_000_000 * 50));
         builder.follow_symlinks(true);
         builder
             .append_dir_all("", archive_directory(architecture))
@@ -163,7 +163,7 @@ pub mod programs {
         join_set.spawn(atuin(architecture));
         join_set.spawn(bat(architecture));
         join_set.spawn(blesh(architecture));
-        join_set.spawn(bottom(architecture));
+        join_set.spawn(btop(architecture));
         join_set.spawn(delta(architecture));
         join_set.spawn(dust(architecture));
         join_set.spawn(dysk(architecture));
@@ -199,6 +199,8 @@ pub mod programs {
     /// The type of archive we download in [`Program`]
     #[derive(Debug, Clone, Copy)]
     enum ArchiveType {
+        /// A `.tar.bz` (`.tbz`) archive
+        TarBz,
         /// A `.tar.gz` archive
         TarGz,
         /// A `.tar.xz` archive
@@ -210,6 +212,7 @@ pub mod programs {
     impl ::std::fmt::Display for ArchiveType {
         fn fmt(&self, formatter: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             let ending = match self {
+                Self::TarBz => ".tbz",
                 Self::TarGz => ".tar.gz",
                 Self::TarXz => ".tar.xz",
                 Self::Zip => ".zip",
@@ -364,6 +367,16 @@ pub mod programs {
             println!("Unpacking archive for '{}'", self.name);
 
             match self.download_archive_type {
+                ArchiveType::TarBz => {
+                    let decoder = ::async_compression::tokio::bufread::BzDecoder::new(&archive[..]);
+                    ::tokio_tar::ArchiveBuilder::new(decoder)
+                        .set_preserve_permissions(true)
+                        .set_preserve_mtime(true)
+                        .set_unpack_xattrs(true)
+                        .build()
+                        .unpack(&directory_extracted)
+                        .await
+                }
                 ArchiveType::TarGz => {
                     let decoder =
                         ::async_compression::tokio::bufread::GzipDecoder::new(&archive[..]);
@@ -374,7 +387,6 @@ pub mod programs {
                         .build()
                         .unpack(&directory_extracted)
                         .await
-                        .context("Could not unpack .tar.gz archive")
                 }
                 ArchiveType::TarXz => {
                     let decoder = ::async_compression::tokio::bufread::XzDecoder::new(&archive[..]);
@@ -385,13 +397,13 @@ pub mod programs {
                         .build()
                         .unpack(&directory_extracted)
                         .await
-                        .context("Could not unpack .tar.xz archive")
                 }
                 ArchiveType::Zip => ::zip::ZipArchive::new(std::io::Cursor::new(&archive[..]))
                     .context("Could not build ZIP archive reader - ZIP malformed?")?
                     .extract(&directory_extracted)
-                    .context("Could not unpack .zip archive"),
+                    .map_err(|error| ::std::io::Error::other(error)),
             }
+            .with_context(|| format!("Could not unpack {} archive", self.download_archive_type))
             .map_err(|error| {
                 if let Err(error) = ::std::fs::remove_dir_all(&directory_extracted)
                     .context("Could not clean up extracted directory after error")
@@ -564,22 +576,18 @@ pub mod programs {
         Ok(())
     }
 
-    /// <https://github.com/ClementTsang/bottom>
-    async fn bottom(architecture: Architecture) -> ::anyhow::Result<()> {
-        let name = "bottom";
-        let version = "0.12.3";
-        let file = format!("{name}_{architecture}-unknown-linux-musl");
-        let archive_type = ArchiveType::TarGz;
+    /// <https://github.com/aristocratos/btop>
+    async fn btop(architecture: Architecture) -> ::anyhow::Result<()> {
+        let name = "btop";
+        let version = "1.4.6";
+        let file = format!("{name}-{architecture}-unknown-linux-musl");
+        let archive_type = ArchiveType::TarBz;
         let uri = format!(
-            "https://github.com/ClementTsang/bottom/releases/download/{version}/{file}{archive_type}"
+            "https://github.com/aristocratos/btop/releases/download/v{version}/{file}{archive_type}"
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert("btm".to_string(), local_bin("btm"));
-        entries.insert(
-            "completion/btm.bash".to_string(),
-            bash_completion("btm.bash"),
-        );
+        entries.insert("./btop/bin/btop".to_string(), local_bin("btop"));
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)

@@ -52,11 +52,12 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 - [_bat_](https://github.com/sharkdp/bat)
   - `cat` with syntax highlighting and git integration
   - enabled with `HERMES_INIT_BAT`, override `cat` with `HERMES_OVERRIDE_CAT_WITH_BAT`
-- [_bottom_](https://github.com/ClementTsang/bottom)
-  - cross-platform graphical process/system monitor and `<X>top` replacement
 - [_ble.sh_](https://github.com/akinomyoga/ble.sh)
   - command line editor written in pure Bash which replaces the default GNU Readline
   - enabled with `HERMES_INIT_BLE_SH`
+- [_btop_](https://github.com/aristocratos/btop)
+  - a resource monitor
+  - consider running `sudo setcap cap_perfmon=+ep "$(command -v btop)"` to set the [`perfmon` capability](https://github.com/torvalds/linux/blob/master/Documentation/admin-guide/perf-security.rst) for btop
 - [_delta_](https://github.com/dandavison/delta)
   - syntax-highlighting pager for `git`, `diff`, `grep`, and `blame` output
   - override `diff` with `HERMES_OVERRIDE_DIFF_WITH_DELTA`
