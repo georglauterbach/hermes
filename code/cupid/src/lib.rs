@@ -401,7 +401,7 @@ pub mod programs {
                 ArchiveType::Zip => ::zip::ZipArchive::new(std::io::Cursor::new(&archive[..]))
                     .context("Could not build ZIP archive reader - ZIP malformed?")?
                     .extract(&directory_extracted)
-                    .map_err(|error| ::std::io::Error::other(error)),
+                    .map_err(::std::io::Error::other),
             }
             .with_context(|| format!("Could not unpack {} archive", self.download_archive_type))
             .map_err(|error| {
