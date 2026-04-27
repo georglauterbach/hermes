@@ -11,7 +11,9 @@ RUN apt-get -qq update \
 RUN git clone --depth=1 --branch=v0.12.1 https://github.com/neovim/neovim.git
 WORKDIR /neovim
 
-RUN make -j"$(nproc)" CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DSTATIC_BUILD=1 -DUSE_BUNDLED=1" \
+# We do not link statically as linking glibc statically causes all sorts of
+# issues; in our case, we have issues with NSS..
+RUN make -j"$(nproc)" CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DUSE_BUNDLED=1" \
     && make install DESTDIR=/neovim/install
 
 RUN strip -s /neovim/install/usr/local/bin/nvim \
