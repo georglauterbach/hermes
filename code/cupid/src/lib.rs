@@ -726,7 +726,7 @@ pub mod programs {
     async fn neovim(architecture: Architecture) -> ::anyhow::Result<()> {
         if architecture != Architecture::X86_64 {
             eprintln!(
-                "WARN  Packaging Neovim is currently only supported on x86_64 (but not on {architecture})"
+                "WARN  Packaging neovim is currently only supported on x86_64 (but not on {architecture})"
             );
             return Ok(());
         }

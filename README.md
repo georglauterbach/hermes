@@ -96,7 +96,7 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 
 The following statically-compiled programs are currently only available on `x86_64`:
 
-- [_Neovim_](https://github.com/neovim/neovim/blob/master/BUILD.md#build-static-binary-linux)
+- [_neovim_](https://github.com/neovim/neovim/blob/master/BUILD.md#build-static-binary-linux)
   - modern, fast and feature-rich editor
 
 ### Supplementary Setup Scripts
