@@ -9,7 +9,9 @@ updates:
     schedule:
       interval: monthly
     assignees: [ georglauterbach ]
-    labels: [ area::ci, kind::update ]
+    labels:
+      - kind::update
+      - area::dependencies
 
   - package-ecosystem: devcontainers
     directory: /
@@ -18,7 +20,9 @@ updates:
     schedule:
       interval: monthly
     assignees: [ georglauterbach ]
-    labels: [ area::ci, kind::update ]
+    labels:
+      - kind::update
+      - area::infrastructure
 
   - package-ecosystem: github-actions
     directory: /
@@ -27,4 +31,6 @@ updates:
     schedule:
       interval: monthly
     assignees: [ georglauterbach ]
-    labels: [ area::ci, kind::update ]
+    labels:
+      - kind::update
+      - area::ci
