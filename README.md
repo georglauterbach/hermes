@@ -1,48 +1,50 @@
 # _hermes_
 
-Delivers setup and configuration for your CLI like a god. But actually a glorified tar-decompressor.
-
-## About
-
-_hermes_ places [selected programs and configuration files](#programs) for your user. The configuration is mostly unopinionated, non-intrusive, and tries to enhance the out-of-the-box experience of your CLI. _hermes_ is built for `x86_64` and `aarch64`.
+_hermes_ installs [programs](#programs) and configuration files for the command line. The setup is non-intrusive (it does not overwrite existing files by default) and mostly unopinionated. _hermes_ is built for `x86_64` and `aarch64`.
 
 ## Usage
 
-To download and run the latest version of _hermes_, run the following commands:
-
 ```bash
+# Download the latest version of hermes and
+# place hermes at ${HOME}/.local/bin/hermes
 function download_hermes_latest() {
-  local HERMES_LOCATION="${HOME}/.local/bin/hermes"
-  local HERMES_RELEASE_URI_BASE='https://github.com/georglauterbach/hermes/releases'
-  local HERMES_VERSION
+  local HERMES="${HOME}/.local/bin/hermes"
+  local RELEASE_URI_BASE='https://github.com/georglauterbach/hermes/releases'
+  local VERSION
 
-  HERMES_VERSION=$(curl --silent --show-error --fail --location --write-out '%{url_effective}' --output /dev/null \
-    "${HERMES_RELEASE_URI_BASE}/latest" | sed 's|.*/||')
+  VERSION=$(curl --silent --show-error --fail --location \
+    --write-out '%{url_effective}' --output /dev/null    \
+    "${RELEASE_URI_BASE}/latest" | sed 's|.*/||')
 
-  mkdir --parents "$(dirname "${HERMES_LOCATION}")"
-  curl --silent --show-error --fail --location --output "${HERMES_LOCATION}" \
-    "${HERMES_RELEASE_URI_BASE}/download/${HERMES_VERSION}/hermes-${HERMES_VERSION}-$(uname -m)-unknown-linux-musl"
+  mkdir --parents "$(dirname "${HERMES}")"
+  curl --silent --show-error --fail --location --output "${HERMES}" \
+    "${RELEASE_URI_BASE}/download/${VERSION}/hermes-${VERSION}-$(uname -m)-unknown-linux-musl"
 
-  chmod +x "${HERMES_LOCATION}"
+  chmod +x "${HERMES}"
 }
 
-# download hermes
-download_hermes_latest
-
-# execute hermes
-"${HOME}/.local/bin/hermes"
+download_hermes_latest      # download hermes
+"${HOME}/.local/bin/hermes" # execute hermes
 ```
 
 ## Additional Setup
 
+### Supplementary Setup Scripts
+
+You can find setup scripts that aid in setting up machines in [`data/scripts/`](./data/scripts/).
+
+### Examples
+
+You can find some personal configuration files in [`data/examples/`](./data/examples/).
+
 ### Bash
 
-1. **To enable _hermes_**: add `source "${HOME}/.config/bash/90-hermes.sh"` to (the end of) your `${HOME}/.bashrc`
-2. **To modify _hermes_**: edit the file [`${HOME}/.config/bash/91-hermes_settings.sh`](./data/config/bash/91-hermes_settings.sh)
+_hermes_'s command line setup focuses on Bash. Use [`source "${HOME}/.config/bash/90-hermes.sh"`](./data/config/bash/90-hermes.sh) in `${HOME}/.bashrc` to load the setup. To modify the setup, adjust [`${HOME}/.config/bash/91-hermes_settings.sh`](./data/config/bash/91-hermes_settings.sh).
+
 
 ### Programs
 
-_hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs include:
+_hermes_ installs additional programs into `${HOME}/.local/bin/`.
 
 - [_Atuin_](https://github.com/atuinsh/atuin)
   - "magical" shell history using SQLite rather than a file
@@ -94,15 +96,7 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`. These programs
 - [_zellij_](https://github.com/zellij-org/zellij)
   - terminal workspace with batteries included
 
-The following statically-compiled programs are currently only available on `x86_64`:
+The following programs are currently only available on `x86_64`:
 
 - [_neovim_](https://github.com/neovim/neovim/blob/master/BUILD.md#build-static-binary-linux)
   - modern, fast and feature-rich editor
-
-### Supplementary Setup Scripts
-
-You can find additional setup scripts that aid in setting up machines under the [`data/scripts/` directory](./data/scripts/).
-
-### Examples
-
-You can find setup examples in the [`data/examples/`](./data/examples/) directory. A custom GUI setup can be found there too.
