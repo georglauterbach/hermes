@@ -3,28 +3,28 @@ version: 2
 
 updates:
   - package-ecosystem: cargo
+    directory: code/
     cooldown:
       default-days: 7
-    directory: code/
     schedule:
       interval: monthly
     assignees: [ georglauterbach ]
+    labels: [ area::ci, kind::update ]
 
   - package-ecosystem: devcontainers
+    directory: /
     cooldown:
       default-days: 7
-    directory: /
     schedule:
       interval: monthly
     assignees: [ georglauterbach ]
+    labels: [ area::ci, kind::update ]
 
   - package-ecosystem: github-actions
+    directory: /
     cooldown:
       default-days: 7
-    directory: /
-    target-branch: dev
-    rebase-strategy: auto
     schedule:
       interval: monthly
     assignees: [ georglauterbach ]
-    labels: [ area/ci, kind/update ]
+    labels: [ area::ci, kind::update ]
