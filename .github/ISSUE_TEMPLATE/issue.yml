@@ -1,8 +1,8 @@
 ---
 name: Generic Issue
 description: Generic Issue
-#title: ''
-#labels:
+title: ''
+labels: [ meta::needs triage ]
 
 body:
   - type: dropdown
