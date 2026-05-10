@@ -62,10 +62,10 @@ if [[ ${-} == *i* ]]; then
 
     # miscellaneous environment variables
     if [[ ! -v VISUAL ]]; then
-      if   __is_command 'nvim' ; then VISUAL='nvim'
-      elif __is_command 'vim'  ; then VISUAL='vim'
-      elif __is_command 'vi'   ; then VISUAL='vi'
-      elif __is_command 'nano' ; then VISUAL='nano'
+      if   __is_command nvim ; then VISUAL='nvim'
+      elif __is_command vim  ; then VISUAL='vim'
+      elif __is_command vi   ; then VISUAL='vi'
+      elif __is_command nano ; then VISUAL='nano'
       else VISUAL=
       fi
     fi
@@ -100,7 +100,7 @@ if [[ ${-} == *i* ]]; then
   }
 
   function __hermes__setup_prompt() {
-    if __evaluates_to_true HERMES_INIT_STARSHIP && __is_command 'starship'; then
+    if __evaluates_to_true HERMES_INIT_STARSHIP && __is_command starship; then
       [[ -v STARSHIP_CONFIG ]] || STARSHIP_CONFIG="${HOME}/.config/starship/starship.toml"
       export STARSHIP_CONFIG
       eval "$(starship init bash || :)"
@@ -125,7 +125,7 @@ if [[ ${-} == *i* ]]; then
       [[ -v BLE_VERSION ]] && bleopt history_share=yes
     }
 
-    if ! __evaluates_to_true HERMES_INIT_ATUIN || ! __is_command 'atuin'; then
+    if ! __evaluates_to_true HERMES_INIT_ATUIN || ! __is_command atuin; then
       __hermes__init_default_history
       return 0
     fi
@@ -142,7 +142,7 @@ if [[ ${-} == *i* ]]; then
     fi
 
     export HISTFILE=${HERMES_CONFIG_ATUIN_WITH_HISTFILE:-/dev/null}
-    if [[ ${HISTFILE} == '/dev/null' ]]; then
+    if [[ ${HISTFILE} == /dev/null ]]; then
       shopt -u histappend
       unset HISTCONTROL HISTSIZE HISTFILESIZE
     else
@@ -152,7 +152,7 @@ if [[ ${-} == *i* ]]; then
     local ATUIN_INIT_ARGUMENTS=()
     __evaluates_to_true HERMES_CONFIG_ATUIN_DISABLE_UP_ARROW && ATUIN_INIT_ARGUMENTS+=('--disable-up-arrow')
     if __evaluates_to_true HERMES_CONFIG_ATUIN_DISABLE_CTRL_F; then
-      ATUIN_INIT_ARGUMENTS+=('--disable-ctrl-r')
+      ATUIN_INIT_ARGUMENTS+=(--disable-ctrl-r)
       bind -x '"\C-e": __atuin_history' # CTRL+e will bring up Atuin
     fi
 
@@ -165,7 +165,7 @@ if [[ ${-} == *i* ]]; then
     fi
   }
 
-  for __FUNCTION in 'path' 'variables' 'completion' 'prompt' 'history'; do
+  for __FUNCTION in path variables completion prompt history; do
     "__hermes__setup_${__FUNCTION}" || :
     unset "__hermes__setup_${__FUNCTION}"
   done
@@ -174,7 +174,7 @@ if [[ ${-} == *i* ]]; then
   # ----  Extra Programs  -------------------------
   # -----------------------------------------------
 
-  if __evaluates_to_true HERMES_INIT_BAT && __is_command 'bat'; then
+  if __evaluates_to_true HERMES_INIT_BAT && __is_command bat; then
     export BAT_STYLE='plain'
     export BAT_THEME_DARK='gruvbox-material-dark'
     export BAT_THEME_LIGHT='everforest-light'
@@ -185,17 +185,17 @@ if [[ ${-} == *i* ]]; then
     fi
   fi
 
-  if __evaluates_to_true HERMES_INIT_FZF && __is_command 'fzf'; then
+  if __evaluates_to_true HERMES_INIT_FZF && __is_command fzf; then
     # bash-completion was loaded before we load `fzf` now, which is what we want
     #
     # ref: https://github.com/akinomyoga/blesh-contrib/blob/master/integration/fzf.md
     if [[ -v BLE_VERSION ]]; then
-      ble-import --delay 'integration/fzf-completion'
+      ble-import --delay integration/fzf-completion
       if [[ -v FZF_CTRL_T_COMMAND ]]; then
-        ble-import --delay 'integration/fzf-key-bindings'
+        ble-import --delay integration/fzf-key-bindings
       else
         # no delayed loading to unbind CTRL+t immediately
-        ble-import 'integration/fzf-key-bindings'
+        ble-import integration/fzf-key-bindings
         ble-bind -x C-t -
       fi
     else
@@ -204,47 +204,47 @@ if [[ ${-} == *i* ]]; then
     fi
   fi
 
-  if __evaluates_to_true HERMES_INIT_ZOXIDE && __is_command 'zoxide'; then
+  if __evaluates_to_true HERMES_INIT_ZOXIDE && __is_command zoxide; then
     # shellcheck source=/dev/null
     source <(zoxide init bash)
-    [[ -v BLE_VERSION ]] && ble-import --delay 'integration/zoxide'
+    [[ -v BLE_VERSION ]] && ble-import --delay integration/zoxide
   fi
 
   # -----------------------------------------------
   # ----  Command Overrides  ----------------------
   # -----------------------------------------------
 
-  if __evaluates_to_true HERMES_OVERRIDE_CAT_WITH_BAT && __is_command 'bat'; then
+  if __evaluates_to_true HERMES_OVERRIDE_CAT_WITH_BAT && __is_command bat; then
     # shellcheck disable=SC2139
     alias cat="bat --paging=never"
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_CD_WITH_ZOXIDE && __is_command 'zoxide'; then
+  if __evaluates_to_true HERMES_OVERRIDE_CD_WITH_ZOXIDE && __is_command zoxide; then
     alias cd='z'
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_DIFF_WITH_DELTA && __is_command 'delta'; then
+  if __evaluates_to_true HERMES_OVERRIDE_DIFF_WITH_DELTA && __is_command delta; then
     alias diff='delta --line-numbers'
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_FIND_WITH_FD && __is_command 'fd'; then
+  if __evaluates_to_true HERMES_OVERRIDE_FIND_WITH_FD && __is_command fd; then
     alias find='fd'
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_GREP_WITH_RIPGREP && __is_command 'rg'; then
+  if __evaluates_to_true HERMES_OVERRIDE_GREP_WITH_RIPGREP && __is_command rg; then
     alias grep='rg'
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_LESS_WITH_BAT && __is_command 'bat'; then
+  if __evaluates_to_true HERMES_OVERRIDE_LESS_WITH_BAT && __is_command bat; then
     # shellcheck disable=SC2139
     alias less="bat --paging=always"
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_LS_WITH_EZA && __is_command 'eza'; then
+  if __evaluates_to_true HERMES_OVERRIDE_LS_WITH_EZA && __is_command eza; then
     alias ls='eza --header --long --binary --group --classify --extended --group-directories-first'
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_Y_WITH_YAZI && __is_command 'yazi'; then
+  if __evaluates_to_true HERMES_OVERRIDE_Y_WITH_YAZI && __is_command yazi; then
     function y() {
       local YAZI_TMP_FILE YAZI_CWD ; YAZI_TMP_FILE="$(mktemp -t "yazi-cwd.XXXXXX")" ;
       yazi "${@}" --cwd-file="${YAZI_TMP_FILE}"
