@@ -57,10 +57,10 @@ You can configure additional useful options:
 
     ```ini
     [user]
-        signingKey = key::ssh-...
+        signingKey = key::ssh-ed25519 dwadA....0e GitHub
 
     [gpg "ssh"]
-        allowedSignersFile = ...
+        allowedSignersFile = ~/.ssh/git.allowed_signers_file.github
     ```
 
     An `allowedSignersFile` looks (roughly) like this:
