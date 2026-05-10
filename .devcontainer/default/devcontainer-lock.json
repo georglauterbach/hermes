@@ -1,0 +1,19 @@
+{
+  "features": {
+    "ghcr.io/georglauterbach/dev-container-features/hermes:13.0": {
+      "version": "13.0.0",
+      "resolved": "ghcr.io/georglauterbach/dev-container-features/hermes@sha256:48e7f8aea9aea74b6c6877fb176c665ab8c3d06f506e38934493056d07a8387c",
+      "integrity": "sha256:48e7f8aea9aea74b6c6877fb176c665ab8c3d06f506e38934493056d07a8387c"
+    },
+    "ghcr.io/georglauterbach/dev-container-features/lang-rust:0.5": {
+      "version": "0.5.0",
+      "resolved": "ghcr.io/georglauterbach/dev-container-features/lang-rust@sha256:ff54945cd4dd3ecef8ef64eb076dfb4059160d4e132cea4366249fd985279e6f",
+      "integrity": "sha256:ff54945cd4dd3ecef8ef64eb076dfb4059160d4e132cea4366249fd985279e6f"
+    },
+    "ghcr.io/georglauterbach/dev-container-features/lang-sh:0.6": {
+      "version": "0.6.0",
+      "resolved": "ghcr.io/georglauterbach/dev-container-features/lang-sh@sha256:715e06f56721c97d0054178eb403a2e7c5cd00e01dfd7dd2b4cce7b2a45fe7ff",
+      "integrity": "sha256:715e06f56721c97d0054178eb403a2e7c5cd00e01dfd7dd2b4cce7b2a45fe7ff"
+    }
+  }
+}
