@@ -31,7 +31,7 @@ download_hermes_latest      # download hermes
 
 ### Supplementary Setup Scripts
 
-You can find setup scripts that aid in setting up machines in [`data/scripts/`](./data/scripts/).
+You can find setup scripts that aid in setting up machines in [`data/scripts/`](./data/scripts/). You might also want to run `bat cache --build` to initialize `bat`'s theme cache.
 
 ### Examples
 
