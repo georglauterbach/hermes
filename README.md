@@ -78,6 +78,9 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`.
   - enabled with `HERMES_INIT_FZF`
 - [_gitui_](https://github.com/extrawurst/gitui)
   - a fast, modern TUI for `git`
+- [_jaq_](https://github.com/01mf02/jaq)
+  - a `jq` clone focussed on correctness, speed, and simplicity
+  - override `jq` with `HERMES_OVERRIDE_JQ_WITH_JAQ`
 - [_just_](https://github.com/casey/just)
   - just a command runner
 - [_ripgrep_](https://github.com/BurntSushi/ripgrep)

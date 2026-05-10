@@ -81,16 +81,18 @@ pub async fn symlink_configuration_directory(
 
     if config_directory.exists() {
         ::std::fs::remove_file(&config_directory)
-            .context(format!("Could not delete {}", config_directory.display()))?;
+            .with_context(|| format!("Could not delete {}", config_directory.display()))?;
     }
 
     ::tokio::fs::symlink(&existing_config_directory, &config_directory)
         .await
-        .context(format!(
-            "Could not symlink '{}' -> '{}'",
-            config_directory.display(),
-            existing_config_directory.display()
-        ))?;
+        .with_context(|| {
+            format!(
+                "Could not symlink '{}' -> '{}'",
+                config_directory.display(),
+                existing_config_directory.display()
+            )
+        })?;
 
     Ok(())
 }
@@ -171,6 +173,7 @@ pub mod programs {
         join_set.spawn(fd(architecture));
         join_set.spawn(fzf(architecture));
         join_set.spawn(gitui(architecture));
+        join_set.spawn(jaq(architecture));
         join_set.spawn(just(architecture));
         join_set.spawn(ripgrep(architecture));
         join_set.spawn(starship(architecture));
@@ -199,6 +202,8 @@ pub mod programs {
     /// The type of archive we download in [`Program`]
     #[derive(Debug, Clone, Copy)]
     enum ArchiveType {
+        /// Not compressed
+        Uncompressed,
         /// A `.tar.bz` (`.tbz`) archive
         TarBz,
         /// A `.tar.gz` archive
@@ -212,6 +217,7 @@ pub mod programs {
     impl ::std::fmt::Display for ArchiveType {
         fn fmt(&self, formatter: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             let ending = match self {
+                Self::Uncompressed => "",
                 Self::TarBz => ".tbz",
                 Self::TarGz => ".tar.gz",
                 Self::TarXz => ".tar.xz",
@@ -367,6 +373,25 @@ pub mod programs {
             println!("Unpacking archive for '{}'", self.name);
 
             match self.download_archive_type {
+                ArchiveType::Uncompressed => {
+                    use ::tokio::io::AsyncWriteExt as _;
+
+                    match tokio::fs::create_dir_all(&directory_extracted).await {
+                        Ok(()) => {
+                            tokio::fs::OpenOptions::new()
+                                .create(true)
+                                .truncate(true)
+                                .write(true)
+                                .mode(0o755)
+                                .open(directory_extracted.join(self.name))
+                                .await
+                                .unwrap()
+                                .write_all(&archive)
+                                .await
+                        }
+                        error => error,
+                    }
+                }
                 ArchiveType::TarBz => {
                     let decoder = ::async_compression::tokio::bufread::BzDecoder::new(&archive[..]);
                     ::tokio_tar::ArchiveBuilder::new(decoder)
@@ -437,25 +462,35 @@ pub mod programs {
                     );
                 }
 
+                if to.file_name().map(|x| x.to_str().unwrap()) == Some("jaq") {
+                    eprintln!(
+                        "symlink from={} to={} parent={}",
+                        from.display(),
+                        to.display(),
+                        to.parent().unwrap().display()
+                    );
+                }
+
                 to.parent()
                     .map(::std::fs::create_dir_all)
                     .transpose()
-                    .context(format!(
-                        "Could not create directory to put '{}' in",
-                        to.display()
-                    ))?;
+                    .with_context(|| {
+                        format!("Could not create directory to put '{}' in", to.display())
+                    })?;
 
                 if to.exists() {
-                    tokio::fs::remove_file(to)
-                        .await
-                        .context("Could not remove existing symbolic link")?;
+                    tokio::fs::remove_file(to).await.with_context(|| {
+                        format!("Could not remove existing symbolic link '{}'", to.display())
+                    })?;
                 }
 
-                ::tokio::fs::symlink(&from, &to).await.context(format!(
-                    "Could not create symbolic link from archive entry '{}' to '{}'",
-                    from.display(),
-                    to.display()
-                ))?;
+                ::tokio::fs::symlink(&from, &to).await.with_context(|| {
+                    format!(
+                        "Could not create symbolic link from archive entry '{}' to '{}'",
+                        from.display(),
+                        to.display()
+                    )
+                })?;
 
                 Ok(())
             }
@@ -770,6 +805,28 @@ pub mod programs {
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
+    }
+
+    /// <https://github.com/01mf02/jaq>
+    async fn jaq(architecture: Architecture) -> ::anyhow::Result<()> {
+        let name = "jaq";
+        let version = "3.0.0";
+        let file = match architecture {
+            Architecture::X86_64 => format!("{name}-{architecture}-unknown-linux-musl"),
+            Architecture::Aarch64 => format!("{name}-{architecture}-unknown-linux-gnu"),
+        };
+        let archive_type = ArchiveType::Uncompressed;
+        let uri = format!("https://github.com/01mf02/jaq/releases/download/v{version}/{file}");
+
+        Program::new(
+            name,
+            version,
+            archive_type,
+            uri,
+            Entries::All("jaq", ".local/bin/jaq"),
+        )
+        .process(architecture)
+        .await
     }
 
     /// <https://github.com/casey/just>

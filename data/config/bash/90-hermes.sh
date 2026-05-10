@@ -235,6 +235,10 @@ if [[ ${-} == *i* ]]; then
     alias grep='rg'
   fi
 
+  if __evaluates_to_true HERMES_OVERRIDE_JQ_WITH_JAQ && __is_command jaq; then
+    alias jq='jaq'
+  fi
+
   if __evaluates_to_true HERMES_OVERRIDE_LESS_WITH_BAT && __is_command bat; then
     # shellcheck disable=SC2139
     alias less="bat --paging=always"
