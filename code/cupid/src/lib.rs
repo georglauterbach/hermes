@@ -462,15 +462,6 @@ pub mod programs {
                     );
                 }
 
-                if to.file_name().map(|x| x.to_str().unwrap()) == Some("jaq") {
-                    eprintln!(
-                        "symlink from={} to={} parent={}",
-                        from.display(),
-                        to.display(),
-                        to.parent().unwrap().display()
-                    );
-                }
-
                 to.parent()
                     .map(::std::fs::create_dir_all)
                     .transpose()
