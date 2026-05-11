@@ -59,6 +59,10 @@ jobs:
         run: |
           cd code
 
+          VERSION=${{ github.ref_name }}
+          VERSION=${VERSION#v}
+          sed -i -E "s/^(version =).*/\1 \"${VERSION}\"/" Cargo.toml
+
           cargo run --package cupid -- --architecture x86-64
           cargo run --package cupid -- --architecture aarch64
 
