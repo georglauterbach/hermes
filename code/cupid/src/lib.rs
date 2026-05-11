@@ -50,6 +50,9 @@ pub mod arguments {
         /// The architecture to be used
         #[clap(short, long, default_value = "x86-64")]
         pub architecture: Architecture,
+        /// Do not create the final archive file
+        #[clap(long)]
+        pub no_archive: bool
     }
 }
 

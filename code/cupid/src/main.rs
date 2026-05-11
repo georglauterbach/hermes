@@ -12,7 +12,11 @@ async fn main() {
             ::cupid::programs::process(arguments.architecture),
             ::cupid::symlink_configuration_directory(arguments.architecture)
         )?;
-        ::cupid::create_archive(arguments.architecture).await
+        if !arguments.no_archive {
+            ::cupid::create_archive(arguments.architecture).await
+        } else {
+            Ok(())
+        }
     }
     .await
     {

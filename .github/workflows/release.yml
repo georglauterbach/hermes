@@ -59,12 +59,19 @@ jobs:
         run: |
           cd code
 
-          VERSION=${{ github.ref_name }}
-          VERSION=${VERSION#v}
-          sed -i -E "s/^(version =).*/\1 \"${VERSION}\"/" Cargo.toml
+          cargo run --package cupid -- --architecture x86-64  --no-archive
+          cargo run --package cupid -- --architecture aarch64 --no-archive
+
+      - name: '[Release] Build Final Archive and Binary'
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          cd code
 
           cargo run --package cupid -- --architecture x86-64
           cargo run --package cupid -- --architecture aarch64
+
+          readonly VERSION=${{ github.ref_name }}
+          sed -i -E "s/^(version =).*/\1 \"${VERSION#v}\"/" Cargo.toml
 
           rustup target add x86_64-unknown-linux-musl
           export CARGO_BUILD_TARGET=x86_64-unknown-linux-musl
@@ -76,16 +83,18 @@ jobs:
           export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-gnu-gcc
           cargo build --release --package hermes
 
-      - name: '[Release] Move Artifacts for Upload'
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: |
-          cd code/target ; mkdir -p .artifacts ;
+          cd target
+          mkdir -p .artifacts
 
-          mv ../../.assets/x86_64/archive.tar.xz       .artifacts/hermes-${{ github.ref_name }}-x86_64.tar.xz
-          mv x86_64-unknown-linux-musl/release/hermes  .artifacts/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
+          mv ../../.assets/x86_64/archive.tar.xz \
+            .artifacts/hermes-${{ github.ref_name }}-x86_64.tar.xz
+          mv x86_64-unknown-linux-musl/release/hermes \
+            .artifacts/hermes-${{ github.ref_name }}-x86_64-unknown-linux-musl
 
-          mv ../../.assets/aarch64/archive.tar.xz      .artifacts/hermes-${{ github.ref_name }}-aarch64.tar.xz
-          mv aarch64-unknown-linux-musl/release/hermes .artifacts/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
+          mv ../../.assets/aarch64/archive.tar.xz \
+            .artifacts/hermes-${{ github.ref_name }}-aarch64.tar.xz
+          mv aarch64-unknown-linux-musl/release/hermes \
+            .artifacts/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
 
       - name: '[Release] Publish Artifacts to Release'
         if: startsWith(github.ref, 'refs/tags/v')
