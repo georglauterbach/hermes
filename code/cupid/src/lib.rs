@@ -52,7 +52,7 @@ pub mod arguments {
         pub architecture: Architecture,
         /// Do not create the final archive file
         #[clap(long)]
-        pub no_archive: bool
+        pub no_archive: bool,
     }
 }
 
