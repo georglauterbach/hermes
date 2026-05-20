@@ -1,3 +1,6 @@
+// Copyright (c) 2024 - PRESENT Georg Lauterbach
+// MIT License
+
 //! A glorified tar-decompressor
 
 use ::async_std::stream::StreamExt as _;

@@ -5,7 +5,7 @@ edition = "2024"
 description = "CLI utilities and configuration files delivered like a god.\nBut actually just a glorified tar-decompressor."
 readme = "../../README.md"
 repository = "https://github.com/georglauterbach/hermes"
-license-file = "../../LICENSE"
+license = "MIT"
 publish = false
 
 [workspace]

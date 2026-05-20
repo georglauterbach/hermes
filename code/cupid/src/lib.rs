@@ -1,3 +1,6 @@
+// Copyright (c) 2024 - PRESENT Georg Lauterbach
+// MIT License
+
 //! The library part of `cupid`
 
 use ::anyhow::Context as _;

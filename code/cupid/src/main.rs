@@ -1,3 +1,6 @@
+// Copyright (c) 2024 - PRESENT Georg Lauterbach
+// MIT License
+
 //! A support crate for `hermes` that packs the
 //! archive that `hermes` uses for its (offline)
 //! installation

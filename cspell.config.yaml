@@ -11,7 +11,9 @@ dictionaries:
   - softwareTerms
   - bash
 
-words: []
+words:
+  - Georg
+  - Lauterbach
 
 ignoreWords:
   - atuin
