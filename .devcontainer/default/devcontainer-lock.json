@@ -1,9 +1,9 @@
 {
   "features": {
-    "ghcr.io/georglauterbach/dev-container-features/hermes:13.0": {
-      "version": "13.0.0",
-      "resolved": "ghcr.io/georglauterbach/dev-container-features/hermes@sha256:48e7f8aea9aea74b6c6877fb176c665ab8c3d06f506e38934493056d07a8387c",
-      "integrity": "sha256:48e7f8aea9aea74b6c6877fb176c665ab8c3d06f506e38934493056d07a8387c"
+    "ghcr.io/georglauterbach/dev-container-features/hermes:": {
+      "version": "13.1.2",
+      "resolved": "ghcr.io/georglauterbach/dev-container-features/hermes@sha256:b76c22ce212261c31b1ba78aff2e61fe77a196c0de95c8de8d00ca560baf272e",
+      "integrity": "sha256:b76c22ce212261c31b1ba78aff2e61fe77a196c0de95c8de8d00ca560baf272e"
     },
     "ghcr.io/georglauterbach/dev-container-features/lang-rust:0.5": {
       "version": "0.5.0",
