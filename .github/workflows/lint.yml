@@ -23,11 +23,11 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
         with:
           persist-credentials: false
 
       - name: Run Linter
-        uses: georglauterbach/linter@v0.3.1
+        uses: georglauterbach/linter@v0.3.2
         with:
           zizmor_config: .github/linter/zizmor.yaml
