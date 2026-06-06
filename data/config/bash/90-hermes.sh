@@ -205,8 +205,13 @@ if [[ ${-} == *i* ]]; then
   fi
 
   if __evaluates_to_true HERMES_INIT_ZOXIDE && __is_command zoxide; then
-    # shellcheck source=/dev/null
-    source <(zoxide init bash)
+    if __evaluates_to_true HERMES_OVERRIDE_CD_WITH_ZOXIDE; then
+      # shellcheck source=/dev/null
+      source <(zoxide init --cmd cd bash)
+    else
+      # shellcheck source=/dev/null
+      source <(zoxide init bash)
+    fi
     [[ -v BLE_VERSION ]] && ble-import --delay integration/zoxide
   fi
 
@@ -217,10 +222,6 @@ if [[ ${-} == *i* ]]; then
   if __evaluates_to_true HERMES_OVERRIDE_CAT_WITH_BAT && __is_command bat; then
     # shellcheck disable=SC2139
     alias cat="bat --paging=never"
-  fi
-
-  if __evaluates_to_true HERMES_OVERRIDE_CD_WITH_ZOXIDE && __is_command zoxide; then
-    alias cd='z'
   fi
 
   if __evaluates_to_true HERMES_OVERRIDE_DIFF_WITH_DELTA && __is_command delta; then
