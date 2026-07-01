@@ -9,7 +9,7 @@ workspace = ".."
 anyhow = { version = "1.0", default-features = false }
 astral-tokio-tar = { workspace = true }
 async-compression = { workspace = true }
-bytes = { version = "1.11", default-features = false }
+bytes = { version = "1.12", default-features = false }
 clap = { workspace = true }
 reqwest = { version = "0.13", default-features = false, features = [
   "rustls",
