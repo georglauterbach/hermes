@@ -44,22 +44,18 @@ repo_root_style = 'blue bold'
 [git_branch]
 format = ' [\[$symbol $branch\]]($style)'
 style = 'purple'
-
 symbol = ''
 
 [rust]
 format = ' [\[$symbol $version\]]($style)'
 style = 'purple'
-
 symbol = '󱘗'
 
 [python]
 format = ' [\[$symbol $version  $virtualenv\]]($style)'
 style = 'purple'
-
 symbol = '󰌠'
 
 [character]
-disabled = false
 success_symbol = '[➜](green)'
 error_symbol   = '[➜](red)'
