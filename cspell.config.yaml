@@ -20,17 +20,22 @@ ignoreWords:
   - atuinsh
   - blesh
   - binutils
+  - btop
   - bufread
   - clippy
   - dysk
+  - flyline
   - georglauterbach
   - gitui
+  - perfmon
   - reqwest
   - rustdoc
   - rustls
+  - setcap
   - sharkdp
   - softprops
   - trixie
+  - xattrs
   - yazi
   - zizmor
   - zstd
