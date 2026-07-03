@@ -14,7 +14,6 @@ members = ["cupid"]
 [workspace.dependencies]
 astral-tokio-tar = { version = "0.6", default-features = false }
 async-compression = { version = "0.4", default-features = false, features = [
-  "bzip2",
   "gzip",
   "tokio",
   "xz-parallel",

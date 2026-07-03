@@ -41,22 +41,13 @@ You can find some personal configuration files in [`data/examples/`](./data/exam
 
 _hermes_'s command line setup focuses on Bash. Use [`source "${HOME}/.config/bash/90-hermes.sh"`](./data/config/bash/90-hermes.sh) in `${HOME}/.bashrc` to load the setup. To modify the setup, adjust [`${HOME}/.config/bash/91-hermes_settings.sh`](./data/config/bash/91-hermes_settings.sh).
 
-
 ### Programs
 
 _hermes_ installs additional programs into `${HOME}/.local/bin/`.
 
-- [_Atuin_](https://github.com/atuinsh/atuin)
-  - "magical" shell history using SQLite rather than a file
-  - enabled with `HERMES_INIT_ATUIN`
-  - `CTRL+e` (or `up-arrow` when `HERMES_CONFIG_ATUIN_DISABLE_UP_ARROW=false`) brings up the history
-  - setting `HERMES_CONFIG_ATUIN_DB_FILE` changes the database file
 - [_bat_](https://github.com/sharkdp/bat)
   - `cat` with syntax highlighting and git integration
   - enabled with `HERMES_INIT_BAT`, override `cat` with `HERMES_OVERRIDE_CAT_WITH_BAT`
-- [_ble.sh_](https://github.com/akinomyoga/ble.sh)
-  - command line editor written in pure Bash which replaces the default GNU Readline
-  - enabled with `HERMES_INIT_BLE_SH`
 - [_btop_](https://github.com/aristocratos/btop)
   - a resource monitor
   - consider running `sudo setcap cap_perfmon=+ep "$(command -v btop)"` to set the [`perfmon` capability](https://github.com/torvalds/linux/blob/master/Documentation/admin-guide/perf-security.rst) for btop
@@ -73,6 +64,9 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`.
 - [_fd_](https://github.com/sharkdp/fd)
   - fast, modern alternative to `find`
   - override `find` with `HERMES_OVERRIDE_FIND_WITH_FD`
+- [_flyline_](https://github.com/HalFrgrd/flyline)
+  - a Bash plugin to replace readline for a modern line editing experience
+  - enabled with `HERMES_INIT_FLYLINE`
 - [_fzf_](https://github.com/junegunn/fzf)
   - general-purpose command-line fuzzy finder
   - enabled with `HERMES_INIT_FZF`
@@ -89,6 +83,7 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`.
 - [_starship_](https://github.com/starship/starship)
   - minimal, blazing-fast, and infinitely customizable prompt for any shell
   - enabled with `HERMES_INIT_STARSHIP`
+  - generate completion by running `starship completions bash >"${HOME}/.local/share/bash-completion/completions/starship.bash"`
 - [_yazi_](https://github.com/sxyazi/yazi)
   - blazing fast terminal file manager
   - set/override `y` with `HERMES_OVERRIDE_Y_WITH_YAZI`
@@ -98,8 +93,3 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`.
   - enabled with `HERMES_INIT_ZOXIDE`, override `cd` with `HERMES_OVERRIDE_CD_WITH_ZOXIDE`
 - [_zellij_](https://github.com/zellij-org/zellij)
   - terminal workspace with batteries included
-
-The following programs are currently only available on `x86_64`:
-
-- [_neovim_](https://github.com/neovim/neovim/blob/master/BUILD.md#build-static-binary-linux)
-  - modern, fast and feature-rich editor

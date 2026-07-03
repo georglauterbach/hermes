@@ -154,8 +154,6 @@ pub fn archive_directory(architecture: arguments::Architecture) -> ::std::path::
 pub mod programs {
     //! This module handles all programs and their associated data
 
-    use crate::asset_base_directory;
-
     use super::arguments::Architecture;
     use ::std::collections;
 
@@ -168,15 +166,14 @@ pub mod programs {
     /// All encountered errors are immediately propagated.
     pub async fn process(architecture: Architecture) -> ::anyhow::Result<()> {
         let mut join_set = ::tokio::task::JoinSet::new();
-        join_set.spawn(atuin(architecture));
         join_set.spawn(bat(architecture));
-        join_set.spawn(blesh(architecture));
         join_set.spawn(btop(architecture));
         join_set.spawn(delta(architecture));
         join_set.spawn(dust(architecture));
         join_set.spawn(dysk(architecture));
         join_set.spawn(eza(architecture));
         join_set.spawn(fd(architecture));
+        join_set.spawn(flyline(architecture));
         join_set.spawn(fzf(architecture));
         join_set.spawn(gitui(architecture));
         join_set.spawn(jaq(architecture));
@@ -186,8 +183,6 @@ pub mod programs {
         join_set.spawn(yazi(architecture));
         join_set.spawn(zellij(architecture));
         join_set.spawn(zoxide(architecture));
-
-        join_set.spawn(neovim(architecture));
 
         while let Some(result) = join_set.join_next().await {
             match result {
@@ -210,12 +205,8 @@ pub mod programs {
     enum ArchiveType {
         /// Not compressed
         Uncompressed,
-        /// A `.tar.bz` (`.tbz`) archive
-        TarBz,
         /// A `.tar.gz` archive
         TarGz,
-        /// A `.tar.xz` archive
-        TarXz,
         /// A `.zip` archive
         Zip,
     }
@@ -224,9 +215,7 @@ pub mod programs {
         fn fmt(&self, formatter: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             let ending = match self {
                 Self::Uncompressed => "",
-                Self::TarBz => ".tbz",
                 Self::TarGz => ".tar.gz",
-                Self::TarXz => ".tar.xz",
                 Self::Zip => ".zip",
             };
             write!(formatter, "{ending}")
@@ -235,38 +224,38 @@ pub mod programs {
 
     /// Which entries from a program's archive to unpack
     #[derive(Debug)]
-    enum Entries {
+    enum Entries<'a> {
         /// Unpack only specific entries
         Specific(::std::collections::HashMap<String, String>),
         /// Unpack all entries
-        All(&'static str, &'static str),
+        All(&'a str, String),
     }
 
     /// A structure that groups properties of a program
     #[derive(Debug)]
-    struct Program {
+    struct Program<'a, 'b, 'c> {
         /// The program name
-        name: &'static str,
+        name: &'a str,
         /// The program version
-        version: &'static str,
+        version: &'b str,
         /// The [`ArchiveType`] that the program is packaged in
         download_archive_type: ArchiveType,
         /// The URI from which to download the archive that
         /// contains the program and its associated data
         download_uri: String,
         /// The entries inside the archive to copy into the archive
-        archive_entries: Entries,
+        archive_entries: Entries<'c>,
     }
 
-    impl Program {
+    impl<'a, 'b, 'c> Program<'a, 'b, 'c> {
         /// Create a new instance of [`Program`]
         #[must_use]
         pub const fn new(
-            name: &'static str,
-            version: &'static str,
+            name: &'a str,
+            version: &'b str,
             download_archive_type: ArchiveType,
             download_uri: String,
-            archive_entries: Entries,
+            archive_entries: Entries<'c>,
         ) -> Self {
             Self {
                 name,
@@ -398,29 +387,9 @@ pub mod programs {
                         error => error,
                     }
                 }
-                ArchiveType::TarBz => {
-                    let decoder = ::async_compression::tokio::bufread::BzDecoder::new(&archive[..]);
-                    ::tokio_tar::ArchiveBuilder::new(decoder)
-                        .set_preserve_permissions(true)
-                        .set_preserve_mtime(true)
-                        .set_unpack_xattrs(true)
-                        .build()
-                        .unpack(&directory_extracted)
-                        .await
-                }
                 ArchiveType::TarGz => {
                     let decoder =
                         ::async_compression::tokio::bufread::GzipDecoder::new(&archive[..]);
-                    ::tokio_tar::ArchiveBuilder::new(decoder)
-                        .set_preserve_permissions(true)
-                        .set_preserve_mtime(true)
-                        .set_unpack_xattrs(true)
-                        .build()
-                        .unpack(&directory_extracted)
-                        .await
-                }
-                ArchiveType::TarXz => {
-                    let decoder = ::async_compression::tokio::bufread::XzDecoder::new(&archive[..]);
                     ::tokio_tar::ArchiveBuilder::new(decoder)
                         .set_preserve_permissions(true)
                         .set_preserve_mtime(true)
@@ -523,33 +492,41 @@ pub mod programs {
         }
     }
 
+    /// Download a separate completion script for Bash
+    async fn download_completion_script(
+        name: &str,
+        version: &str,
+        architecture: Architecture,
+        uri: String,
+    ) -> ::anyhow::Result<()> {
+        let name_completion = format!("{name}-completion");
+        let archive_type = ArchiveType::Uncompressed;
+
+        Program::new(
+            &name_completion,
+            version,
+            archive_type,
+            uri,
+            Entries::All(&name_completion, bash_completion(name)),
+        )
+        .process(architecture)
+        .await
+    }
+
     /// A helper to easily compute `.local/bin/` + `and`
     fn local_bin(and: &str) -> String {
         format!(".local/bin/{and}")
     }
 
-    /// A helper to easily compute
-    /// `.local/share/bash-completion/completions/` + `and`
-    fn bash_completion(and: &str) -> String {
-        format!(".local/share/bash-completion/completions/{and}")
+    /// A helper to easily compute `.local/lib/` + `and`
+    fn local_lib(and: &str) -> String {
+        format!(".local/lib/{and}")
     }
 
-    /// <https://github.com/atuinsh/atuin>
-    async fn atuin(architecture: super::arguments::Architecture) -> ::anyhow::Result<()> {
-        let name = "atuin";
-        let version = "18.15.2";
-        let file = format!("{name}-{architecture}-unknown-linux-musl");
-        let archive_type = ArchiveType::TarGz;
-        let uri = format!(
-            "https://github.com/atuinsh/atuin/releases/download/v{version}/{file}{archive_type}"
-        );
-
-        let mut entries = collections::HashMap::new();
-        entries.insert(format!("{file}/{name}"), local_bin(name));
-
-        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
-            .process(architecture)
-            .await
+    /// A helper to easily compute
+    /// `.local/share/bash-completion/completions/` + `and` + `.bash`
+    fn bash_completion(and: &str) -> String {
+        format!(".local/share/bash-completion/completions/{and}.bash")
     }
 
     /// <https://github.com/sharkdp/bat>
@@ -565,8 +542,8 @@ pub mod programs {
         let mut entries = collections::HashMap::new();
         entries.insert(format!("{file}/{name}"), local_bin(name));
         entries.insert(
-            format!("{file}/autocomplete/bat.bash"),
-            bash_completion("bat.bash"),
+            format!("{file}/autocomplete/{name}.bash"),
+            bash_completion(name),
         );
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
@@ -574,52 +551,18 @@ pub mod programs {
             .await
     }
 
-    /// <https://github.com/akinomyoga/ble.sh>
-    async fn blesh(architecture: Architecture) -> ::anyhow::Result<()> {
-        let name = "blesh";
-        let version = "nightly";
-        let file = "ble-nightly";
-        let archive_type = ArchiveType::TarXz;
-        let uri = format!(
-            "https://github.com/akinomyoga/ble.sh/releases/download/{version}/{file}{archive_type}"
-        );
-
-        Program::new(
-            name,
-            version,
-            archive_type,
-            uri,
-            Entries::All("ble-nightly", ".local/share/blesh"),
-        )
-        .process(architecture)
-        .await?;
-
-        let ble_base_path = asset_base_directory(architecture)
-            .join("extracted")
-            .join(name)
-            .join(version)
-            .join(file);
-        let _ = ::std::fs::remove_dir_all(ble_base_path.join("cache.d"));
-        let _ = ::std::fs::remove_dir_all(ble_base_path.join("contrib").join("airline"));
-        let _ = ::std::fs::remove_dir_all(ble_base_path.join("doc"));
-        let _ = ::std::fs::remove_dir_all(ble_base_path.join("licenses"));
-        let _ = ::std::fs::remove_dir_all(ble_base_path.join("run"));
-
-        Ok(())
-    }
-
     /// <https://github.com/aristocratos/btop>
     async fn btop(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "btop";
-        let version = "1.4.6";
+        let version = "1.4.7";
         let file = format!("{name}-{architecture}-unknown-linux-musl");
-        let archive_type = ArchiveType::TarBz;
+        let archive_type = ArchiveType::TarGz;
         let uri = format!(
             "https://github.com/aristocratos/btop/releases/download/v{version}/{file}{archive_type}"
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert("./btop/bin/btop".to_owned(), local_bin("btop"));
+        entries.insert("./btop/bin/btop".to_owned(), local_bin(name));
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
@@ -644,7 +587,9 @@ pub mod programs {
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
-            .await
+            .await?;
+
+        download_completion_script(name, version, architecture, format!("https://raw.githubusercontent.com/dandavison/delta/refs/tags/{version}/etc/completion/completion.bash")).await
     }
 
     /// <https://github.com/bootandy/dust>
@@ -662,17 +607,18 @@ pub mod programs {
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
-            .await
+            .await?;
+
+        download_completion_script(name, version, architecture, format!("https://raw.githubusercontent.com/bootandy/dust/refs/tags/v{version}/completions/dust.bash")).await
     }
 
     /// <https://github.com/Canop/dysk>
     async fn dysk(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "dysk";
-        let tag = "3.6.0b";
-        let version = "3.6.0";
+        let version = "3.6.1";
         let archive_type = ArchiveType::Zip;
         let uri = format!(
-            "https://github.com/Canop/dysk/releases/download/v{tag}/dysk_{version}{archive_type}"
+            "https://github.com/Canop/dysk/releases/download/v{version}/dysk_{version}{archive_type}"
         );
 
         let mut entries = collections::HashMap::new();
@@ -682,7 +628,7 @@ pub mod programs {
         );
         entries.insert(
             String::from("build/completion/dysk.bash"),
-            bash_completion("dysk.bash"),
+            bash_completion("dysk"),
         );
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
@@ -699,16 +645,32 @@ pub mod programs {
             architecture.link_library()
         );
         let archive_type = ArchiveType::TarGz;
-        let uri = format!(
-            "https://github.com/eza-community/eza/releases/download/v{version}/{file}{archive_type}"
-        );
+        let base_uri = "https://github.com/eza-community/eza/releases/download";
+        let uri = format!("{base_uri}/v{version}/{file}{archive_type}");
 
         let mut entries = collections::HashMap::new();
         entries.insert(format!("./{name}"), local_bin(name));
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
-            .await
+            .await?;
+
+        let uri = format!("{base_uri}/v{version}/completions-{version}{archive_type}");
+        let mut entries = collections::HashMap::new();
+        entries.insert(
+            format!("./target/completions-{version}/{name}"),
+            bash_completion(name),
+        );
+
+        Program::new(
+            "eza-completion",
+            version,
+            archive_type,
+            uri,
+            Entries::Specific(entries),
+        )
+        .process(architecture)
+        .await
     }
 
     /// <https://github.com/sharkdp/fd>
@@ -724,9 +686,28 @@ pub mod programs {
         let mut entries = collections::HashMap::new();
         entries.insert(format!("{file}/{name}"), local_bin(name));
         entries.insert(
-            format!("{file}/autocomplete/fd.bash"),
-            bash_completion("fd.bash"),
+            format!("{file}/autocomplete/{name}.bash"),
+            bash_completion(name),
         );
+
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
+            .process(architecture)
+            .await
+    }
+
+    /// <https://github.com/>
+    async fn flyline(architecture: Architecture) -> ::anyhow::Result<()> {
+        // cSpell: ignore libflyline
+        let name = "flyline";
+        let version = "1.2.3";
+        let file = format!("libflyline-v{version}-{architecture}-unknown-linux-gnu");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/HalFrgrd/flyline/releases/download/v{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(format!("libflyline.so.{version}"), local_lib("libflyline.so"));
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
@@ -736,7 +717,7 @@ pub mod programs {
     /// <https://github.com/junegunn/fzf>
     async fn fzf(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fzf";
-        let version = "0.71.0";
+        let version = "0.73.1";
         let file = match architecture {
             Architecture::X86_64 => format!("{name}-{version}-linux_amd64"),
             Architecture::Aarch64 => format!("{name}-{version}-linux_arm64"),
@@ -751,39 +732,16 @@ pub mod programs {
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
-            .await
-    }
+            .await?;
 
-    /// <https://github.com/georglauterbach/hermes/releases/tag/custom>
-    async fn neovim(architecture: Architecture) -> ::anyhow::Result<()> {
-        if architecture != Architecture::X86_64 {
-            eprintln!(
-                "WARN  Packaging neovim is currently only supported on x86_64 (but not on {architecture})"
-            );
-            return Ok(());
-        }
-
-        let name = "neovim";
-        let archive_type = ArchiveType::TarXz;
-        let file = "nvim";
-        let uri = format!(
-            "https://github.com/georglauterbach/hermes/releases/download/custom/{file}_{architecture}{archive_type}"
-        );
-
-        let mut entries = collections::HashMap::new();
-        entries.insert("./bin/nvim".to_owned(), local_bin("nvim"));
-        entries.insert("./lib/nvim".to_owned(), ".local/lib/nvim".to_owned());
-        entries.insert("./share/nvim".to_owned(), ".local/share/nvim".to_owned());
-
-        Program::new(
+        download_completion_script(
             name,
-            "latest",
-            archive_type,
-            uri,
-            Entries::Specific(entries),
-        )
-        .process(architecture)
-        .await
+            version,
+            architecture,
+            format!(
+                "https://raw.githubusercontent.com/junegunn/fzf/refs/tags/v{version}/shell/completion.bash"
+            ),
+        ).await
     }
 
     /// <https://github.com/extrawurst/gitui>
@@ -807,7 +765,7 @@ pub mod programs {
     /// <https://github.com/01mf02/jaq>
     async fn jaq(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "jaq";
-        let version = "3.0.0";
+        let version = "3.1.0";
         let file = match architecture {
             Architecture::X86_64 => format!("{name}-{architecture}-unknown-linux-musl"),
             Architecture::Aarch64 => format!("{name}-{architecture}-unknown-linux-gnu"),
@@ -820,7 +778,7 @@ pub mod programs {
             version,
             archive_type,
             uri,
-            Entries::All("jaq", ".local/bin/jaq"),
+            Entries::All(name, local_bin(name)),
         )
         .process(architecture)
         .await
@@ -829,7 +787,7 @@ pub mod programs {
     /// <https://github.com/casey/just>
     async fn just(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "just";
-        let version = "1.49.0";
+        let version = "1.55.1";
         let file = format!("{name}-{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -838,10 +796,7 @@ pub mod programs {
 
         let mut entries = collections::HashMap::new();
         entries.insert(name.to_owned(), local_bin(name));
-        entries.insert(
-            String::from("completions/just.bash"),
-            bash_completion("just.bash"),
-        );
+        entries.insert(format!("completions/{name}.bash"), bash_completion(name));
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
@@ -850,10 +805,10 @@ pub mod programs {
 
     /// <https://github.com/BurntSushi/ripgrep>
     async fn ripgrep(architecture: Architecture) -> ::anyhow::Result<()> {
-        let name = "ripgrep";
+        let name = "rg";
         let version = "15.1.0";
         let file = format!(
-            "{name}-{version}-{architecture}-unknown-linux-{}",
+            "ripgrep-{version}-{architecture}-unknown-linux-{}",
             architecture.link_library()
         );
         let archive_type = ArchiveType::TarGz;
@@ -862,10 +817,10 @@ pub mod programs {
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert(format!("{file}/rg"), local_bin("rg"));
+        entries.insert(format!("{file}/{name}"), local_bin(name));
         entries.insert(
-            format!("{file}/complete/rg.bash"),
-            bash_completion("rg.bash"),
+            format!("{file}/complete/{name}.bash"),
+            bash_completion(name),
         );
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
@@ -876,7 +831,7 @@ pub mod programs {
     /// <https://github.com/starship/starship>
     async fn starship(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "starship";
-        let version = "1.24.2";
+        let version = "1.26.0";
         let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -894,7 +849,7 @@ pub mod programs {
     /// <https://github.com/sxyazi/yazi>
     async fn yazi(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "yazi";
-        let version = "26.1.22";
+        let version = "26.5.6";
         let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::Zip;
         let uri = format!(
@@ -904,13 +859,10 @@ pub mod programs {
         let mut entries = collections::HashMap::new();
         entries.insert(format!("{file}/ya"), local_bin("ya"));
         entries.insert(format!("{file}/{name}"), local_bin(name));
+        entries.insert(format!("{file}/completions/ya.bash"), bash_completion("ya"));
         entries.insert(
-            format!("{file}/completions/ya.bash"),
-            bash_completion("ya.bash"),
-        );
-        entries.insert(
-            format!("{file}/completions/yazi.bash"),
-            bash_completion("yazi.bash"),
+            format!("{file}/completions/{name}.bash"),
+            bash_completion(name),
         );
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
@@ -921,7 +873,7 @@ pub mod programs {
     /// <https://github.com/zellij-org/zellij>
     async fn zellij(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "zellij";
-        let version = "0.44.1";
+        let version = "0.44.3";
         let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -948,10 +900,7 @@ pub mod programs {
 
         let mut entries = collections::HashMap::new();
         entries.insert(name.to_owned(), local_bin(name));
-        entries.insert(
-            "completions/zoxide.bash".to_owned(),
-            bash_completion("zoxide.bash"),
-        );
+        entries.insert(format!("completions/{name}.bash"), bash_completion(name));
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
