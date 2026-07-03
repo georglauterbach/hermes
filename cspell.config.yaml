@@ -15,6 +15,9 @@ words:
   - Georg
   - Lauterbach
 
+  - recognised
+  - unrecognised
+
 ignoreWords:
   - atuin
   - atuinsh
@@ -24,15 +27,18 @@ ignoreWords:
   - bufread
   - clippy
   - dysk
+  - everforest
   - flyline
   - georglauterbach
   - gitui
+  - gsettings
   - perfmon
   - reqwest
   - rustdoc
   - rustls
   - setcap
   - sharkdp
+  - sigusr2
   - softprops
   - trixie
   - xattrs
