@@ -8,7 +8,7 @@ FROM docker.io/ubuntu:24.04
 RUN apt-get -qq update \
     && apt-get -qq install build-essential ca-certificates cmake gettext git ninja-build
 
-RUN git clone --depth=1 --branch=v0.12.1 https://github.com/neovim/neovim.git
+RUN git clone --depth=1 --branch=v0.12.3 https://github.com/neovim/neovim.git
 WORKDIR /neovim
 
 # We do not link statically as linking glibc statically causes all sorts of
