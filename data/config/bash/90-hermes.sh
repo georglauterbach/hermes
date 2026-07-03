@@ -88,11 +88,15 @@ function __hermes__setup_prompt() {
   if __evaluates_to_true HERMES_INIT_STARSHIP && __is_command 'starship'; then
     [[ -v STARSHIP_CONFIG ]] || STARSHIP_CONFIG="${HOME}/.config/starship/starship.toml"
     export STARSHIP_CONFIG
+    eval "$(starship init bash || :)"
+    # We disable PS0 and preexec hooks because
+    # they mess with trapping signals like SIGUSR2
+    unset -f starship_preexec_ps0 2>/dev/null
+    PS0=''
     if __evaluates_to_true HERMES_INIT_FLYLINE; then
       # shellcheck disable=SC2016
       export PS1_FINAL='$(starship module directory) ➜ ' RPS1_FINAL='' PS1_FILL_FINAL=''
     fi
-    eval "$(starship init bash || :)"
   else
     export PROMPT_DIRTRIM=4
     export PS2=''   # continuation shell prompt
@@ -106,21 +110,28 @@ function __hermes__setup_prompt() {
 
   if __evaluates_to_true HERMES_INIT_FLYLINE && [[ -s "${HOME}/.local/lib/libflyline.so" ]]; then
     eval "$(dircolors || :)" # LS_COLORS for coloring completions
-    enable -f "${HOME}/.local/lib/libflyline.so" flyline
+    __is_command flyline || enable -f "${HOME}/.local/lib/libflyline.so" flyline
 
     flyline editor      --auto-close-chars false
     flyline editor      --show-inline-history true
     flyline mouse       --mode disabled
     flyline suggestions set-fuzzy-mode none
 
-    flyline set-style \
-      recognised-command='green' unrecognised-command='bold red' \
-      single-quoted-text='yellow' double-quoted-text='yellow'    \
-      normal-text='black' secondary-text='black'                 \
-      inline-suggestion='dim white' key-sequence-style='red'     \
-      opening-and-closing-pair='purple'                          \
-      rainbow-bracket1='blue' rainbow-bracket2='dim blue'        \
-      rainbow-bracket3='purple' rainbow-bracket4='dim purple'
+    if [[ ! -v __HERMES__FLYLINE_BASE_COLORS ]]; then
+      readonly __HERMES__FLYLINE_BASE_COLORS=(
+        recognised-command='green'
+        unrecognised-command='bold red'
+        single-quoted-text='yellow'
+        double-quoted-text='yellow'
+        inline-suggestion='cyan'
+        key-sequence-style='red'
+        opening-and-closing-pair='magenta'
+        rainbow-bracket1='blue'
+        rainbow-bracket2='dim blue'
+        rainbow-bracket3='purple'
+        rainbow-bracket4='dim purple'
+      )
+    fi
   fi
 }
 
@@ -223,10 +234,25 @@ if [[ -s ${HOME}/.config/bash/91-hermes_settings.sh ]]; then
   source "${HOME}/.config/bash/91-hermes_settings.sh"
 fi
 
-  # cSpell: ignore checkwinsize autocd
+# cSpell: ignore checkwinsize autocd
 shopt -s checkwinsize globstar autocd
 
 for __FUNCTION in path variables completion history prompt extra_programs overrides aliases; do
   "__hermes__setup_${__FUNCTION}" || :
   unset "__hermes__setup_${__FUNCTION}"
 done
+
+function __hermes__signal_handler_sigusr2() {
+  if __evaluates_to_true HERMES_INIT_FLYLINE; then
+    if [[ $(gsettings get org.gnome.desktop.interface color-scheme) == "'prefer-light'" ]]; then
+      flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
+        normal-text='dim black' secondary-text='black'
+    else
+      flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
+        normal-text='white' secondary-text='dim white'
+    fi
+  fi
+}
+
+trap __hermes__signal_handler_sigusr2 SIGUSR2
+__hermes__signal_handler_sigusr2
