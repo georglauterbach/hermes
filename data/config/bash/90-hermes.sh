@@ -161,9 +161,18 @@ function __hermes__setup_extra_programs() {
 }
 
 function __hermes__setup_overrides() {
+  # The checks on `[[ -t 0 ]]` guard against missing stdin, which
+  # is a problem in agent sessions because it leads to hanging.
+
   if __evaluates_to_true HERMES_OVERRIDE_CAT_WITH_BAT && __is_command 'bat'; then
-    # shellcheck disable=SC2139
-    alias cat="bat --paging=never"
+    # shellcheck disable=SC2329
+    function cat() {
+      if [[ -t 0 ]]
+      then command bat --paging=never "${@}"
+      else command cat "${@}"
+      fi
+    }
+    export -f cat
   fi
 
   if __evaluates_to_true HERMES_OVERRIDE_CD_WITH_ZOXIDE && __is_command 'zoxide'; then
@@ -171,16 +180,36 @@ function __hermes__setup_overrides() {
   fi
 
   if __evaluates_to_true HERMES_OVERRIDE_DIFF_WITH_DELTA && __is_command 'delta'; then
-    alias diff='delta --line-numbers'
+    # shellcheck disable=SC2329
+    function diff() {
+      if [[ -t 0 ]]
+      then command delta --line-numbers "${@}"
+      else command diff "${@}"
+      fi
+    }
+    export -f diff
   fi
 
   if __evaluates_to_true HERMES_OVERRIDE_LESS_WITH_BAT && __is_command 'bat'; then
-    # shellcheck disable=SC2139
-    alias less="bat --paging=always"
+    # shellcheck disable=SC2329
+    function less() {
+      if [[ -t 0 ]]
+      then command bat --paging=always "${@}"
+      else command less "${@}"
+      fi
+    }
+    export -f less
   fi
 
   if __evaluates_to_true HERMES_OVERRIDE_LS_WITH_EZA && __is_command 'eza'; then
-    alias ls='eza --header --long --binary --group --classify --extended --group-directories-first'
+    # shellcheck disable=SC2329
+    function ls() {
+      if [[ -t 0 ]]
+      then command eza --header --long --binary --group --classify --extended --group-directories-first "${@}"
+      else command ls "${@}"
+      fi
+    }
+    export -f ls
   fi
 
   if __evaluates_to_true HERMES_OVERRIDE_Y_WITH_YAZI && __is_command 'yazi'; then
