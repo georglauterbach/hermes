@@ -174,14 +174,6 @@ function __hermes__setup_overrides() {
     alias diff='delta --line-numbers'
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_FIND_WITH_FD && __is_command 'fd'; then
-    alias find='fd'
-  fi
-
-  if __evaluates_to_true HERMES_OVERRIDE_GREP_WITH_RIPGREP && __is_command 'rg'; then
-    alias grep='rg'
-  fi
-
   if __evaluates_to_true HERMES_OVERRIDE_LESS_WITH_BAT && __is_command 'bat'; then
     # shellcheck disable=SC2139
     alias less="bat --paging=always"
