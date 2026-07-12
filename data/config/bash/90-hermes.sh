@@ -132,6 +132,24 @@ function __hermes__setup_prompt() {
         rainbow-bracket4='dim purple'
       )
     fi
+
+    # shellcheck disable=SC2329
+    function __hermes__set_flyline_theme() {
+      local THEME_VARIANT=${1:?theme variant required __hermes__set_flyline_theme}
+
+      # cSpell: disable-next-line
+      if [[ ${THEME_VARIANT} =~ ^l(ight)?$ ]]; then
+        flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
+          normal-text='dim black' secondary-text='black'
+      elif [[ ${THEME_VARIANT} =~ ^d(ark)?$ ]]; then
+        flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
+          normal-text='white' secondary-text='dim white'
+      else
+        echo "WARN  Theme variant '${THEME_VARIANT}' unknown - use 'light' or 'dark'" >&2
+        return 1
+      fi
+    }
+    export -f __hermes__set_flyline_theme
   fi
 }
 
@@ -263,17 +281,22 @@ for __FUNCTION in path variables completion history prompt extra_programs overri
   unset "__hermes__setup_${__FUNCTION}"
 done
 
-function __hermes__signal_handler_sigusr2() {
-  if __evaluates_to_true HERMES_INIT_FLYLINE; then
-    if [[ $(gsettings get org.gnome.desktop.interface color-scheme) == "'prefer-light'" ]]; then
-      flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
-        normal-text='dim black' secondary-text='black'
-    else
-      flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
-        normal-text='white' secondary-text='dim white'
-    fi
+function __hermes__get_theme_variant() {
+  local THEME_VARIANT
+  THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || :)
+
+  if   [[ ${THEME_VARIANT} == "'prefer-light'" ]]; then printf light
+  elif [[ ${THEME_VARIANT} == "'prefer-dark'" ]];  then printf dark
+  else printf unknown
   fi
 }
 
+function __hermes__signal_handler_sigusr2() {
+  if __evaluates_to_true HERMES_INIT_FLYLINE; then
+    __hermes__set_flyline_theme "$(__hermes__get_theme_variant)" 2>/dev/null || :
+  fi
+}
+
+export -f __hermes__get_theme_variant __hermes__signal_handler_sigusr2
 trap __hermes__signal_handler_sigusr2 SIGUSR2
 __hermes__signal_handler_sigusr2
