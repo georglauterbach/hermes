@@ -39,7 +39,7 @@ You can find some personal configuration files in [`data/examples/`](./data/exam
 
 ### Bash
 
-_hermes_'s command line setup focuses on Bash. Use [`source "${HOME}/.config/bash/90-hermes.sh"`](./data/config/bash/90-hermes.sh) in `${HOME}/.bashrc` to load the setup. To modify the setup, adjust [`${HOME}/.config/bash/91-hermes_settings.sh`](./data/config/bash/91-hermes_settings.sh).
+_hermes_'s command line setup focuses on Bash. Use [`source "${HOME}/.config/bash/90-hermes.sh"`](./data/home/.config/bash/90-hermes.sh) in `${HOME}/.bashrc` to load the setup. To modify the setup, adjust [`${HOME}/.config/bash/91-hermes_settings.sh`](./data/home/.config/bash/91-hermes_settings.sh).
 
 ### Programs
 

@@ -77,7 +77,8 @@ pub async fn symlink_configuration_directory(
         .parent()
         .context("Could not get repository root directory (parent parent of asset directory)")?
         .join("data")
-        .join("config");
+        .join("home")
+        .join(".config");
 
     if !archive_directory.exists() {
         ::tokio::fs::create_dir_all(archive_directory)

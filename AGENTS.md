@@ -10,17 +10,17 @@ This project delivers programs and configuration for the command line.
 
 ## Repository Layout
 
-| Path             | Purpose                                                           |
-| :--------------- | :---------------------------------------------------------------- |
-| `.devcontainer/` | [Development Container] with the complete environment             |
-| `.github/`       | GitHub-related content like CI/CD, issues, etc.                   |
-| `code/`          | contains all source code                                          |
-| `code/cupid/`    | the helper that collects all of hermes' programs and bundles them |
-| `code/src/`      | hermes' actual source code                                        |
-| `data/config/`   | all programs' configuration files that hermes ships               |
-| `data/examples/` | custom example configurations that are not shipped with hermes    |
-| `data/manuals/`  | written manuals for all kinds of work on the command line         |
-| `data/scripts/`  | common useful scripts that I need from time to time               |
+| Path                 | Purpose                                                           |
+| :------------------- | :---------------------------------------------------------------- |
+| `.devcontainer/`     | [Development Container] with the complete environment             |
+| `.github/`           | GitHub-related content like CI/CD, issues, etc.                   |
+| `code/`              | contains all source code                                          |
+| `code/cupid/`        | the helper that collects all of hermes' programs and bundles them |
+| `code/src/`          | hermes' actual source code                                        |
+| `data/home/.config/` | all programs' configuration files that hermes ships               |
+| `data/examples/`     | custom example configurations that are not shipped with hermes    |
+| `data/manuals/`      | written manuals for all kinds of work on the command line         |
+| `data/scripts/`      | common useful scripts that I need from time to time               |
 
 ## Programming Language
 
