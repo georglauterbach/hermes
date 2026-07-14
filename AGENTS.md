@@ -4,7 +4,7 @@ This project delivers programs and configuration for the command line.
 
 ## Associated Projects
 
-1. [`github.com/georglauterbach/desktop`](https://github.com/georglauterbach/desktop): Like hermes, but for the GUI
+1. [`github.com/georglauterbach/desktop`](https://github.com/georglauterbach/desktop): Like this project, but for the GUI
 2. [`github.com/georglauterbach/evergruv`](https://github.com/georglauterbach/evergruv): My color scheme for everything
 3. [`github.com/georglauterbach/linter`](https://github.com/georglauterbach/linter): A composite linter for all of my projects
 
