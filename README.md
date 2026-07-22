@@ -83,7 +83,7 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`.
 - [_starship_](https://github.com/starship/starship)
   - minimal, blazing-fast, and infinitely customizable prompt for any shell
   - enabled with `HERMES_INIT_STARSHIP`
-  - generate completion by running `starship completions bash >"${HOME}/.local/share/bash-completion/completions/starship.bash"`
+  - generate completion by running `starship completions bash >"${XDG_DATA_HOME:-"${HOME}/.local/share"}/bash-completion/completions/starship.bash"`
 - [_yazi_](https://github.com/sxyazi/yazi)
   - blazing fast terminal file manager
   - set/override `y` with `HERMES_OVERRIDE_Y_WITH_YAZI`
@@ -93,3 +93,4 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`.
   - enabled with `HERMES_INIT_ZOXIDE`, override `cd` with `HERMES_OVERRIDE_CD_WITH_ZOXIDE`
 - [_zellij_](https://github.com/zellij-org/zellij)
   - terminal workspace with batteries included
+  - generate completion by running `zellij setup --generate-completion bash >"${XDG_DATA_HOME:-"${HOME}/.local/share"}/bash-completion/completions/zellij.bash"`
