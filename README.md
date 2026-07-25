@@ -39,7 +39,9 @@ You can find some personal configuration files in [`data/examples/`](./data/exam
 
 ### Bash
 
-[`data/examples/bash/.bashrc`](./data/examples/bash/.bashrc) provides an example of what your `~/.bashrc` could look like with hermes. Uncomment the lines associated with Zellij to start it automatically. If you want to change the behavior of hermes' shell setup, update [`~/.config/bash/91-hermes_settings.sh`](./data/home/.config/bash/91-hermes_settings.sh).
+[`data/examples/bash/.bashrc`](./data/examples/bash/.bashrc) provides an example of what your `~/.bashrc` could look like with hermes. If you want to change the behavior of hermes' shell setup, update [`~/.config/bash/91-hermes_settings.sh`](./data/home/.config/bash/91-hermes_settings.sh).
+
+The `--color` flag in the example loads additional color handling based on [the Evergruv color theme](https://github.com/georglauterbach/evergruv). Omit it to not load additional colors.
 
 ### Programs
 
@@ -48,6 +50,7 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`.
 - [_bat_](https://github.com/sharkdp/bat)
   - `cat` with syntax highlighting and git integration
   - enabled with `HERMES_INIT_BAT`, override `cat` with `HERMES_OVERRIDE_CAT_WITH_BAT`
+  - create the theme cache with `bat cache --clear ; bat cache --build`
 - [_btop_](https://github.com/aristocratos/btop)
   - a resource monitor
   - consider running `sudo setcap cap_perfmon=+ep "$(command -v btop)"` to set the [`perfmon` capability](https://github.com/torvalds/linux/blob/master/Documentation/admin-guide/perf-security.rst) for btop

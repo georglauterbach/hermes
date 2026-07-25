@@ -26,8 +26,25 @@ export HERMES_OVERRIDE_LS_WITH_EZA=${HERMES_OVERRIDE_LS_WITH_EZA:-true}
 export HERMES_OVERRIDE_Y_WITH_YAZI=${HERMES_OVERRIDE_Y_WITH_YAZI:-true}
 
 # -----------------------------------------------
+# ----  Colors  ---------------------------------
+# -----------------------------------------------
+
+export HERMES_COLOR_BAT=${HERMES_COLOR_BAT:-true}
+export HERMES_COLOR_BTOP=${HERMES_COLOR_BTOP:-true}
+export HERMES_COLOR_GITUI=${HERMES_COLOR_GITUI:-true}
+export HERMES_COLOR_FLYLINE=${HERMES_COLOR_FLYLINE:-true}
+export HERMES_COLOR_FZF=${HERMES_COLOR_FZF:-true}
+
+# -----------------------------------------------
 # ----  Miscellaneous  --------------------------
 # -----------------------------------------------
 
-# This settings loads useful aliases that are very likely to not override anything.
-export HERMES_LOAD_GLOBAL_ALIASES=${HERMES_LOAD_GLOBAL_ALIASES:-true}
+# Loads additional aliases
+export HERMES_LOAD_ADDITIONAL_ALIASES=${HERMES_LOAD_ADDITIONAL_ALIASES:-true}
+
+# Whether to automatically start Zellij
+# 1. When a shell is started in a git repository (with the directory name
+#    being a part of the session name)
+export HERMES_ZELLIJ_AUTO_ATTACH_GIT=${HERMES_ZELLIJ_AUTO_ATTACH_GIT:-false}
+# 2. When a shell is started in general
+export HERMES_ZELLIJ_AUTO_RUN=${HERMES_ZELLIJ_AUTO_RUN:-false}
