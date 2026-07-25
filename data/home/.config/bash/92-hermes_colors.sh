@@ -98,6 +98,8 @@ function __hermes__setup_signal_handlers() {
   # is simply an optimization.
   # shellcheck disable=SC2329
   function __hermes__signal_handler_exit() {
+    [[ -r /tmp/.hermes_shells_to_update ]] || return 0
+
     # We ignore SC2094 because we fully read the file first and overwrite it only afterward.
     # shellcheck disable=SC2094
     {
