@@ -357,7 +357,7 @@ function __hermes__setup_signal_handlers() {
   export -f __hermes__signal_handler_sigusr2 __hermes__signal_handler_exit
 
   trap __hermes__signal_handler_sigusr2 SIGUSR2
-  trap __hermes__update_pid_file_on_exit EXIT
+  trap __hermes__signal_handler_exit EXIT
 
   { flock -x 3 ; echo "${$}" >&3 ; } 3>>/tmp/.hermes_shells_to_update
   __hermes__signal_handler_sigusr2
