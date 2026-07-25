@@ -151,7 +151,7 @@ function __hermes__setup_prompt() {
   fi
 }
 
-function __hermes__setup_extra_programs() {
+function __hermes__setup_programs() {
   # cSpell: ignore gsub manroffopt
 
   if __evaluates_to_true HERMES_INIT_BAT && __is_command 'bat'; then
@@ -168,6 +168,24 @@ function __hermes__setup_extra_programs() {
   if __evaluates_to_true HERMES_INIT_FZF && __is_command 'fzf'; then
     # shellcheck source=/dev/null
     source <(fzf --bash)
+
+    export FZF_DEFAULT_OPTS_BASE=${FZF_DEFAULT_OPTS}
+
+    # shellcheck disable=SC2329
+    function __hermes__set_fzf_theme() {
+      local THEME_VARIANT=${1:?theme variant required __hermes__set_flyline_theme}
+
+      # cSpell: disable-next-line
+      if [[ ${THEME_VARIANT} =~ ^l(ight)?$ ]]; then
+        export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS_BASE} --color=light --color=fg:#5C6A72,bg:#F5F5F2,hl:#8DA101 --color=fg+:#5C6A72,bg+:#EBEBE4,hl+:#8DA101 --color=info:#D69A00,prompt:#8DA101,pointer:#3A94C5 --color=marker:#8DA101,spinner:#35A77C,header:#8DA101 --color=border:#EBEBE4,gutter:#F5F5F2,query:#5C6A72 --color=scrollbar:#8DA101,separator:#EBEBE4"
+      elif [[ ${THEME_VARIANT} =~ ^d(ark)?$ ]]; then
+        TODO
+      else
+        echo "WARN  Theme variant '${THEME_VARIANT}' unknown - use 'light' or 'dark'" >&2
+        return 1
+      fi
+    }
+    export -f __hermes__set_fzf_theme
   fi
 
   if __evaluates_to_true HERMES_INIT_ZELLIJ && __is_command 'zellij'; then
@@ -302,6 +320,49 @@ function __hermes__setup_aliases() {
   fi
 }
 
+function __hermes__setup_signal_handlers() {
+  # When hermes is used in conjunction with https://github.com/georglauterbach/desktop,
+  # theme variant changes to certain CLI utilities (that cannot be updated in another way)
+  # can be applied with the `theme` script; for this to work properly, we need to handle
+  # the 'SIGUSR2' signal.
+  function __hermes__signal_handler_sigusr2() {
+    local THEME_VARIANT
+    THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || :)
+
+    if   [[ ${THEME_VARIANT} == "'prefer-light'" ]]; then THEME_VARIANT=light
+    elif [[ ${THEME_VARIANT} == "'prefer-dark'" ]];  then THEME_VARIANT=dark
+    else return 0
+    fi
+
+    __evaluates_to_true HERMES_INIT_FLYLINE && __hermes__set_flyline_theme "${THEME_VARIANT}" || :
+    __evaluates_to_true HERMES_INIT_FZF && __hermes__set_fzf_theme "${THEME_VARIANT}" || :
+    return 0
+  }
+
+  # To perform cleanup of the current shell's PID, we run a dedicated script when we
+  # receive the 'EXIT' signal. Not doing this is not an issue because the `theme` script
+  # (https://github.com/georglauterbach/desktop) will also clean up - having this handler
+  # is simply an optimization.
+  # shellcheck disable=SC2329
+  function __hermes__signal_handler_exit() {
+    # We ignore SC2094 because we fully read the file first and overwrite it only afterward.
+    # shellcheck disable=SC2094
+    {
+      flock -x 3
+      grep -v ${$} <&3 >/tmp/.hermes_shells_to_update_exit || :
+      mv /tmp/.hermes_shells_to_update_exit /tmp/.hermes_shells_to_update
+    } 3</tmp/.hermes_shells_to_update
+  }
+
+  export -f __hermes__signal_handler_sigusr2 __hermes__signal_handler_exit
+
+  trap __hermes__signal_handler_sigusr2 SIGUSR2
+  trap __hermes__update_pid_file_on_exit EXIT
+
+  { flock -x 3 ; echo "${$}" >&3 ; } 3>>/tmp/.hermes_shells_to_update
+  __hermes__signal_handler_sigusr2
+}
+
 if [[ -s ${HOME}/.config/bash/91-hermes_settings.sh ]]; then
   # shellcheck disable=SC1091
   # shellcheck source=91-hermes_settings.sh
@@ -311,7 +372,7 @@ fi
 # cSpell: ignore checkwinsize autocd
 shopt -s checkwinsize globstar autocd
 
-for __FUNCTION in variables completion history prompt extra_programs overrides aliases; do
+for __FUNCTION in variables completion history prompt programs overrides aliases signal_handlers; do
   "__hermes__setup_${__FUNCTION}" || :
   unset "__hermes__setup_${__FUNCTION}"
 done
@@ -330,26 +391,3 @@ function download_hermes_latest() {
 
   chmod +x "${HERMES_LOCATION}"
 }
-
-function __hermes__get_theme_variant() {
-  local THEME_VARIANT
-  THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || :)
-
-  if   [[ ${THEME_VARIANT} == "'prefer-light'" ]]; then printf light
-  elif [[ ${THEME_VARIANT} == "'prefer-dark'" ]];  then printf dark
-  else printf unknown
-  fi
-}
-
-# When hermes is used in conjunction with https://github.com/georglauterbach/desktop,
-# the prompt theme variant can be updated with the `theme` script; for this to work
-# properly, we need to handle the SIGUSR2 signal.
-function __hermes__signal_handler_sigusr2() {
-  if __evaluates_to_true HERMES_INIT_FLYLINE; then
-    __hermes__set_flyline_theme "$(__hermes__get_theme_variant)" 2>/dev/null || :
-  fi
-}
-
-export -f __hermes__get_theme_variant __hermes__signal_handler_sigusr2
-trap __hermes__signal_handler_sigusr2 SIGUSR2
-__hermes__signal_handler_sigusr2
