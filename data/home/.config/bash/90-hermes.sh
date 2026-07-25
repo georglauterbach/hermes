@@ -16,8 +16,8 @@ function __evaluates_to_true() {
 }
 
 function __call_and_unset() {
-  "${1:?Function name required in call_and_unset}" "${@}"
-  unset "${1}"
+  local FUNCTION_NAME="${1:?Function name required in call_and_unset}"
+  shift 1 ; "${FUNCTION_NAME}" "${@}" ; unset "${FUNCTION_NAME}"
 }
 
 function __hermes__setup_zellij() {
