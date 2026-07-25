@@ -11,6 +11,7 @@ export HERMES_INIT_BAT=${HERMES_INIT_BAT:-true}
 export HERMES_INIT_FLYLINE=${HERMES_INIT_FLYLINE:-true}
 export HERMES_INIT_FZF=${HERMES_INIT_FZF:-true}
 export HERMES_INIT_STARSHIP=${HERMES_INIT_STARSHIP:-true}
+export HERMES_INIT_ZELLIJ=${HERMES_INIT_ZELLIJ:-true}
 export HERMES_INIT_ZOXIDE=${HERMES_INIT_ZOXIDE:-true}
 
 # -----------------------------------------------

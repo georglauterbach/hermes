@@ -14,37 +14,35 @@ function __evaluates_to_true() {
   [[ -v ${1} ]] && [[ ${INPUT,,} == 'true' ]]
 }
 
-# shellcheck disable=SC2066
-function __hermes__setup_path() {
+function __hermes__setup_variables() {
   local PATH_SEGMENT
   export PATH=${PATH:-'/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'}
 
+  # shellcheck disable=SC2066
   for PATH_SEGMENT in "${HOME}/.local/bin"; do
     if [[ -d ${PATH_SEGMENT} ]] && [[ -r ${PATH_SEGMENT} ]] && [[ ${PATH} != *${PATH_SEGMENT}* ]]; then
       PATH="${PATH_SEGMENT}:${PATH}"
     fi
   done
 
+  # shellcheck disable=SC2066
   for PATH_SEGMENT in "${HOME}/.cargo/env"; do
     # shellcheck source=/dev/null
     [[ -s ${PATH_SEGMENT} ]] && [[ -r ${PATH_SEGMENT} ]] && source "${PATH_SEGMENT}"
   done
-}
 
-function __hermes__setup_variables() {
-  # common editor
   if [[ ! -v VISUAL ]]; then
     if   __is_command 'nvim' ; then VISUAL='nvim'
     elif __is_command 'vim'  ; then VISUAL='vim'
     elif __is_command 'vi'   ; then VISUAL='vi'
     elif __is_command 'nano' ; then VISUAL='nano'
-    else VISUAL=
+    else VISUAL=''
     fi
   fi
 
-  command -v less &>/dev/null && PAGER=${PAGER:-$(command -v less)}
   EDITOR=${EDITOR:-${VISUAL}}
   GPG_TTY=$(tty)
+  command -v less &>/dev/null && PAGER=${PAGER:-$(command -v less)}
 
   export VISUAL EDITOR PAGER GPG_TTY
 
@@ -172,6 +170,43 @@ function __hermes__setup_extra_programs() {
     source <(fzf --bash)
   fi
 
+  if __evaluates_to_true HERMES_INIT_ZELLIJ && __is_command 'zellij'; then
+    alias zj='zellij'
+    alias zd='zellij action detach'
+
+    # shellcheck disable=SC2329
+    function zat() {
+      if [[ -n ${ZELLIJ:-} ]]; then
+        echo 'Running Zellij in Zellij is not supported' >&2
+        return 1
+      fi
+
+      if git status &>/dev/null; then
+        zellij attach --create "$(basename "${PWD}")"
+        return "${?}"
+      fi
+
+      local SESSIONS SELECTED_SESSION
+
+      SESSIONS=$(zellij ls 2>/dev/null)
+      if [[ -z ${SESSIONS} ]]; then
+        echo 'There are no Zellij sessions available'
+        return 0
+      fi
+
+      if ! __is_command fzf; then
+        echo "Command 'fzf' required but not found" >&2
+        return 1
+      fi
+
+      SELECTED_SESSION="$(fzf --ansi <<< "${SESSIONS}" |& awk '{print $1}')"
+      [[ -n ${SELECTED_SESSION} ]] || return 0
+
+      zellij attach --create "${SELECTED_SESSION}"
+    }
+    export -f zat
+  fi
+
   if __evaluates_to_true HERMES_INIT_ZOXIDE && __is_command 'zoxide'; then
     # shellcheck source=/dev/null
     source <(zoxide init bash)
@@ -276,10 +311,25 @@ fi
 # cSpell: ignore checkwinsize autocd
 shopt -s checkwinsize globstar autocd
 
-for __FUNCTION in path variables completion history prompt extra_programs overrides aliases; do
+for __FUNCTION in variables completion history prompt extra_programs overrides aliases; do
   "__hermes__setup_${__FUNCTION}" || :
   unset "__hermes__setup_${__FUNCTION}"
 done
+
+function download_hermes_latest() {
+  local HERMES_LOCATION="${HOME}/.local/bin/hermes"
+  local HERMES_RELEASE_URI_BASE='https://github.com/georglauterbach/hermes/releases'
+  local HERMES_VERSION
+
+  HERMES_VERSION=$(curl --silent --show-error --fail --location --write-out '%{url_effective}' --output /dev/null \
+    "${HERMES_RELEASE_URI_BASE}/latest" | sed 's|.*/||')
+
+  mkdir --parents "$(dirname "${HERMES_LOCATION}")"
+  curl --silent --show-error --fail --location --output "${HERMES_LOCATION}" \
+    "${HERMES_RELEASE_URI_BASE}/download/${HERMES_VERSION}/hermes-${HERMES_VERSION}-$(uname -m)-unknown-linux-musl"
+
+  chmod +x "${HERMES_LOCATION}"
+}
 
 function __hermes__get_theme_variant() {
   local THEME_VARIANT
@@ -291,6 +341,9 @@ function __hermes__get_theme_variant() {
   fi
 }
 
+# When hermes is used in conjunction with https://github.com/georglauterbach/desktop,
+# the prompt theme variant can be updated with the `theme` script; for this to work
+# properly, we need to handle the SIGUSR2 signal.
 function __hermes__signal_handler_sigusr2() {
   if __evaluates_to_true HERMES_INIT_FLYLINE; then
     __hermes__set_flyline_theme "$(__hermes__get_theme_variant)" 2>/dev/null || :
