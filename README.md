@@ -39,7 +39,7 @@ You can find some personal configuration files in [`data/examples/`](./data/exam
 
 ### Bash
 
-[`data/examples/bash/.bashrc`](./data/examples/bash/.bashrc) provides an example of what your `~/.bashrc` could look like with hermes. Uncomment the line containing [`20-zellij.sh`](./data/home/.config/bash/20-zellij.sh) if you want to use Zellij. Create `95-custom.sh` and uncomment the line that contains `95-custom.sh` to run late shell setup commands. If you want to change the behavior of hermes' shell setup, update [`~/.config/bash/91-hermes_settings.sh`](./data/home/.config/bash/91-hermes_settings.sh).
+[`data/examples/bash/.bashrc`](./data/examples/bash/.bashrc) provides an example of what your `~/.bashrc` could look like with hermes. Uncomment the lines associated with Zellij to start it automatically. If you want to change the behavior of hermes' shell setup, update [`~/.config/bash/91-hermes_settings.sh`](./data/home/.config/bash/91-hermes_settings.sh).
 
 ### Programs
 
