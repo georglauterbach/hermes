@@ -179,7 +179,7 @@ function __hermes__setup_programs() {
       if [[ ${THEME_VARIANT} =~ ^l(ight)?$ ]]; then
         export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS_BASE} --color=light --color=fg:#5C6A72,bg:#F5F5F2,hl:#8DA101 --color=fg+:#5C6A72,bg+:#EBEBE4,hl+:#8DA101 --color=info:#D69A00,prompt:#8DA101,pointer:#3A94C5 --color=marker:#8DA101,spinner:#35A77C,header:#8DA101 --color=border:#EBEBE4,gutter:#F5F5F2,query:#5C6A72 --color=scrollbar:#8DA101,separator:#EBEBE4"
       elif [[ ${THEME_VARIANT} =~ ^d(ark)?$ ]]; then
-        TODO
+        export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS_BASE} --color=dark --color=fg:#DDC7A1,bg:#1D2021,hl:#A9B665 --color=fg+:#DDC7A1,bg+:#141617,hl+:#A9B665 --color=info:#D8A657,prompt:#A9B665,pointer:#7DAEA3 --color=marker:#A9B665,spinner:#89B482,header:#A9B665 --color=border:#141617,gutter:#1D2021,query:#DDC7A1 --color=scrollbar:#A9B665,separator:#141617"
       else
         echo "WARN  Theme variant '${THEME_VARIANT}' unknown - use 'light' or 'dark'" >&2
         return 1
