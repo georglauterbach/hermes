@@ -19,22 +19,29 @@ words:
   - unrecognised
 
 ignoreWords:
-  - atuin
-  - atuinsh
+  - autocd
   - blesh
   - binutils
   - btop
   - bufread
+  - checkwinsize
   - clippy
   - dircolors
+  - dirtrim
   - dysk
   - everforest
   - evergruv
   - flyline
   - georglauterbach
+  - getline
   - gitui
   - gsettings
+  - gsub
+  - herdr
+  - histappend
+  - ignoreboth
   - libflyline
+  - manroffopt
   - perfmon
   - reqwest
   - rustdoc

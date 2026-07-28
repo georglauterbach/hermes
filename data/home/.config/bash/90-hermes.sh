@@ -6,124 +6,74 @@
 
 [[ ${-} == *i* ]] || return 0
 
-function __is_command() {
-  command -v "${1:?Command name required in __is_command}" &>/dev/null
-}
-
-function __evaluates_to_true() {
-  local -n INPUT=${1:?Input for evaluation required in __evaluates_to_true}
-  [[ -v ${1} ]] && [[ ${INPUT,,} == 'true' ]]
-}
-
-function __call_and_unset() {
-  local FUNCTION_NAME="${1:?Function name required in call_and_unset}"
-  shift 1 ; "${FUNCTION_NAME}" "${@}" ; unset "${FUNCTION_NAME}"
-}
-
-function __hermes__setup_zellij() {
-  if command -v zellij &>/dev/null && [[ -z ${ZELLIJ:-} ]]; then
-    if [[ ${HERMES_ZELLIJ_AUTO_ATTACH_GIT:-false} == true ]] && git status &>/dev/null; then
-      exec zellij attach -c "git! $(basename "${PWD}")"
-    elif [[ ${HERMES_ZELLIJ_AUTO_RUN:-false} == true ]]; then
-      exec zellij
-    fi
-  fi
-}
+function __is_command() { command -v "${1:?}" &>/dev/null ; }
+function __evaluates_to_true() { [[ -v ${1:?} ]] && [[ ${!1,,} == 'true' ]] ; }
+function __call_and_unset() { "${1:?}" "${@:2}" ; unset "${1}" ; }
 
 function __hermes__setup_variables() {
-  local PATH_SEGMENT
-  export PATH=${PATH:-'/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'}
+  local SEGMENT
+  PATH=${PATH:-'/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'}
 
   # shellcheck disable=SC2066
-  for PATH_SEGMENT in "${HOME}/.local/bin"; do
-    if [[ -d ${PATH_SEGMENT} ]] && [[ -r ${PATH_SEGMENT} ]] && [[ ${PATH} != *${PATH_SEGMENT}* ]]; then
-      PATH="${PATH_SEGMENT}:${PATH}"
-    fi
+  for SEGMENT in "${HOME}/.local/bin"; do
+    [[ -d ${SEGMENT} ]] && [[ ${PATH} != *${SEGMENT}* ]] && PATH="${SEGMENT}:${PATH}"
   done
 
   # shellcheck disable=SC2066
-  for PATH_SEGMENT in "${HOME}/.cargo/env"; do
+  for SEGMENT in "${HOME}/.cargo/env"; do
     # shellcheck source=/dev/null
-    [[ -s ${PATH_SEGMENT} ]] && [[ -r ${PATH_SEGMENT} ]] && source "${PATH_SEGMENT}"
+    [[ -s ${SEGMENT} ]] && [[ -r ${SEGMENT} ]] && source "${SEGMENT}"
   done
 
-  export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-${HOME}/.config}
-  export XDG_CACHE_HOME=${XDG_CACHE_HOME:-${HOME}/.cache}
-  export XDG_DATA_HOME=${XDG_DATA_HOME:-${HOME}/.local/share}
-  export XDG_STATE_HOME=${XDG_STATE_HOME:-${HOME}/.local/state}
+  XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-${HOME}/.config}
+  XDG_CACHE_HOME=${XDG_CACHE_HOME:-${HOME}/.cache}
+  XDG_DATA_HOME=${XDG_DATA_HOME:-${HOME}/.local/share}
+  XDG_STATE_HOME=${XDG_STATE_HOME:-${HOME}/.local/state}
 
   if [[ ! -v VISUAL ]]; then
     if   __is_command nvim ; then VISUAL='nvim'
     elif __is_command vim  ; then VISUAL='vim'
-    elif __is_command vi   ; then VISUAL='vi'
     elif __is_command nano ; then VISUAL='nano'
     else VISUAL=''
     fi
   fi
 
   EDITOR=${EDITOR:-${VISUAL}}
-  GPG_TTY=$(tty)
-  command -v less &>/dev/null && PAGER=${PAGER:-$(command -v less)}
-
-  export VISUAL EDITOR PAGER GPG_TTY
+  __is_command less && export PAGER=${PAGER:-$(command -v less)}
 
   if [[ ! -v LANG ]]; then
     # shellcheck source=/dev/null
     [[ -r /etc/locale.conf ]] && source /etc/locale.conf
-    export LANG=${LANG:-C.UTF-8}
-    export LANGUAGE=${LANGUAGE:-${LANG}}
-    export LC_ALL=${LC_ALL:-${LANG}}
+    LANG=${LANG:-C.UTF-8} LANGUAGE=${LANGUAGE:-${LANG}} LC_ALL=${LC_ALL:-${LANG}}
   fi
+
+  export PATH VISUAL EDITOR LANG LANGUAGE LC_ALL
+  export XDG_CONFIG_HOME XDG_CACHE_HOME XDG_DATA_HOME XDG_STATE_HOME
 }
 
 function __hermes__setup_completion() {
   shopt -oq posix && return 0
 
-  if [[ -r ${XDG_CONFIG_HOME}/bash_completion ]]; then
-    # shellcheck source=/dev/null
-    source "${XDG_CONFIG_HOME}/bash_completion"
-  fi
-
-  if [[ -r /usr/share/bash-completion/bash_completion ]]; then
-    # shellcheck source=/dev/null
-    source /usr/share/bash-completion/bash_completion
-  fi
-}
-
-function __hermes__setup_history() {
-  # cSpell: ignore ignoreboth histappend
-
-  export HISTFILE=${HISTFILE:-${XDG_CACHE_HOME}/bash/history.txt}
-  export HISTCONTROL=${HISTCONTROL:-ignoreboth}
-  export HISTSIZE=${HISTSIZE:-10000}
-  export HISTFILESIZE=${HISTFILESIZE:-10000}
-
-  mkdir -p "$(dirname "${HISTFILE}")"
-  shopt -s histappend
+  # shellcheck source=/dev/null
+  [[ -r ${XDG_CONFIG_HOME}/bash_completion ]] && source "${XDG_CONFIG_HOME}/bash_completion"
+  # shellcheck source=/dev/null
+  [[ -r /usr/share/bash-completion/bash_completion ]] && source /usr/share/bash-completion/bash_completion
 }
 
 function __hermes__setup_prompt() {
-  # cSpell: ignore dirtrim libflyline dircolors
+  if __evaluates_to_true HERMES_INIT_STARSHIP && __is_command starship; then
+    export STARSHIP_CONFIG=${STARSHIP_CONFIG:-${HOME}/.config/starship/starship.toml}
+    # shellcheck source=/dev/null
+    source <(starship init bash)
 
-  if __evaluates_to_true HERMES_INIT_STARSHIP && __is_command 'starship'; then
-    [[ -v STARSHIP_CONFIG ]] || STARSHIP_CONFIG="${HOME}/.config/starship/starship.toml"
-    export STARSHIP_CONFIG
-
-    eval "$(starship init bash || :)"
-
-    # We disable PS0 and preexec hooks because
-    # they mess with trapping signals like SIGUSR2
+    # We disable PS0 and preexec hooks because they mess with trapping signals like SIGUSR2
     unset -f starship_preexec_ps0 2>/dev/null
-    PS0=''
+    export PS0=''
 
-    if __evaluates_to_true HERMES_INIT_FLYLINE; then
-      # shellcheck disable=SC2016
-      export PS1_FINAL='$(starship module directory) ➜ ' RPS1_FINAL='' PS1_FILL_FINAL=''
-    fi
+    # shellcheck disable=SC2016
+    __evaluates_to_true HERMES_INIT_FLYLINE && export PS1_FINAL='$(starship module directory) ➜ '
   else
-    export PROMPT_DIRTRIM=4
-    export PS2=''   # continuation shell prompt
-    export PS4='> ' # `set -x` tracing prompt
+    export PROMPT_DIRTRIM=4 PS2='' PS4='> '
   fi
 
   if __evaluates_to_true HERMES_INIT_FLYLINE && [[ -s ${HOME}/.local/lib/libflyline.so ]]; then
@@ -133,162 +83,307 @@ function __hermes__setup_prompt() {
     flyline editor --show-inline-history true
     flyline mouse --mode disabled
     flyline suggestions set-fuzzy-mode none
+    flyline set-cursor --backend terminal
+  fi
+}
+
+function __hermes__setup_history() {
+  if __evaluates_to_true HERMES_INIT_STINKPOT && __is_command stinkpot; then
+    export HISTFILE=${HISTFILE:-/dev/null}
+    # shellcheck source=/dev/null
+    source <(stinkpot init)
+    __is_command flyline && flyline key bind Ctrl+r 'always=runBashCommand(__stinkpot_search)'
+  else
+    HISTFILE=${HISTFILE:-${XDG_CACHE_HOME}/bash/history.txt}
+    HISTCONTROL=${HISTCONTROL:-ignoreboth}
+    HISTSIZE=${HISTSIZE:-10000}
+    HISTFILESIZE=${HISTFILESIZE:-10000}
+    shopt -s histappend
+    mkdir -p "${HISTFILE%/*}" &>/dev/null || :
+    export HISTFILE HISTCONTROL HISTSIZE HISTFILESIZE
   fi
 }
 
 function __hermes__setup_programs() {
-  # cSpell: ignore gsub manroffopt
-
   if __evaluates_to_true HERMES_INIT_BAT && __is_command bat; then
     export BAT_STYLE=plain
-
     if [[ -v PAGER ]]; then
       export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat --plain --language=man'"
       export MANROFFOPT='-c'
     fi
   fi
 
-  if __evaluates_to_true HERMES_INIT_FZF && __is_command fzf; then
-    # shellcheck source=/dev/null
-    source <(fzf --bash)
-  fi
-
-  if __evaluates_to_true HERMES_INIT_ZELLIJ && __is_command zellij; then
-    alias zj='zellij'
-    alias zd='zellij action detach'
-
-    # shellcheck disable=SC2329
-    function zat() {
-      if [[ -n ${ZELLIJ:-} ]]; then
-        echo 'Running Zellij in Zellij is not supported' >&2
-        return 1
-      fi
-
-      if git status &>/dev/null; then
-        zellij attach --create "$(basename "${PWD}")"
-        return "${?}"
-      fi
-
-      local SESSIONS SELECTED_SESSION
-
-      SESSIONS=$(zellij ls 2>/dev/null)
-      if [[ -z ${SESSIONS} ]]; then
-        echo 'There are no Zellij sessions available'
-        return 0
-      fi
-
-      if ! __is_command fzf; then
-        echo "Command 'fzf' required but not found" >&2
-        return 1
-      fi
-
-      SELECTED_SESSION="$(fzf --ansi <<< "${SESSIONS}" |& awk '{print $1}')"
-      [[ -n ${SELECTED_SESSION} ]] || return 0
-
-      zellij attach --create "${SELECTED_SESSION}"
-    }
-  fi
-
-  if __evaluates_to_true HERMES_INIT_ZOXIDE && __is_command zoxide; then
-    # shellcheck source=/dev/null
-    source <(zoxide init bash)
-  fi
+  # shellcheck source=/dev/null
+  __evaluates_to_true HERMES_INIT_FZF && __is_command fzf && source <(fzf --bash)
+  # shellcheck source=/dev/null
+  __evaluates_to_true HERMES_INIT_ZOXIDE && __is_command zoxide && source <(zoxide init bash)
 }
 
 function __hermes__setup_overrides() {
-
   # The checks on `[[ -t 0 ]]` guard against missing stdin, which
   # is a problem in agent sessions because it leads to hanging.
 
   if __evaluates_to_true HERMES_OVERRIDE_CAT_WITH_BAT && __is_command bat; then
     # shellcheck disable=SC2329
     function cat() {
-      if [[ -t 0 ]]; then
-        command bat --paging=never "${@}"
-      else
-        command cat "${@}"
-      fi
+      if [[ -t 0 ]]; then command bat --paging=never "${@}"; else command cat "${@}"; fi
     }
-    export -f cat
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_CD_WITH_ZOXIDE && __is_command zoxide; then
-    alias cd='z'
-  fi
+  __evaluates_to_true HERMES_OVERRIDE_CD_WITH_ZOXIDE && __is_command zoxide && alias cd='z'
 
   if __evaluates_to_true HERMES_OVERRIDE_DIFF_WITH_DELTA && __is_command delta; then
     # shellcheck disable=SC2329
     function diff() {
-      if [[ -t 0 ]]; then
-        command delta --line-numbers "${@}"
-      else
-        command diff "${@}"
-      fi
+      if [[ -t 0 ]]; then command delta "${@}"; else  command diff "${@}"; fi
     }
-    export -f diff
   fi
 
   if __evaluates_to_true HERMES_OVERRIDE_LESS_WITH_BAT && __is_command bat; then
     # shellcheck disable=SC2329
     function less() {
-      if [[ -t 0 ]]; then
-        command bat --paging=always "${@}"
-      else
-        command less "${@}"
-      fi
+      if [[ -t 0 ]]; then command bat --paging=always "${@}"; else command less "${@}"; fi
     }
-    export -f less
   fi
 
   if __evaluates_to_true HERMES_OVERRIDE_LS_WITH_EZA && __is_command eza; then
     # shellcheck disable=SC2329
     function ls() {
       if [[ -t 0 ]]; then
-        command eza --header --long --binary --group --classify --extended --group-directories-first "${@}"
+        command eza --long --binary --group --classify --extended --group-directories-first "${@}"
       else
         command ls "${@}"
       fi
     }
-    export -f ls
   fi
 
   if __evaluates_to_true HERMES_OVERRIDE_Y_WITH_YAZI && __is_command yazi; then
     # shellcheck disable=SC2329
     function y() {
-      local YAZI_TMP_FILE YAZI_CWD
-      YAZI_TMP_FILE="$(mktemp -t "yazi-cwd.XXXXXX")"
-      yazi "${@}" --cwd-file="${YAZI_TMP_FILE}"
-      IFS= read -r -d '' YAZI_CWD < "${YAZI_TMP_FILE}"
-      [[ -n ${YAZI_CWD:-} ]] && [[ ${YAZI_CWD} != "${PWD}" ]] && { builtin cd -- "${YAZI_CWD}" || return 1 ; }
-      rm --force -- "${YAZI_TMP_FILE}"
+      local YAZI_DIR_FILE YAZI_DIR
+      YAZI_DIR_FILE="$(mktemp -t ".yazi_dir_XXXXXX")"
+
+      yazi "${@}" --cwd-file="${YAZI_DIR_FILE}"
+      YAZI_DIR="$(<"${YAZI_DIR_FILE}")"
+
+      if [[ -n ${YAZI_DIR} ]] && [[ ${YAZI_DIR} != "${PWD}" ]]; then
+        builtin cd -- "${YAZI_DIR}" || { rm --force -- "${YAZI_DIR_FILE}" ; return 1 ; }
+      fi
+      rm --force -- "${YAZI_DIR_FILE}"
     }
-    export -f y
   fi
 }
 
 function __hermes__setup_aliases() {
-  if __evaluates_to_true HERMES_LOAD_ADDITIONAL_ALIASES; then
-    alias gcs='git commit --signoff --gpg-sign'
-    alias gp='git pull'
-    alias gf='git fetch --prune --tags --force'
+  alias gcs='git commit --signoff --gpg-sign'
+  alias gf='git fetch --prune --tags --force'
 
-    alias lsa='ls -A'
+  # shellcheck disable=SC2139
+  [[ -n ${EDITOR} ]] && alias v="${EDITOR}" sv="sudo $(command -v "${EDITOR}")"
 
-    if [[ -n ${EDITOR} ]]; then
-      # shellcheck disable=SC2139
-      alias v="${EDITOR}" sv="sudo $(command -v "${EDITOR}")"
+  alias lsa='ls -A'
+  alias ...='cd ../..'
+  alias ....='cd ../../..'
+  alias .....='cd ../../../..'
+  alias ......='cd ../../../../..'
+  alias .......='cd ../../../../../..'
+}
+
+function __hermes__setup_signal_handlers() {
+  # When hermes is used in conjunction with https://github.com/georglauterbach/desktop,
+  # theme variant changes to certain CLI utilities (that cannot be updated in another way)
+  # can be applied with the `theme` script; for this to work properly, we need to handle
+  # the 'SIGUSR2' signal.
+  # shellcheck disable=SC2329
+  function __hermes__signal_handler_sigusr2() {
+    local __HERMES__THEME_VARIANT SIGNAL_HANDLER
+    __HERMES__THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || :)
+
+    if   [[ ${__HERMES__THEME_VARIANT} == "'prefer-light'" ]]; then __HERMES__THEME_VARIANT=light
+    elif [[ ${__HERMES__THEME_VARIANT} == "'prefer-dark'" ]];  then __HERMES__THEME_VARIANT=dark
+    else return 0
     fi
 
-    alias ...='cd ../..'
-    alias ....='cd ../../..'
-    alias .....='cd ../../../..'
-    alias ......='cd ../../../../..'
-    alias .......='cd ../../../../../..'
+    for SIGNAL_HANDLER in "${__HERMES__SIGNAL_HANDLERS_SIGUSR2[@]:-}"; do
+      "${SIGNAL_HANDLER}"
+    done
+  }
+
+  # To perform cleanup of the current shell's PID, we run a dedicated script when we
+  # receive the 'EXIT' signal. Not doing this is not an issue because the `theme` script
+  # (https://github.com/georglauterbach/desktop) will also clean up - having this handler
+  # is simply an optimization.
+  # shellcheck disable=SC2329
+  function __hermes__signal_handler_exit() {
+    [[ -r /tmp/.hermes_shells_to_update ]] || return 0
+
+    # We ignore SC2094 because we fully read the file first and overwrite it only afterward.
+    # shellcheck disable=SC2094
+    {
+      flock -x 3
+      grep -v ${$} <&3 >/tmp/.hermes_shells_to_update_exit || :
+      mv /tmp/.hermes_shells_to_update_exit /tmp/.hermes_shells_to_update
+    } 3</tmp/.hermes_shells_to_update
+  }
+
+  __HERMES__SIGNAL_HANDLERS_SIGUSR2=()
+
+  trap __hermes__signal_handler_sigusr2 SIGUSR2
+  trap __hermes__signal_handler_exit    EXIT
+
+  { flock -x 3 ; echo "${$}" >&3 ; } 3>>/tmp/.hermes_shells_to_update
+}
+
+function __hermes__setup_themes() {
+  local __HERMES__THEME_VARIANT
+  __HERMES__THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || :)
+  if   [[ ${__HERMES__THEME_VARIANT} == "'prefer-light'" ]]; then __HERMES__THEME_VARIANT=light
+  else __HERMES__THEME_VARIANT=dark
+  fi
+
+  if __evaluates_to_true HERMES_THEME_BAT && __is_command bat; then
+    export BAT_THEME_DARK=evergruv-dark
+    export BAT_THEME_LIGHT=evergruv-light
+  fi
+
+  if __evaluates_to_true HERMES_THEME_BTOP && __is_command btop; then
+    # shellcheck disable=SC2329
+    function __hermes__set_theme_btop() {
+      local CONFIG_FILE=${XDG_CONFIG_HOME}/btop/btop.conf
+      if [[ -f ${CONFIG_FILE} ]]; then
+        sed --in-place --regexp-extended \
+          "s/^(color_theme =).*/\1 \"evergruv-${__HERMES__THEME_VARIANT:?}\"/" \
+          "${CONFIG_FILE}"
+      fi
+    }
+    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_btop)
+  fi
+
+  if __evaluates_to_true HERMES_THEME_EZA && __is_command eza; then
+    # shellcheck disable=SC2329
+    function __hermes__set_theme_eza() {
+      local CONFIG_DIR=${XDG_CONFIG_HOME}/eza
+      local THEME_FILE=themes/${__HERMES__THEME_VARIANT:?}.yaml
+      if [[ -f ${CONFIG_DIR}/${THEME_FILE} ]]; then
+        ln --symbol --force "${THEME_FILE}" "${CONFIG_DIR}/theme.yaml"
+      fi
+    }
+    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_eza)
+  fi
+
+  if __evaluates_to_true HERMES_THEME_FZF && __is_command fzf; then
+    [[ -v __HERMES__FZF_DEFAULT_OPTS ]] || export __HERMES__FZF_DEFAULT_OPTS=${FZF_DEFAULT_OPTS:-}
+
+    function __hermes__set_theme_fzf() {
+      if [[ ${__HERMES__THEME_VARIANT:?} == light ]]; then
+        export FZF_DEFAULT_OPTS="--color=light --color=fg:#5C6A72,bg:#F5F5F2,hl:#8DA101 --color=fg+:#5C6A72,bg+:#EBEBE4,hl+:#8DA101 --color=info:#D69A00,prompt:#8DA101,pointer:#3A94C5 --color=marker:#8DA101,spinner:#35A77C,header:#8DA101 --color=border:#EBEBE4,gutter:#F5F5F2,query:#5C6A72 --color=scrollbar:#8DA101,separator:#EBEBE4${__HERMES__FZF_DEFAULT_OPTS+ ${__HERMES__FZF_DEFAULT_OPTS}}"
+      elif [[ ${__HERMES__THEME_VARIANT} == dark ]]; then
+        export FZF_DEFAULT_OPTS="--color=dark --color=fg:#DDC7A1,bg:#1D2021,hl:#A9B665 --color=fg+:#DDC7A1,bg+:#141617,hl+:#A9B665 --color=info:#D8A657,prompt:#A9B665,pointer:#7DAEA3 --color=marker:#A9B665,spinner:#89B482,header:#A9B665 --color=border:#141617,gutter:#1D2021,query:#DDC7A1 --color=scrollbar:#A9B665,separator:#141617${__HERMES__FZF_DEFAULT_OPTS+ ${__HERMES__FZF_DEFAULT_OPTS}}"
+      fi
+    }
+    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_fzf)
+    __hermes__set_theme_fzf
+  fi
+
+  if __evaluates_to_true HERMES_THEME_GITUI && __is_command gitui; then
+    # shellcheck disable=SC2329
+    function __hermes__set_theme_gitui() {
+      local CONFIG_DIR=${XDG_CONFIG_HOME}/gitui
+      local THEME_FILE=themes/evergruv-${__HERMES__THEME_VARIANT:?}.ron
+      if [[ -f ${CONFIG_DIR}/${THEME_FILE} ]]; then
+        ln --symbol --force "${THEME_FILE}" "${CONFIG_DIR}/theme.ron"
+      fi
+    }
+    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_gitui)
+  fi
+
+  if __evaluates_to_true HERMES_THEME_HERDR && __is_command herdr; then
+    # shellcheck disable=SC2329
+    function __hermes__set_theme_herdr() {
+      local CONFIG_DIR=${XDG_CONFIG_HOME}/herdr
+      local CONFIG_FILE=${CONFIG_DIR}/config.toml
+      local THEME_FILE=${CONFIG_DIR}/themes/evergruv_${__HERMES__THEME_VARIANT:?}.toml
+      local TMP_FILE
+
+      [[ -s ${CONFIG_FILE} ]] || return 2
+      [[ -s ${THEME_FILE} ]] || return 2
+
+      grep --quiet '^# BEGIN evergruv$' "${CONFIG_FILE}" || return 2
+      grep --quiet '^# END evergruv$' "${CONFIG_FILE}" || return 2
+
+      TMP_FILE=$(mktemp) || return 1
+      # shellcheck disable=SC2064
+      trap "rm --force '${TMP_FILE}'" RETURN
+
+      awk -v theme_file="${THEME_FILE}" '
+        BEGIN {
+          while ((getline line < theme_file) > 0) {
+            theme = theme line ORS
+          }
+          close(theme_file)
+        }
+        /^# BEGIN evergruv$/ {
+          print
+          printf "%s", theme
+          skip = 1
+          next
+        }
+        /^# END evergruv$/ {
+          skip = 0
+        }
+        skip { next }
+        { print }
+      ' "${CONFIG_FILE}" >"${TMP_FILE}" || return 1
+
+      mv "${TMP_FILE}" "${CONFIG_FILE}" || return 1
+      trap - RETURN
+
+      herdr server reload-config &>/dev/null || return 2
+    }
+    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_herdr)
+  fi
+
+  # ! flyline should be added last because it's update entails user input and if
+  #   is first, then it potentially blocks other programs from updating properly
+  if __evaluates_to_true HERMES_THEME_FLYLINE && [[ -s ${HOME}/.local/lib/libflyline.so ]]; then
+    eval "$(dircolors || :)" # LS_COLORS for coloring completions
+
+    __HERMES__FLYLINE_BASE_COLORS=(
+      recognised-command='green'
+      unrecognised-command='bold red'
+      single-quoted-text='yellow'
+      double-quoted-text='yellow'
+      inline-suggestion='cyan'
+      key-sequence-style='red'
+      opening-and-closing-pair='magenta'
+      rainbow-bracket1='yellow'
+      rainbow-bracket2='green'
+      rainbow-bracket3='cyan'
+      rainbow-bracket4='blue'
+    )
+
+    function __hermes__set_theme_flyline() {
+      __is_command flyline || return 0
+      if [[ ${__HERMES__THEME_VARIANT:?} == light ]]; then
+        flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
+          normal-text= secondary-text=black
+      elif [[ ${__HERMES__THEME_VARIANT} == dark ]]; then
+        flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
+          normal-text= secondary-text=white
+      fi
+    }
+    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_flyline)
+    __hermes__set_theme_flyline
   fi
 }
 
 function hermes_debug() {
-  env | grep -E '^(__)?HERMES' | sort
+  local __NAME
+  for __NAME in ${!HERMES_*} ${!__HERMES__*}; do
+    declare -n __VAL=${__NAME}
+    echo "${__NAME}=\"${__VAL[*]}\""
+    unset __VAL
+  done
 }
 
 function __hermes__main() {
@@ -297,25 +392,26 @@ function __hermes__main() {
     source "${HOME}/.config/bash/91-hermes_settings.sh"
   fi
 
-  # cSpell: ignore checkwinsize autocd
   shopt -s checkwinsize globstar autocd
 
+  local SETUP_FUNCTIONS=(variables completion prompt history programs overrides)
+  __evaluates_to_true HERMES_ENABLE_ADDITIONAL_ALIASES && SETUP_FUNCTIONS+=(aliases)
+  __evaluates_to_true HERMES_ENABLE_THEMING && SETUP_FUNCTIONS+=(signal_handlers themes)
+
   local __FUNCTION
-  for __FUNCTION in zellij variables completion history prompt programs overrides aliases; do
+  for __FUNCTION in "${SETUP_FUNCTIONS[@]}"; do
     __call_and_unset "__hermes__setup_${__FUNCTION}" || :
   done
 
-  # quote ${1} here because it may expand to '-c' which is then interpreted by '[[' incorrectly
-  if [[ "${1:-}" =~ ^-(c|-colors)$ ]] && [[ -r ${HOME}/.config/bash/92-hermes_colors.sh ]]; then
-    # shellcheck source=92-hermes_colors.sh
-    source "${HOME}/.config/bash/92-hermes_colors.sh"
-    __call_and_unset __hermes__setup_signal_handlers
+  if __evaluates_to_true HERMES_ENABLE_EXPORT_OF_ENVS; then
+    # shellcheck disable=SC2086
+    export ${!HERMES_*} ${!__HERMES__*}
   fi
 }
 
 __call_and_unset __hermes__main "${@}"
 
-function download_hermes_latest() {
+function hermes_download_latest_version() {
   local HERMES_LOCATION=${HOME}/.local/bin/hermes
   local HERMES_RELEASE_URI_BASE=https://github.com/georglauterbach/hermes/releases
   local HERMES_VERSION
@@ -324,7 +420,7 @@ function download_hermes_latest() {
     --write-out '%{url_effective}' --output /dev/null \
     "${HERMES_RELEASE_URI_BASE}/latest" | sed 's|.*/||')
 
-  mkdir --parents "$(dirname "${HERMES_LOCATION}")"
+  mkdir --parents "${HERMES_LOCATION%/*}"
   curl --silent --show-error --fail --location --output "${HERMES_LOCATION}" \
     "${HERMES_RELEASE_URI_BASE}/download/${HERMES_VERSION}/hermes-${HERMES_VERSION}-$(uname -m)-unknown-linux-musl"
 
