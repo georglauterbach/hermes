@@ -140,6 +140,8 @@ function __hermes__setup_programs() {
   # cSpell: ignore gsub manroffopt
 
   if __evaluates_to_true HERMES_INIT_BAT && __is_command bat; then
+    export BAT_STYLE=plain
+
     if [[ -v PAGER ]]; then
       export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat --plain --language=man'"
       export MANROFFOPT='-c'

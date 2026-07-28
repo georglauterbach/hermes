@@ -26,6 +26,7 @@ ignoreWords:
   - btop
   - bufread
   - clippy
+  - dircolors
   - dysk
   - everforest
   - evergruv
@@ -33,6 +34,7 @@ ignoreWords:
   - georglauterbach
   - gitui
   - gsettings
+  - libflyline
   - perfmon
   - reqwest
   - rustdoc

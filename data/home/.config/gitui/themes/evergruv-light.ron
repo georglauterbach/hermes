@@ -1,0 +1,25 @@
+// ref: https://docs.rs/ratatui/latest/ratatui/style/enum.Color.html
+(
+    selected_tab: Some("black"),
+    command_fg: Some("black"),
+    selection_bg: Some("bright white"),
+    selection_fg: Some("black"),
+    cmdbar_bg: Some("reset"),
+    disabled_fg: Some("grey"),
+    diff_line_add: Some("green"),
+    diff_line_delete: Some("red"),
+    diff_file_added: Some("green"),
+    diff_file_removed: Some("red"),
+    diff_file_moved: Some("magenta"),
+    diff_file_modified: Some("blue"),
+    commit_hash: Some("magenta"),
+    commit_time: Some("cyan"),
+    commit_author: Some("green"),
+    danger_fg: Some("red"),
+    push_gauge_bg: Some("black"),
+    push_gauge_fg: Some("white"),
+    tag_fg: Some("yellow"),
+    branch_fg: Some("yellow"),
+    block_title_focused: Some("black"),
+    syntax: Some("themes/evergruv-light")
+)

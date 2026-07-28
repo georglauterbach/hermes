@@ -31,9 +31,10 @@ export HERMES_OVERRIDE_Y_WITH_YAZI=${HERMES_OVERRIDE_Y_WITH_YAZI:-true}
 
 export HERMES_COLOR_BAT=${HERMES_COLOR_BAT:-true}
 export HERMES_COLOR_BTOP=${HERMES_COLOR_BTOP:-true}
-export HERMES_COLOR_GITUI=${HERMES_COLOR_GITUI:-true}
+export HERMES_COLOR_EZA=${HERMES_COLOR_EZA:-true}
 export HERMES_COLOR_FLYLINE=${HERMES_COLOR_FLYLINE:-true}
 export HERMES_COLOR_FZF=${HERMES_COLOR_FZF:-true}
+export HERMES_COLOR_GITUI=${HERMES_COLOR_GITUI:-true}
 
 # -----------------------------------------------
 # ----  Miscellaneous  --------------------------

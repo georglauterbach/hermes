@@ -1,17 +1,18 @@
 #! /usr/bin/env bash
 
 # ! Customize hermes' colors
-#   Sourced by "${HOME}/.config/bash/90-hermes.sh" when sourced with '--colors'
+#   Sourced with `source "${HOME}/.config/bash/90-hermes.sh" --colors`
+
+XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-${HOME}/.config}
 
 if __evaluates_to_true HERMES_COLOR_BAT && __is_command 'bat'; then
-  export BAT_STYLE=plain
   export BAT_THEME_DARK=evergruv-dark
   export BAT_THEME_LIGHT=evergruv-light
 fi
 
 if __evaluates_to_true HERMES_COLOR_BTOP && __is_command btop; then
   function __hermes__set_theme_btop() {
-    local CONFIG_FILE=${HOME}/.config/btop/btop.conf
+    local CONFIG_FILE=${XDG_CONFIG_HOME}/btop/btop.conf
     if [[ -f ${CONFIG_FILE} ]]; then
       sed --in-place --regexp-extended \
         "s/^(color_theme =).*/\1 \"evergruv-${__HERMES__THEME_VARIANT:?}\"/" \
@@ -20,11 +21,12 @@ if __evaluates_to_true HERMES_COLOR_BTOP && __is_command btop; then
   }
 fi
 
-if __evaluates_to_true HERMES_COLOR_GITUI && __is_command gitui; then
-  function __hermes__set_theme_gitui() {
-    local THEME_FILE=${HOME}/.config/gitui/evergruv-${__HERMES__THEME_VARIANT:?}.ron
-    if [[ -f ${THEME_FILE} ]]; then
-      ln --symbol --force "${THEME_FILE}" "${HOME}/.config/gitui/theme.ron"
+if __evaluates_to_true HERMES_COLOR_EZA && __is_command eza; then
+  function __hermes__set_theme_eza() {
+    local CONFIG_DIR=${XDG_CONFIG_HOME}/eza
+    local THEME_FILE=themes/${__HERMES__THEME_VARIANT:?}.yaml
+    if [[ -f ${CONFIG_DIR}/${THEME_FILE} ]]; then
+      ln --symbol --force "${THEME_FILE}" "${CONFIG_DIR}/theme.yaml"
     fi
   }
 fi
@@ -32,29 +34,27 @@ fi
 if __evaluates_to_true HERMES_COLOR_FLYLINE && [[ -s ${HOME}/.local/lib/libflyline.so ]]; then
   eval "$(dircolors || :)" # LS_COLORS for coloring completions
 
-  if [[ ! -v __HERMES__FLYLINE_BASE_COLORS ]]; then
-    readonly __HERMES__FLYLINE_BASE_COLORS=(
-      recognised-command='green'
-      unrecognised-command='bold red'
-      single-quoted-text='yellow'
-      double-quoted-text='yellow'
-      inline-suggestion='cyan'
-      key-sequence-style='red'
-      opening-and-closing-pair='magenta'
-      rainbow-bracket1='blue'
-      rainbow-bracket2='dim blue'
-      rainbow-bracket3='purple'
-      rainbow-bracket4='dim purple'
-    )
-  fi
+  __HERMES__FLYLINE_BASE_COLORS=(
+    recognised-command='green'
+    unrecognised-command='bold red'
+    single-quoted-text='yellow'
+    double-quoted-text='yellow'
+    inline-suggestion='cyan'
+    key-sequence-style='red'
+    opening-and-closing-pair='magenta'
+    rainbow-bracket1='blue'
+    rainbow-bracket2='dim blue'
+    rainbow-bracket3='purple'
+    rainbow-bracket4='dim purple'
+  )
 
   function __hermes__set_theme_flyline() {
-    if [[ ${__HERMES__THEME_VARIANT:?} =~ ^l(ight)?$ ]]; then
+    if [[ ${__HERMES__THEME_VARIANT:?} == light ]]; then
       flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
-        normal-text='dim black' secondary-text='black'
-    elif [[ ${__HERMES__THEME_VARIANT} =~ ^d(ark)?$ ]]; then
+        normal-text= secondary-text=black
+    elif [[ ${__HERMES__THEME_VARIANT} == dark ]]; then
       flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
-        normal-text='white' secondary-text='dim white'
+        normal-text= secondary-text=white
     fi
   }
 fi
@@ -64,10 +64,20 @@ if __evaluates_to_true HERMES_COLOR_FZF && __is_command fzf; then
 
   # shellcheck disable=SC2329
   function __hermes__set_theme_fzf() {
-    if [[ ${__HERMES__THEME_VARIANT:?} =~ ^l(ight)?$ ]]; then
+    if [[ ${__HERMES__THEME_VARIANT:?} == light ]]; then
       export FZF_DEFAULT_OPTS="--color=light --color=fg:#5C6A72,bg:#F5F5F2,hl:#8DA101 --color=fg+:#5C6A72,bg+:#EBEBE4,hl+:#8DA101 --color=info:#D69A00,prompt:#8DA101,pointer:#3A94C5 --color=marker:#8DA101,spinner:#35A77C,header:#8DA101 --color=border:#EBEBE4,gutter:#F5F5F2,query:#5C6A72 --color=scrollbar:#8DA101,separator:#EBEBE4${__HERMES__FZF_DEFAULT_OPTS+ ${__HERMES__FZF_DEFAULT_OPTS}}"
-    elif [[ ${__HERMES__THEME_VARIANT} =~ ^d(ark)?$ ]]; then
+    elif [[ ${__HERMES__THEME_VARIANT} == dark ]]; then
       export FZF_DEFAULT_OPTS="--color=dark --color=fg:#DDC7A1,bg:#1D2021,hl:#A9B665 --color=fg+:#DDC7A1,bg+:#141617,hl+:#A9B665 --color=info:#D8A657,prompt:#A9B665,pointer:#7DAEA3 --color=marker:#A9B665,spinner:#89B482,header:#A9B665 --color=border:#141617,gutter:#1D2021,query:#DDC7A1 --color=scrollbar:#A9B665,separator:#141617${__HERMES__FZF_DEFAULT_OPTS+ ${__HERMES__FZF_DEFAULT_OPTS}}"
+    fi
+  }
+fi
+
+if __evaluates_to_true HERMES_COLOR_GITUI && __is_command gitui; then
+  function __hermes__set_theme_gitui() {
+    local CONFIG_DIR=${XDG_CONFIG_HOME}/gitui
+    local THEME_FILE=themes/evergruv-${__HERMES__THEME_VARIANT:?}.ron
+    if [[ -f ${CONFIG_DIR}/${THEME_FILE} ]]; then
+      ln --symbol --force "${THEME_FILE}" "${CONFIG_DIR}/theme.ron"
     fi
   }
 fi
@@ -86,10 +96,11 @@ function __hermes__setup_signal_handlers() {
     else return 0
     fi
 
-    __hermes__set_theme_btop
-    __hermes__set_theme_gitui
-    __evaluates_to_true HERMES_INIT_FLYLINE && __hermes__set_theme_flyline
-    __evaluates_to_true HERMES_INIT_FZF     && __hermes__set_theme_fzf
+    __evaluates_to_true HERMES_COLOR_BTOP    && __hermes__set_theme_btop
+    __evaluates_to_true HERMES_COLOR_EZA     && __hermes__set_theme_eza
+    __evaluates_to_true HERMES_COLOR_FLYLINE && __hermes__set_theme_flyline
+    __evaluates_to_true HERMES_COLOR_FZF     && __hermes__set_theme_fzf
+    __evaluates_to_true HERMES_COLOR_GITUI   && __hermes__set_theme_gitui
   }
 
   # To perform cleanup of the current shell's PID, we run a dedicated script when we
