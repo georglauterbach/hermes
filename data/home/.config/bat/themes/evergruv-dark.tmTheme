@@ -20,13 +20,13 @@
           <key>foreground</key>
           <string>#DDC7A1</string>
           <key>lineHighlight</key>
-          <string>#DDC7A10A</string>
+          <string>#252726</string>
           <key>selection</key>
-          <string>#DDC7A120</string>
+          <string>#353531</string>
           <key>activeGuide</key>
-          <string>#DDC7A10C</string>
+          <string>#262827</string>
           <key>findHighlight</key>
-          <string>#DDC7A120</string>
+          <string>#353531</string>
           <key>misspelling</key>
           <string>#EA6962</string>
         </dict>
@@ -138,7 +138,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>#DDC7A160</string>
+          <string>#655F51</string>
         </dict>
       </dict>
       <dict>
@@ -204,7 +204,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>#DDC7A1E0</string>
+          <string>#C6B391</string>
         </dict>
       </dict>
       <dict>
@@ -226,7 +226,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>#DDC7A1A0</string>
+          <string>#958971</string>
         </dict>
       </dict>
       <dict>
@@ -381,7 +381,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>#DDC7A1A0</string>
+          <string>#958971</string>
         </dict>
       </dict>
       <dict>
@@ -392,7 +392,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>#DDC7A1A0</string>
+          <string>#958971</string>
         </dict>
       </dict>
       <dict>
@@ -498,7 +498,7 @@
         <key>name</key>
         <string>JSON | Key</string>
         <key>scope</key>
-        <string>support.type.property-name</string>
+        <string>support.type.property-name,meta.mapping.key.json string,meta.structure.dictionary.key.json string</string>
         <key>settings</key>
         <dict>
           <key>foreground</key>
@@ -520,7 +520,7 @@
         <key>name</key>
         <string>Markdown | Heading 1</string>
         <key>scope</key>
-        <string>heading.1.markdown,markup.heading.setext.1.markdown</string>
+        <string>heading.1.markdown,markup.heading.1.markdown,markup.heading.setext.1.markdown</string>
         <key>settings</key>
         <dict>
           <key>foreground</key>
@@ -533,7 +533,7 @@
         <key>name</key>
         <string>Markdown | Heading 2</string>
         <key>scope</key>
-        <string>heading.2.markdown,markup.heading.setext.2.markdown</string>
+        <string>heading.2.markdown,markup.heading.2.markdown,markup.heading.setext.2.markdown</string>
         <key>settings</key>
         <dict>
           <key>foreground</key>
@@ -546,7 +546,7 @@
         <key>name</key>
         <string>Markdown | Heading 3</string>
         <key>scope</key>
-        <string>heading.3.markdown</string>
+        <string>heading.3.markdown,markup.heading.3.markdown,markup.heading.markdown</string>
         <key>settings</key>
         <dict>
           <key>foreground</key>
@@ -559,7 +559,7 @@
         <key>name</key>
         <string>Markdown | Heading 4</string>
         <key>scope</key>
-        <string>heading.4.markdown</string>
+        <string>heading.4.markdown,markup.heading.4.markdown</string>
         <key>settings</key>
         <dict>
           <key>foreground</key>
@@ -572,7 +572,7 @@
         <key>name</key>
         <string>Markdown | Heading 5</string>
         <key>scope</key>
-        <string>heading.5.markdown</string>
+        <string>heading.5.markdown,markup.heading.5.markdown</string>
         <key>settings</key>
         <dict>
           <key>foreground</key>
@@ -585,7 +585,7 @@
         <key>name</key>
         <string>Markdown | Heading 6</string>
         <key>scope</key>
-        <string>heading.6.markdown</string>
+        <string>heading.6.markdown,markup.heading.6.markdown</string>
         <key>settings</key>
         <dict>
           <key>foreground</key>
@@ -609,11 +609,11 @@
         <key>name</key>
         <string>Markdown | Toned Down Elements</string>
         <key>scope</key>
-        <string>punctuation.definition.heading.markdown,punctuation.definition.string.begin.markdown,punctuation.definition.string.end.markdown,punctuation.definition.bold.markdown,punctuation.definition.italic.markdown,punctuation.definition.quote.begin.markdown,punctuation.definition.metadata.markdown,punctuation.separator.key-value.markdown,punctuation.definition.constant.markdown,meta.separator.markdown,punctuation.definition.constant.begin.markdown,punctuation.definition.constant.end.markdown,punctuation.definition.link.markdown</string>
+        <string>punctuation.definition.heading.markdown,punctuation.definition.heading.begin.markdown,punctuation.definition.heading.end.markdown,punctuation.definition.string.begin.markdown,punctuation.definition.string.end.markdown,punctuation.definition.bold.markdown,punctuation.definition.italic.markdown,punctuation.definition.quote.begin.markdown,punctuation.definition.metadata.markdown,punctuation.separator.key-value.markdown,punctuation.definition.constant.markdown,meta.separator.markdown,punctuation.definition.constant.begin.markdown,punctuation.definition.constant.end.markdown,punctuation.definition.link.markdown</string>
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>#DDC7A1A0</string>
+          <string>#958971</string>
         </dict>
       </dict>
       <dict>
