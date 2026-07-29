@@ -204,7 +204,7 @@ function __hermes__setup_signal_handlers() {
     else return 0
     fi
 
-    for SIGNAL_HANDLER in "${__HERMES__SIGNAL_HANDLERS_SIGUSR2[@]:-}"; do
+    for SIGNAL_HANDLER in "${__HERMES__SIGNAL_HANDLERS_SIGUSR2[@]}"; do
       "${SIGNAL_HANDLER}"
     done
   }
@@ -269,6 +269,38 @@ function __hermes__setup_themes() {
       fi
     }
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_eza)
+  fi
+
+  if __evaluates_to_true HERMES_THEME_FLYLINE && [[ -s ${HOME}/.local/lib/libflyline.so ]]; then
+    eval "$(dircolors || :)" # LS_COLORS for coloring completions
+
+    __HERMES__FLYLINE_BASE_COLORS=(
+      recognised-command='green'
+      unrecognised-command='bold red'
+      single-quoted-text='yellow'
+      double-quoted-text='yellow'
+      inline-suggestion='cyan'
+      key-sequence-style='red'
+      opening-and-closing-pair='magenta'
+      rainbow-bracket1='yellow'
+      rainbow-bracket2='green'
+      rainbow-bracket3='cyan'
+      rainbow-bracket4='blue'
+    )
+
+    function __hermes__set_theme_flyline() {
+      __is_command flyline || return 0
+      if [[ ${__HERMES__THEME_VARIANT:?} == light ]]; then
+        flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
+          normal-text= secondary-text=black
+
+      elif [[ ${__HERMES__THEME_VARIANT} == dark ]]; then
+        flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
+          normal-text= secondary-text=white
+      fi
+    }
+    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_flyline)
+    __hermes__set_theme_flyline
   fi
 
   if __evaluates_to_true HERMES_THEME_FZF && __is_command fzf; then
@@ -341,39 +373,6 @@ function __hermes__setup_themes() {
       herdr server reload-config &>/dev/null || return 2
     }
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_herdr)
-  fi
-
-  # ! flyline should be added last because it's update entails user input and if
-  #   is first, then it potentially blocks other programs from updating properly
-  if __evaluates_to_true HERMES_THEME_FLYLINE && [[ -s ${HOME}/.local/lib/libflyline.so ]]; then
-    eval "$(dircolors || :)" # LS_COLORS for coloring completions
-
-    __HERMES__FLYLINE_BASE_COLORS=(
-      recognised-command='green'
-      unrecognised-command='bold red'
-      single-quoted-text='yellow'
-      double-quoted-text='yellow'
-      inline-suggestion='cyan'
-      key-sequence-style='red'
-      opening-and-closing-pair='magenta'
-      rainbow-bracket1='yellow'
-      rainbow-bracket2='green'
-      rainbow-bracket3='cyan'
-      rainbow-bracket4='blue'
-    )
-
-    function __hermes__set_theme_flyline() {
-      __is_command flyline || return 0
-      if [[ ${__HERMES__THEME_VARIANT:?} == light ]]; then
-        flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
-          normal-text= secondary-text=black
-      elif [[ ${__HERMES__THEME_VARIANT} == dark ]]; then
-        flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
-          normal-text= secondary-text=white
-      fi
-    }
-    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_flyline)
-    __hermes__set_theme_flyline
   fi
 }
 

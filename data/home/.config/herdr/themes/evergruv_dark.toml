@@ -1,0 +1,13 @@
+# Evergruv dark overrides for Herdr (base theme: terminal)
+# ref: https://github.com/georglauterbach/evergruv
+
+[theme.custom]
+accent = "#7DAEA3"
+
+red = "#EA6962"
+peach = "#E78A4E"
+yellow = "#D8A657"
+green = "#A9B665"
+teal = "#89B482"
+blue = "#7DAEA3"
+mauve = "#D3869B"
