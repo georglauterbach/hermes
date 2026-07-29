@@ -27,3 +27,4 @@
 
 *.sh     text    diff=bash
 *.md     text    diff=markdown
+*.rs     text    diff=rust
