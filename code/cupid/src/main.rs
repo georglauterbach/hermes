@@ -207,6 +207,7 @@ pub mod programs {
         join_set.spawn(just(architecture));
         join_set.spawn(ripgrep(architecture));
         join_set.spawn(starship(architecture));
+        join_set.spawn(stinkpot(architecture));
         join_set.spawn(yazi(architecture));
         join_set.spawn(herdr(architecture));
         join_set.spawn(zoxide(architecture));
@@ -798,9 +799,8 @@ pub mod programs {
         let version = "0.7.5";
         let file = format!("herdr-linux-{architecture}");
         let archive_type = ArchiveType::Uncompressed;
-        let uri = format!(
-            "https://github.com/ogulcancelik/herdr/releases/download/v{version}/{file}"
-        );
+        let uri =
+            format!("https://github.com/ogulcancelik/herdr/releases/download/v{version}/{file}");
 
         Program::new(
             name,
@@ -897,6 +897,27 @@ pub mod programs {
             .await
     }
 
+    /// <https://github.com/georglauterbach/stinkpot-rs>
+    async fn stinkpot(architecture: Architecture) -> ::anyhow::Result<()> {
+        let name = "stinkpot";
+        let version = "0.1.0";
+        let file = format!("{name}-{architecture}-unknown-linux-musl");
+        let archive_type = ArchiveType::Uncompressed;
+        let uri = format!(
+            "https://github.com/georglauterbach/stinkpot-rs/releases/download/v{version}/{file}{archive_type}"
+        );
+
+        Program::new(
+            name,
+            version,
+            archive_type,
+            uri,
+            Entries::All(name, local_bin(name)),
+        )
+        .process(architecture)
+        .await
+    }
+
     /// <https://github.com/sxyazi/yazi>
     async fn yazi(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "yazi";
@@ -940,4 +961,3 @@ pub mod programs {
             .await
     }
 }
-
