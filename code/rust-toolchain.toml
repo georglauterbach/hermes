@@ -10,3 +10,4 @@
 channel = "1.97.1"
 targets = ["x86_64-unknown-linux-musl"]
 profile = "default"
+components = ["rustfmt", "clippy", "rust-docs"]
