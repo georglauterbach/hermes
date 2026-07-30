@@ -102,12 +102,20 @@
   "update.mode": "none",
   // ? terminal
   "terminal.external.linuxExec": "alacritty",
+  "terminal.integrated.initialHint": false,
   "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font,FiraCode Nerd Font,Consolas",
   "terminal.integrated.fontLigatures.enabled": true,
   "terminal.integrated.tabs.enabled": true,
   "terminal.integrated.showExitAlert": false,
-  "terminal.integrated.enableMultiLinePasteWarning": "auto",
+  "terminal.integrated.enableMultiLinePasteWarning": "never",
   "terminal.integrated.shellIntegration.enabled": false,
+  "terminal.integrated.sendKeybindingsToShell": false,
+  "terminal.integrated.commandsToSkipShell": [
+    "workbench.view.explorer"
+  ],
+  "terminal.integrated.minimumContrastRatio": 1,
+  "terminal.integrated.enableKittyKeyboardProtocol": true,
+  "terminal.integrated.textBlinking": true,
   // ? window
   "window.zoomLevel": 1,
   "window.menuStyle": "custom",
@@ -176,7 +184,10 @@
       "multiline": true
     },
     {
-      "tag": "ref",
+      "tag": [
+        "ref",
+        ">"
+      ],
       "color": "#A9B665",
       "multiline": true
     }
@@ -289,7 +300,8 @@
     "hint"
   ],
   "errorLens.excludeByMessage": [
-    "Unknown word"
+    "Unknown word",
+    "code is inactive due to #[cfg] directives"
   ],
   //
   //
@@ -311,8 +323,8 @@
       "strings": false,
       "other": true
     }
-  } // ? dynamic
-  //
+  }
+  // ? dynamic
   //
   // ? comments
   /*
