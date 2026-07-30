@@ -4,8 +4,6 @@
 //! A support crate for `hermes` that packs the archive which
 //! `hermes` uses for its (offline)  installation
 
-// TODO add stinkpot https://tangled.org/oppi.li/stinkpot/
-
 use ::anyhow::Context as _;
 
 /// The entrypoint of `cupid`
@@ -725,7 +723,6 @@ pub mod programs {
 
     /// <https://github.com/HalFrgrd/flyline>
     async fn flyline(architecture: Architecture) -> ::anyhow::Result<()> {
-        // cSpell: ignore libflyline
         let name = "flyline";
         let version = "1.4.0";
         let file = format!("libflyline-v{version}-{architecture}-unknown-linux-gnu");

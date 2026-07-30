@@ -15,8 +15,12 @@ words:
   - Georg
   - Lauterbach
 
+  - foldables
+  - keepalive
   - recognised
   - unrecognised
+  - worktree
+  - worktrees
 
 ignoreWords:
   - autocd
@@ -24,6 +28,7 @@ ignoreWords:
   - binutils
   - btop
   - bufread
+  - catppuccin
   - checkwinsize
   - clippy
   - dircolors
@@ -34,16 +39,26 @@ ignoreWords:
   - flyline
   - georglauterbach
   - getline
+  - ghostty
   - gitui
   - gsettings
   - gsub
   - herdr
   - histappend
   - ignoreboth
+  - kanagawa
+  - kimi
+  - kiro
   - libflyline
   - manroffopt
+  - nord
+  - opencode
   - perfmon
+  - qoder
+  - qodercli
+  - reflog
   - reqwest
+  - rrggbb
   - rustdoc
   - rustls
   - setcap
