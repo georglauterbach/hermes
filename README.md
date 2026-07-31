@@ -49,6 +49,10 @@ The `--color` flag in the example loads additional color handling based on [the 
 
 ### Programs
 
+> [!tip]
+>
+> If you are looking for more awesome terminal programs, head to [Terminal Trove](https://terminaltrove.com).
+
 _hermes_ installs additional programs into `${HOME}/.local/bin/`.
 
 - [_bat_](https://github.com/sharkdp/bat)
