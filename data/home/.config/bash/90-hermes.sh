@@ -81,9 +81,17 @@ function __hermes__setup_prompt() {
 
     flyline editor --auto-close-chars false
     flyline editor --show-inline-history true
+    flyline key bind Ctrl+Left        always=moveLeftOneWordPart
+    flyline key bind Ctrl+Right       always=moveRightOneWordPart
+    flyline key bind Ctrl+Shift+Left  always=moveLeftOneWordPartExtendSelection
+    flyline key bind Ctrl+Shift+Right always=moveRightOneWordPartExtendSelection
+    flyline key bind Alt+Left         always=moveLeftOneWord
+    flyline key bind Alt+Right        always=moveRightOneWord
+    flyline key bind Alt+Shift+Left   always=moveLeftOneWordExtendSelection
+    flyline key bind Alt+Shift+Right  always=moveRightOneWordExtendSelection
     flyline mouse --mode disabled
+    flyline set-style selected-text=reverse
     flyline suggestions set-fuzzy-mode none
-    flyline set-cursor --backend terminal
   fi
 }
 
