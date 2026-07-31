@@ -734,7 +734,7 @@ pub mod programs {
         let mut entries = collections::HashMap::new();
         entries.insert(
             format!("libflyline.so.{version}"),
-            local_lib("libflyline.so.{version}"),
+            local_lib(&format!("libflyline.so.{version}")),
         );
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))

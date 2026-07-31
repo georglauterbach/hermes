@@ -290,15 +290,14 @@ function __hermes__setup_themes() {
 
     function __hermes__set_theme_flyline() {
       __is_command flyline || return 0
-      local FLYLINE_CURSOR_COLOR
+      local FLYLINE_CURSOR_COLOR='#3A94C5'
       if [[ ${__HERMES__THEME_VARIANT:?} == light ]]; then
         flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
           --default-theme light normal-text=black secondary-text=
-        FLYLINE_CURSOR_COLOR='#3A94C5'
       elif [[ ${__HERMES__THEME_VARIANT} == dark ]]; then
         flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
           --default-theme dark normal-text= secondary-text=white
-        FLYLINE_CURSOR_COLOR='#3A94C5'
+        FLYLINE_CURSOR_COLOR='#7DAEA3'
       fi
       flyline set-cursor --backend flyline --effect fade --style "${FLYLINE_CURSOR_COLOR}"
     }
