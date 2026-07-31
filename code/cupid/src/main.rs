@@ -728,13 +728,13 @@ pub mod programs {
         let file = format!("libflyline-v{version}-{architecture}-unknown-linux-gnu");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
-            "https://github.com/HalFrgrd/flyline/releases/download/v{version}/{file}{archive_type}"
+            "https://github.com/georglauterbach/flyline/releases/download/v{version}/{file}{archive_type}"
         );
 
         let mut entries = collections::HashMap::new();
         entries.insert(
             format!("libflyline.so.{version}"),
-            local_lib("libflyline.so"),
+            local_lib("libflyline.so.{version}"),
         );
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
