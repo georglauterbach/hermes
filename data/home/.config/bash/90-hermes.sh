@@ -243,11 +243,43 @@ function __hermes__setup_signal_handlers() {
 }
 
 function __hermes__setup_themes() {
+  # ! The color values set in this function are kept in sync with
+  #   https://github.com/georglauterbach/desktop/tree/main/data/home/.config/alacritty/themes
   local __HERMES__THEME_VARIANT
-  __HERMES__THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || :)
-  if   [[ ${__HERMES__THEME_VARIANT} == "'prefer-light'" ]]; then __HERMES__THEME_VARIANT=light
-  else __HERMES__THEME_VARIANT=dark
-  fi
+  function __hermes_set_colors() {
+    __HERMES__THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || :)
+    if [[ ${__HERMES__THEME_VARIANT} == "'prefer-light'" ]]; then
+      __HERMES__THEME_VARIANT=light
+      __HERMES__COLOR_BACKGROUND='#F5F5F2'
+      __HERMES__COLOR_FOREGROUND='#5C6A72'
+      __HERMES__COLOR_BLACK='#363E42'
+      __HERMES__COLOR_RED='#F85552'
+      __HERMES__COLOR_GREEN='#8DA101'
+      __HERMES__COLOR_YELLOW='#D69A00'
+      __HERMES__COLOR_BLUE='#3A94C5'
+      __HERMES__COLOR_MAGENTA='#DF69BA'
+      __HERMES__COLOR_CYAN='#35A77C'
+      __HERMES__COLOR_WHITE='#999997'
+      __HERMES__COLOR_BRIGHT_BLACK='#7E919C'
+      __HERMES__COLOR_BRIGHT_WHITE='#EBEBE4'
+    else
+      __HERMES__THEME_VARIANT=dark
+      __HERMES__COLOR_BACKGROUND='#1D2021'
+      __HERMES__COLOR_FOREGROUND='#DDC7A1'
+      __HERMES__COLOR_BLACK='#141617'
+      __HERMES__COLOR_RED='#EA6962'
+      __HERMES__COLOR_GREEN='#A9B665'
+      __HERMES__COLOR_YELLOW='#D8A657'
+      __HERMES__COLOR_BLUE='#7DAEA3'
+      __HERMES__COLOR_MAGENTA='#D3869B'
+      __HERMES__COLOR_CYAN='#7BB674'
+      __HERMES__COLOR_WHITE='#A39377'
+      __HERMES__COLOR_BRIGHT_BLACK='#2B2A29'
+      __HERMES__COLOR_BRIGHT_WHITE='#FFE6BA'
+    fi
+  }
+  __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes_set_colors)
+  __hermes_set_colors
 
   if __evaluates_to_true HERMES_THEME_BAT && __is_command bat; then
     export BAT_THEME_DARK=evergruv-dark
@@ -273,7 +305,7 @@ function __hermes__setup_themes() {
       local CONFIG_DIR=${XDG_CONFIG_HOME}/eza
       local THEME_FILE=themes/${__HERMES__THEME_VARIANT:?}.yaml
       if [[ -f ${CONFIG_DIR}/${THEME_FILE} ]]; then
-        ln --symbol --force "${THEME_FILE}" "${CONFIG_DIR}/theme.yaml"
+        ln --symbolic --force "${THEME_FILE}" "${CONFIG_DIR}/theme.yaml"
       fi
     }
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_eza)
@@ -298,16 +330,14 @@ function __hermes__setup_themes() {
 
     function __hermes__set_theme_flyline() {
       __is_command flyline || return 0
-      local FLYLINE_CURSOR_COLOR='#3A94C5'
       if [[ ${__HERMES__THEME_VARIANT:?} == light ]]; then
-        flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
-          --default-theme light normal-text=black secondary-text=
+        flyline set-style --default-theme "${__HERMES__THEME_VARIANT}" \
+           "${__HERMES__FLYLINE_BASE_COLORS[@]}" normal-text=black secondary-text=
       elif [[ ${__HERMES__THEME_VARIANT} == dark ]]; then
-        flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
-          --default-theme dark normal-text= secondary-text=white
-        FLYLINE_CURSOR_COLOR='#7DAEA3'
+        flyline set-style --default-theme "${__HERMES__THEME_VARIANT}" \
+          "${__HERMES__FLYLINE_BASE_COLORS[@]}"  normal-text= secondary-text=white
       fi
-      flyline set-cursor --backend flyline --effect fade --style "${FLYLINE_CURSOR_COLOR}"
+      flyline set-cursor --backend flyline --effect fade --style "${__HERMES__COLOR_BLUE}"
     }
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_flyline)
     __hermes__set_theme_flyline
@@ -317,11 +347,17 @@ function __hermes__setup_themes() {
     [[ -v __HERMES__FZF_DEFAULT_OPTS ]] || export __HERMES__FZF_DEFAULT_OPTS=${FZF_DEFAULT_OPTS:-}
 
     function __hermes__set_theme_fzf() {
+      export FZF_DEFAULT_OPTS="--color=${__HERMES__THEME_VARIANT} --color=fg:${__HERMES__COLOR_FOREGROUND},bg:${__HERMES__COLOR_BACKGROUND},hl:${__HERMES__COLOR_GREEN} --color=info:${__HERMES__COLOR_YELLOW},prompt:${__HERMES__COLOR_GREEN},pointer:${__HERMES__COLOR_BLUE} --color=marker:${__HERMES__COLOR_GREEN},spinner:${__HERMES__COLOR_CYAN},header:${__HERMES__COLOR_GREEN}"
       if [[ ${__HERMES__THEME_VARIANT:?} == light ]]; then
-        export FZF_DEFAULT_OPTS="--color=light --color=fg:#5C6A72,bg:#F5F5F2,hl:#8DA101 --color=fg+:#5C6A72,bg+:#EBEBE4,hl+:#8DA101 --color=info:#D69A00,prompt:#8DA101,pointer:#3A94C5 --color=marker:#8DA101,spinner:#35A77C,header:#8DA101 --color=border:#EBEBE4,gutter:#F5F5F2,query:#5C6A72 --color=scrollbar:#8DA101,separator:#EBEBE4${__HERMES__FZF_DEFAULT_OPTS+ ${__HERMES__FZF_DEFAULT_OPTS}}"
+        FZF_DEFAULT_OPTS+=" --color=fg+:${__HERMES__COLOR_FOREGROUND},bg+:${__HERMES__COLOR_BRIGHT_WHITE},hl+:${__HERMES__COLOR_GREEN}"
+        FZF_DEFAULT_OPTS+=" --color=border:${__HERMES__COLOR_BRIGHT_WHITE},gutter:${__HERMES__COLOR_BACKGROUND},query:${__HERMES__COLOR_FOREGROUND}"
+        FZF_DEFAULT_OPTS+=" --color=scrollbar:${__HERMES__COLOR_GREEN},separator:${__HERMES__COLOR_BRIGHT_WHITE}"
       elif [[ ${__HERMES__THEME_VARIANT} == dark ]]; then
-        export FZF_DEFAULT_OPTS="--color=dark --color=fg:#DDC7A1,bg:#1D2021,hl:#A9B665 --color=fg+:#DDC7A1,bg+:#141617,hl+:#A9B665 --color=info:#D8A657,prompt:#A9B665,pointer:#7DAEA3 --color=marker:#A9B665,spinner:#89B482,header:#A9B665 --color=border:#141617,gutter:#1D2021,query:#DDC7A1 --color=scrollbar:#A9B665,separator:#141617${__HERMES__FZF_DEFAULT_OPTS+ ${__HERMES__FZF_DEFAULT_OPTS}}"
+        FZF_DEFAULT_OPTS+=" --color=fg+:${__HERMES__COLOR_FOREGROUND},bg+:${__HERMES__COLOR_BLACK},hl+:${__HERMES__COLOR_GREEN}"
+        FZF_DEFAULT_OPTS+=" --color=border:${__HERMES__COLOR_BLACK},gutter:${__HERMES__COLOR_BACKGROUND},query:${__HERMES__COLOR_FOREGROUND}"
+        FZF_DEFAULT_OPTS+=" --color=scrollbar:${__HERMES__COLOR_GREEN},separator:${__HERMES__COLOR_BLACK}"
       fi
+      FZF_DEFAULT_OPTS+=${__HERMES__FZF_DEFAULT_OPTS+ ${__HERMES__FZF_DEFAULT_OPTS}}
     }
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_fzf)
     __hermes__set_theme_fzf
@@ -333,7 +369,7 @@ function __hermes__setup_themes() {
       local CONFIG_DIR=${XDG_CONFIG_HOME}/gitui
       local THEME_FILE=themes/evergruv-${__HERMES__THEME_VARIANT:?}.ron
       if [[ -f ${CONFIG_DIR}/${THEME_FILE} ]]; then
-        ln --symbol --force "${THEME_FILE}" "${CONFIG_DIR}/theme.ron"
+        ln --symbolic --force "${THEME_FILE}" "${CONFIG_DIR}/theme.ron"
       fi
     }
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_gitui)
