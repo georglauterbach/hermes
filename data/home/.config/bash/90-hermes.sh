@@ -89,7 +89,7 @@ function __hermes__setup_prompt() {
 
 function __hermes__setup_history() {
   if __evaluates_to_true HERMES_INIT_STINKPOT && __is_command stinkpot; then
-    export HISTFILE=${HISTFILE:-/dev/null}
+    export HISTFILE=${HISTFILE:-/dev/null} HISTCONTROL=${HISTCONTROL:-ignoreboth}
     # shellcheck source=/dev/null
     source <(stinkpot init bash)
     __is_command flyline && flyline key bind Ctrl+r 'always=runBashCommand(__stinkpot_search)'
