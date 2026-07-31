@@ -288,7 +288,7 @@ function __hermes__setup_themes() {
       single-quoted-text='yellow'
       double-quoted-text='yellow'
       inline-suggestion='cyan'
-      key-sequence-style='red'
+      key-sequence-style='bold cyan'
       opening-and-closing-pair='magenta'
       rainbow-bracket1='yellow'
       rainbow-bracket2='green'
