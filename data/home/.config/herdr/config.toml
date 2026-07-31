@@ -51,7 +51,7 @@ goto = "ctrl+p"
 toggle_sidebar = "ctrl+b"
 edit_scrollback = "ctrl+shift+s"
 
-remote_image_paste = ""  # only active in herdr --remote; empty disables raw-key image paste
+remote_image_paste = "" # only active in herdr --remote; empty disables raw-key image paste
 open_notification_target = ""
 
 # * workspaces
@@ -75,7 +75,7 @@ focus_agent = ""
 
 # * tabs
 new_tab = "ctrl+n"
-rename_tab = "ctrl+r"
+rename_tab = ""
 close_tab = "ctrl+x"
 previous_tab = ""
 next_tab = ""
@@ -105,11 +105,18 @@ resize_mode = "ctrl+shift+r"
 # Popup width and height accept terminal cells or percentages such as "80%".
 # On Windows, command strings run through cmd.exe /d /c.
 [[keys.command]]
-key = "prefix+g"
+key = "ctrl+alt+g"
 type = "popup"
-command = "gitui || bash -c 'read -p \"\nERROR Probably not a git repository: ${PWD}\"'"
-width = "80%"
-height = "80%"
+command = "gitui || bash -c 'read -p \"       probably not a git repository: ${PWD}\"'"
+width = "90%"
+height = "90%"
+
+[[keys.command]]
+key = "ctrl+alt+b"
+type = "popup"
+command = "btop"
+width = "90%"
+height = "90%"
 
 # Legacy indexed shortcut config is still parsed for compatibility.
 # Prefer switch_tab, switch_workspace, and focus_agent for new configs.
