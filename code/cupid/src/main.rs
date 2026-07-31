@@ -897,7 +897,7 @@ pub mod programs {
     /// <https://github.com/georglauterbach/stinkpot-rs>
     async fn stinkpot(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "stinkpot";
-        let version = "0.1.0";
+        let version = "0.1.1";
         let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::Uncompressed;
         let uri = format!(
