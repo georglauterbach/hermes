@@ -204,11 +204,11 @@ function __hermes__setup_signal_handlers() {
   # the 'SIGUSR2' signal.
   # shellcheck disable=SC2329
   function __hermes__signal_handler_sigusr2() {
-    local __HERMES__THEME_VARIANT SIGNAL_HANDLER
-    __HERMES__THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || :)
+    local HERMES_THEME_VARIANT SIGNAL_HANDLER
+    HERMES_THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || :)
 
-    if   [[ ${__HERMES__THEME_VARIANT} == "'prefer-light'" ]]; then __HERMES__THEME_VARIANT=light
-    elif [[ ${__HERMES__THEME_VARIANT} == "'prefer-dark'" ]];  then __HERMES__THEME_VARIANT=dark
+    if   [[ ${HERMES_THEME_VARIANT} == "'prefer-light'" ]]; then HERMES_THEME_VARIANT=light
+    elif [[ ${HERMES_THEME_VARIANT} == "'prefer-dark'" ]];  then HERMES_THEME_VARIANT=dark
     else return 0
     fi
 
@@ -245,11 +245,10 @@ function __hermes__setup_signal_handlers() {
 function __hermes__setup_themes() {
   # ! The color values set in this function are kept in sync with
   #   https://github.com/georglauterbach/desktop/tree/main/data/home/.config/alacritty/themes
-  local __HERMES__THEME_VARIANT
   function __hermes_set_colors() {
-    __HERMES__THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || :)
-    if [[ ${__HERMES__THEME_VARIANT} == "'prefer-light'" ]]; then
-      __HERMES__THEME_VARIANT=light
+    HERMES_THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || :)
+    if [[ ${HERMES_THEME_VARIANT} == "'prefer-light'" ]]; then
+      HERMES_THEME_VARIANT=light
       __HERMES__COLOR_BACKGROUND='#F5F5F2'
       __HERMES__COLOR_FOREGROUND='#5C6A72'
       __HERMES__COLOR_BLACK='#363E42'
@@ -263,7 +262,10 @@ function __hermes__setup_themes() {
       __HERMES__COLOR_BRIGHT_BLACK='#7E919C'
       __HERMES__COLOR_BRIGHT_WHITE='#EBEBE4'
     else
-      __HERMES__THEME_VARIANT=dark
+      if [[ ${HERMES_THEME_VARIANT} != "'prefer-dark'" ]]; then
+        echo "Theme variant detection failed - using dark by default" >&2
+      fi
+      HERMES_THEME_VARIANT=dark
       __HERMES__COLOR_BACKGROUND='#1D2021'
       __HERMES__COLOR_FOREGROUND='#DDC7A1'
       __HERMES__COLOR_BLACK='#141617'
@@ -281,29 +283,29 @@ function __hermes__setup_themes() {
   __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes_set_colors)
   __hermes_set_colors
 
-  if __evaluates_to_true HERMES_THEME_BAT && __is_command bat; then
+  if __evaluates_to_true HERMES_OVERRIDE_COLORS_BAT && __is_command bat; then
     export BAT_THEME_DARK=evergruv-dark
     export BAT_THEME_LIGHT=evergruv-light
   fi
 
-  if __evaluates_to_true HERMES_THEME_BTOP && __is_command btop; then
+  if __evaluates_to_true HERMES_OVERRIDE_COLORS_BTOP && __is_command btop; then
     # shellcheck disable=SC2329
     function __hermes__set_theme_btop() {
       local CONFIG_FILE=${XDG_CONFIG_HOME}/btop/btop.conf
       if [[ -f ${CONFIG_FILE} ]]; then
         sed --in-place --regexp-extended \
-          "s/^(color_theme =).*/\1 \"evergruv-${__HERMES__THEME_VARIANT:?}\"/" \
+          "s/^(color_theme =).*/\1 \"evergruv-${HERMES_THEME_VARIANT:?}\"/" \
           "${CONFIG_FILE}"
       fi
     }
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_btop)
   fi
 
-  if __evaluates_to_true HERMES_THEME_EZA && __is_command eza; then
+  if __evaluates_to_true HERMES_OVERRIDE_COLORS_EZA && __is_command eza; then
     # shellcheck disable=SC2329
     function __hermes__set_theme_eza() {
       local CONFIG_DIR=${XDG_CONFIG_HOME}/eza
-      local THEME_FILE=themes/${__HERMES__THEME_VARIANT:?}.yaml
+      local THEME_FILE=themes/${HERMES_THEME_VARIANT:?}.yaml
       if [[ -f ${CONFIG_DIR}/${THEME_FILE} ]]; then
         ln --symbolic --force "${THEME_FILE}" "${CONFIG_DIR}/theme.yaml"
       fi
@@ -311,7 +313,7 @@ function __hermes__setup_themes() {
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_eza)
   fi
 
-  if __evaluates_to_true HERMES_THEME_FLYLINE && [[ -s ${HOME}/.local/lib/libflyline.so ]]; then
+  if __evaluates_to_true HERMES_OVERRIDE_COLORS_FLYLINE && [[ -s ${HOME}/.local/lib/libflyline.so ]]; then
     eval "$(dircolors || :)" # LS_COLORS for coloring completions
 
     __HERMES__FLYLINE_BASE_COLORS=(
@@ -330,11 +332,11 @@ function __hermes__setup_themes() {
 
     function __hermes__set_theme_flyline() {
       __is_command flyline || return 0
-      if [[ ${__HERMES__THEME_VARIANT:?} == light ]]; then
-        flyline set-style --default-theme "${__HERMES__THEME_VARIANT}" \
-           "${__HERMES__FLYLINE_BASE_COLORS[@]}" normal-text=black secondary-text=
-      elif [[ ${__HERMES__THEME_VARIANT} == dark ]]; then
-        flyline set-style --default-theme "${__HERMES__THEME_VARIANT}" \
+      if [[ ${HERMES_THEME_VARIANT:?} == light ]]; then
+        flyline set-style --default-theme "${HERMES_THEME_VARIANT}" \
+          "${__HERMES__FLYLINE_BASE_COLORS[@]}" normal-text=black secondary-text=
+      elif [[ ${HERMES_THEME_VARIANT} == dark ]]; then
+        flyline set-style --default-theme "${HERMES_THEME_VARIANT}" \
           "${__HERMES__FLYLINE_BASE_COLORS[@]}"  normal-text= secondary-text=white
       fi
       flyline set-cursor --backend flyline --effect fade --style "${__HERMES__COLOR_BLUE}"
@@ -343,16 +345,16 @@ function __hermes__setup_themes() {
     __hermes__set_theme_flyline
   fi
 
-  if __evaluates_to_true HERMES_THEME_FZF && __is_command fzf; then
+  if __evaluates_to_true HERMES_OVERRIDE_COLORS_FZF && __is_command fzf; then
     [[ -v __HERMES__FZF_DEFAULT_OPTS ]] || export __HERMES__FZF_DEFAULT_OPTS=${FZF_DEFAULT_OPTS:-}
 
     function __hermes__set_theme_fzf() {
-      export FZF_DEFAULT_OPTS="--color=${__HERMES__THEME_VARIANT} --color=fg:${__HERMES__COLOR_FOREGROUND},bg:${__HERMES__COLOR_BACKGROUND},hl:${__HERMES__COLOR_GREEN} --color=info:${__HERMES__COLOR_YELLOW},prompt:${__HERMES__COLOR_GREEN},pointer:${__HERMES__COLOR_BLUE} --color=marker:${__HERMES__COLOR_GREEN},spinner:${__HERMES__COLOR_CYAN},header:${__HERMES__COLOR_GREEN}"
-      if [[ ${__HERMES__THEME_VARIANT:?} == light ]]; then
+      export FZF_DEFAULT_OPTS="--color=${HERMES_THEME_VARIANT} --color=fg:${__HERMES__COLOR_FOREGROUND},bg:${__HERMES__COLOR_BACKGROUND},hl:${__HERMES__COLOR_GREEN} --color=info:${__HERMES__COLOR_YELLOW},prompt:${__HERMES__COLOR_GREEN},pointer:${__HERMES__COLOR_BLUE} --color=marker:${__HERMES__COLOR_GREEN},spinner:${__HERMES__COLOR_CYAN},header:${__HERMES__COLOR_GREEN}"
+      if [[ ${HERMES_THEME_VARIANT:?} == light ]]; then
         FZF_DEFAULT_OPTS+=" --color=fg+:${__HERMES__COLOR_FOREGROUND},bg+:${__HERMES__COLOR_BRIGHT_WHITE},hl+:${__HERMES__COLOR_GREEN}"
         FZF_DEFAULT_OPTS+=" --color=border:${__HERMES__COLOR_BRIGHT_WHITE},gutter:${__HERMES__COLOR_BACKGROUND},query:${__HERMES__COLOR_FOREGROUND}"
         FZF_DEFAULT_OPTS+=" --color=scrollbar:${__HERMES__COLOR_GREEN},separator:${__HERMES__COLOR_BRIGHT_WHITE}"
-      elif [[ ${__HERMES__THEME_VARIANT} == dark ]]; then
+      elif [[ ${HERMES_THEME_VARIANT} == dark ]]; then
         FZF_DEFAULT_OPTS+=" --color=fg+:${__HERMES__COLOR_FOREGROUND},bg+:${__HERMES__COLOR_BLACK},hl+:${__HERMES__COLOR_GREEN}"
         FZF_DEFAULT_OPTS+=" --color=border:${__HERMES__COLOR_BLACK},gutter:${__HERMES__COLOR_BACKGROUND},query:${__HERMES__COLOR_FOREGROUND}"
         FZF_DEFAULT_OPTS+=" --color=scrollbar:${__HERMES__COLOR_GREEN},separator:${__HERMES__COLOR_BLACK}"
@@ -363,11 +365,11 @@ function __hermes__setup_themes() {
     __hermes__set_theme_fzf
   fi
 
-  if __evaluates_to_true HERMES_THEME_GITUI && __is_command gitui; then
+  if __evaluates_to_true HERMES_OVERRIDE_COLORS_GITUI && __is_command gitui; then
     # shellcheck disable=SC2329
     function __hermes__set_theme_gitui() {
       local CONFIG_DIR=${XDG_CONFIG_HOME}/gitui
-      local THEME_FILE=themes/evergruv-${__HERMES__THEME_VARIANT:?}.ron
+      local THEME_FILE=themes/evergruv-${HERMES_THEME_VARIANT:?}.ron
       if [[ -f ${CONFIG_DIR}/${THEME_FILE} ]]; then
         ln --symbolic --force "${THEME_FILE}" "${CONFIG_DIR}/theme.ron"
       fi
@@ -375,12 +377,12 @@ function __hermes__setup_themes() {
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_gitui)
   fi
 
-  if __evaluates_to_true HERMES_THEME_HERDR && __is_command herdr; then
+  if __evaluates_to_true HERMES_OVERRIDE_COLORS_HERDR && __is_command herdr; then
     # shellcheck disable=SC2329
     function __hermes__set_theme_herdr() {
       local CONFIG_DIR=${XDG_CONFIG_HOME}/herdr
       local CONFIG_FILE=${CONFIG_DIR}/config.toml
-      local THEME_FILE=${CONFIG_DIR}/themes/evergruv_${__HERMES__THEME_VARIANT:?}.toml
+      local THEME_FILE=${CONFIG_DIR}/themes/evergruv_${HERMES_THEME_VARIANT:?}.toml
       local TMP_FILE
 
       [[ -s ${CONFIG_FILE} ]] || return 2

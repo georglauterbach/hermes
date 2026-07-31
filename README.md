@@ -54,11 +54,11 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`.
 - [_bat_](https://github.com/sharkdp/bat)
   - `cat` with syntax highlighting and git integration
   - enabled with `HERMES_INIT_BAT`, override `cat` with `HERMES_OVERRIDE_CAT_WITH_BAT`
-  - enable coloring with `HERMES_THEME_BAT`
+  - enable coloring with `HERMES_OVERRIDE_COLORS_BAT`
   - create the theme cache with `bat cache --clear ; bat cache --build`
 - [_btop_](https://github.com/aristocratos/btop)
   - a resource monitor
-  - enable coloring with `HERMES_THEME_BTOP`
+  - enable coloring with `HERMES_OVERRIDE_COLORS_BTOP`
   - consider running `sudo setcap cap_perfmon=+ep "$(command -v btop)"` to set the [`perfmon` capability](https://github.com/torvalds/linux/blob/master/Documentation/admin-guide/perf-security.rst) for btop
 - [_delta_](https://github.com/dandavison/delta)
   - syntax-highlighting pager for `git`, `diff`, `grep`, and `blame` output
@@ -70,26 +70,26 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`.
 - [_eza_](https://github.com/eza-community/eza)
   - fast, modern alternative to `ls`
   - override `ls` with `HERMES_OVERRIDE_LS_WITH_EZA`
-  - override colors for punctuation with `HERMES_THEME_EZA`
+  - override colors for punctuation with `HERMES_OVERRIDE_COLORS_EZA`
 - [_fd_](https://github.com/sharkdp/fd)
   - fast, modern alternative to `find`
   - override `find` with `HERMES_OVERRIDE_FIND_WITH_FD`
 - [_flyline_](https://github.com/HalFrgrd/flyline)
   - a Bash plugin to replace readline for a modern line editing experience
   - enabled with `HERMES_INIT_FLYLINE`
-  - enable coloring with `HERMES_THEME_FLYLINE`
+  - enable coloring with `HERMES_OVERRIDE_COLORS_FLYLINE`
   - you need to manually update the symlink in `~/.local/lib/` after an update
 - [_fzf_](https://github.com/junegunn/fzf)
   - general-purpose command-line fuzzy finder
   - enabled with `HERMES_INIT_FZF`
-  - enable coloring with `HERMES_THEME_FZF`
+  - enable coloring with `HERMES_OVERRIDE_COLORS_FZF`
 - [_gitui_](https://github.com/extrawurst/gitui)
   - a fast, modern TUI for `git`
-  - enable coloring with `HERMES_THEME_GITUI`
+  - enable coloring with `HERMES_OVERRIDE_COLORS_GITUI`
 - [_herdr_](https://github.com/ogulcancelik/herdr)
   - (terminal &) agent multiplexer that lives in your terminal
   - `herdr completion bash >"${XDG_DATA_HOME:-"${HOME}/.local/share"}/bash-completion/completions/herdr.bash"`
-  - enable coloring with `HERMES_THEME_HERDR`
+  - enable coloring with `HERMES_OVERRIDE_COLORS_HERDR`
 - [_jaq_](https://github.com/01mf02/jaq)
   - a `jq` clone focussed on correctness, speed, and simplicity
   - override `jq` with `HERMES_OVERRIDE_JQ_WITH_JAQ`
