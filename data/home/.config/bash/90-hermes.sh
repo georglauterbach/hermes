@@ -290,14 +290,17 @@ function __hermes__setup_themes() {
 
     function __hermes__set_theme_flyline() {
       __is_command flyline || return 0
+      local FLYLINE_CURSOR_COLOR
       if [[ ${__HERMES__THEME_VARIANT:?} == light ]]; then
         flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
-          normal-text= secondary-text=black
-
+          --default-theme light normal-text=black secondary-text=
+        FLYLINE_CURSOR_COLOR='#3A94C5'
       elif [[ ${__HERMES__THEME_VARIANT} == dark ]]; then
         flyline set-style "${__HERMES__FLYLINE_BASE_COLORS[@]}" \
-          normal-text= secondary-text=white
+          --default-theme dark normal-text= secondary-text=white
+        FLYLINE_CURSOR_COLOR='#3A94C5'
       fi
+      flyline set-cursor --backend flyline --effect fade --style "${FLYLINE_CURSOR_COLOR}"
     }
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_flyline)
     __hermes__set_theme_flyline
