@@ -4,6 +4,10 @@ _hermes_ installs [programs](#programs) and configuration files for the command 
 
 ## Usage
 
+> [!tip]
+>
+> You do not need to manually save the `download_hermes_latest` function once you ran and source hermes because hermes exports it for you.
+
 ```bash
 # Download the latest version of hermes and
 # place hermes at ${HOME}/.local/bin/hermes
