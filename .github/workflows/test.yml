@@ -4,6 +4,9 @@ run-name: Test
 
 on: # yamllint disable-line rule:truthy
   workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths: [ code/**, .github/** ]
   pull_request:
     branches: [ '**' ]
     paths: [ code/**, .github/** ]
