@@ -22,7 +22,7 @@ permissions:
 
 jobs:
   build:
-    name: Check Build
+    name: Check Code
     runs-on: ubuntu-latest
     container: docker.io/rust:1.97.1-slim-trixie
 
@@ -39,7 +39,6 @@ jobs:
         run: |
           cd code
 
-          cargo check  --workspace
           cargo fmt    --all                              -- --check
           cargo clippy --workspace --quiet --all-features -- -D warnings
           cargo doc    --workspace --quiet --no-deps --document-private-items
