@@ -1,0 +1,61 @@
+---
+name: Test
+run-name: Test
+
+on: # yamllint disable-line rule:truthy
+  workflow_dispatch:
+  pull_request:
+    branches: [ '**' ]
+    paths: [ code/**, .github/** ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+# Restrict default permissions for all jobs to read-only
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Check Build
+    runs-on: ubuntu-latest
+    container: docker.io/rust:1.97.1-slim-trixie
+
+    permissions:
+      contents: write # Required to checkout the repository and push to a release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check Code
+        run: |
+          cd code
+
+          cargo check  --workspace
+          cargo fmt    --all                              -- --check
+          cargo clippy --workspace --quiet --all-features -- -D warnings
+          cargo doc    --workspace --quiet --no-deps --document-private-items
+
+      - name: Install Packages
+        if: startsWith(github.ref, 'main')
+        run: |
+          apt-get --yes --quiet=2 update
+          apt-get --yes install binutils-aarch64-linux-gnu gcc gcc-aarch64-linux-gnu musl-tools pkg-config zstd
+
+      - name: Build
+        if: startsWith(github.ref, 'main')
+        run: |
+          mkdir --parents .assets/x86_64
+          touch           .assets/x86_64/archive.tar.xz
+          cd code
+
+          cargo run --package cupid -- --architecture x86-64  --no-archive
+          cargo run --package cupid -- --architecture aarch64 --no-archive

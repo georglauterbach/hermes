@@ -5,15 +5,11 @@ run-name: Release
 on: # yamllint disable-line rule:truthy
   workflow_dispatch:
   push:
-    branches: [ main ]
     paths: [ code/**, .github/** ]
-    tags: [ '*.*.*' ]
-  pull_request:
-    branches: [ '**' ]
-    paths: [ code/**, .github/** ]
+    tags: [ v*.*.* ]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 defaults:
@@ -44,26 +40,7 @@ jobs:
           apt-get --yes --quiet=2 update
           apt-get --yes install binutils-aarch64-linux-gnu gcc gcc-aarch64-linux-gnu musl-tools pkg-config zstd
 
-      - name: Test & Lint Code
-        run: |
-          mkdir --parents .assets/x86_64
-          touch           .assets/x86_64/archive.tar.xz
-
-          cd code
-
-          cargo fmt    --all                              -- --check
-          cargo clippy --workspace --quiet --all-features -- -D warnings
-          cargo doc    --workspace --quiet --no-deps --document-private-items
-
-      - name: Build
-        run: |
-          cd code
-
-          cargo run --package cupid -- --architecture x86-64  --no-archive
-          cargo run --package cupid -- --architecture aarch64 --no-archive
-
-      - name: '[Release] Build Final Archive and Binary'
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Build Artifacts
         run: |
           cd code
 
@@ -96,8 +73,7 @@ jobs:
           mv aarch64-unknown-linux-musl/release/hermes \
             .artifacts/hermes-${{ github.ref_name }}-aarch64-unknown-linux-musl
 
-      - name: '[Release] Publish Artifacts to Release'
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Publish Artifacts
         uses: softprops/action-gh-release@v3
         with:
           files: |
