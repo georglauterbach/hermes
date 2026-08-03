@@ -1,0 +1,20 @@
+_commit: 0.2.6
+_src_path: gh:georglauterbach/template.git
+code_binary_enabled: true
+code_library_enabled: true
+dev_container_enabled: true
+dev_container_use_hermes: true
+git_ecosystem: github
+git_ecosystem_username: georglauterbach
+lang_python_enabled: false
+lang_rust_enabled: true
+lang_shell_enabled: true
+lang_shell_type: bash
+project_changelog_enabled: false
+project_copyright_holder: Georg Lauterbach
+project_description: _hermes_ installs [programs](#programs) and configuration files
+    for the command line. The setup is non-intrusive (it does not overwrite existing
+    files by default) and mostly unopinionated. _hermes_ is built for `x86_64` and
+    `aarch64`.
+project_license: MIT
+project_name: hermes

@@ -1,72 +1,96 @@
 ---
 version: '0.2'
 
-import: []
+import: [ cspell.user.config.yaml ]
 
 ignorePaths: []
-dictionaryDefinitions: []
 
+dictionaryDefinitions: []
 dictionaries:
   - en_US
   - softwareTerms
   - bash
 
 words:
-  - Georg
-  - Lauterbach
-
+  - allowlist
+  - backpressure
+  - cooldown
+  - debuggee
+  - foldable
   - foldables
   - keepalive
+  - lockscreen
   - recognised
   - unrecognised
+  - unrequested
+  - unsanitized
   - worktree
   - worktrees
 
 ignoreWords:
-  - autocd
-  - blesh
-  - binutils
-  - btop
-  - bufread
-  - catppuccin
-  - checkwinsize
+  - georg
+  - lauterbach
+  - georglauterbach
+
   - clippy
-  - dircolors
-  - dirtrim
-  - dysk
+  - lldb
+  - rustc
+  - rustdoc
+  - rustup
+
+  - pyproject
+  - pytest
+  - ruff
+
+  - PKCS11
+
+  - acpi
+  - agentic
+  - awww
+  - bindsym
+  - btop
+  - buildx
+  - bwrap
+  - containerfile
+  - coolors
+  - gamemode
   - everforest
   - evergruv
   - flyline
-  - georglauterbach
-  - getline
-  - ghostty
   - gitui
   - gsettings
-  - gsub
   - herdr
-  - histappend
-  - ignoreboth
-  - kanagawa
-  - kimi
-  - kiro
+  - justfile
+  - libbash
   - libflyline
-  - manroffopt
-  - nord
-  - opencode
-  - perfmon
-  - qoder
-  - qodercli
+  - lightctl
+  - patchelf
+  - pipewire
+  - powerprofilesctl
+  - ptyxis
   - reflog
-  - reqwest
-  - rrggbb
-  - rustdoc
-  - rustls
-  - setcap
-  - sharkdp
-  - sigusr2
-  - softprops
-  - trixie
-  - xattrs
+  - rofi
+  - rtkit
+  - satty
+  - scdoc
+  - shellcheck
+  - shfmt
+  - shikane
+  - shikanectl
+  - swayfx
+  - swayidle
+  - swayimg
+  - swaylock
+  - swaymsg
+  - swaync
+  - swaynotificationcenter
+  - waybar
+  - wdisplays
+  - wireplumber
+  - wleave
+  - wlsunset
+  - wpctl
+  - xwayland
+  - yaru
   - yazi
   - zizmor
-  - zstd

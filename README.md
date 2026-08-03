@@ -1,4 +1,4 @@
-# _hermes_
+# hermes
 
 _hermes_ installs [programs](#programs) and configuration files for the command line. The setup is non-intrusive (it does not overwrite existing files by default) and mostly unopinionated. _hermes_ is built for `x86_64` and `aarch64`.
 

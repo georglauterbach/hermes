@@ -2,6 +2,17 @@
 version: 2
 
 updates:
+  - package-ecosystem: github-actions
+    directory: /
+    cooldown:
+      default-days: 7
+    schedule:
+      interval: monthly
+    assignees: [ georglauterbach ]
+    labels:
+      - kind::update
+      - area::ci
+
   - package-ecosystem: cargo
     directory: code/
     cooldown:
@@ -30,14 +41,3 @@ updates:
     labels:
       - kind::update
       - area::infrastructure
-
-  - package-ecosystem: github-actions
-    directory: /
-    cooldown:
-      default-days: 7
-    schedule:
-      interval: monthly
-    assignees: [ georglauterbach ]
-    labels:
-      - kind::update
-      - area::ci

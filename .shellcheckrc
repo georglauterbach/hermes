@@ -1,3 +1,5 @@
+shell=bash
+
 enable=all
 color=auto
 severity=style
