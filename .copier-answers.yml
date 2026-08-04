@@ -1,4 +1,4 @@
-_commit: 0.2.7
+_commit: 0.3.1
 _src_path: gh:georglauterbach/template.git
 code_binary_enabled: true
 code_library_enabled: true
@@ -6,6 +6,7 @@ dev_container_enabled: true
 dev_container_use_hermes: true
 git_ecosystem: github
 git_ecosystem_username: georglauterbach
+lang_container_enabled: false
 lang_python_enabled: false
 lang_rust_enabled: true
 lang_shell_enabled: true
