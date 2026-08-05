@@ -27,7 +27,7 @@
   "editor.tabCompletion": "on",
   "editor.suggestSelection": "first",
   // * editor::cursor
-  "editor.cursorSurroundingLines": 15,
+  "editor.cursorSurroundingLines": 10,
   "editor.cursorBlinking": "phase",
   "editor.cursorSmoothCaretAnimation": "on",
   "editor.hideCursorInOverviewRuler": true,
@@ -52,13 +52,13 @@
   "editor.minimap.renderCharacters": false,
   "editor.minimap.size": "proportional",
   "editor.minimap.side": "left",
-  "editor.minimap.maxColumn": 100,
+  "editor.minimap.maxColumn": 65,
   "editor.minimap.showSlider": "always",
   "editor.minimap.autohide": "none",
   // * editor::rendering
   "editor.renderControlCharacters": true,
   "editor.renderFinalNewline": "dimmed",
-  "editor.renderWhitespace": "all",
+  "editor.renderWhitespace": "boundary",
   // * editor::scroll bar (vertical)
   "editor.scrollbar.vertical": "hidden",
   "editor.scrollbar.verticalScrollbarSize": 0,
@@ -146,8 +146,6 @@
   "workbench.editor.pinnedTabSizing": "compact",
   // * workbench::miscellaneous
   "workbench.startupEditor": "none",
-  //
-  //
   // ? extensions
   "extensions.ignoreRecommendations": true,
   // * extensions::asciidoctor.asciidoctor-vscode
@@ -266,9 +264,18 @@
   "cSpell.language": "en",
   "cSpell.diagnosticLevel": "Information",
   "cSpell.enabledFileTypes": {
-    "*": true
+    "*": false,
+    "asciidoc": true,
+    "json": true,
+    "jsonc": true,
+    "markdown": true,
+    "plaintext": true,
+    "python": true,
+    "rust": true,
+    "shell": true,
+    "toml": true,
+    "yaml": true
   },
-  "cSpell.globRoot": "${workspaceFolder}",
   "cSpell.ignorePaths": [
     "**/settings.json",
     "**/settings.jsonc",
