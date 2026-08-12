@@ -47,6 +47,10 @@ You can find some personal configuration files in [`data/examples/`](./data/exam
 
 The `--color` flag in the example loads additional color handling based on [the Evergruv color theme](https://github.com/georglauterbach/evergruv). Omit it to not load additional colors.
 
+> [!important]
+> 
+> To use [_flyline_](https://github.com/HalFrgrd/flyline), you need to manually update the symbolic link in `~/.local/lib/` after the initial installation and after updates! Navigate to `~/.local/lib/` and run `ln -sf libflyline.so.<VERSION> libflyline.so`.
+
 ### Programs
 
 > [!tip]
@@ -82,7 +86,6 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`.
   - a Bash plugin to replace readline for a modern line editing experience
   - enabled with `HERMES_INIT_FLYLINE`
   - enable coloring with `HERMES_OVERRIDE_COLORS_FLYLINE`
-  - you need to manually update the symlink in `~/.local/lib/` after an update
 - [_fzf_](https://github.com/junegunn/fzf)
   - general-purpose command-line fuzzy finder
   - enabled with `HERMES_INIT_FZF`
