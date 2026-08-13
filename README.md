@@ -6,12 +6,12 @@ _hermes_ installs [programs](#programs) and configuration files for the command 
 
 > [!tip]
 >
-> You do not need to manually save the `download_hermes_latest` function once you ran and source hermes because hermes exports it for you.
+> You do not need to manually save the `hermes_download_latest` function once you ran and source hermes because hermes exports it for you.
 
 ```bash
 # Download the latest version of hermes and
 # place hermes at ${HOME}/.local/bin/hermes
-function download_hermes_latest() {
+function hermes_download_latest() {
   local HERMES="${HOME}/.local/bin/hermes"
   local RELEASE_URI_BASE='https://github.com/georglauterbach/hermes/releases'
   local VERSION
@@ -27,7 +27,7 @@ function download_hermes_latest() {
   chmod +x "${HERMES}"
 }
 
-download_hermes_latest      # download hermes
+hermes_download_latest      # download hermes
 "${HOME}/.local/bin/hermes" # execute hermes
 ```
 
@@ -45,7 +45,7 @@ You can find some personal configuration files in [`data/examples/`](./data/exam
 
 [`data/examples/bash/.bashrc`](./data/examples/bash/.bashrc) provides an example of what your `~/.bashrc` could look like with hermes. If you want to change the behavior of hermes' shell setup, update [`~/.config/bash/91-hermes_settings.sh`](./data/home/.config/bash/91-hermes_settings.sh).
 
-The `--color` flag in the example loads additional color handling based on [the Evergruv color theme](https://github.com/georglauterbach/evergruv). Omit it to not load additional colors.
+hermes defines two types of functions: Those that start with `hermes_` can and should be used by you; those that start with `__hermes__` are for internal use and must not be used by you.
 
 > [!important]
 > 

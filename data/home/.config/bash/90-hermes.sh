@@ -198,25 +198,6 @@ function __hermes__setup_aliases() {
 }
 
 function __hermes__setup_signal_handlers() {
-  # When hermes is used in conjunction with https://github.com/georglauterbach/desktop,
-  # theme variant changes to certain CLI utilities (that cannot be updated in another way)
-  # can be applied with the `theme` script; for this to work properly, we need to handle
-  # the 'SIGUSR2' signal.
-  # shellcheck disable=SC2329
-  function __hermes__signal_handler_sigusr2() {
-    local HERMES_THEME_VARIANT SIGNAL_HANDLER
-    HERMES_THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || :)
-
-    if   [[ ${HERMES_THEME_VARIANT} == "'prefer-light'" ]]; then HERMES_THEME_VARIANT=light
-    elif [[ ${HERMES_THEME_VARIANT} == "'prefer-dark'" ]];  then HERMES_THEME_VARIANT=dark
-    else return 0
-    fi
-
-    for SIGNAL_HANDLER in "${__HERMES__SIGNAL_HANDLERS_SIGUSR2[@]}"; do
-      "${SIGNAL_HANDLER}"
-    done
-  }
-
   # To perform cleanup of the current shell's PID, we run a dedicated script when we
   # receive the 'EXIT' signal. Not doing this is not an issue because the `theme` script
   # (https://github.com/georglauterbach/desktop) will also clean up - having this handler
@@ -236,53 +217,13 @@ function __hermes__setup_signal_handlers() {
 
   __HERMES__SIGNAL_HANDLERS_SIGUSR2=()
 
-  trap __hermes__signal_handler_sigusr2 SIGUSR2
-  trap __hermes__signal_handler_exit    EXIT
+  trap 'hermes_switch_theme --force' SIGUSR2
+  trap __hermes__signal_handler_exit EXIT
 
   { flock -x 3 ; echo "${$}" >&3 ; } 3>>/tmp/.hermes_shells_to_update
 }
 
-function __hermes__setup_themes() {
-  # ! The color values set in this function are kept in sync with
-  #   https://github.com/georglauterbach/desktop/tree/main/data/home/.config/alacritty/themes
-  function __hermes_set_colors() {
-    HERMES_THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || :)
-    if [[ ${HERMES_THEME_VARIANT} == "'prefer-light'" ]]; then
-      HERMES_THEME_VARIANT=light
-      __HERMES__COLOR_BACKGROUND='#F5F5F2'
-      __HERMES__COLOR_FOREGROUND='#5C6A72'
-      __HERMES__COLOR_BLACK='#363E42'
-      __HERMES__COLOR_RED='#F85552'
-      __HERMES__COLOR_GREEN='#8DA101'
-      __HERMES__COLOR_YELLOW='#D69A00'
-      __HERMES__COLOR_BLUE='#3A94C5'
-      __HERMES__COLOR_MAGENTA='#DF69BA'
-      __HERMES__COLOR_CYAN='#35A77C'
-      __HERMES__COLOR_WHITE='#999997'
-      __HERMES__COLOR_BRIGHT_BLACK='#7E919C'
-      __HERMES__COLOR_BRIGHT_WHITE='#EBEBE4'
-    else
-      if [[ ${HERMES_THEME_VARIANT} != "'prefer-dark'" ]]; then
-        echo "Theme variant detection failed - using dark by default" >&2
-      fi
-      HERMES_THEME_VARIANT=dark
-      __HERMES__COLOR_BACKGROUND='#1D2021'
-      __HERMES__COLOR_FOREGROUND='#DDC7A1'
-      __HERMES__COLOR_BLACK='#141617'
-      __HERMES__COLOR_RED='#EA6962'
-      __HERMES__COLOR_GREEN='#A9B665'
-      __HERMES__COLOR_YELLOW='#D8A657'
-      __HERMES__COLOR_BLUE='#7DAEA3'
-      __HERMES__COLOR_MAGENTA='#D3869B'
-      __HERMES__COLOR_CYAN='#7BB674'
-      __HERMES__COLOR_WHITE='#A39377'
-      __HERMES__COLOR_BRIGHT_BLACK='#2B2A29'
-      __HERMES__COLOR_BRIGHT_WHITE='#FFE6BA'
-    fi
-  }
-  __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes_set_colors)
-  __hermes_set_colors
-
+function __hermes__setup_theme() {
   if __evaluates_to_true HERMES_OVERRIDE_COLORS_BAT && __is_command bat; then
     export BAT_THEME_DARK=evergruv-dark
     export BAT_THEME_LIGHT=evergruv-light
@@ -346,7 +287,7 @@ function __hermes__setup_themes() {
   fi
 
   if __evaluates_to_true HERMES_OVERRIDE_COLORS_FZF && __is_command fzf; then
-    [[ -v __HERMES__FZF_DEFAULT_OPTS ]] || export __HERMES__FZF_DEFAULT_OPTS=${FZF_DEFAULT_OPTS:-}
+    [[ -v __HERMES__FZF_DEFAULT_OPTS ]] || __HERMES__FZF_DEFAULT_OPTS=${FZF_DEFAULT_OPTS:-}
 
     function __hermes__set_theme_fzf() {
       export FZF_DEFAULT_OPTS="--color=${HERMES_THEME_VARIANT} --color=fg:${__HERMES__COLOR_FOREGROUND},bg:${__HERMES__COLOR_BACKGROUND},hl:${__HERMES__COLOR_GREEN} --color=info:${__HERMES__COLOR_YELLOW},prompt:${__HERMES__COLOR_GREEN},pointer:${__HERMES__COLOR_BLUE} --color=marker:${__HERMES__COLOR_GREEN},spinner:${__HERMES__COLOR_CYAN},header:${__HERMES__COLOR_GREEN}"
@@ -424,6 +365,78 @@ function __hermes__setup_themes() {
   fi
 }
 
+# ! The color values set in this function are kept in sync with
+#   https://github.com/georglauterbach/desktop/tree/main/data/home/.config/alacritty/themes
+function __hermes__export_colors() {
+  local THEME_VARIANT=${HERMES_THEME_VARIANT:-}
+
+  [[ ${1:-} == dark ]]  && THEME_VARIANT=dark
+  [[ ${1:-} == light ]] && THEME_VARIANT=light
+
+  if [[ ${1:-} == --force ]] || [[ -z ${THEME_VARIANT} ]]; then
+    THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null | tr -d "'" || :)
+    if [[ ${THEME_VARIANT} == prefer-light ]]; then
+      THEME_VARIANT=light
+    elif [[ ${THEME_VARIANT} == prefer-dark ]]; then
+      THEME_VARIANT=dark
+    elif [[ ${THEME_VARIANT} == default ]]; then
+      echo "Theme variant '${THEME_VARIANT}' is treated as 'dark'"
+      THEME_VARIANT=dark
+    else
+      echo "Theme variant '${THEME_VARIANT}' parsed from 'gsettings' unknown" >&2
+      return 1
+    fi
+  fi
+
+  if [[ ${THEME_VARIANT} == light ]]; then
+    HERMES_THEME_VARIANT=light
+    __HERMES__COLOR_BACKGROUND='#F5F5F2'
+    __HERMES__COLOR_FOREGROUND='#5C6A72'
+    __HERMES__COLOR_BLACK='#363E42'
+    __HERMES__COLOR_RED='#F85552'
+    __HERMES__COLOR_GREEN='#8DA101'
+    __HERMES__COLOR_YELLOW='#D69A00'
+    __HERMES__COLOR_BLUE='#3A94C5'
+    __HERMES__COLOR_MAGENTA='#DF69BA'
+    __HERMES__COLOR_CYAN='#35A77C'
+    __HERMES__COLOR_WHITE='#999997'
+    __HERMES__COLOR_BRIGHT_BLACK='#7E919C'
+    __HERMES__COLOR_BRIGHT_WHITE='#EBEBE4'
+  elif [[ ${THEME_VARIANT} == dark ]]; then
+    HERMES_THEME_VARIANT=dark
+    __HERMES__COLOR_BACKGROUND='#1D2021'
+    __HERMES__COLOR_FOREGROUND='#DDC7A1'
+    __HERMES__COLOR_BLACK='#141617'
+    __HERMES__COLOR_RED='#EA6962'
+    __HERMES__COLOR_GREEN='#A9B665'
+    __HERMES__COLOR_YELLOW='#D8A657'
+    __HERMES__COLOR_BLUE='#7DAEA3'
+    __HERMES__COLOR_MAGENTA='#D3869B'
+    __HERMES__COLOR_CYAN='#7BB674'
+    __HERMES__COLOR_WHITE='#A39377'
+    __HERMES__COLOR_BRIGHT_BLACK='#2B2A29'
+    __HERMES__COLOR_BRIGHT_WHITE='#FFE6BA'
+  else
+    echo "Theme variant '${THEME_VARIANT}' unknown - must be 'dark' or 'light'" >&2
+    return 1
+  fi
+}
+
+# Trigger a theme switch for TUI applications
+#
+# Certain applications (e.g., gitui, btop, etc.) have no (working) automation for
+# triggering theme variant switches. Hence, you can either call this function manually
+# or, when hermes is used in conjunction with <https://github.com/georglauterbach/desktop>,
+# have it called when SIGUSR2 is received.
+function hermes_switch_theme() {
+  __hermes__export_colors "${@}"
+
+  local HANDLER_FUNCTION
+  for HANDLER_FUNCTION in "${__HERMES__SIGNAL_HANDLERS_SIGUSR2[@]}"; do
+    "${HANDLER_FUNCTION}"
+  done
+}
+
 function hermes_debug() {
   local __NAME
   for __NAME in ${!HERMES_*} ${!__HERMES__*}; do
@@ -442,8 +455,17 @@ function __hermes__main() {
   shopt -s checkwinsize globstar autocd
 
   local SETUP_FUNCTIONS=(variables completion prompt history programs overrides)
-  __evaluates_to_true HERMES_ENABLE_ADDITIONAL_ALIASES && SETUP_FUNCTIONS+=(aliases)
-  __evaluates_to_true HERMES_ENABLE_THEMING && SETUP_FUNCTIONS+=(signal_handlers themes)
+  if __evaluates_to_true HERMES_ENABLE_ADDITIONAL_ALIASES; then
+    SETUP_FUNCTIONS+=(aliases)
+  else
+    unset __hermes__setup_aliases
+  fi
+  if __evaluates_to_true HERMES_ENABLE_THEMING; then
+    __hermes__export_colors
+    SETUP_FUNCTIONS+=(signal_handlers theme)
+  else
+    unset __hermes__{export_colors,setup_{signal_handlers,theme}} hermes_switch_theme
+  fi
 
   local __FUNCTION
   for __FUNCTION in "${SETUP_FUNCTIONS[@]}"; do
