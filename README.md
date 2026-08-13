@@ -48,7 +48,7 @@ You can find some personal configuration files in [`data/examples/`](./data/exam
 hermes defines two types of functions: Those that start with `hermes_` can and should be used by you; those that start with `__hermes__` are for internal use and must not be used by you.
 
 > [!important]
-> 
+>
 > To use [_flyline_](https://github.com/HalFrgrd/flyline), you need to manually update the symbolic link in `~/.local/lib/` after the initial installation and after updates! Navigate to `~/.local/lib/` and run `ln -sf libflyline.so.<VERSION> libflyline.so`.
 
 ### Programs
