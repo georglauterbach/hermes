@@ -405,8 +405,7 @@ pub mod programs {
                                 .write(true)
                                 .mode(0o755)
                                 .open(directory_extracted.join(self.name))
-                                .await
-                                .unwrap()
+                                .await?
                                 .write_all(&archive)
                                 .await
                         }
