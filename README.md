@@ -43,6 +43,8 @@ You can find some personal configuration files in [`data/examples/`](./data/exam
 
 ### Bash
 
+#### Local
+
 [`data/examples/bash/.bashrc`](./data/examples/bash/.bashrc) provides an example of what your `~/.bashrc` could look like with hermes. If you want to change the behavior of hermes' shell setup, update [`~/.config/bash/91-hermes_settings.sh`](./data/home/.config/bash/91-hermes_settings.sh).
 
 hermes defines two types of functions: Those that start with `hermes_` can and should be used by you; those that start with `__hermes__` are for internal use and must not be used by you.
@@ -50,6 +52,17 @@ hermes defines two types of functions: Those that start with `hermes_` can and s
 > [!important]
 >
 > To use [_flyline_](https://github.com/HalFrgrd/flyline), you need to manually update the symbolic link in `~/.local/lib/` after the initial installation and after updates! Navigate to `~/.local/lib/` and run `ln -sf libflyline.so.<VERSION> libflyline.so`.
+
+#### SSH & Containers
+
+hermes works flawlessly on remote hosts. The setup is the same for local and remote host, except for theming. If you want proper theming, you should
+
+1. Enable theming locally with `HERMES_ENABLE_THEMING=true`
+2. Add `SendEnv HERMES_THEME_VARIANT` to the desired host in `~/.ssh/config`
+3. Enable theming on the remote (with `HERMES_ENABLE_THEMING=true`)
+4. Adjust `/etc/ssh/sshd_config` on the remote to contain `AcceptEnv ... HERMES_*`
+5. Restart `sshd` with `systemctl restart sshd` on the remote
+6. Reconnect to the remote and run `hermes_switch_theme`
 
 ### Programs
 

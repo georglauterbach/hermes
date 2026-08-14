@@ -272,7 +272,7 @@
     "plaintext": true,
     "python": true,
     "rust": true,
-    "shell": true,
+    "shellscript": true,
     "toml": true,
     "yaml": true
   },

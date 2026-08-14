@@ -374,17 +374,22 @@ function __hermes__export_colors() {
   [[ ${1:-} == light ]] && THEME_VARIANT=light
 
   if [[ ${1:-} == --force ]] || [[ -z ${THEME_VARIANT} ]]; then
-    THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null | tr -d "'" || :)
-    if [[ ${THEME_VARIANT} == prefer-light ]]; then
-      THEME_VARIANT=light
-    elif [[ ${THEME_VARIANT} == prefer-dark ]]; then
-      THEME_VARIANT=dark
-    elif [[ ${THEME_VARIANT} == default ]]; then
-      echo "Theme variant '${THEME_VARIANT}' is treated as 'dark'"
+    if ! __is_command gsettings; then
+      echo "Command 'gsettings' not found - using theme 'dark' by default"
       THEME_VARIANT=dark
     else
-      echo "Theme variant '${THEME_VARIANT}' parsed from 'gsettings' unknown" >&2
-      return 1
+      THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme |& tr -d "'" || :)
+      if [[ ${THEME_VARIANT} == prefer-light ]]; then
+        THEME_VARIANT=light
+      elif [[ ${THEME_VARIANT} == prefer-dark ]]; then
+        THEME_VARIANT=dark
+      elif [[ ${THEME_VARIANT} == default ]]; then
+        echo "Theme variant '${THEME_VARIANT}' is treated as 'dark'" >&2
+        THEME_VARIANT=dark
+      else
+        echo "Theme variant '${THEME_VARIANT}' parsed from 'gsettings' unknown and treated as 'dark'" >&2
+        THEME_VARIANT=dark
+      fi
     fi
   fi
 
@@ -420,6 +425,8 @@ function __hermes__export_colors() {
     echo "Theme variant '${THEME_VARIANT}' unknown - must be 'dark' or 'light'" >&2
     return 1
   fi
+
+  export HERMES_THEME_VARIANT
 }
 
 # Trigger a theme switch for TUI applications

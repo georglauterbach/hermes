@@ -1,2 +1,15 @@
 ---
-ignoreWords: []
+ignoreWords:
+  - autocd
+  - checkwinsize
+  - dircolors
+  - dirtrim
+  - dysk
+  - getline
+  - gsub
+  - histappend
+  - ignoreboth
+  - manroffopt
+  - perfmon
+  - setcap
+  - sigusr
