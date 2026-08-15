@@ -81,17 +81,70 @@ function __hermes__setup_prompt() {
 
     flyline editor --auto-close-chars false
     flyline editor --show-inline-history true
-    flyline key bind Ctrl+Left        always=moveLeftOneWordPart
-    flyline key bind Ctrl+Right       always=moveRightOneWordPart
-    flyline key bind Ctrl+Shift+Left  always=moveLeftOneWordPartExtendSelection
-    flyline key bind Ctrl+Shift+Right always=moveRightOneWordPartExtendSelection
-    flyline key bind Alt+Left         always=moveLeftOneWord
-    flyline key bind Alt+Right        always=moveRightOneWord
-    flyline key bind Alt+Shift+Left   always=moveLeftOneWordExtendSelection
-    flyline key bind Alt+Shift+Right  always=moveRightOneWordExtendSelection
+    flyline history --backend flyline --jsonl-path "${XDG_CACHE_HOME}/bash_history.jsonl"
     flyline mouse --mode disabled
     flyline set-style selected-text=reverse
     flyline suggestions set-fuzzy-mode none
+
+    flyline key --clear-defaults
+    flyline key bind AnyChar          always=insertChar
+    flyline key bind Shift+AnyChar    always=insertChar
+
+    flyline key bind Down             always=nextHistoryEntry
+    flyline key bind Down             !cursorOnFinalLine=moveLineDown
+    flyline key bind Shift+Down       always=moveLineDownExtendSelection
+
+    flyline key bind Right            always=moveRight
+    flyline key bind Shift+Right      always=moveRightExtendSelection
+    flyline key bind Ctrl+Right       always=moveRightOneWordPart
+    flyline key bind Ctrl+Shift+Right always=moveRightOneWordPartExtendSelection
+    flyline key bind Alt+Right        always=moveRightOneWord
+    flyline key bind Alt+Shift+Right  always=moveRightOneWordExtendSelection
+    flyline key bind Right \
+      inlineSuggestionAvailable+cursorAtEnd+!tabCompletionMultiColAvailable=inlineSuggestionAccept
+
+    flyline key bind Up               always=prevHistoryEntry
+    flyline key bind Up               !cursorOnFirstLine=moveLineUp
+    flyline key bind Shift+Up         always=moveLineUpExtendSelection
+
+    flyline key bind Left             always=moveLeft
+    flyline key bind Shift+Left       always=moveLeftExtendSelection
+    flyline key bind Ctrl+Left        always=moveLeftOneWordPart
+    flyline key bind Ctrl+Shift+Left  always=moveLeftOneWordPartExtendSelection
+    flyline key bind Alt+Left         always=moveLeftOneWord
+    flyline key bind Alt+Shift+Left   always=moveLeftOneWordExtendSelection
+
+    flyline key bind End              always=moveRightEndOfLine
+
+    flyline key bind Backspace        always=deleteLeft
+    flyline key bind Ctrl+Backspace   always=deleteLeftOneWordPart
+    flyline key bind Alt+Backspace    always=deleteLeftOneWord
+
+    flyline key bind Delete           always=deleteRight
+    flyline key bind Ctrl+Delete      always=deleteRightOneWordPart
+    flyline key bind Alt+Delete       always=deleteRightOneWord
+
+    flyline key bind Ctrl+l           always=clearScreen
+    flyline key bind Ctrl+d           bufferIsEmpty=exit
+    flyline key bind Ctrl+c           always=cancel
+    flyline key bind Ctrl+c           textSelected=copyTarget
+    flyline key bind Ctrl+v           always=pasteSystemClipboard
+
+    flyline key bind Esc              always=toggleMouse
+    flyline key bind Esc              textSelected=escapeToNormalMode
+    flyline key bind Esc              tabCompletionWaiting=escapeToNormalMode
+    flyline key bind Esc              tabCompletion=escapeToNormalMode
+    flyline key bind Esc              tabCompletionAvailable=escapeToNormalMode
+
+    flyline key bind Tab              always=runTabCompletion
+    flyline key bind Tab              tabCompletionAvailable=tabCompletionNextSuggestion
+    flyline key bind Tab              tabCompletionOneResult=tabCompletionAcceptEntry
+    flyline key bind Shift+Tab        tabCompletionAvailable=tabCompletionPrevSuggestion
+
+    flyline key bind Enter            always=submitOrNewline
+    flyline key bind Enter            multilineBuffer=insertNewline
+    flyline key bind Enter            multilineBuffer+cursorAtEndTrimmed=submitOrNewline
+    flyline key bind Enter            tabCompletionEntrySelected=tabCompletionAcceptEntry
   fi
 }
 
@@ -278,7 +331,7 @@ function __hermes__setup_theme() {
           "${__HERMES__FLYLINE_BASE_COLORS[@]}" normal-text=black secondary-text=
       elif [[ ${HERMES_THEME_VARIANT} == dark ]]; then
         flyline set-style --default-theme "${HERMES_THEME_VARIANT}" \
-          "${__HERMES__FLYLINE_BASE_COLORS[@]}"  normal-text= secondary-text=white
+          "${__HERMES__FLYLINE_BASE_COLORS[@]}" normal-text= secondary-text=white
       fi
       flyline set-cursor --backend flyline --effect fade --style "${__HERMES__COLOR_BLUE}"
     }

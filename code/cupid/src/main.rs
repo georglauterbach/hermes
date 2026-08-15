@@ -723,7 +723,7 @@ pub mod programs {
     /// <https://github.com/HalFrgrd/flyline>
     async fn flyline(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "flyline";
-        let version = "1.4.0";
+        let version = "1.6.2";
         let file = format!("libflyline-v{version}-{architecture}-unknown-linux-gnu");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
