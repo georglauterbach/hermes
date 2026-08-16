@@ -1,19 +1,13 @@
 {
   "version": 1,
   "machine_id": "unknown",
-  "updated_at": "2026-08-16T16:09:01.129Z",
+  "updated_at": "2026-08-16T16:12:03.190Z",
   "active": [
     {
-      "label": "lauter_g",
-      "branch": "lauter_g",
+      "label": "hermes · bash",
+      "branch": "hermes · bash",
       "base_ref": "origin/master",
-      "created_at": "2026-08-16T16:08:35.495Z"
-    },
-    {
-      "label": "hermes",
-      "branch": "hermes",
-      "base_ref": "origin/master",
-      "created_at": "2026-08-16T16:08:35.495Z"
+      "created_at": "2026-08-16T16:11:57.184Z"
     }
   ],
   "archived": []
