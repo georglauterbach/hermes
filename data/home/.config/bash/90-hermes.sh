@@ -114,6 +114,7 @@ function __hermes__setup_prompt() {
     flyline key bind Alt+Left         always=moveLeftOneWord
     flyline key bind Alt+Shift+Left   always=moveLeftOneWordExtendSelection
 
+    flyline key bind Home             always=moveLeftStartOfLine
     flyline key bind End              always=moveRightEndOfLine
 
     flyline key bind Backspace        always=deleteLeft
@@ -140,6 +141,7 @@ function __hermes__setup_prompt() {
     flyline key bind Tab              tabCompletionAvailable=tabCompletionNextSuggestion
     flyline key bind Tab              tabCompletionOneResult=tabCompletionAcceptEntry
     flyline key bind Shift+Tab        tabCompletionAvailable=tabCompletionPrevSuggestion
+    flyline key bind Shift+BackTab    tabCompletionAvailable=tabCompletionPrevSuggestion
 
     flyline key bind Enter            always=submitOrNewline
     flyline key bind Enter            multilineBuffer=insertNewline
@@ -322,6 +324,8 @@ function __hermes__setup_theme() {
       rainbow-bracket2='green'
       rainbow-bracket3='cyan'
       rainbow-bracket4='blue'
+      matching-char='green'
+      selected-text='blue'
     )
 
     function __hermes__set_theme_flyline() {
