@@ -207,7 +207,6 @@ pub mod programs {
         join_set.spawn(starship(architecture));
         join_set.spawn(stinkpot(architecture));
         join_set.spawn(yazi(architecture));
-        join_set.spawn(herdr(architecture));
         join_set.spawn(zoxide(architecture));
 
         while let Some(result) = join_set.join_next().await {
@@ -723,11 +722,11 @@ pub mod programs {
     /// <https://github.com/HalFrgrd/flyline>
     async fn flyline(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "flyline";
-        let version = "1.6.2";
+        let version = "1.7.0";
         let file = format!("libflyline-v{version}-{architecture}-unknown-linux-gnu");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
-            "https://github.com/georglauterbach/flyline/releases/download/v{version}/{file}{archive_type}"
+            "https://github.com/HalFrgrd/flyline/releases/download/v{version}/{file}{archive_type}"
         );
 
         let mut entries = collections::HashMap::new();
@@ -787,26 +786,6 @@ pub mod programs {
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))
             .process(architecture)
             .await
-    }
-
-    /// <https://github.com/ogulcancelik/herdr>
-    async fn herdr(architecture: Architecture) -> ::anyhow::Result<()> {
-        let name = "herdr";
-        let version = "0.7.5";
-        let file = format!("herdr-linux-{architecture}");
-        let archive_type = ArchiveType::Uncompressed;
-        let uri =
-            format!("https://github.com/ogulcancelik/herdr/releases/download/v{version}/{file}");
-
-        Program::new(
-            name,
-            version,
-            archive_type,
-            uri,
-            Entries::All(name, local_bin(name)),
-        )
-        .process(architecture)
-        .await
     }
 
     /// <https://github.com/01mf02/jaq>

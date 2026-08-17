@@ -374,52 +374,6 @@ function __hermes__setup_theme() {
     }
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_gitui)
   fi
-
-  if __evaluates_to_true HERMES_OVERRIDE_COLORS_HERDR && __is_command herdr; then
-    # shellcheck disable=SC2329
-    function __hermes__set_theme_herdr() {
-      local CONFIG_DIR=${XDG_CONFIG_HOME}/herdr
-      local CONFIG_FILE=${CONFIG_DIR}/config.toml
-      local THEME_FILE=${CONFIG_DIR}/themes/evergruv_${HERMES_THEME_VARIANT:?}.toml
-      local TMP_FILE
-
-      [[ -s ${CONFIG_FILE} ]] || return 2
-      [[ -s ${THEME_FILE} ]] || return 2
-
-      grep --quiet '^# BEGIN evergruv$' "${CONFIG_FILE}" || return 2
-      grep --quiet '^# END evergruv$' "${CONFIG_FILE}" || return 2
-
-      TMP_FILE=$(mktemp) || return 1
-      # shellcheck disable=SC2064
-      trap "rm --force '${TMP_FILE}'" RETURN
-
-      awk -v theme_file="${THEME_FILE}" '
-        BEGIN {
-          while ((getline line < theme_file) > 0) {
-            theme = theme line ORS
-          }
-          close(theme_file)
-        }
-        /^# BEGIN evergruv$/ {
-          print
-          printf "%s", theme
-          skip = 1
-          next
-        }
-        /^# END evergruv$/ {
-          skip = 0
-        }
-        skip { next }
-        { print }
-      ' "${CONFIG_FILE}" >"${TMP_FILE}" || return 1
-
-      mv "${TMP_FILE}" "${CONFIG_FILE}" || return 1
-      trap - RETURN
-
-      herdr server reload-config &>/dev/null || return 2
-    }
-    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_herdr)
-  fi
 }
 
 # ! The color values set in this function are kept in sync with

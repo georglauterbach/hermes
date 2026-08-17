@@ -70,7 +70,6 @@ ignoreWords:
   - flyline
   - gitui
   - gsettings
-  - herdr
   - justfile
   - libbash
   - libflyline
