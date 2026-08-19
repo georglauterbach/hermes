@@ -22,6 +22,7 @@ A general `.gitconfig` in your home directory could look like this:
     autocrlf = input
     safecrlf = true
     eol = lf
+    editor = fresh --cmd daemon open-file . --wait
 
 [init]
     defaultBranch = main
@@ -123,6 +124,13 @@ And create the corresponding files (e.g., `~/.gitconfig.github`):
 
 [url "ssh://git@github.com"]
     insteadOf = https://github.com
+
+#[credential "https://github.com"]
+#    helper =
+#    helper = !/usr/bin/gh auth git-credential
+#[credential "https://gist.github.com"]
+#    helper =
+#    helper = !/usr/bin/gh auth git-credential
 ```
 
 > [!WARNING]
