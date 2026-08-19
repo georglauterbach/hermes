@@ -199,6 +199,7 @@ pub mod programs {
         join_set.spawn(eza(architecture));
         join_set.spawn(fd(architecture));
         join_set.spawn(flyline(architecture));
+        join_set.spawn(fresh(architecture));
         join_set.spawn(fzf(architecture));
         join_set.spawn(gitui(architecture));
         join_set.spawn(jaq(architecture));
@@ -547,6 +548,11 @@ pub mod programs {
         format!(".local/lib/{and}")
     }
 
+    /// A helper to easily compute `.local/lib/` + `and`
+    fn local_share(and: &str) -> String {
+        format!(".local/share/{and}")
+    }
+
     /// A helper to easily compute
     /// `.local/share/bash-completion/completions/` + `and` + `.bash`
     fn bash_completion(and: &str) -> String {
@@ -733,6 +739,28 @@ pub mod programs {
         entries.insert(
             format!("libflyline.so.{version}"),
             local_lib(&format!("libflyline.so.{version}")),
+        );
+
+        Program::new(name, version, archive_type, uri, Entries::Specific(entries))
+            .process(architecture)
+            .await
+    }
+
+    /// <https://github.com/sinelaw/fresh>
+    async fn fresh(architecture: Architecture) -> ::anyhow::Result<()> {
+        let name = "fresh";
+        let version = "0.4.9";
+        let file = format!("{name}-editor-{architecture}-unknown-linux-musl");
+        let archive_type = ArchiveType::TarGz;
+        let uri = format!(
+            "https://github.com/sinelaw/fresh/releases/download/v{version}/{file}{archive_type}"
+        );
+
+        let mut entries = collections::HashMap::new();
+        entries.insert(format!("{file}/{name}"), local_bin(name));
+        entries.insert(
+            format!("{file}/{name}.desktop"),
+            local_share(&format!("applications/{name}.desktop"))
         );
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))

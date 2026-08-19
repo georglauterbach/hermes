@@ -99,6 +99,8 @@ _hermes_ installs additional programs into `${HOME}/.local/bin/`.
   - a Bash plugin to replace readline for a modern line editing experience
   - enabled with `HERMES_INIT_FLYLINE`
   - enable coloring with `HERMES_OVERRIDE_COLORS_FLYLINE`
+- [_fresh_](https://github.com/sinelaw/fresh)
+  - terminal-based IDE & text editor: easy, powerful and fast
 - [_fzf_](https://github.com/junegunn/fzf)
   - general-purpose command-line fuzzy finder
   - enabled with `HERMES_INIT_FZF`

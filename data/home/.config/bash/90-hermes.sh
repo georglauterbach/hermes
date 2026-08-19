@@ -30,9 +30,10 @@ function __hermes__setup_variables() {
   XDG_STATE_HOME=${XDG_STATE_HOME:-${HOME}/.local/state}
 
   if [[ ! -v VISUAL ]]; then
-    if   __is_command nvim ; then VISUAL='nvim'
-    elif __is_command vim  ; then VISUAL='vim'
-    elif __is_command nano ; then VISUAL='nano'
+    if   __is_command fresh ; then VISUAL='fresh'
+    elif __is_command nvim  ; then VISUAL='nvim'
+    elif __is_command vim   ; then VISUAL='vim'
+    elif __is_command nano  ; then VISUAL='nano'
     else VISUAL=''
     fi
   fi
