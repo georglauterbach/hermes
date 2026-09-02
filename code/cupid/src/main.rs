@@ -749,7 +749,7 @@ pub mod programs {
     /// <https://github.com/sinelaw/fresh>
     async fn fresh(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fresh";
-        let version = "0.4.9";
+        let version = "0.4.10";
         let file = format!("{name}-editor-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -760,7 +760,7 @@ pub mod programs {
         entries.insert(format!("{file}/{name}"), local_bin(name));
         entries.insert(
             format!("{file}/{name}.desktop"),
-            local_share(&format!("applications/{name}.desktop"))
+            local_share(&format!("applications/{name}.desktop")),
         );
 
         Program::new(name, version, archive_type, uri, Entries::Specific(entries))

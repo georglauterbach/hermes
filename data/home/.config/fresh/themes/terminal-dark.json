@@ -1,0 +1,220 @@
+{
+  "name": "terminal-dark",
+  "editor": {
+    "after_eof_bg": [
+      29,
+      32,
+      33
+    ],
+    "bg": [
+      29,
+      32,
+      33
+    ],
+    "bracket_match_fg": "White",
+    "bracket_rainbow_1": [
+      221,
+      199,
+      161
+    ],
+    "bracket_rainbow_2": [
+      221,
+      199,
+      161
+    ],
+    "bracket_rainbow_3": [
+      221,
+      199,
+      161
+    ],
+    "bracket_rainbow_4": [
+      221,
+      199,
+      161
+    ],
+    "bracket_rainbow_5": [
+      221,
+      199,
+      161
+    ],
+    "bracket_rainbow_6": [
+      221,
+      199,
+      161
+    ],
+    "current_line_bg": "Default",
+    "cursor": [
+      125,
+      174,
+      163
+    ],
+    "diff_add_bg": "Green",
+    "diff_add_collision_fg": null,
+    "diff_add_highlight_bg": "LightGreen",
+    "diff_modify_bg": "Blue",
+    "diff_modify_collision_fg": null,
+    "diff_remove_bg": "Red",
+    "diff_remove_collision_fg": null,
+    "diff_remove_highlight_bg": "LightRed",
+    "fg": [
+      221,
+      199,
+      161
+    ],
+    "inactive_cursor": "Gray",
+    "indent_rainbow_1": "LightYellow",
+    "indent_rainbow_2": "LightGreen",
+    "indent_rainbow_3": "LightCyan",
+    "indent_rainbow_4": "LightBlue",
+    "indent_rainbow_5": "LightMagenta",
+    "indent_rainbow_6": "LightBlue",
+    "indentation_guide_fg": "Blue",
+    "line_number_bg": [
+      29,
+      32,
+      33
+    ],
+    "line_number_fg": "Gray",
+    "ruler_bg": "DarkGray",
+    "selection_bg": [
+      57,
+      60,
+      61
+    ],
+    "whitespace_indicator_fg": "Gray"
+  },
+  "ui": {
+    "compose_margin_bg": "Default",
+    "file_status_added_fg": "Green",
+    "file_status_conflicted_fg": "Magenta",
+    "file_status_deleted_fg": "Red",
+    "file_status_modified_fg": "Yellow",
+    "file_status_renamed_fg": "Cyan",
+    "file_status_untracked_fg": "Gray",
+    "help_bg": "Default",
+    "help_fg": "Default",
+    "help_indicator_bg": "Default",
+    "help_indicator_fg": "Red",
+    "help_key_fg": "Cyan",
+    "help_separator_fg": "DarkGray",
+    "inline_code_bg": "DarkGray",
+    "menu_active_bg": "Blue",
+    "menu_active_fg": "White",
+    "menu_bg": "Default",
+    "menu_border_fg": "DarkGray",
+    "menu_disabled_bg": "Default",
+    "menu_disabled_fg": "DarkGray",
+    "menu_dropdown_bg": "Default",
+    "menu_dropdown_fg": "Default",
+    "menu_fg": "Default",
+    "menu_highlight_bg": "Blue",
+    "menu_highlight_fg": "White",
+    "menu_hover_bg": "DarkGray",
+    "menu_hover_fg": "White",
+    "menu_separator_fg": "DarkGray",
+    "popup_bg": "Default",
+    "popup_border_fg": "Gray",
+    "popup_selection_bg": "Blue",
+    "popup_selection_fg": "White",
+    "popup_text_fg": "Default",
+    "prompt_bg": "Default",
+    "prompt_fg": "Default",
+    "prompt_selection_bg": "Blue",
+    "prompt_selection_fg": "White",
+    "scrollbar_thumb_fg": "Gray",
+    "scrollbar_thumb_hover_fg": "White",
+    "scrollbar_track_fg": "DarkGray",
+    "scrollbar_track_hover_fg": "Gray",
+    "semantic_highlight_bg": "Default",
+    "settings_selected_bg": "Blue",
+    "settings_selected_fg": "White",
+    "split_separator_fg": "DarkGray",
+    "split_separator_hover_fg": "Cyan",
+    "status_bar_bg": "Default",
+    "status_bar_fg": "Default",
+    "status_error_indicator_bg": "Red",
+    "status_error_indicator_fg": "White",
+    "status_error_indicator_hover_bg": "LightRed",
+    "status_error_indicator_hover_fg": "White",
+    "status_lsp_actionable_bg": "Yellow",
+    "status_lsp_actionable_fg": "Black",
+    "status_lsp_on_bg": "Default",
+    "status_lsp_on_fg": "Default",
+    "status_palette_bg": "Magenta",
+    "status_palette_fg": "White",
+    "status_separator_bg": "Default",
+    "status_separator_fg": "Default",
+    "status_warning_indicator_bg": "Yellow",
+    "status_warning_indicator_fg": "Black",
+    "status_warning_indicator_hover_bg": "LightYellow",
+    "status_warning_indicator_hover_fg": "Black",
+    "suggestion_bg": "Default",
+    "suggestion_fg": "Default",
+    "suggestion_selected_bg": "Blue",
+    "tab_active_bg": "Default",
+    "tab_active_fg": "Yellow",
+    "tab_close_hover_fg": "Red",
+    "tab_drop_zone_bg": "Blue",
+    "tab_drop_zone_border": "Cyan",
+    "tab_hover_bg": "DarkGray",
+    "tab_inactive_bg": "Default",
+    "tab_inactive_fg": "Gray",
+    "tab_separator_bg": "Default",
+    "terminal_bg": "Default",
+    "terminal_fg": "Default",
+    "text_input_selection_bg": "Blue"
+  },
+  "search": {
+    "label_bg": "Magenta",
+    "label_fg": "White",
+    "match_bg": "Cyan",
+    "match_fg": [
+      29,
+      32,
+      33
+    ]
+  },
+  "diagnostic": {
+    "error_bg": [
+      29,
+      32,
+      33
+    ],
+    "error_fg": "Red",
+    "hint_bg": [
+      29,
+      32,
+      33
+    ],
+    "hint_fg": "Cyan",
+    "info_bg": [
+      29,
+      32,
+      33
+    ],
+    "info_fg": "Blue",
+    "warning_bg": [
+      29,
+      32,
+      33
+    ],
+    "warning_fg": "Yellow"
+  },
+  "syntax": {
+    "comment": "Gray",
+    "constant": "Magenta",
+    "function": "Green",
+    "keyword": "Red",
+    "operator": [
+      231,
+      138,
+      78
+    ],
+    "punctuation_bracket": "Default",
+    "punctuation_delimiter": "Default",
+    "string": "Yellow",
+    "type": "Blue",
+    "variable": "Default",
+    "variable_builtin": "Red"
+  }
+}
