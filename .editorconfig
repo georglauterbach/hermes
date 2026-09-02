@@ -17,6 +17,7 @@ trim_trailing_whitespace = true
 [*.rs]
 indent_size              = 4
 tab_width                = 4
+max_line_length          = 100
 
 [*.sh]
 shell_variant            = bash
