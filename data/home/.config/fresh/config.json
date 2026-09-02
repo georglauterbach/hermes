@@ -62,7 +62,7 @@
       ]
     },
     // * theme
-    "use_terminal_bg": false
+    "use_terminal_bg": true
   },
   "languages": {
     "bash": {
@@ -239,7 +239,7 @@
     {
       "key": "delete",
       "modifiers": ["shift"],
-      "action": "delete_line"
+      "action": "cut"
     },
     {
       "key": "w",
