@@ -10,18 +10,18 @@ function __evaluates_to_true() { [[ -v ${1:?} ]] && [[ ${!1,,} == 'true' ]] ; }
 function __call_and_unset() { "${1:?}" "${@:2}" ; unset "${1}" ; }
 
 function __hermes__setup_variables() {
-  local SEGMENT
+  local segment
   PATH=${PATH:-'/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'}
 
   # shellcheck disable=SC2066
-  for SEGMENT in "${HOME}/.local/bin"; do
-    [[ -d ${SEGMENT} ]] && [[ ${PATH} != *${SEGMENT}* ]] && PATH="${SEGMENT}:${PATH}"
+  for segment in "${HOME}/.local/bin"; do
+    [[ -d ${segment} ]] && [[ ${PATH} != *${segment}* ]] && PATH="${segment}:${PATH}"
   done
 
   # shellcheck disable=SC2066
-  for SEGMENT in "${HOME}/.cargo/env"; do
+  for segment in "${HOME}/.cargo/env"; do
     # shellcheck source=/dev/null
-    [[ -s ${SEGMENT} ]] && [[ -r ${SEGMENT} ]] && source "${SEGMENT}"
+    [[ -s ${segment} ]] && [[ -r ${segment} ]] && source "${segment}"
   done
 
   XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-${HOME}/.config}
@@ -223,16 +223,16 @@ function __hermes__setup_overrides() {
   if __evaluates_to_true HERMES_OVERRIDE_Y_WITH_YAZI && __is_command yazi; then
     # shellcheck disable=SC2329
     function y() {
-      local YAZI_DIR_FILE YAZI_DIR
-      YAZI_DIR_FILE="$(mktemp -t ".yazi_dir_XXXXXX")"
+      local tmp_file dir
+      tmp_file="$(mktemp -t ".yazi_dir_XXXXXX")"
 
-      yazi "${@}" --cwd-file="${YAZI_DIR_FILE}"
-      YAZI_DIR="$(<"${YAZI_DIR_FILE}")"
+      yazi "${@}" --cwd-file="${tmp_file}"
+      dir="$(<"${tmp_file}")"
 
-      if [[ -n ${YAZI_DIR} ]] && [[ ${YAZI_DIR} != "${PWD}" ]]; then
-        builtin cd -- "${YAZI_DIR}" || { rm --force -- "${YAZI_DIR_FILE}" ; return 1 ; }
+      if [[ -n ${dir} ]] && [[ ${dir} != "${PWD}" ]]; then
+        builtin cd -- "${dir}" || { rm --force -- "${tmp_file}" ; return 1 ; }
       fi
-      rm --force -- "${YAZI_DIR_FILE}"
+      rm --force -- "${tmp_file}"
     }
   fi
 }
@@ -272,7 +272,7 @@ function __hermes__setup_signal_handlers() {
 
   __HERMES__SIGNAL_HANDLERS_SIGUSR2=()
 
-  trap 'hermes_switch_theme --force' SIGUSR2
+  trap 'hermes_switch_theme' SIGUSR2
   trap __hermes__signal_handler_exit EXIT
 
   { flock -x 3 ; echo "${$}" >&3 ; } 3>>/tmp/.hermes_shells_to_update
@@ -287,11 +287,11 @@ function __hermes__setup_theme() {
   if __evaluates_to_true HERMES_OVERRIDE_COLORS_BTOP && __is_command btop; then
     # shellcheck disable=SC2329
     function __hermes__set_theme_btop() {
-      local CONFIG_FILE=${XDG_CONFIG_HOME}/btop/btop.conf
-      if [[ -f ${CONFIG_FILE} ]]; then
+      local config_file=${XDG_CONFIG_HOME}/btop/btop.conf
+      if [[ -f ${config_file} ]]; then
         sed --in-place --regexp-extended \
           "s/^(color_theme =).*/\1 \"evergruv-${HERMES_THEME_VARIANT:?}\"/" \
-          "${CONFIG_FILE}"
+          "${config_file}"
       fi
     }
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_btop)
@@ -300,10 +300,10 @@ function __hermes__setup_theme() {
   if __evaluates_to_true HERMES_OVERRIDE_COLORS_EZA && __is_command eza; then
     # shellcheck disable=SC2329
     function __hermes__set_theme_eza() {
-      local CONFIG_DIR=${XDG_CONFIG_HOME}/eza
-      local THEME_FILE=themes/${HERMES_THEME_VARIANT:?}.yaml
-      if [[ -f ${CONFIG_DIR}/${THEME_FILE} ]]; then
-        ln --symbolic --force "${THEME_FILE}" "${CONFIG_DIR}/theme.yaml"
+      local config_dir=${XDG_CONFIG_HOME}/eza
+      local theme_file=themes/${HERMES_THEME_VARIANT:?}.yaml
+      if [[ -f ${config_dir}/${theme_file} ]]; then
+        ln --symbolic --force "${theme_file}" "${config_dir}/theme.yaml"
       fi
     }
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_eza)
@@ -366,10 +366,10 @@ function __hermes__setup_theme() {
   if __evaluates_to_true HERMES_OVERRIDE_COLORS_GITUI && __is_command gitui; then
     # shellcheck disable=SC2329
     function __hermes__set_theme_gitui() {
-      local CONFIG_DIR=${XDG_CONFIG_HOME}/gitui
-      local THEME_FILE=themes/evergruv-${HERMES_THEME_VARIANT:?}.ron
-      if [[ -f ${CONFIG_DIR}/${THEME_FILE} ]]; then
-        ln --symbolic --force "${THEME_FILE}" "${CONFIG_DIR}/theme.ron"
+      local config_dir=${XDG_CONFIG_HOME}/gitui
+      local theme_file=themes/evergruv-${HERMES_THEME_VARIANT:?}.ron
+      if [[ -f ${config_dir}/${theme_file} ]]; then
+        ln --symbolic --force "${theme_file}" "${config_dir}/theme.ron"
       fi
     }
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_gitui)
@@ -377,34 +377,82 @@ function __hermes__setup_theme() {
 }
 
 function __hermes__export_colors() {
-  local THEME_VARIANT=${HERMES_THEME_VARIANT:-}
+  function get_theme_variant() {
+    [[ ${1:-} == dark ]] && { theme_variant=dark ; return ; }
+    [[ ${1:-} == light ]] && { theme_variant=light ; return ; }
 
-  [[ ${1:-} == dark ]]  && THEME_VARIANT=dark
-  [[ ${1:-} == light ]] && THEME_VARIANT=light
-
-  if [[ ${1:-} == --force ]] || [[ -z ${THEME_VARIANT} ]]; then
-    if ! __is_command gsettings; then
-      echo "Command 'gsettings' not found - using theme 'dark' by default"
-      THEME_VARIANT=dark
-    else
-      THEME_VARIANT=$(gsettings get org.gnome.desktop.interface color-scheme |& tr -d "'" || :)
-      if [[ ${THEME_VARIANT} == prefer-light ]]; then
-        THEME_VARIANT=light
-      elif [[ ${THEME_VARIANT} == prefer-dark ]]; then
-        THEME_VARIANT=dark
-      elif [[ ${THEME_VARIANT} == default ]]; then
-        echo "Theme variant '${THEME_VARIANT}' is treated as 'dark'" >&2
-        THEME_VARIANT=dark
+    if __is_command gsettings; then
+      local gsettings_variant
+      gsettings_variant=$(gsettings get org.gnome.desktop.interface color-scheme |& tr -d "'" || :)
+      if [[ ${gsettings_variant} == prefer-light ]]; then
+        theme_variant=light
+      elif [[ ${gsettings_variant} == prefer-dark ]]; then
+        theme_variant=dark
+      elif [[ ${gsettings_variant} == default ]]; then
+        echo "gsettings theme variant '${theme_variant}' treated as 'dark'" >&2
+        theme_variant=dark
       else
-        echo "Theme variant '${THEME_VARIANT}' parsed from 'gsettings' unknown and treated as 'dark'" >&2
-        THEME_VARIANT=dark
+        echo "hermes: gsettings theme variant '${theme_variant}' unknown - treated as 'dark'" >&2
+        theme_variant=dark
       fi
+      return
     fi
-  fi
+
+    if [[ ${COLORFGBG:-} =~ \;([0-9]+)$ ]]; then
+      if (( BASH_REMATCH[1] > 6 )) && (( BASH_REMATCH[1] != 8 )); then
+        theme_variant=light
+      else
+        theme_variant=dark
+      fi
+      return
+    fi
+
+    if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+      echo "hermes: could not extrapolate colors from /dev/tty - assuming 'dark'" >&2
+      theme_variant=dark
+      return
+    fi
+
+    local saved color reply red green blue perceived_luminance
+    saved=$(stty -g < /dev/tty)
+    trap 'stty "${saved}" < /dev/tty 2>/dev/null; trap - RETURN INT TERM' RETURN INT TERM
+
+    # keep ISIG (Ctrl-C); time 1 = 100 ms for the first byte
+    stty -echo -icanon min 0 time 1 < /dev/tty
+    printf '\e]11;?\a' >/dev/tty
+
+    while IFS= read -r -n 1 -d '' color < /dev/tty; do
+      reply+=${color}
+      [[ ${color} == $'\a' ]] && break
+      [[ ${reply} == *$'\e\\' ]] && break
+      (( ${#reply} >= 64 )) && break
+    done
+
+    if [[ ${reply} =~ rgb:([0-9a-fA-F]+)/([0-9a-fA-F]+)/([0-9a-fA-F]+) ]]; then
+      red=${BASH_REMATCH[1]}
+      green=${BASH_REMATCH[2]}
+      blue=${BASH_REMATCH[3]}
+      (( ${#red} == 1 )) && red=${red}${red}
+      (( ${#green} == 1 )) && green=${green}${green}
+      (( ${#blue} == 1 )) && blue=${blue}${blue}
+      red=$((16#${red:0:2}))
+      green=$((16#${green:0:2}))
+      blue=$((16#${blue:0:2}))
+      perceived_luminance=$(( (red * 299 + green * 587 + blue * 114) / 1000 ))
+      if (( perceived_luminance > 128 )); then theme_variant=light; else theme_variant=dark; fi
+      return
+    fi
+
+    echo "hermes: could not extrapolate colors from terminal - assuming 'dark'" >&2
+    theme_variant=dark
+  }
+
+  local theme_variant
+  get_theme_variant "${@}"
 
   # ! The color values set in this function are kept in sync with
   #   https://github.com/georglauterbach/desktop/tree/main/data/home/.config/alacritty/themes
-  if [[ ${THEME_VARIANT} == light ]]; then
+  if [[ ${theme_variant} == light ]]; then
     HERMES_THEME_VARIANT=light
     __HERMES__COLOR_BACKGROUND='#F5F5F2'
     __HERMES__COLOR_FOREGROUND='#5C6A72'
@@ -418,7 +466,7 @@ function __hermes__export_colors() {
     __HERMES__COLOR_WHITE='#999997'
     __HERMES__COLOR_BRIGHT_BLACK='#7E919C'
     __HERMES__COLOR_BRIGHT_WHITE='#EBEBE4'
-  elif [[ ${THEME_VARIANT} == dark ]]; then
+  elif [[ ${theme_variant} == dark ]]; then
     HERMES_THEME_VARIANT=dark
     __HERMES__COLOR_BACKGROUND='#1D2021'
     __HERMES__COLOR_FOREGROUND='#DDC7A1'
@@ -433,11 +481,9 @@ function __hermes__export_colors() {
     __HERMES__COLOR_BRIGHT_BLACK='#2B2A29'
     __HERMES__COLOR_BRIGHT_WHITE='#FFE6BA'
   else
-    echo "Theme variant '${THEME_VARIANT}' unknown - must be 'dark' or 'light'" >&2
+    echo "hermes: (bug) theme variant '${theme_variant}' unknown - must be 'dark' or 'light'" >&2
     return 1
   fi
-
-  export HERMES_THEME_VARIANT
 }
 
 # Trigger a theme switch for TUI applications
@@ -449,37 +495,37 @@ function __hermes__export_colors() {
 function hermes_switch_theme() {
   __hermes__export_colors "${@}"
 
-  local HANDLER_FUNCTION
-  for HANDLER_FUNCTION in "${__HERMES__SIGNAL_HANDLERS_SIGUSR2[@]}"; do
-    "${HANDLER_FUNCTION}"
+  local __function
+  for __function in "${__HERMES__SIGNAL_HANDLERS_SIGUSR2[@]}"; do
+    "${__function}"
   done
 }
 
 # Show information related to the current setup of hermes
 function hermes_debug() {
-  local __NAME
-  for __NAME in ${!HERMES_*} ${!__HERMES__*}; do
-    declare -n __VAL=${__NAME}
-    echo "${__NAME}=\"${__VAL[*]}\""
+  local __name
+  for __name in ${!HERMES_*} ${!__HERMES__*}; do
+    declare -n __VAL=${__name}
+    echo "${__name}=\"${__VAL[*]}\""
     unset __VAL
   done
 }
 
 # Download the latest version of hermes
 function hermes_download_latest_version() {
-  local HERMES_LOCATION=${HOME}/.local/bin/hermes
-  local HERMES_RELEASE_URI_BASE=https://github.com/georglauterbach/hermes/releases
-  local HERMES_VERSION
+  local location=${HOME}/.local/bin/hermes
+  local uri_base=https://github.com/georglauterbach/hermes/releases
+  local version
 
-  HERMES_VERSION=$(curl --silent --show-error --fail --location \
+  version=$(curl --silent --show-error --fail --location \
     --write-out '%{url_effective}' --output /dev/null \
-    "${HERMES_RELEASE_URI_BASE}/latest" | sed 's|.*/||')
+    "${uri_base}/latest" | sed 's|.*/||')
 
-  mkdir --parents "${HERMES_LOCATION%/*}"
-  curl --silent --show-error --fail --location --output "${HERMES_LOCATION}" \
-    "${HERMES_RELEASE_URI_BASE}/download/${HERMES_VERSION}/hermes-${HERMES_VERSION}-$(uname -m)-unknown-linux-musl"
+  mkdir --parents "${location%/*}"
+  curl --silent --show-error --fail --location --output "${location}" \
+    "${uri_base}/download/${version}/hermes-${version}-$(uname -m)-unknown-linux-musl"
 
-  chmod +x "${HERMES_LOCATION}"
+  chmod +x "${location}"
 }
 
 function __hermes__main() {
@@ -490,22 +536,24 @@ function __hermes__main() {
 
   shopt -s checkwinsize globstar autocd
 
-  local SETUP_FUNCTIONS=(variables completion prompt history programs overrides)
+  local setup_function=(variables completion prompt history programs overrides)
+
   if __evaluates_to_true HERMES_ENABLE_ADDITIONAL_ALIASES; then
-    SETUP_FUNCTIONS+=(aliases)
+    setup_function+=(aliases)
   else
     unset __hermes__setup_aliases
   fi
+
   if __evaluates_to_true HERMES_ENABLE_THEMING; then
     __hermes__export_colors
-    SETUP_FUNCTIONS+=(signal_handlers theme)
+    setup_function+=(signal_handlers theme)
   else
     unset __hermes__{export_colors,setup_{signal_handlers,theme}} hermes_switch_theme
   fi
 
-  local __FUNCTION
-  for __FUNCTION in "${SETUP_FUNCTIONS[@]}"; do
-    __call_and_unset "__hermes__setup_${__FUNCTION}" || :
+  local __function
+  for __function in "${setup_function[@]}"; do
+    __call_and_unset "__hermes__setup_${__function}" || :
   done
 
   if __evaluates_to_true HERMES_ENABLE_EXPORT_OF_ENVS; then

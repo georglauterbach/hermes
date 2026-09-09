@@ -1,5 +1,8 @@
 ---
 ignoreWords:
+  - COLORFGBG
+  - ISIG
+
   - autocd
   - checkwinsize
   - dircolors
@@ -8,8 +11,10 @@ ignoreWords:
   - getline
   - gsub
   - histappend
+  - icanon
   - ignoreboth
   - manroffopt
   - perfmon
   - setcap
   - sigusr
+  - stty
