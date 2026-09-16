@@ -310,7 +310,7 @@ function __hermes__setup_theme() {
   fi
 
   if __evaluates_to_true HERMES_OVERRIDE_COLORS_FLYLINE && [[ -s ${HOME}/.local/lib/libflyline.so ]]; then
-    eval "$(dircolors || :)" # LS_COLORS for coloring completions
+    eval "$(dircolors --bourne-shell || :)" # LS_COLORS for coloring completions
 
     __HERMES__FLYLINE_BASE_COLORS=(
       recognised-command='green'
