@@ -378,6 +378,8 @@ function __hermes__setup_theme() {
 
 function __hermes__export_colors() {
   function get_theme_variant() {
+    local fallback=${HERMES_THEME_VARIANT_FALLBACK:-dark}
+
     [[ ${1:-} == dark ]] && { theme_variant=dark ; return ; }
     [[ ${1:-} == light ]] && { theme_variant=light ; return ; }
 
@@ -389,11 +391,11 @@ function __hermes__export_colors() {
       elif [[ ${gsettings_variant} == prefer-dark ]]; then
         theme_variant=dark
       elif [[ ${gsettings_variant} == default ]]; then
-        echo "gsettings theme variant '${theme_variant}' treated as 'dark'" >&2
-        theme_variant=dark
+        echo "gsettings theme variant '${gsettings_variant}' treated as '${fallback}'" >&2
+        theme_variant=${fallback}
       else
-        echo "hermes: gsettings theme variant '${theme_variant}' unknown - treated as 'dark'" >&2
-        theme_variant=dark
+        echo "hermes: gsettings theme variant '${gsettings_variant}' unknown - treated as '${fallback}'" >&2
+        theme_variant=${fallback}
       fi
       return
     fi
@@ -407,28 +409,81 @@ function __hermes__export_colors() {
       return
     fi
 
-    if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
-      echo "hermes: could not extrapolate colors from /dev/tty - assuming 'dark'" >&2
-      theme_variant=dark
+    if [[ ! -v TERM ]] && [[ ${TERM:-} == dumb ]]; then
+      theme_variant=${fallback}
       return
     fi
 
-    local saved color reply red green blue perceived_luminance
-    saved=$(stty -g < /dev/tty)
+    if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+      echo "hermes: cannot extrapolate colors from /dev/tty - assuming '${fallback}'" >&2
+      theme_variant=${fallback}
+      return
+    fi
+
+    if read -r -t 0 < /dev/tty; then
+      theme_variant=${fallback}
+      return
+    fi
+
+    local saved color buffer osc da1 rest red green blue perceived_luminance
+    local osc_prefix=$'\e]11;'
+    local da1_pattern=$'\e\[[0-9;?]*c'
+    saved=$(stty -g < /dev/tty) || {
+      theme_variant=${fallback}
+      return
+    }
     trap 'stty "${saved}" < /dev/tty 2>/dev/null; trap - RETURN INT TERM' RETURN INT TERM
 
-    # keep ISIG (Ctrl-C); time 1 = 100 ms for the first byte
-    stty -echo -icanon min 0 time 1 < /dev/tty
-    printf '\e]11;?\a' >/dev/tty
+    # keep ISIG (Ctrl-C); time 3 = 300 ms per byte
+    stty -echo -icanon min 0 time 3 < /dev/tty || {
+      theme_variant=${fallback}
+      return
+    }
+    printf '%s' $'\e]11;?\e\\\e[c' >/dev/tty || {
+      theme_variant=${fallback}
+      return
+    }
 
-    while IFS= read -r -n 1 -d '' color < /dev/tty; do
-      reply+=${color}
-      [[ ${color} == $'\a' ]] && break
-      [[ ${reply} == *$'\e\\' ]] && break
-      (( ${#reply} >= 64 )) && break
+    local deadline=$((SECONDS + 2))
+    while (( SECONDS < deadline )); do
+      if IFS= read -r -n 1 -d '' color < /dev/tty; then
+        buffer+=${color}
+        [[ ${buffer} =~ ${da1_pattern} ]] && break
+      fi
     done
 
-    if [[ ${reply} =~ rgb:([0-9a-fA-F]+)/([0-9a-fA-F]+)/([0-9a-fA-F]+) ]]; then
+    rest=${buffer}
+    if [[ ${buffer} == *"${osc_prefix}"* ]]; then
+      local before_osc=${buffer%%"${osc_prefix}"*}
+      local osc_tail=${buffer#*"${osc_prefix}"}
+      local osc_body
+      local osc_terminator
+      if [[ ${osc_tail} == *$'\a'* ]]; then
+        osc_body=${osc_tail%%$'\a'*}
+        osc_terminator=$'\a'
+      elif [[ ${osc_tail} == *$'\e\\'* ]]; then
+        osc_body=${osc_tail%%$'\e\\'*}
+        osc_terminator=$'\e\\'
+      else
+        rest=${before_osc}
+        osc_tail=
+      fi
+      if [[ -n ${osc_tail} ]]; then
+        osc=${osc_prefix}${osc_body}${osc_terminator}
+        rest=${buffer/"${osc}"/}
+      fi
+    fi
+
+    if [[ ${rest} =~ ${da1_pattern} ]]; then
+      da1=${BASH_REMATCH[0]}
+      rest=${rest/"${da1}"/}
+    elif [[ ${rest} == *$'\e['* ]]; then
+      rest=${rest%%$'\e['*}
+    fi
+
+    __HERMES__TYPEAHEAD=${rest}
+
+    if [[ ${osc} =~ rgb:([0-9a-fA-F]+)/([0-9a-fA-F]+)/([0-9a-fA-F]+) ]]; then
       red=${BASH_REMATCH[1]}
       green=${BASH_REMATCH[2]}
       blue=${BASH_REMATCH[3]}
@@ -443,11 +498,12 @@ function __hermes__export_colors() {
       return
     fi
 
-    echo "hermes: could not extrapolate colors from terminal - assuming 'dark'" >&2
-    theme_variant=dark
+    echo "hermes: could not extrapolate colors from terminal - assuming '${fallback}'" >&2
+    theme_variant=${fallback}
   }
 
   local theme_variant
+  __HERMES__TYPEAHEAD=
   get_theme_variant "${@}"
 
   # ! The color values set in this function are kept in sync with
@@ -555,6 +611,21 @@ function __hermes__main() {
   for __function in "${setup_function[@]}"; do
     __call_and_unset "__hermes__setup_${__function}" || :
   done
+
+  if [[ -n ${__HERMES__TYPEAHEAD:-} ]]; then
+    local __typeahead=${__HERMES__TYPEAHEAD}
+    local __line
+    unset __HERMES__TYPEAHEAD
+
+    printf '%s' "${__typeahead}"
+    [[ ${__typeahead: -1} == $'\n' ]] || printf '\n'
+    while [[ ${__typeahead} == *$'\n'* ]]; do
+      __line=${__typeahead%%$'\n'*}
+      __typeahead=${__typeahead#*$'\n'}
+      [[ -n ${__line} ]] && builtin eval "${__line}"
+    done
+    [[ -z ${__typeahead} ]] || builtin history -s "${__typeahead}"
+  fi
 
   if __evaluates_to_true HERMES_ENABLE_EXPORT_OF_ENVS; then
     # shellcheck disable=SC2086
