@@ -653,11 +653,11 @@ pub mod programs {
 
         let mut entries = collections::HashMap::new();
         entries.insert(
-            format!("build/{architecture}-unknown-linux-musl/dysk"),
+            format!("{architecture}-unknown-linux-musl/dysk"),
             local_bin(name),
         );
         entries.insert(
-            String::from("build/completion/dysk.bash"),
+            String::from("completion/dysk.bash"),
             bash_completion("dysk"),
         );
 
