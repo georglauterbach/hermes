@@ -1,5 +1,5 @@
 {
-  // suitable for VS Code 1.114.0
+  // suitable for VS Code 1.138.0
   //
   // cSpell:enable
   //
@@ -111,7 +111,10 @@
   "terminal.integrated.shellIntegration.enabled": false,
   "terminal.integrated.sendKeybindingsToShell": false,
   "terminal.integrated.commandsToSkipShell": [
-    "workbench.view.explorer"
+    "workbench.view.explorer",
+    // * Cursor
+    "composer.sendToAgend",
+    "aichat.newchataction"
   ],
   "terminal.integrated.minimumContrastRatio": 1,
   "terminal.integrated.enableKittyKeyboardProtocol": true,
@@ -330,7 +333,10 @@
       "strings": false,
       "other": true
     }
-  }
+  },
+  // ? Cursor
+  "workbench.layoutControl.enabled": false,
+  "workbench.agentsWindowButton.enabled": false
   // ? dynamic
   //
   // ? comments
@@ -346,16 +352,16 @@
     - Docker: ms-azuretools.vscode-docker
     - Encode-Decode: mitchdenny.ecdc
     - Screenshots: adpyke.codesnap
-      "codesnap.boxShadow": "none",
-      "codesnap.roundedCorners": true,
-      "codesnap.containerPadding": "0em",
-      "codesnap.showWindowControls": false,
-      "codesnap.showWindowTitle": false,
-      "codesnap.showLineNumbers": true,
-      "codesnap.realLineNumbers": false,
-      "codesnap.transparentBackground": true,
-      "codesnap.target": "container",
-      "codesnap.shutterAction": "save",
+    "codesnap.boxShadow": "none",
+    "codesnap.roundedCorners": true,
+    "codesnap.containerPadding": "0em",
+    "codesnap.showWindowControls": false,
+    "codesnap.showWindowTitle": false,
+    "codesnap.showLineNumbers": true,
+    "codesnap.realLineNumbers": false,
+    "codesnap.transparentBackground": true,
+    "codesnap.target": "container",
+    "codesnap.shutterAction": "save",
     - Typst: myriad-dreamin.tinymist
     - YAML: redhat.vscode-yaml
 

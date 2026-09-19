@@ -262,5 +262,18 @@
         "key": "ctrl+enter",
         "command": "-chatEditor.action.accept",
         "when": "chatEdits.hasEditorModifications && editorFocus && !chatEdits.isRequestInProgress"
+    },
+    // ! ------------------------------------------------------------
+    // ! CURSOR
+    // ! ------------------------------------------------------------
+    {
+        "key": "ctrl+l",
+        "command": "-composer.sendToAgent",
+        "when": "editorHasPromptBar && editorPromptBarFocused"
+    },
+    {
+        "key": "ctrl+l",
+        "command": "-aichat.newchataction",
+        "when": "!isGlass"
     }
 ]

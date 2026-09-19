@@ -4,7 +4,6 @@ set -eE -u -o pipefail
 shopt -s inherit_errexit
 
 readonly EXTENSIONS=(
-  'asciidoctor.asciidoctor-vscode'
   'editorconfig.editorconfig'
   'edwinhuish.better-comments-next'
   'mads-hartmann.bash-ide-vscode'
@@ -21,5 +20,5 @@ readonly EXTENSIONS=(
 )
 
 for EXTENSION in "${EXTENSIONS[@]}"; do
-  code --install-extension "${EXTENSION}"
+  "${1:-code}" --install-extension "${EXTENSION}"
 done
