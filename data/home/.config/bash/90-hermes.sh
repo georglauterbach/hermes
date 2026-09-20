@@ -44,8 +44,10 @@ function __hermes__setup_variables() {
   if [[ ! -v LANG ]]; then
     # shellcheck source=/dev/null
     [[ -r /etc/locale.conf ]] && source /etc/locale.conf
-    LANG=${LANG:-C.UTF-8} LANGUAGE=${LANGUAGE:-${LANG}} LC_ALL=${LC_ALL:-${LANG}}
+    LANG=${LANG:-C.UTF-8}
   fi
+
+  LANGUAGE=${LANGUAGE:-${LANG}} LC_ALL=${LC_ALL:-${LANG}}
 
   export PATH VISUAL EDITOR LANG LANGUAGE LC_ALL
   export XDG_CONFIG_HOME XDG_CACHE_HOME XDG_DATA_HOME XDG_STATE_HOME
