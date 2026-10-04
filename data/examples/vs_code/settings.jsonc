@@ -112,6 +112,7 @@
   "terminal.integrated.sendKeybindingsToShell": false,
   "terminal.integrated.commandsToSkipShell": [
     "workbench.view.explorer",
+    "workbench.action.toggleSidebarVisibility",
     // * Cursor
     "composer.sendToAgend",
     "aichat.newchataction"

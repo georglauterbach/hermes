@@ -228,6 +228,13 @@
         "command": "workbench.action.terminal.kill",
         "when": "terminalFocus"
     },
+    // ? TERMINAL::REMOVED
+    //   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    {
+        "key": "ctrl+backspace",
+        "command": "-workbench.action.terminal.sendSequence",
+        "when": "terminalFocus"
+    },
     // ! ------------------------------------------------------------
     // ! REMOVED
     // ! ------------------------------------------------------------
@@ -262,18 +269,5 @@
         "key": "ctrl+enter",
         "command": "-chatEditor.action.accept",
         "when": "chatEdits.hasEditorModifications && editorFocus && !chatEdits.isRequestInProgress"
-    },
-    // ! ------------------------------------------------------------
-    // ! CURSOR
-    // ! ------------------------------------------------------------
-    {
-        "key": "ctrl+l",
-        "command": "-composer.sendToAgent",
-        "when": "editorHasPromptBar && editorPromptBarFocused"
-    },
-    {
-        "key": "ctrl+l",
-        "command": "-aichat.newchataction",
-        "when": "!isGlass"
     }
 ]
