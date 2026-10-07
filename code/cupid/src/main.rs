@@ -602,7 +602,7 @@ pub mod programs {
     /// <https://github.com/dandavison/delta>
     async fn delta(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "delta";
-        let version = "0.19.2";
+        let version = "0.20.1";
         let file = format!(
             "{name}-{version}-{architecture}-unknown-linux-{}",
             architecture.link_library()
@@ -625,7 +625,7 @@ pub mod programs {
     /// <https://github.com/bootandy/dust>
     async fn dust(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "dust";
-        let version = "1.2.5";
+        let version = "1.2.6";
         let file = format!("{name}-v{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -645,7 +645,7 @@ pub mod programs {
     /// <https://github.com/Canop/dysk>
     async fn dysk(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "dysk";
-        let version = "3.7.0";
+        let version = "3.7.1";
         let archive_type = ArchiveType::Zip;
         let uri = format!(
             "https://github.com/Canop/dysk/releases/download/v{version}/dysk_{version}{archive_type}"
@@ -728,7 +728,7 @@ pub mod programs {
     /// <https://github.com/HalFrgrd/flyline>
     async fn flyline(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "flyline";
-        let version = "1.8.0";
+        let version = "1.9.0";
         let file = format!("libflyline-v{version}-{architecture}-unknown-linux-gnu");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -749,7 +749,7 @@ pub mod programs {
     /// <https://github.com/sinelaw/fresh>
     async fn fresh(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fresh";
-        let version = "0.5.1";
+        let version = "0.5.2";
         let file = format!("{name}-editor-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
