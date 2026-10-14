@@ -22,7 +22,6 @@ A general `.gitconfig` in your home directory could look like this:
     autocrlf = input
     safecrlf = true
     eol = lf
-    editor = fresh --cmd daemon open-file . --wait
 
 [init]
     defaultBranch = main
