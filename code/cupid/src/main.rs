@@ -645,7 +645,7 @@ pub mod programs {
     /// <https://github.com/Canop/dysk>
     async fn dysk(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "dysk";
-        let version = "3.8.0";
+        let version = "3.8.1";
         let archive_type = ArchiveType::Zip;
         let uri = format!(
             "https://github.com/Canop/dysk/releases/download/v{version}/dysk_{version}{archive_type}"
