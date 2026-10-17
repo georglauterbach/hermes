@@ -645,7 +645,7 @@ pub mod programs {
     /// <https://github.com/Canop/dysk>
     async fn dysk(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "dysk";
-        let version = "3.7.1";
+        let version = "3.8.0";
         let archive_type = ArchiveType::Zip;
         let uri = format!(
             "https://github.com/Canop/dysk/releases/download/v{version}/dysk_{version}{archive_type}"
@@ -771,7 +771,7 @@ pub mod programs {
     /// <https://github.com/junegunn/fzf>
     async fn fzf(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fzf";
-        let version = "0.74.4";
+        let version = "0.74.5";
         let file = match architecture {
             Architecture::X86_64 => format!("{name}-{version}-linux_amd64"),
             Architecture::Aarch64 => format!("{name}-{version}-linux_arm64"),
