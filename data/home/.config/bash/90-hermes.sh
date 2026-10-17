@@ -393,8 +393,8 @@ function __hermes__export_colors() {
   function get_theme_variant() {
     local fallback=${HERMES_THEME_VARIANT_FALLBACK:-dark}
 
-    [[ ${1:-} == dark ]] && { theme_variant=dark ; return ; }
-    [[ ${1:-} == light ]] && { theme_variant=light ; return ; }
+    [[ ${1:-} =~ ^d(ark)?$  ]] && { theme_variant=dark  ; return ; }
+    [[ ${1:-} =~ ^l(ight)?$ ]] && { theme_variant=light ; return ; }
 
     if __is_command gsettings; then
       local gsettings_variant
