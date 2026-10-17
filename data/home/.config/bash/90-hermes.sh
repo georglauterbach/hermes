@@ -72,8 +72,19 @@ function __hermes__setup_prompt() {
     unset -f starship_preexec_ps0 2>/dev/null
     export PS0=''
 
-    # shellcheck disable=SC2016
-    __evaluates_to_true HERMES_INIT_FLYLINE && export PS1_FINAL='$(starship module directory) ➜ '
+    if __evaluates_to_true HERMES_INIT_FLYLINE; then
+      # shellcheck disable=SC2329
+      function __hermes__set_transient_prompt() {
+        PS1_FINAL=$(starship module character --status="${STARSHIP_CMD_STATUS:-0}")
+        if [[ ${PWD:=} != "${__HERMES__TRANSIENT_PROMPT_PWD:-}" ]]; then
+          # shellcheck disable=SC2034
+          PS1_FINAL="\$(starship module directory) ${PS1_FINAL}"
+        fi
+        __HERMES__TRANSIENT_PROMPT_PWD=${PWD}
+      }
+      # shellcheck disable=SC2034
+      RPS1_FINAL='' starship_precmd_user_func=__hermes__set_transient_prompt
+    fi
   else
     export PROMPT_DIRTRIM=4 PS2='' PS4='> '
   fi
