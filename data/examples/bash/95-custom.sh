@@ -1,11 +1,12 @@
 #! /usr/bin/env bash
 
-alias code='code --password-store=gnome-libsecret --enable-features=UseOzonePlatform --ozone-platform=wayland'
+# cSpell: ignore vedit libsecret
 
-if __is_command 'doas'; then
-  complete -cf doas
-  alias sudo='doas'
-fi
+alias edit='fresh'
+alias vedit='codium --password-store=gnome-libsecret --enable-features=UseOzonePlatform --ozone-platform=wayland'
+
+alias e='edit'
+alias ve='vedit'
 
 if __is_command 'gitui'; then
   alias g='gitui'
