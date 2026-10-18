@@ -14,10 +14,6 @@ A general `.gitconfig` in your home directory could look like this:
 # ----  https://git-scm.com/docs/git-config  ----
 # -----------------------------------------------
 
-# -----------------------------------------------
-# ----  General  --------------------------------
-# -----------------------------------------------
-
 [core]
     autocrlf = input
     safecrlf = true
@@ -40,56 +36,50 @@ A general `.gitconfig` in your home directory could look like this:
     required = true
 ```
 
-You can configure additional useful options:
+### Use `delta` as a Pager
 
-1. Signing commits using SSH keys (instead of GPG keys):
+```ini
+[core]
+    pager = delta
 
-    ```ini
-    [commit]
-        gpgsign = true
+[interactive]
+    diffFilter = delta --color-only
 
-    [gpg]
-        format = ssh
-    ```
+[delta]
+    line-numbers = true
+    true-color = auto
+    hyperlinks = true
+```
 
-    Also add the key [`signingKey`](https://git-scm.com/docs/git-config#Documentation/git-config.txt-usersigningKey) with your SSH public key to your `[user]` section and [`allowedSignersFile`](https://git-scm.com/docs/git-config#Documentation/git-config.txt-gpgsshallowedSignersFile) to the `gpg.ssh` section:
+### Signing Commits
 
-    ```ini
-    [user]
-        signingKey = key::ssh-ed25519 someRandom....0e GitHub
+```ini
+[commit]
+    gpgsign = true
 
-    [gpg "ssh"]
-        allowedSignersFile = ~/.ssh/git.allowed_signers_file.github
-    ```
+[gpg]
+    format = ssh
 
-    An `allowedSignersFile` looks (roughly) like this:
+[user]
+    signingKey = key::<YOUR SSH PUBLIC KEY>
 
-    ```txt
-    <YOUR GITHUB E-MAIL ADDRESS> <YOUR SSH PUBLIC KEY>
-    ```
+[gpg "ssh"]
+    allowedSignersFile = ~/<PATH TO FILE>
+```
 
-2. Using a pager for rendering the diff:
+An `allowedSignersFile` looks (roughly) like this:
 
-    ```ini
-    [core]
-        pager = delta
+```txt
+<YOUR E-MAIL ADDRESS> <YOUR SSH PUBLIC KEY>
+```
 
-    [interactive]
-        diffFilter = delta --color-only
+### User-Specific Settings
 
-    [delta]
-        line-numbers = true
-        true-color = auto
-        hyperlinks = true
-    ```
-
-### User-Specific
-
-If you maintain projects on different platforms and different users, you can conditionally enabled them. Add the following to `~/.gitconfig`:
+If you maintain projects on different platforms and different users, you can conditionally enable them:
 
 ```ini
 # -----------------------------------------------
-# ----  User-Specific  --------------------------
+# ----  User-Specific Settings  -----------------
 # -----------------------------------------------
 
 # default configuration
@@ -99,20 +89,18 @@ If you maintain projects on different platforms and different users, you can con
     signingKey = ...
 
 [includeIf "gitdir:**/git/hub/"]
-    path = .gitconfig.github
+    path = .gitconfig.github.ini
 
-[includeIf "gitdir:**/git/lab/"]
-    path = .gitconfig.gitlab
+[includeIf "gitdir:**/git/forgejo/"]
+    path = .gitconfig.forgejo.ini
 
 [includeIf "gitdir:**/git/ea/"]
-    path = .gitconfig.gitlab
+    path = .gitconfig.gitlab.ini
 ```
 
-And create the corresponding files (e.g., `~/.gitconfig.github`):
+And create the corresponding files (e.g., `~/.gitconfig.github.ini`):
 
 ```ini
-# vim: syntax=gitconfig
-
 [user]
     name = ...
     email = ...
@@ -124,6 +112,8 @@ And create the corresponding files (e.g., `~/.gitconfig.github`):
 [url "ssh://git@github.com"]
     insteadOf = https://github.com
 
+# If you use the GitHub CLI, you may also
+# uncomment the following settings:
 #[credential "https://github.com"]
 #    helper =
 #    helper = !/usr/bin/gh auth git-credential
@@ -137,23 +127,6 @@ And create the corresponding files (e.g., `~/.gitconfig.github`):
 > Always specify a default configuration if you are working with Remote Development. When in remote targets, other files next to `.gitconfig` are very likely not "forwarded" properly.
 
 ## Altering the History
-
-### Replacing Commit Name and E-Mail
-
-[Source](https://stackoverflow.com/questions/2919878/git-rewrite-previous-commit-usernames-and-emails)
-
-```bash
-pip3 install git-filter-repo
-OLD_NAME=
-NEW_NAME=
-OLD_MAIL=
-NEW_MAIL=44545919+aendeavor@users.noreply.github.com
-git-filter-repo --name-callback "return name.replace(b'${OLD_NAME}', b'${NEW_NAME}')" --email-callback "return email.replace(b'${OLD_MAIL}', b'${NEW_MAIL}')"
-
-GITHUB_USERNAME=
-REPO_NAME=
-git remote add "${REPO_NAME}" "git@github.com:${GITHUB_USERNAME}/${REPO_NAME}.git"
-```
 
 ### Shorten the History
 
@@ -198,7 +171,7 @@ Successfully rebased and updated ...
 
 It may be necessary to specify the key you want to use for singing: `--gpg-sign=<KEY>`. Finally, you will need to do a force-push over the branch. Make sure you set the correct signing key beforehand:
 
-## Adding a File to LFS That Is Currently Not But Should Be
+### Adding a File to LFS That Is Currently Not But Should Be
 
 [Source](https://stackoverflow.com/questions/46704572/git-error-encountered-7-files-that-should-have-been-pointers-but-werent)
 
