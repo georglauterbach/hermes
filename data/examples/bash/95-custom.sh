@@ -1,12 +1,12 @@
 #! /usr/bin/env bash
 
-# cSpell: ignore vedit libsecret
+# cSpell: ignore editv libsecret
 
 alias edit='fresh'
-alias vedit='codium --password-store=gnome-libsecret --enable-features=UseOzonePlatform --ozone-platform=wayland'
+alias editv='codium --password-store=gnome-libsecret --enable-features=UseOzonePlatform --ozone-platform=wayland'
 
 alias e='edit'
-alias ve='vedit'
+alias ev='editv'
 
 if __is_command 'gitui'; then
   alias g='gitui'
