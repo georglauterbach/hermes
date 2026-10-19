@@ -254,9 +254,6 @@ function __hermes__setup_aliases() {
   alias gcs='git commit --signoff --gpg-sign'
   alias gf='git fetch --prune --tags --force'
 
-  # shellcheck disable=SC2139
-  [[ -n ${EDITOR} ]] && alias v="${EDITOR}" sv="sudo $(command -v "${EDITOR}")"
-
   alias lsa='ls -A'
   alias ...='cd ../..'
   alias ....='cd ../../..'
