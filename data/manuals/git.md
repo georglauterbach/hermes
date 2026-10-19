@@ -1,6 +1,10 @@
-# `git`
+---
+git: 2.55.0
+---
 
 [//]: # ( cSpell: ignore conflictstyle gitdir gpgsign safecrlf zdiff3 )
+
+# `git`
 
 ## Configuration
 
