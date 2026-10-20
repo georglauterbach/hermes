@@ -96,6 +96,7 @@ function __hermes__setup_prompt() {
     flyline editor --show-inline-history true
     flyline history --backend flyline --jsonl-path "${XDG_CACHE_HOME}/bash_history.jsonl"
     flyline mouse --mode disabled
+    flyline --set-newline-marker ''
     flyline set-style selected-text=reverse
     flyline suggestions set-fuzzy-mode none
 
