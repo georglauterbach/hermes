@@ -92,12 +92,15 @@ function __hermes__setup_prompt() {
   if __evaluates_to_true HERMES_INIT_FLYLINE && [[ -s ${HOME}/.local/lib/libflyline.so ]]; then
     command -v flyline &>/dev/null || enable -f "${HOME}/.local/lib/libflyline.so" flyline
 
+    flyline --set-newline-marker ''
     flyline editor --auto-close-chars false
     flyline editor --show-inline-history true
     flyline history --backend flyline --jsonl-path "${XDG_CACHE_HOME}/bash_history.jsonl"
     flyline mouse --mode disabled
-    flyline --set-newline-marker ''
     flyline set-style selected-text=reverse
+
+    flyline suggestions --sort-order alphabetical
+    flyline suggestions flycomp --enabled false
     flyline suggestions set-fuzzy-mode none
 
     flyline key --clear-defaults
