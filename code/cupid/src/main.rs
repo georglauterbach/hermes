@@ -819,7 +819,7 @@ pub mod programs {
     /// <https://github.com/01mf02/jaq>
     async fn jaq(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "jaq";
-        let version = "3.1.1";
+        let version = "3.1.2";
         let file = match architecture {
             Architecture::X86_64 => format!("{name}-{architecture}-unknown-linux-musl"),
             Architecture::Aarch64 => format!("{name}-{architecture}-unknown-linux-gnu"),
