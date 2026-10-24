@@ -43,9 +43,9 @@
       114
     ],
     "current_line_bg": [
-      242,
-      242,
-      240
+      239,
+      240,
+      237
     ],
     "cursor": [
       58,
@@ -72,15 +72,31 @@
     "indent_rainbow_4": "LightBlue",
     "indent_rainbow_5": "LightMagenta",
     "indent_rainbow_6": "LightBlue",
-    "indentation_guide_fg": "Blue",
+    "indentation_guide_fg": [
+      215,
+      216,
+      217
+    ],
     "line_number_bg": [
       245,
       245,
       242
     ],
-    "line_number_fg": "Gray",
-    "ruler_bg": "DarkGray",
-    "selection_bg": "White",
+    "line_number_fg": [
+      187,
+      193,
+      194
+    ],
+    "ruler_bg": [
+      238,
+      238,
+      236
+    ],
+    "selection_bg": [
+      226,
+      228,
+      226
+    ],
     "whitespace_indicator_fg": [
       215,
       216,
@@ -92,12 +108,36 @@
     "blame_header_bg": "DarkGray",
     "blame_header_fg": "White",
     "compose_margin_bg": "Default",
-    "file_status_added_fg": "Green",
-    "file_status_conflicted_fg": "Magenta",
-    "file_status_deleted_fg": "Red",
-    "file_status_modified_fg": "Yellow",
-    "file_status_renamed_fg": "Cyan",
-    "file_status_untracked_fg": "Gray",
+    "file_status_added_fg": [
+      141,
+      161,
+      1
+    ],
+    "file_status_conflicted_fg": [
+      223,
+      105,
+      186
+    ],
+    "file_status_deleted_fg": [
+      248,
+      85,
+      82
+    ],
+    "file_status_modified_fg": [
+      58,
+      148,
+      197
+    ],
+    "file_status_renamed_fg": [
+      53,
+      167,
+      124
+    ],
+    "file_status_untracked_fg": [
+      141,
+      161,
+      1
+    ],
     "help_bg": "Default",
     "help_fg": "Default",
     "help_indicator_bg": "Default",
@@ -159,13 +199,25 @@
     "suggestion_fg": "Default",
     "suggestion_selected_bg": "Blue",
     "tab_active_bg": "Default",
-    "tab_active_fg": "Yellow",
+    "tab_active_fg": [
+      92,
+      106,
+      114
+    ],
     "tab_close_hover_fg": "Red",
     "tab_drop_zone_bg": "Blue",
     "tab_drop_zone_border": "Cyan",
-    "tab_hover_bg": "White",
+    "tab_hover_bg": [
+      235,
+      235,
+      228
+    ],
     "tab_inactive_bg": "Default",
-    "tab_inactive_fg": "Gray",
+    "tab_inactive_fg": [
+      149,
+      158,
+      162
+    ],
     "tab_separator_bg": "Default",
     "terminal_bg": "Default",
     "terminal_fg": "Default",
@@ -175,8 +227,16 @@
   "search": {
     "label_bg": "Magenta",
     "label_fg": "White",
-    "match_bg": "Yellow",
-    "match_fg": "Black"
+    "match_bg": [
+      214,
+      217,
+      215
+    ],
+    "match_fg": [
+      92,
+      106,
+      114
+    ]
   },
   "diagnostic": {
     "error_bg": [
@@ -184,31 +244,63 @@
       245,
       242
     ],
-    "error_fg": "Red",
+    "error_fg": [
+      248,
+      85,
+      82
+    ],
     "hint_bg": [
       245,
       245,
       242
     ],
-    "hint_fg": "Cyan",
+    "hint_fg": [
+      141,
+      161,
+      1
+    ],
     "info_bg": [
       245,
       245,
       242
     ],
-    "info_fg": "Blue",
+    "info_fg": [
+      58,
+      148,
+      197
+    ],
     "warning_bg": [
       245,
       245,
       242
     ],
-    "warning_fg": "Yellow"
+    "warning_fg": [
+      214,
+      154,
+      0
+    ]
   },
   "syntax": {
-    "comment": "Gray",
-    "constant": "Magenta",
-    "function": "Green",
-    "keyword": "Red",
+    "comment": [
+      149,
+      158,
+      162
+    ],
+    "constant": [
+      92,
+      106,
+      114
+    ],
+    "function": [
+      141,
+      161,
+      1
+    ],
+    "keyword": [
+      248,
+      85,
+      82
+    ],
     "operator": [
       245,
       125,
@@ -216,9 +308,21 @@
     ],
     "punctuation_bracket": "Default",
     "punctuation_delimiter": "Default",
-    "string": "Yellow",
-    "type": "Blue",
+    "string": [
+      214,
+      154,
+      0
+    ],
+    "type": [
+      58,
+      148,
+      197
+    ],
     "variable": "Default",
-    "variable_builtin": "Red"
+    "variable_builtin": [
+      248,
+      85,
+      82
+    ]
   }
 }

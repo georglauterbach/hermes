@@ -1,11 +1,11 @@
 {
-  // Suitable for Fresh 0.4.9
+  // Suitable for Fresh 0.5.4
   //
   // cSpell: enabled
-  "version": 2,
+  "version": 3,
   "check_for_updates": false,
   "self_update": false,
-  "theme": "terminal-light.json",
+  "theme": "terminal-dark.json",
   "file_browser": {
     "show_hidden": true
   },
@@ -15,13 +15,17 @@
   },
   "editor": {
     // * cursor
-    "cursor_style": "steady_bar",
+    "cursor_style": "blinking_bar",
+    "scroll_offset": 10,
     // * wrap & rules
-    "wrap_column": 110,
-    "rulers": [],
-    "line_wrap": false,
+    "wrap_column": 105,
+    "rulers": [
+      100,
+      110 // for aligning the side bar
+    ],
+    "line_wrap": true,
     // * brackets
-    "rainbow_brackets": true,
+    "rainbow_brackets": false,
     // * indentation & whitespaces
     "indentation_guide": "all",
     "whitespace_spaces_leading": true,
@@ -29,22 +33,23 @@
     "whitespace_spaces_trailing": true,
     "whitespace_tabs_leading": true,
     "whitespace_tabs_inner": false,
-    "whitespace_tabs_traling": true,
+    "whitespace_tabs_trailing": true,
     // * on-save
     "trim_trailing_whitespace_on_save": true,
     "ensure_final_newline_on_save": true,
     // * hints & diagnostics
-    "enable_inlay_hints": true,
+    "enable_inlay_hints": false,
     "diagnostics_inline_text": true,
     "completion_popup_auto_show": true,
+    "quick_suggestions_delay_ms": 10,
     // * tabs
-    "tab_size": 2,
+    "tab_size": 4,
     // * menus & bars
     "show_menu_bar": false,
     "show_vertical_scrollbar": false,
     "show_tilde": false,
     "nerd_font_icons": true,
-    "rainbow_indentation": true,
+    "rainbow_indentation": false,
     "status_bar": {
       "left": [
         "{remote}",
@@ -61,6 +66,9 @@
         "{language}"
       ]
     },
+    // * scrolling & animations
+    "smooth_scroll": false,
+    "viewport_edge_fade": false,
     // * theme
     "use_terminal_bg": true
   },
@@ -78,13 +86,19 @@
         "cf",
         "conf"
       ]
+    },
+    "makefile": {
+      "filenames": [
+        "Justfile"
+      ]
     }
   },
   "terminal": {
     "shell": {
       "command": "bash",
       "args": []
-    }
+    },
+    "close_on_exit": true
   },
   "lsp": {
     "rust": {
@@ -193,6 +207,12 @@
       "when": "normal"
     },
     {
+      "key": "i",
+      "modifiers": ["ctrl", "alt"],
+      "action": "toggle_inlay_hints",
+      "when": "normal"
+    },
+    {
       "keys": [
         {
           "key": "k",
@@ -247,15 +267,21 @@
       "action": "close_tab"
     },
     {
-      "key": "=",
+      "key": "`",
       "modifiers": ["ctrl"],
       "action": "toggle_utility_dock",
       "when": "global"
     },
     {
-      "key": "=",
+      "key": "`",
       "modifiers": ["ctrl", "shift"],
       "action": "open_terminal_in_dock",
+      "when": "global"
+    },
+    {
+      "key": "`",
+      "modifiers": ["ctrl", "alt"],
+      "action": "toggle_maximize_split",
       "when": "global"
     },
     {
@@ -265,9 +291,12 @@
       "when": "terminal"
     },
     {
+      // Fresh has one palette, on Ctrl+P; it switches modes by prefix
+      // (`>` commands, `#` buffers, `:` line), so there is nothing
+      // commands-only to put here.
       "key": "p",
       "modifiers": ["ctrl", "shift"],
-      "action": "quick_open",
+      "action": "unbind",
       "when": "global"
     },
     {

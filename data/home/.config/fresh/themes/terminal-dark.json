@@ -68,14 +68,26 @@
     "indent_rainbow_4": "LightBlue",
     "indent_rainbow_5": "LightMagenta",
     "indent_rainbow_6": "LightBlue",
-    "indentation_guide_fg": "Blue",
+    "indentation_guide_fg": [
+      77,
+      74,
+      65
+    ],
     "line_number_bg": [
       29,
       32,
       33
     ],
-    "line_number_fg": "Gray",
-    "ruler_bg": "DarkGray",
+    "line_number_fg": [
+      77,
+      74,
+      65
+    ],
+    "ruler_bg": [
+      38,
+      40,
+      39
+    ],
     "selection_bg": [
       57,
       60,
@@ -85,12 +97,36 @@
   },
   "ui": {
     "compose_margin_bg": "Default",
-    "file_status_added_fg": "Green",
-    "file_status_conflicted_fg": "Magenta",
-    "file_status_deleted_fg": "Red",
-    "file_status_modified_fg": "Yellow",
-    "file_status_renamed_fg": "Cyan",
-    "file_status_untracked_fg": "Gray",
+    "file_status_added_fg": [
+      169,
+      182,
+      101
+    ],
+    "file_status_conflicted_fg": [
+      211,
+      134,
+      155
+    ],
+    "file_status_deleted_fg": [
+      234,
+      105,
+      98
+    ],
+    "file_status_modified_fg": [
+      125,
+      174,
+      163
+    ],
+    "file_status_renamed_fg": [
+      137,
+      180,
+      130
+    ],
+    "file_status_untracked_fg": [
+      169,
+      182,
+      101
+    ],
     "help_bg": "Default",
     "help_fg": "Default",
     "help_indicator_bg": "Default",
@@ -152,13 +188,25 @@
     "suggestion_fg": "Default",
     "suggestion_selected_bg": "Blue",
     "tab_active_bg": "Default",
-    "tab_active_fg": "Yellow",
+    "tab_active_fg": [
+      221,
+      199,
+      161
+    ],
     "tab_close_hover_fg": "Red",
     "tab_drop_zone_bg": "Blue",
     "tab_drop_zone_border": "Cyan",
-    "tab_hover_bg": "DarkGray",
+    "tab_hover_bg": [
+      20,
+      22,
+      23
+    ],
     "tab_inactive_bg": "Default",
-    "tab_inactive_fg": "Gray",
+    "tab_inactive_fg": [
+      149,
+      137,
+      113
+    ],
     "tab_separator_bg": "Default",
     "terminal_bg": "Default",
     "terminal_fg": "Default",
@@ -167,11 +215,15 @@
   "search": {
     "label_bg": "Magenta",
     "label_fg": "White",
-    "match_bg": "Cyan",
+    "match_bg": [
+      101,
+      95,
+      81
+    ],
     "match_fg": [
-      29,
-      32,
-      33
+      221,
+      199,
+      161
     ]
   },
   "diagnostic": {
@@ -180,31 +232,63 @@
       32,
       33
     ],
-    "error_fg": "Red",
+    "error_fg": [
+      234,
+      105,
+      98
+    ],
     "hint_bg": [
       29,
       32,
       33
     ],
-    "hint_fg": "Cyan",
+    "hint_fg": [
+      169,
+      182,
+      101
+    ],
     "info_bg": [
       29,
       32,
       33
     ],
-    "info_fg": "Blue",
+    "info_fg": [
+      125,
+      174,
+      163
+    ],
     "warning_bg": [
       29,
       32,
       33
     ],
-    "warning_fg": "Yellow"
+    "warning_fg": [
+      216,
+      166,
+      87
+    ]
   },
   "syntax": {
-    "comment": "Gray",
-    "constant": "Magenta",
-    "function": "Green",
-    "keyword": "Red",
+    "comment": [
+      101,
+      95,
+      81
+    ],
+    "constant": [
+      221,
+      199,
+      161
+    ],
+    "function": [
+      169,
+      182,
+      101
+    ],
+    "keyword": [
+      234,
+      105,
+      98
+    ],
     "operator": [
       231,
       138,
@@ -212,9 +296,21 @@
     ],
     "punctuation_bracket": "Default",
     "punctuation_delimiter": "Default",
-    "string": "Yellow",
-    "type": "Blue",
+    "string": [
+      216,
+      166,
+      87
+    ],
+    "type": [
+      125,
+      174,
+      163
+    ],
     "variable": "Default",
-    "variable_builtin": "Red"
+    "variable_builtin": [
+      234,
+      105,
+      98
+    ]
   }
 }
