@@ -21,12 +21,15 @@ void (async () => {
       'color-scheme',
     ]);
 
-    editor.applyTheme(
-      colorScheme.exit_code === 0 && colorScheme.stdout.includes('dark')
-        ? 'terminal-dark'
-        : 'terminal-light',
-    );
-  } catch (error) {
-    editor.applyTheme('terminal-light');
+    // A non-zero exit means the scheme is unknown, not light: leave the theme
+    // `config.json` already loaded in place rather than guessing.
+    if (colorScheme.exit_code === 0) {
+      editor.applyTheme(
+        colorScheme.stdout.includes('dark') ? 'terminal-dark' : 'terminal-light',
+      );
+    }
+  } catch {
+    // Swallowed on purpose: an unhandled rejection here is fatal to the whole
+    // plugin runtime, and a theme that stays as configured is no emergency.
   }
 })();
