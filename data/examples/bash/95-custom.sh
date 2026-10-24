@@ -8,7 +8,7 @@ alias editv='codium --password-store=gnome-libsecret --enable-features=UseOzoneP
 alias e='edit'
 alias ev='editv'
 
-if __is_command 'gitui'; then
+if hermes::is_command 'gitui'; then
   alias g='gitui'
 else
   alias g='git diff'

@@ -5,11 +5,16 @@
 
 [[ ${-} == *i* ]] || return 0
 
-function __is_command() { command -v "${1:?}" &>/dev/null ; }
-function __evaluates_to_true() { [[ -v ${1:?} ]] && [[ ${!1,,} == 'true' ]] ; }
-function __call_and_unset() { "${1:?}" "${@:2}" ; unset "${1}" ; }
+function hermes::is_command() { command -v "${1:?}" &>/dev/null ; }
+function hermes::__evaluates_to_true() { [[ -v ${1:?} ]] && [[ ${!1,,} == 'true' ]] ; }
+function hermes::__call_and_unset() { "${1:?}" "${@:2}" ; unset "${1}" ; }
+function hermes::__log() {
+  declare -r level=${1:?log level required}
+  shift 1
+  printf '%s %5s hermes: %s' "$(date --iso-8601=s)" "${level^^}" "${*}"
+}
 
-function __hermes__setup_variables() {
+function hermes::__setup_variables() {
   local segment
   PATH=${PATH:-'/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'}
 
@@ -30,16 +35,16 @@ function __hermes__setup_variables() {
   XDG_STATE_HOME=${XDG_STATE_HOME:-${HOME}/.local/state}
 
   if [[ ! -v VISUAL ]]; then
-    if   __is_command fresh ; then VISUAL='fresh'
-    elif __is_command nvim  ; then VISUAL='nvim'
-    elif __is_command vim   ; then VISUAL='vim'
-    elif __is_command nano  ; then VISUAL='nano'
+    if   hermes::is_command fresh ; then VISUAL='fresh'
+    elif hermes::is_command nvim  ; then VISUAL='nvim'
+    elif hermes::is_command vim   ; then VISUAL='vim'
+    elif hermes::is_command nano  ; then VISUAL='nano'
     else VISUAL=''
     fi
   fi
 
   EDITOR=${EDITOR:-${VISUAL}}
-  __is_command less && export PAGER=${PAGER:-$(command -v less)}
+  hermes::is_command less && export PAGER=${PAGER:-$(command -v less)}
 
   if [[ ! -v LANG ]]; then
     # shellcheck source=/dev/null
@@ -53,17 +58,18 @@ function __hermes__setup_variables() {
   export XDG_CONFIG_HOME XDG_CACHE_HOME XDG_DATA_HOME XDG_STATE_HOME
 }
 
-function __hermes__setup_completion() {
+function hermes::__setup_completion() {
   shopt -oq posix && return 0
 
-  # shellcheck source=/dev/null
-  [[ -r ${XDG_CONFIG_HOME}/bash_completion ]] && source "${XDG_CONFIG_HOME}/bash_completion"
-  # shellcheck source=/dev/null
-  [[ -r /usr/share/bash-completion/bash_completion ]] && source /usr/share/bash-completion/bash_completion
+  local path
+  for path in "${XDG_CONFIG_HOME}/bash_completion" /usr/share/bash-completion/bash_completion; do
+    # shellcheck source=/dev/null
+    [[ -r ${path} ]] && source "${path}"
+  done
 }
 
-function __hermes__setup_prompt() {
-  if __evaluates_to_true HERMES_INIT_STARSHIP && __is_command starship; then
+function hermes::__setup_prompt() {
+  if hermes::__evaluates_to_true HERMES_INIT_STARSHIP && hermes::is_command starship; then
     export STARSHIP_CONFIG=${STARSHIP_CONFIG:-${HOME}/.config/starship/starship.toml}
     # shellcheck source=/dev/null
     source <(starship init bash)
@@ -72,9 +78,9 @@ function __hermes__setup_prompt() {
     unset -f starship_preexec_ps0 2>/dev/null
     export PS0=''
 
-    if __evaluates_to_true HERMES_INIT_FLYLINE; then
+    if hermes::__evaluates_to_true HERMES_INIT_FLYLINE; then
       # shellcheck disable=SC2329
-      function __hermes__set_transient_prompt() {
+      function hermes::__set_transient_prompt() {
         PS1_FINAL=$(starship module character --status="${STARSHIP_CMD_STATUS:-0}")
         if [[ ${PWD:=} != "${__HERMES__TRANSIENT_PROMPT_PWD:-}" ]]; then
           # shellcheck disable=SC2034
@@ -83,13 +89,13 @@ function __hermes__setup_prompt() {
         __HERMES__TRANSIENT_PROMPT_PWD=${PWD}
       }
       # shellcheck disable=SC2034
-      RPS1_FINAL='' starship_precmd_user_func=__hermes__set_transient_prompt
+      RPS1_FINAL='' starship_precmd_user_func=hermes::__set_transient_prompt
     fi
   else
     export PROMPT_DIRTRIM=4 PS2='' PS4='> '
   fi
 
-  if __evaluates_to_true HERMES_INIT_FLYLINE && [[ -s ${HOME}/.local/lib/libflyline.so ]]; then
+  if hermes::__evaluates_to_true HERMES_INIT_FLYLINE && [[ -s ${HOME}/.local/lib/libflyline.so ]]; then
     command -v flyline &>/dev/null || enable -f "${HOME}/.local/lib/libflyline.so" flyline
 
     flyline --set-newline-marker ''
@@ -167,12 +173,12 @@ function __hermes__setup_prompt() {
   fi
 }
 
-function __hermes__setup_history() {
-  if __evaluates_to_true HERMES_INIT_STINKPOT && __is_command stinkpot; then
+function hermes::__setup_history() {
+  if hermes::__evaluates_to_true HERMES_INIT_STINKPOT && hermes::is_command stinkpot; then
     export HISTFILE=${HISTFILE:-/dev/null} HISTCONTROL=${HISTCONTROL:-ignoreboth}
     # shellcheck source=/dev/null
     source <(stinkpot init bash)
-    __is_command flyline && flyline key bind Ctrl+r 'always=runBashCommand(__stinkpot_search)'
+    hermes::is_command flyline && flyline key bind Ctrl+r 'always=runBashCommand(__stinkpot_search)'
   else
     HISTFILE=${HISTFILE:-${XDG_CACHE_HOME}/bash/history.txt}
     HISTCONTROL=${HISTCONTROL:-ignoreboth}
@@ -184,49 +190,55 @@ function __hermes__setup_history() {
   fi
 }
 
-function __hermes__setup_programs() {
-  if __evaluates_to_true HERMES_INIT_BAT && __is_command bat; then
+function hermes::__setup_programs() {
+  if hermes::__evaluates_to_true HERMES_INIT_BAT && hermes::is_command bat; then
     export BAT_STYLE=plain
     if [[ -v PAGER ]]; then
-      export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat --plain --language=man'"
+      export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -l man'"
       export MANROFFOPT='-c'
     fi
   fi
 
-  # shellcheck source=/dev/null
-  __evaluates_to_true HERMES_INIT_FZF && __is_command fzf && source <(fzf --bash)
-  # shellcheck source=/dev/null
-  __evaluates_to_true HERMES_INIT_ZOXIDE && __is_command zoxide && source <(zoxide init bash)
+  if hermes::__evaluates_to_true HERMES_INIT_FZF && hermes::is_command fzf; then
+    # shellcheck source=/dev/null
+    source <(fzf --bash)
+  fi
+  if hermes::__evaluates_to_true HERMES_INIT_ZOXIDE && hermes::is_command zoxide; then
+    # shellcheck source=/dev/null
+    source <(zoxide init bash)
+  fi
 }
 
-function __hermes__setup_overrides() {
+function hermes::__setup_overrides() {
   # The checks on `[[ -t 0 ]]` guard against missing stdin, which
   # is a problem in agent sessions because it leads to hanging.
 
-  if __evaluates_to_true HERMES_OVERRIDE_CAT_WITH_BAT && __is_command bat; then
+  if hermes::__evaluates_to_true HERMES_OVERRIDE_CAT_WITH_BAT && hermes::is_command bat; then
     # shellcheck disable=SC2329
     function cat() {
       if [[ -t 0 ]]; then command bat --paging=never "${@}"; else command cat "${@}"; fi
     }
   fi
 
-  __evaluates_to_true HERMES_OVERRIDE_CD_WITH_ZOXIDE && __is_command zoxide && alias cd='z'
+  if hermes::__evaluates_to_true HERMES_OVERRIDE_CD_WITH_ZOXIDE && hermes::is_command zoxide; then
+    alias cd='z'
+  fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_DIFF_WITH_DELTA && __is_command delta; then
+  if hermes::__evaluates_to_true HERMES_OVERRIDE_DIFF_WITH_DELTA && hermes::is_command delta; then
     # shellcheck disable=SC2329
     function diff() {
       if [[ -t 0 ]]; then command delta "${@}"; else  command diff "${@}"; fi
     }
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_LESS_WITH_BAT && __is_command bat; then
+  if hermes::__evaluates_to_true HERMES_OVERRIDE_LESS_WITH_BAT && hermes::is_command bat; then
     # shellcheck disable=SC2329
     function less() {
       if [[ -t 0 ]]; then command bat --paging=always "${@}"; else command less "${@}"; fi
     }
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_LS_WITH_EZA && __is_command eza; then
+  if hermes::__evaluates_to_true HERMES_OVERRIDE_LS_WITH_EZA && hermes::is_command eza; then
     # shellcheck disable=SC2329
     function ls() {
       if [[ -t 0 ]]; then
@@ -237,7 +249,7 @@ function __hermes__setup_overrides() {
     }
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_Y_WITH_YAZI && __is_command yazi; then
+  if hermes::__evaluates_to_true HERMES_OVERRIDE_Y_WITH_YAZI && hermes::is_command yazi; then
     # shellcheck disable=SC2329
     function y() {
       local tmp_file dir
@@ -254,7 +266,7 @@ function __hermes__setup_overrides() {
   fi
 }
 
-function __hermes__setup_aliases() {
+function hermes::__setup_aliases() {
   alias gcs='git commit --signoff --gpg-sign'
   alias gf='git fetch --prune --tags --force'
 
@@ -266,13 +278,13 @@ function __hermes__setup_aliases() {
   alias .......='cd ../../../../../..'
 }
 
-function __hermes__setup_signal_handlers() {
+function hermes::__setup_signal_handlers() {
   # To perform cleanup of the current shell's PID, we run a dedicated script when we
   # receive the 'EXIT' signal. Not doing this is not an issue because the `theme` script
   # (https://github.com/georglauterbach/desktop) will also clean up - having this handler
   # is simply an optimization.
   # shellcheck disable=SC2329
-  function __hermes__signal_handler_exit() {
+  function hermes::__signal_handler_exit() {
     [[ -r /tmp/.hermes_shells_to_update ]] || return 0
 
     # We ignore SC2094 because we fully read the file first and overwrite it only afterward.
@@ -287,20 +299,20 @@ function __hermes__setup_signal_handlers() {
   __HERMES__SIGNAL_HANDLERS_SIGUSR2=()
 
   trap 'hermes_switch_theme' SIGUSR2
-  trap __hermes__signal_handler_exit EXIT
+  trap hermes::__signal_handler_exit EXIT
 
   { flock -x 3 ; echo "${$}" >&3 ; } 3>>/tmp/.hermes_shells_to_update
 }
 
-function __hermes__setup_theme() {
-  if __evaluates_to_true HERMES_OVERRIDE_COLORS_BAT && __is_command bat; then
+function hermes::__setup_theme() {
+  if hermes::__evaluates_to_true HERMES_OVERRIDE_COLORS_BAT && hermes::is_command bat; then
     export BAT_THEME_DARK=evergruv-dark
     export BAT_THEME_LIGHT=evergruv-light
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_COLORS_BTOP && __is_command btop; then
+  if hermes::__evaluates_to_true HERMES_OVERRIDE_COLORS_BTOP && hermes::is_command btop; then
     # shellcheck disable=SC2329
-    function __hermes__set_theme_btop() {
+    function hermes::__set_theme_btop() {
       local config_file=${XDG_CONFIG_HOME}/btop/btop.conf
       if [[ -f ${config_file} ]]; then
         sed --in-place --regexp-extended \
@@ -308,22 +320,23 @@ function __hermes__setup_theme() {
           "${config_file}"
       fi
     }
-    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_btop)
+    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(hermes::__set_theme_btop)
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_COLORS_EZA && __is_command eza; then
+  if hermes::__evaluates_to_true HERMES_OVERRIDE_COLORS_EZA && hermes::is_command eza; then
     # shellcheck disable=SC2329
-    function __hermes__set_theme_eza() {
+    function hermes::__set_theme_eza() {
       local config_dir=${XDG_CONFIG_HOME}/eza
       local theme_file=themes/${HERMES_THEME_VARIANT:?}.yaml
       if [[ -f ${config_dir}/${theme_file} ]]; then
         ln --symbolic --force "${theme_file}" "${config_dir}/theme.yaml"
       fi
     }
-    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_eza)
+    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(hermes::__set_theme_eza)
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_COLORS_FLYLINE && [[ -s ${HOME}/.local/lib/libflyline.so ]]; then
+  if hermes::__evaluates_to_true HERMES_OVERRIDE_COLORS_FLYLINE \
+  && [[ -s ${HOME}/.local/lib/libflyline.so ]]; then
     eval "$(dircolors --bourne-shell || :)" # LS_COLORS for coloring completions
 
     __HERMES__FLYLINE_BASE_COLORS=(
@@ -342,8 +355,8 @@ function __hermes__setup_theme() {
       selected-text='blue'
     )
 
-    function __hermes__set_theme_flyline() {
-      __is_command flyline || return 0
+    function hermes::__set_theme_flyline() {
+      hermes::is_command flyline || return 0
       if [[ ${HERMES_THEME_VARIANT:?} == light ]]; then
         flyline set-style --default-theme "${HERMES_THEME_VARIANT}" \
           "${__HERMES__FLYLINE_BASE_COLORS[@]}" normal-text=black secondary-text=
@@ -353,15 +366,16 @@ function __hermes__setup_theme() {
       fi
       flyline set-cursor --backend flyline --effect fade --style "${__HERMES__COLOR_BLUE}"
     }
-    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_flyline)
-    __hermes__set_theme_flyline
+    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(hermes::__set_theme_flyline)
+    hermes::__set_theme_flyline
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_COLORS_FZF && __is_command fzf; then
+  if hermes::__evaluates_to_true HERMES_OVERRIDE_COLORS_FZF && hermes::is_command fzf; then
     [[ -v __HERMES__FZF_DEFAULT_OPTS ]] || __HERMES__FZF_DEFAULT_OPTS=${FZF_DEFAULT_OPTS:-}
 
-    function __hermes__set_theme_fzf() {
+    function hermes::__set_theme_fzf() {
       export FZF_DEFAULT_OPTS="--color=${HERMES_THEME_VARIANT} --color=fg:${__HERMES__COLOR_FOREGROUND},bg:${__HERMES__COLOR_BACKGROUND},hl:${__HERMES__COLOR_GREEN} --color=info:${__HERMES__COLOR_YELLOW},prompt:${__HERMES__COLOR_GREEN},pointer:${__HERMES__COLOR_BLUE} --color=marker:${__HERMES__COLOR_GREEN},spinner:${__HERMES__COLOR_CYAN},header:${__HERMES__COLOR_GREEN}"
+
       if [[ ${HERMES_THEME_VARIANT:?} == light ]]; then
         FZF_DEFAULT_OPTS+=" --color=fg+:${__HERMES__COLOR_FOREGROUND},bg+:${__HERMES__COLOR_BRIGHT_WHITE},hl+:${__HERMES__COLOR_GREEN}"
         FZF_DEFAULT_OPTS+=" --color=border:${__HERMES__COLOR_BRIGHT_WHITE},gutter:${__HERMES__COLOR_BACKGROUND},query:${__HERMES__COLOR_FOREGROUND}"
@@ -373,31 +387,31 @@ function __hermes__setup_theme() {
       fi
       FZF_DEFAULT_OPTS+=${__HERMES__FZF_DEFAULT_OPTS+ ${__HERMES__FZF_DEFAULT_OPTS}}
     }
-    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_fzf)
-    __hermes__set_theme_fzf
+    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(hermes::__set_theme_fzf)
+    hermes::__set_theme_fzf
   fi
 
-  if __evaluates_to_true HERMES_OVERRIDE_COLORS_GITUI && __is_command gitui; then
+  if hermes::__evaluates_to_true HERMES_OVERRIDE_COLORS_GITUI && hermes::is_command gitui; then
     # shellcheck disable=SC2329
-    function __hermes__set_theme_gitui() {
+    function hermes::__set_theme_gitui() {
       local config_dir=${XDG_CONFIG_HOME}/gitui
       local theme_file=themes/evergruv-${HERMES_THEME_VARIANT:?}.ron
       if [[ -f ${config_dir}/${theme_file} ]]; then
         ln --symbolic --force "${theme_file}" "${config_dir}/theme.ron"
       fi
     }
-    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(__hermes__set_theme_gitui)
+    __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(hermes::__set_theme_gitui)
   fi
 }
 
-function __hermes__export_colors() {
+function hermes::__export_colors() {
   function get_theme_variant() {
     local fallback=${HERMES_THEME_VARIANT_FALLBACK:-dark}
 
     [[ ${1:-} =~ ^d(ark)?$  ]] && { theme_variant=dark  ; return ; }
     [[ ${1:-} =~ ^l(ight)?$ ]] && { theme_variant=light ; return ; }
 
-    if __is_command gsettings; then
+    if hermes::is_command gsettings; then
       local gsettings_variant
       gsettings_variant=$(gsettings get org.gnome.desktop.interface color-scheme |& tr -d "'" || :)
       if [[ ${gsettings_variant} == prefer-light ]]; then
@@ -408,7 +422,8 @@ function __hermes__export_colors() {
         echo "gsettings theme variant '${gsettings_variant}' treated as '${fallback}'" >&2
         theme_variant=${fallback}
       else
-        echo "hermes: gsettings theme variant '${gsettings_variant}' unknown - treated as '${fallback}'" >&2
+        hermes::__log warn \
+          "gsettings theme variant '${gsettings_variant}' unknown - treated as '${fallback}'" >&2
         theme_variant=${fallback}
       fi
       return
@@ -512,7 +527,7 @@ function __hermes__export_colors() {
       return
     fi
 
-    echo "hermes: could not extrapolate colors from terminal - assuming '${fallback}'" >&2
+    hermes::__log warn "could not extrapolate colors from terminal - assuming '${fallback}'" >&2
     theme_variant=${fallback}
   }
 
@@ -551,7 +566,7 @@ function __hermes__export_colors() {
     __HERMES__COLOR_BRIGHT_BLACK='#2B2A29'
     __HERMES__COLOR_BRIGHT_WHITE='#FFE6BA'
   else
-    echo "hermes: (bug) theme variant '${theme_variant}' unknown - must be 'dark' or 'light'" >&2
+    hermes::__log error "(bug) theme variant '${theme_variant}' unknown - must be 'dark' or 'light'" >&2
     return 1
   fi
 }
@@ -562,8 +577,8 @@ function __hermes__export_colors() {
 # triggering theme variant switches. Hence, you can either call this function manually
 # or, when hermes is used in conjunction with <https://github.com/georglauterbach/desktop>,
 # have it called when SIGUSR2 is received.
-function hermes_switch_theme() {
-  __hermes__export_colors "${@}"
+function hermes::switch_theme() {
+  hermes::__export_colors "${@}"
 
   local __function
   for __function in "${__HERMES__SIGNAL_HANDLERS_SIGUSR2[@]}"; do
@@ -572,7 +587,7 @@ function hermes_switch_theme() {
 }
 
 # Show information related to the current setup of hermes
-function hermes_debug() {
+function hermes::debug() {
   local __name
   for __name in ${!HERMES_*} ${!__HERMES__*}; do
     declare -n __VAL=${__name}
@@ -582,7 +597,7 @@ function hermes_debug() {
 }
 
 # Download the latest version of hermes
-function hermes_download_latest_version() {
+function hermes::download_latest_version() {
   local location=${HOME}/.local/bin/hermes
   local uri_base=https://github.com/georglauterbach/hermes/releases
   local version
@@ -598,7 +613,7 @@ function hermes_download_latest_version() {
   chmod +x "${location}"
 }
 
-function __hermes__main() {
+function hermes::__main() {
   if [[ -r ${HOME}/.config/bash/91-hermes_settings.sh ]]; then
     # shellcheck source=91-hermes_settings.sh
     source "${HOME}/.config/bash/91-hermes_settings.sh"
@@ -608,22 +623,22 @@ function __hermes__main() {
 
   local setup_function=(variables completion prompt history programs overrides)
 
-  if __evaluates_to_true HERMES_ENABLE_ADDITIONAL_ALIASES; then
+  if hermes::__evaluates_to_true HERMES_ENABLE_ADDITIONAL_ALIASES; then
     setup_function+=(aliases)
   else
-    unset __hermes__setup_aliases
+    unset hermes::__setup_aliases
   fi
 
-  if __evaluates_to_true HERMES_ENABLE_THEMING; then
-    __hermes__export_colors
+  if hermes::__evaluates_to_true HERMES_ENABLE_THEMING; then
+    hermes::__export_colors
     setup_function+=(signal_handlers theme)
   else
-    unset __hermes__{export_colors,setup_{signal_handlers,theme}} hermes_switch_theme
+    unset hermes::__{export_colors,setup_{signal_handlers,theme}} hermes_switch_theme
   fi
 
   local __function
   for __function in "${setup_function[@]}"; do
-    __call_and_unset "__hermes__setup_${__function}" || :
+    hermes::__call_and_unset "hermes::__setup_${__function}" || :
   done
 
   if [[ -n ${__HERMES__TYPEAHEAD:-} ]]; then
@@ -641,10 +656,10 @@ function __hermes__main() {
     [[ -z ${__typeahead} ]] || builtin history -s "${__typeahead}"
   fi
 
-  if __evaluates_to_true HERMES_ENABLE_EXPORT_OF_ENVS; then
+  if hermes::__evaluates_to_true HERMES_ENABLE_EXPORT_OF_ENVS; then
     # shellcheck disable=SC2086
     export ${!HERMES_*} ${!__HERMES__*}
   fi
 }
 
-__call_and_unset __hermes__main "${@}"
+hermes::__call_and_unset hermes::__main "${@}"

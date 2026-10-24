@@ -11,7 +11,7 @@ _hermes_ installs [programs](#programs) and configuration files for the command 
 ```bash
 # Download the latest version of hermes and
 # place hermes at ${HOME}/.local/bin/hermes
-function hermes_download_latest() {
+function hermes::download_latest() {
   local HERMES="${HOME}/.local/bin/hermes"
   local RELEASE_URI_BASE='https://github.com/georglauterbach/hermes/releases'
   local VERSION
@@ -47,7 +47,7 @@ You can find some personal configuration files in [`data/examples/`](./data/exam
 
 [`data/examples/bash/.bashrc`](./data/examples/bash/.bashrc) provides an example of what your `~/.bashrc` could look like with hermes. If you want to change the behavior of hermes' shell setup, update [`~/.config/bash/91-hermes_settings.sh`](./data/home/.config/bash/91-hermes_settings.sh).
 
-hermes defines two types of functions: Those that start with `hermes_` can and should be used by you; those that start with `__hermes__` are for internal use and must not be used by you.
+hermes defines two types of functions: You can use those that start with `hermes::`, those that start with `hermes::__` are internal and should not be used.
 
 > [!important]
 >
