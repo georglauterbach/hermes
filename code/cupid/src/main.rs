@@ -584,7 +584,7 @@ pub mod programs {
     /// <https://github.com/aristocratos/btop>
     async fn btop(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "btop";
-        let version = "1.4.7";
+        let version = "1.4.8";
         let file = format!("{name}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
