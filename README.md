@@ -27,7 +27,7 @@ function hermes::download_latest() {
   chmod +x "${HERMES}"
 }
 
-hermes_download_latest      # download hermes
+hermes::download_latest     # download hermes
 "${HOME}/.local/bin/hermes" # execute hermes
 ```
 
@@ -62,7 +62,7 @@ hermes works flawlessly on remote hosts. The setup is the same for local and rem
 3. Enable theming on the remote (with `HERMES_ENABLE_THEMING=true`)
 4. Adjust `/etc/ssh/sshd_config` on the remote to contain `AcceptEnv ... HERMES_*`
 5. Restart `sshd` with `systemctl restart sshd` on the remote
-6. Reconnect to the remote and run `hermes_switch_theme`
+6. Reconnect to the remote and run `hermes::switch_theme`
 
 ### Programs
 
