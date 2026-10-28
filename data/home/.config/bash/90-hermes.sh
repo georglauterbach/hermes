@@ -298,7 +298,7 @@ function hermes::__setup_signal_handlers() {
 
   __HERMES__SIGNAL_HANDLERS_SIGUSR2=()
 
-  trap 'hermes_switch_theme' SIGUSR2
+  trap 'hermes::switch_theme' SIGUSR2
   trap hermes::__signal_handler_exit EXIT
 
   { flock -x 3 ; echo "${$}" >&3 ; } 3>>/tmp/.hermes_shells_to_update
