@@ -278,22 +278,28 @@ function hermes::__setup_aliases() {
   alias .......='cd ../../../../../..'
 }
 
-function hermes::__setup_signal_handlers() {
-  # To perform cleanup of the current shell's PID, we run a dedicated script when we
-  # receive the 'EXIT' signal. Not doing this is not an issue because the `theme` script
-  # (https://github.com/georglauterbach/desktop) will also clean up - having this handler
-  # is simply an optimization.
-  # shellcheck disable=SC2329
-  function hermes::__signal_handler_exit() {
-    [[ -r /tmp/.hermes_shells_to_update ]] || return 0
+function __hermes__setup_signal_handlers() {
+  __HERMES__SHELLS_TO_UPDATE=${XDG_RUNTIME_DIR:-/tmp}/hermes-${UID}/shells
+  # shellcheck disable=SC2174
+  mkdir -p -m 700 "$(dirname "${__HERMES__SHELLS_TO_UPDATE}")"
 
-    # We ignore SC2094 because we fully read the file first and overwrite it only afterward.
+  # To perform cleanup of the current shell's PID, we run a dedicated script
+  # when we receive the 'EXIT' signal. Not doing this is not an issue because
+  # the `theme` script (https://github.com/georglauterbach/desktop) will also
+  # clean up - having this handler is simply an optimization.
+  # shellcheck disable=SC2329
+  function __hermes__signal_handler_exit() {
+    [[ -r ${__HERMES__SHELLS_TO_UPDATE} ]] || return 0
+
+    # We ignore SC2094 because we fully read the file first and overwrite it
+    # only afterward.
     # shellcheck disable=SC2094
     {
-      flock -x 3
-      grep -v ${$} <&3 >/tmp/.hermes_shells_to_update_exit || :
-      mv /tmp/.hermes_shells_to_update_exit /tmp/.hermes_shells_to_update
-    } 3</tmp/.hermes_shells_to_update
+      flock -x -w 2 3 || return 0
+      grep -vxF -- "${$}" <&3 >"${__HERMES__SHELLS_TO_UPDATE}.exit" || :
+      # shellcheck disable=SC2217
+      mv --force "${__HERMES__SHELLS_TO_UPDATE}.exit" "${__HERMES__SHELLS_TO_UPDATE}" < /dev/null
+    } 3< "${__HERMES__SHELLS_TO_UPDATE}"
   }
 
   __HERMES__SIGNAL_HANDLERS_SIGUSR2=()
@@ -301,7 +307,7 @@ function hermes::__setup_signal_handlers() {
   trap 'hermes::switch_theme' SIGUSR2
   trap hermes::__signal_handler_exit EXIT
 
-  { flock -x 3 ; echo "${$}" >&3 ; } 3>>/tmp/.hermes_shells_to_update
+  { flock -x -w 2 3 ; echo "${$}" >&3 ; } 3>>"${__HERMES__SHELLS_TO_UPDATE}"
 }
 
 function hermes::__setup_theme() {
