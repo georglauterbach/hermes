@@ -278,7 +278,7 @@ function hermes::__setup_aliases() {
   alias .......='cd ../../../../../..'
 }
 
-function __hermes__setup_signal_handlers() {
+function hermes::__setup_signal_handlers() {
   __HERMES__SHELLS_TO_UPDATE=${XDG_RUNTIME_DIR:-/tmp}/hermes-${UID}/shells
   # shellcheck disable=SC2174
   mkdir -p -m 700 "$(dirname "${__HERMES__SHELLS_TO_UPDATE}")"
@@ -288,7 +288,7 @@ function __hermes__setup_signal_handlers() {
   # the `theme` script (https://github.com/georglauterbach/desktop) will also
   # clean up - having this handler is simply an optimization.
   # shellcheck disable=SC2329
-  function __hermes__signal_handler_exit() {
+  function hermes::__signal_handler_exit() {
     [[ -r ${__HERMES__SHELLS_TO_UPDATE} ]] || return 0
 
     # We ignore SC2094 because we fully read the file first and overwrite it
@@ -304,7 +304,7 @@ function __hermes__setup_signal_handlers() {
 
   __HERMES__SIGNAL_HANDLERS_SIGUSR2=()
 
-  trap 'hermes::switch_theme' SIGUSR2
+  trap hermes::switch_theme SIGUSR2
   trap hermes::__signal_handler_exit EXIT
 
   { flock -x -w 2 3 ; echo "${$}" >&3 ; } 3>>"${__HERMES__SHELLS_TO_UPDATE}"
