@@ -625,7 +625,7 @@ pub mod programs {
     /// <https://github.com/bootandy/dust>
     async fn dust(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "dust";
-        let version = "1.2.6";
+        let version = "1.2.7";
         let file = format!("{name}-v{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -749,7 +749,7 @@ pub mod programs {
     /// <https://github.com/sinelaw/fresh>
     async fn fresh(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fresh";
-        let version = "0.5.4";
+        let version = "0.5.7";
         let file = format!("{name}-editor-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
