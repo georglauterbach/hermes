@@ -385,12 +385,12 @@ function hermes::__setup_theme() {
 
       if [[ ${HERMES_THEME_VARIANT:?} == light ]]; then
         FZF_DEFAULT_OPTS+=" --color=fg+:${__HERMES__COLOR_FOREGROUND},bg+:${__HERMES__COLOR_BRIGHT_WHITE},hl+:${__HERMES__COLOR_GREEN}"
-        FZF_DEFAULT_OPTS+=" --color=border:${__HERMES__COLOR_BRIGHT_WHITE},gutter:${__HERMES__COLOR_BACKGROUND},query:${__HERMES__COLOR_FOREGROUND}"
-        FZF_DEFAULT_OPTS+=" --color=scrollbar:${__HERMES__COLOR_GREEN},separator:${__HERMES__COLOR_BRIGHT_WHITE}"
+        FZF_DEFAULT_OPTS+=" --color=border:${__HERMES__COLOR_BORDER},gutter:${__HERMES__COLOR_BACKGROUND},query:${__HERMES__COLOR_FOREGROUND}"
+        FZF_DEFAULT_OPTS+=" --color=scrollbar:${__HERMES__COLOR_GREEN},separator:${__HERMES__COLOR_BORDER}"
       elif [[ ${HERMES_THEME_VARIANT} == dark ]]; then
         FZF_DEFAULT_OPTS+=" --color=fg+:${__HERMES__COLOR_FOREGROUND},bg+:${__HERMES__COLOR_BLACK},hl+:${__HERMES__COLOR_GREEN}"
-        FZF_DEFAULT_OPTS+=" --color=border:${__HERMES__COLOR_BLACK},gutter:${__HERMES__COLOR_BACKGROUND},query:${__HERMES__COLOR_FOREGROUND}"
-        FZF_DEFAULT_OPTS+=" --color=scrollbar:${__HERMES__COLOR_GREEN},separator:${__HERMES__COLOR_BLACK}"
+        FZF_DEFAULT_OPTS+=" --color=border:${__HERMES__COLOR_BORDER},gutter:${__HERMES__COLOR_BACKGROUND},query:${__HERMES__COLOR_FOREGROUND}"
+        FZF_DEFAULT_OPTS+=" --color=scrollbar:${__HERMES__COLOR_GREEN},separator:${__HERMES__COLOR_BORDER}"
       fi
       FZF_DEFAULT_OPTS+=${__HERMES__FZF_DEFAULT_OPTS+ ${__HERMES__FZF_DEFAULT_OPTS}}
     }
@@ -544,10 +544,12 @@ function hermes::__export_colors() {
 
   # ! The color values set in this function are kept in sync with
   #   https://github.com/georglauterbach/desktop/tree/main/data/home/.config/alacritty/themes
+  #   (except for the border color, which comes from
+  #   https://github.com/georglauterbach/evergruv/blob/main/theme.yaml)
   if [[ ${theme_variant} == light ]]; then
     HERMES_THEME_VARIANT=light
     __HERMES__COLOR_BACKGROUND='#F5F5F2'
-    __HERMES__COLOR_FOREGROUND='#5C6A72'
+    __HERMES__COLOR_FOREGROUND='#505D65'
     __HERMES__COLOR_BLACK='#363E42'
     __HERMES__COLOR_RED='#F85552'
     __HERMES__COLOR_GREEN='#8DA101'
@@ -558,6 +560,7 @@ function hermes::__export_colors() {
     __HERMES__COLOR_WHITE='#999997'
     __HERMES__COLOR_BRIGHT_BLACK='#7E919C'
     __HERMES__COLOR_BRIGHT_WHITE='#EBEBE4'
+    __HERMES__COLOR_BORDER='#D5D6D6'
   elif [[ ${theme_variant} == dark ]]; then
     HERMES_THEME_VARIANT=dark
     __HERMES__COLOR_BACKGROUND='#1D2021'
@@ -568,10 +571,11 @@ function hermes::__export_colors() {
     __HERMES__COLOR_YELLOW='#D8A657'
     __HERMES__COLOR_BLUE='#7DAEA3'
     __HERMES__COLOR_MAGENTA='#D3869B'
-    __HERMES__COLOR_CYAN='#7BB674'
+    __HERMES__COLOR_CYAN='#89B482'
     __HERMES__COLOR_WHITE='#A39377'
     __HERMES__COLOR_BRIGHT_BLACK='#2B2A29'
     __HERMES__COLOR_BRIGHT_WHITE='#FFE6BA'
+    __HERMES__COLOR_BORDER='#2E2D29'
   else
     hermes::__log error "(bug) theme variant '${theme_variant}' unknown - must be 'dark' or 'light'" >&2
     return 1

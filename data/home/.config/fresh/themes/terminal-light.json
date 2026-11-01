@@ -13,39 +13,39 @@
     ],
     "bracket_match_fg": "Black",
     "bracket_rainbow_1": [
-      92,
-      106,
-      114
+      80,
+      93,
+      101
     ],
     "bracket_rainbow_2": [
-      92,
-      106,
-      114
+      80,
+      93,
+      101
     ],
     "bracket_rainbow_3": [
-      92,
-      106,
-      114
+      80,
+      93,
+      101
     ],
     "bracket_rainbow_4": [
-      92,
-      106,
-      114
+      80,
+      93,
+      101
     ],
     "bracket_rainbow_5": [
-      92,
-      106,
-      114
+      80,
+      93,
+      101
     ],
     "bracket_rainbow_6": [
-      92,
-      106,
-      114
+      80,
+      93,
+      101
     ],
     "current_line_bg": [
       239,
-      240,
-      237
+      239,
+      236
     ],
     "cursor": [
       58,
@@ -61,9 +61,9 @@
     "diff_remove_collision_fg": null,
     "diff_remove_highlight_bg": "LightRed",
     "fg": [
-      92,
-      106,
-      114
+      80,
+      93,
+      101
     ],
     "inactive_cursor": "Gray",
     "indent_rainbow_1": "LightYellow",
@@ -73,9 +73,9 @@
     "indent_rainbow_5": "LightMagenta",
     "indent_rainbow_6": "LightBlue",
     "indentation_guide_fg": [
-      215,
-      216,
-      217
+      213,
+      214,
+      214
     ],
     "line_number_bg": [
       245,
@@ -83,24 +83,24 @@
       242
     ],
     "line_number_fg": [
-      187,
-      193,
-      194
+      183,
+      188,
+      189
     ],
     "ruler_bg": [
+      237,
       238,
-      238,
-      236
+      235
     ],
     "selection_bg": [
-      226,
-      228,
-      226
+      225,
+      227,
+      225
     ],
     "whitespace_indicator_fg": [
-      215,
-      216,
-      217
+      213,
+      214,
+      214
     ],
     "whitespace_indicator_selected_fg": "White"
   },
@@ -143,12 +143,20 @@
     "help_indicator_bg": "Default",
     "help_indicator_fg": "Red",
     "help_key_fg": "Cyan",
-    "help_separator_fg": "DarkGray",
+    "help_separator_fg": [
+      213,
+      214,
+      214
+    ],
     "inline_code_bg": "DarkGray",
     "menu_active_bg": "Blue",
     "menu_active_fg": "White",
     "menu_bg": "Default",
-    "menu_border_fg": "DarkGray",
+    "menu_border_fg": [
+      213,
+      214,
+      214
+    ],
     "menu_disabled_bg": "Default",
     "menu_disabled_fg": "DarkGray",
     "menu_dropdown_bg": "Default",
@@ -158,9 +166,17 @@
     "menu_highlight_fg": "White",
     "menu_hover_bg": "DarkGray",
     "menu_hover_fg": "White",
-    "menu_separator_fg": "DarkGray",
+    "menu_separator_fg": [
+      213,
+      214,
+      214
+    ],
     "popup_bg": "Default",
-    "popup_border_fg": "Gray",
+    "popup_border_fg": [
+      213,
+      214,
+      214
+    ],
     "popup_selection_bg": "Blue",
     "popup_selection_fg": "White",
     "popup_text_fg": "Default",
@@ -175,8 +191,16 @@
     "semantic_highlight_bg": "Default",
     "settings_selected_bg": "Blue",
     "settings_selected_fg": "White",
-    "split_separator_fg": "DarkGray",
-    "split_separator_hover_fg": "Cyan",
+    "split_separator_fg": [
+      213,
+      214,
+      214
+    ],
+    "split_separator_hover_fg": [
+      164,
+      169,
+      172
+    ],
     "status_bar_bg": "Default",
     "status_bar_fg": "Default",
     "status_error_indicator_bg": "Red",
@@ -200,9 +224,9 @@
     "suggestion_selected_bg": "Blue",
     "tab_active_bg": "Default",
     "tab_active_fg": [
-      92,
-      106,
-      114
+      80,
+      93,
+      101
     ],
     "tab_close_hover_fg": "Red",
     "tab_drop_zone_bg": "Blue",
@@ -214,9 +238,9 @@
     ],
     "tab_inactive_bg": "Default",
     "tab_inactive_fg": [
-      149,
-      158,
-      162
+      141,
+      150,
+      154
     ],
     "tab_separator_bg": "Default",
     "terminal_bg": "Default",
@@ -228,14 +252,14 @@
     "label_bg": "Magenta",
     "label_fg": "White",
     "match_bg": [
-      214,
-      217,
-      215
+      212,
+      215,
+      214
     ],
     "match_fg": [
-      92,
-      106,
-      114
+      80,
+      93,
+      101
     ]
   },
   "diagnostic": {
@@ -282,14 +306,14 @@
   },
   "syntax": {
     "comment": [
-      149,
-      158,
-      162
+      141,
+      150,
+      154
     ],
     "constant": [
-      92,
-      106,
-      114
+      80,
+      93,
+      101
     ],
     "function": [
       141,

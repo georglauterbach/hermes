@@ -9,10 +9,10 @@
 theme[main_bg]="#F5F5F2"
 
 # Main text color
-theme[main_fg]="#5C6A72"
+theme[main_fg]="#505D65"
 
 # Title color for boxes
-theme[title]="#5C6A72"
+theme[title]="#505D65"
 
 # Highlight color for keyboard shortcuts
 theme[hi_fg]="#D69A00"
@@ -27,7 +27,7 @@ theme[selected_fg]="#F57D26"
 theme[inactive_fg]="#EBEBE4"
 
 # Color of text appearing on top of graphs, i.e uptime and current network graph scaling
-theme[graph_text]="#5C6A72"
+theme[graph_text]="#505D65"
 
 # Background color of the percentage meters
 theme[meter_bg]="#EBEBE4"

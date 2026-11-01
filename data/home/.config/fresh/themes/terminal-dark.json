@@ -69,9 +69,9 @@
     "indent_rainbow_5": "LightMagenta",
     "indent_rainbow_6": "LightBlue",
     "indentation_guide_fg": [
-      77,
-      74,
-      65
+      46,
+      45,
+      41
     ],
     "line_number_bg": [
       29,
@@ -132,12 +132,20 @@
     "help_indicator_bg": "Default",
     "help_indicator_fg": "Red",
     "help_key_fg": "Cyan",
-    "help_separator_fg": "DarkGray",
+    "help_separator_fg": [
+      46,
+      45,
+      41
+    ],
     "inline_code_bg": "DarkGray",
     "menu_active_bg": "Blue",
     "menu_active_fg": "White",
     "menu_bg": "Default",
-    "menu_border_fg": "DarkGray",
+    "menu_border_fg": [
+      46,
+      45,
+      41
+    ],
     "menu_disabled_bg": "Default",
     "menu_disabled_fg": "DarkGray",
     "menu_dropdown_bg": "Default",
@@ -147,9 +155,17 @@
     "menu_highlight_fg": "White",
     "menu_hover_bg": "DarkGray",
     "menu_hover_fg": "White",
-    "menu_separator_fg": "DarkGray",
+    "menu_separator_fg": [
+      46,
+      45,
+      41
+    ],
     "popup_bg": "Default",
-    "popup_border_fg": "Gray",
+    "popup_border_fg": [
+      46,
+      45,
+      41
+    ],
     "popup_selection_bg": "Blue",
     "popup_selection_fg": "White",
     "popup_text_fg": "Default",
@@ -164,8 +180,16 @@
     "semantic_highlight_bg": "Default",
     "settings_selected_bg": "Blue",
     "settings_selected_fg": "White",
-    "split_separator_fg": "DarkGray",
-    "split_separator_hover_fg": "Cyan",
+    "split_separator_fg": [
+      46,
+      45,
+      41
+    ],
+    "split_separator_hover_fg": [
+      77,
+      74,
+      69
+    ],
     "status_bar_bg": "Default",
     "status_bar_fg": "Default",
     "status_error_indicator_bg": "Red",
