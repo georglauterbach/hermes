@@ -366,11 +366,12 @@ function hermes::__setup_theme() {
       if [[ ${HERMES_THEME_VARIANT:?} == light ]]; then
         flyline set-style --default-theme "${HERMES_THEME_VARIANT}" \
           "${__HERMES__FLYLINE_BASE_COLORS[@]}" normal-text=black secondary-text=
+        flyline set-cursor --backend flyline --effect fade --style "${__HERMES__COLOR_GREEN}"
       elif [[ ${HERMES_THEME_VARIANT} == dark ]]; then
         flyline set-style --default-theme "${HERMES_THEME_VARIANT}" \
           "${__HERMES__FLYLINE_BASE_COLORS[@]}" normal-text= secondary-text=white
+        flyline set-cursor --backend flyline --effect fade --style "${__HERMES__COLOR_YELLOW}"
       fi
-      flyline set-cursor --backend flyline --effect fade --style "${__HERMES__COLOR_BLUE}"
     }
     __HERMES__SIGNAL_HANDLERS_SIGUSR2+=(hermes::__set_theme_flyline)
     hermes::__set_theme_flyline
