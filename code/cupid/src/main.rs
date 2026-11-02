@@ -645,19 +645,20 @@ pub mod programs {
     /// <https://github.com/Canop/dysk>
     async fn dysk(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "dysk";
-        let version = "3.8.1";
-        let archive_type = ArchiveType::Zip;
+        let version = "3.8.2";
+        let archive_type = ArchiveType::TarGz;
+        let file = format!("{name}-v{version}-{architecture}-unknown-linux-musl");
         let uri = format!(
-            "https://github.com/Canop/dysk/releases/download/v{version}/dysk_{version}{archive_type}"
+            "https://github.com/Canop/dysk/releases/download/v{version}/{file}{archive_type}"
         );
 
         let mut entries = collections::HashMap::new();
         entries.insert(
-            format!("{architecture}-unknown-linux-musl/dysk"),
+            format!("{file}/{name}"),
             local_bin(name),
         );
         entries.insert(
-            String::from("completion/dysk.bash"),
+            format!("{file}/completion/{name}.bash"),
             bash_completion("dysk"),
         );
 
