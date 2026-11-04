@@ -707,7 +707,7 @@ pub mod programs {
     /// <https://github.com/sharkdp/fd>
     async fn fd(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fd";
-        let version = "10.5.0";
+        let version = "10.5.1";
         let file = format!("{name}-v{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
