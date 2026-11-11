@@ -707,7 +707,7 @@ pub mod programs {
     /// <https://github.com/sharkdp/fd>
     async fn fd(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fd";
-        let version = "10.5.1";
+        let version = "10.5.2";
         let file = format!("{name}-v{version}-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -750,7 +750,7 @@ pub mod programs {
     /// <https://github.com/sinelaw/fresh>
     async fn fresh(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fresh";
-        let version = "0.5.7";
+        let version = "0.5.8";
         let file = format!("{name}-editor-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -772,7 +772,7 @@ pub mod programs {
     /// <https://github.com/junegunn/fzf>
     async fn fzf(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fzf";
-        let version = "0.74.5";
+        let version = "0.75.0";
         let file = match architecture {
             Architecture::X86_64 => format!("{name}-{version}-linux_amd64"),
             Architecture::Aarch64 => format!("{name}-{version}-linux_arm64"),
