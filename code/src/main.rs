@@ -3,7 +3,7 @@
 
 //! A glorified tar-decompressor
 
-use ::async_std::stream::StreamExt as _;
+use ::smol::stream::StreamExt as _;
 
 /// The arguments `hermes` takes
 #[derive(Debug, ::clap::Parser)]
