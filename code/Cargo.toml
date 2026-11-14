@@ -3,30 +3,68 @@ name = "hermes"
 version = "0.0.0"
 edition = "2024"
 description = "CLI utilities and configuration files delivered like a god.\nBut actually just a glorified tar-decompressor."
-readme = "../../README.md"
+readme = "../README.md"
 repository = "https://github.com/georglauterbach/hermes"
 license = "MIT"
 publish = false
+
+[dependencies]
+astral-tokio-tar = { workspace = true }
+async-compression = { workspace = true }
+async-std = {
+  version = "1.13",
+  default-features = false,
+  features = [
+    "unstable",
+  ]
+}
+clap = { workspace = true }
+clap-verbosity-flag = {
+  version = "3.0",
+  default-features = false,
+  features = [
+    "tracing",
+  ]
+}
+regex = { version = "1.13", default-features = false, features = ["std"] }
+tokio = { workspace = true }
+tracing = { version = "0.1", default-features = false }
+tracing-subscriber = { version = "0.3", default-features = true }
+
+[lints]
+workspace = true
 
 [workspace]
 members = ["cupid"]
 
 [workspace.dependencies]
 astral-tokio-tar = { version = "0.7", default-features = false }
-async-compression = { version = "0.4", default-features = false, features = [
-  "gzip",
-  "tokio",
-  "xz-parallel",
-] }
-clap = { version = "4.6", default-features = true, features = [
-  "cargo",
-  "derive",
-] }
-tokio = { version = "1.53", default-features = false, features = [
-  "macros",
-  "process",
-  "rt-multi-thread",
-] }
+async-compression = {
+  version = "0.4",
+  default-features = false,
+  features = [
+    "gzip",
+    "tokio",
+    "xz-parallel",
+  ]
+}
+clap = {
+  version = "4.6",
+  default-features = true,
+  features = [
+    "cargo",
+    "derive",
+  ]
+}
+tokio = {
+  version = "1.53",
+  default-features = false,
+  features = [
+    "macros",
+    "process",
+    "rt-multi-thread",
+  ]
+}
 
 # ref: https://doc.rust-lang.org/stable/clippy/index.html
 [workspace.lints.clippy]
@@ -40,20 +78,20 @@ cargo = { level = "deny", priority = -1 }
 cargo_common_metadata = { level = "allow", priority = 1 }
 
 # Additional lints
-nursery = { level = "deny", priority = -1 } # strict lints with occasional false positives
-pedantic = { level = "deny", priority = -1 } # new lints under development
+nursery = { level = "deny", priority = -1 }  # strict lints with occasional false positives
+pedantic = { level = "deny", priority = -1 }  # new lints under development
 
-# Lints that deny panics
-unwrap_used = "deny"
+arithmetic_side_effects = "deny"
 expect_used = "deny"
 indexing_slicing = "deny"
-arithmetic_side_effects = "deny"
-unreachable = "deny"
-unimplemented = "deny"
-unchecked_time_subtraction = "deny"
-string_slice = "deny"
-panic_in_result_fn = "deny"
 panic = "deny"
+panic_in_result_fn = "deny"
+string_slice = "deny"
+unchecked_time_subtraction = "deny"
+unimplemented = "deny"
+unreachable = "deny"
+# Lints that deny panics
+unwrap_used = "deny"
 
 [workspace.lints.rust]
 missing_debug_implementations = "deny"
@@ -64,24 +102,6 @@ missing_docs = "deny"
 all = { level = "deny", priority = 1 }
 broken_intra_doc_links = "deny"
 private_intra_doc_links = "allow"
-
-[dependencies]
-astral-tokio-tar = { workspace = true }
-async-compression = { workspace = true }
-async-std = { version = "1.13", default-features = false, features = [
-  "unstable",
-] }
-clap = { workspace = true }
-clap-verbosity-flag = { version = "3.0", default-features = false, features = [
-  "tracing",
-] }
-regex = { version = "1.13", default-features = false, features = ["std"] }
-tokio = { workspace = true }
-tracing = { version = "0.1", default-features = false }
-tracing-subscriber = { version = "0.3", default-features = true }
-
-[lints]
-workspace = true
 
 [profile.release]
 lto = "fat"

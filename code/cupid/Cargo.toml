@@ -11,10 +11,7 @@ astral-tokio-tar = { workspace = true }
 async-compression = { workspace = true }
 bytes = { version = "1.12", default-features = false }
 clap = { workspace = true }
-reqwest = { version = "0.13", default-features = false, features = [
-  "rustls",
-  "socks"
-] }
+reqwest = { version = "0.13", default-features = false, features = ["rustls", "socks"] }
 tokio = { workspace = true }
 zip = { version = "8.6", default-features = true }
 
