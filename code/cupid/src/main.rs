@@ -653,10 +653,7 @@ pub mod programs {
         );
 
         let mut entries = collections::HashMap::new();
-        entries.insert(
-            format!("{file}/{name}"),
-            local_bin(name),
-        );
+        entries.insert(format!("{file}/{name}"), local_bin(name));
         entries.insert(
             format!("{file}/completion/{name}.bash"),
             bash_completion("dysk"),
