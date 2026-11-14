@@ -60,6 +60,14 @@ tokio = {
   ]
 }
 
+[workspace.lints.cargo]
+default = "deny"
+correctness = "deny"
+style = "deny"
+suspicious = "deny"
+pedantic = "deny"
+restriction = "deny"
+
 # ref: https://doc.rust-lang.org/stable/clippy/index.html
 [workspace.lints.clippy]
 # Enable all lints (correctness, suspicious, style, complexity, perf)
