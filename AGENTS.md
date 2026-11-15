@@ -2,24 +2,19 @@
 
 This project delivers programs and configuration for the command line.
 
-## Associated Projects
-
-1. [`github.com/georglauterbach/desktop`](https://github.com/georglauterbach/desktop): Like this project, but for the GUI
-2. [`github.com/georglauterbach/evergruv`](https://github.com/georglauterbach/evergruv): My color scheme for everything
-3. [`github.com/georglauterbach/linter`](https://github.com/georglauterbach/linter): A composite linter for all of my projects
-
 ## Repository Layout
 
 |Path|Purpose|
 |:-|:-|
-|`README.md`|Project description|
-|`cspell.config.yaml`|Spell-check configuration|
 |`.devcontainer/`|[Development Container](https://containers.dev/) with the complete environment|
 |`.github/`|GitHub-related content like CI/CD, issues, etc.|
-|`code/`|contains all source code|
+|`cspell.config.yaml`|Spell-check configuration|
+|`README.md`|Project description|
+|`code/`|contains the source code|
 |`code/Cargo.toml`|Rust package manifest|
 |`code/cupid/`|the helper that collects all of hermes' programs and bundles them|
 |`code/src/`|hermes' actual source code|
+|`data`|contains all configuration file and notes|
 |`data/home/.config/`|all programs' configuration files that hermes ships|
 |`data/examples/`|custom example configurations that are not shipped with hermes|
 |`data/manuals/`|written manuals for all kinds of work on the command line|
