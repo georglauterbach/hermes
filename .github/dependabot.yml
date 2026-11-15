@@ -10,7 +10,6 @@ updates:
       interval: monthly
     assignees: [ georglauterbach ]
     labels:
-      - kind::update
       - area::ci
 
   - package-ecosystem: cargo
@@ -39,5 +38,4 @@ updates:
       interval: monthly
     assignees: [ georglauterbach ]
     labels:
-      - kind::update
       - area::infrastructure
