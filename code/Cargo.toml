@@ -68,7 +68,7 @@ suspicious = "deny"
 pedantic = "deny"
 restriction = "deny"
 
-# ref: https://doc.rust-lang.org/stable/clippy/index.html
+# > https://doc.rust-lang.org/stable/clippy/index.html
 [workspace.lints.clippy]
 # Enable all lints (correctness, suspicious, style, complexity, perf)
 all = { level = "deny", priority = -1 }
@@ -99,7 +99,7 @@ unwrap_used = "deny"
 missing_debug_implementations = "deny"
 missing_docs = "deny"
 
-# ref: https://doc.rust-lang.org/rustdoc/index.html
+# > https://doc.rust-lang.org/rustdoc/index.html
 [workspace.lints.rustdoc]
 all = { level = "deny", priority = 1 }
 broken_intra_doc_links = "deny"
