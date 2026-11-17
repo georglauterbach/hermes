@@ -47,6 +47,16 @@
       239,
       236
     ],
+    "current_line_number_fg": {
+      "color": [
+        80,
+        93,
+        101
+      ],
+      "modifier": [
+        "bold"
+      ]
+    },
     "cursor": [
       58,
       148,
@@ -108,6 +118,21 @@
     "blame_header_bg": "DarkGray",
     "blame_header_fg": "White",
     "compose_margin_bg": "Default",
+    "file_explorer_directory_fg": [
+      80,
+      93,
+      101
+    ],
+    "file_explorer_indicator_fg": [
+      141,
+      150,
+      154
+    ],
+    "file_icon_fg": [
+      141,
+      150,
+      154
+    ],
     "file_status_added_fg": [
       141,
       161,
@@ -207,14 +232,43 @@
     "status_error_indicator_fg": "White",
     "status_error_indicator_hover_bg": "LightRed",
     "status_error_indicator_hover_fg": "White",
+    "status_inner_bg": [
+      225,
+      227,
+      225
+    ],
+    "status_inner_fg": [
+      80,
+      93,
+      101
+    ],
     "status_lsp_actionable_bg": "Yellow",
     "status_lsp_actionable_fg": "Black",
     "status_lsp_on_bg": "Default",
     "status_lsp_on_fg": "Default",
+    "status_outer_bg": [
+      58,
+      148,
+      197
+    ],
+    "status_outer_fg": {
+      "color": [
+        245,
+        245,
+        242
+      ],
+      "modifier": [
+        "bold"
+      ]
+    },
     "status_palette_bg": "Magenta",
     "status_palette_fg": "White",
     "status_separator_bg": "Default",
-    "status_separator_fg": "Default",
+    "status_separator_fg": [
+      183,
+      188,
+      189
+    ],
     "status_warning_indicator_bg": "Yellow",
     "status_warning_indicator_fg": "Black",
     "status_warning_indicator_hover_bg": "LightYellow",
@@ -222,7 +276,11 @@
     "suggestion_bg": "Default",
     "suggestion_fg": "Default",
     "suggestion_selected_bg": "Blue",
-    "tab_active_bg": "Default",
+    "tab_active_bg": [
+      225,
+      227,
+      225
+    ],
     "tab_active_fg": [
       80,
       93,
@@ -243,12 +301,32 @@
       154
     ],
     "tab_separator_bg": "Default",
+    "tab_separator_fg": [
+      213,
+      214,
+      214
+    ],
     "terminal_bg": "Default",
     "terminal_fg": "Default",
     "text_input_selection_bg": "Blue",
     "tour_step_bg": "DarkGray"
   },
   "search": {
+    "current_match_bg": [
+      214,
+      154,
+      0
+    ],
+    "current_match_fg": {
+      "color": [
+        245,
+        245,
+        242
+      ],
+      "modifier": [
+        "bold"
+      ]
+    },
     "label_bg": "Magenta",
     "label_fg": "White",
     "match_bg": [
@@ -348,5 +426,34 @@
       85,
       82
     ]
+  },
+  "chrome": {
+    "file_explorer_border": false,
+    "fold_collapsed": "\u203a",
+    "fold_expanded": "\u2304",
+    "folder_collapsed": "\u203a",
+    "folder_expanded": "\u2304",
+    "gutter_separator": false,
+    "nerd_font": {
+      "diagnostic_marker": "\uf057",
+      "fold_collapsed": "\uf460",
+      "fold_expanded": "\uf47c",
+      "folder_collapsed": "\uf460",
+      "folder_expanded": "\uf47c",
+      "panel_close": "\udb80\udd56",
+      "panel_refresh": "\udb81\udc50",
+      "status_bar_cap_left": "\ue0b6",
+      "status_bar_cap_right": "\ue0b4",
+      "status_bar_section_left": "\ue0b4",
+      "status_bar_section_right": "\ue0b6",
+      "tab_cap_left": "\ue0b6",
+      "tab_cap_right": "\ue0b4",
+      "tab_close": "\udb80\udd56"
+    },
+    "section_collapsed": "\u203a",
+    "section_expanded": "\u2304",
+    "status_bar_separator": "\u00b7",
+    "tab_modified": " \u25cf",
+    "tab_separator": " "
   }
 }
