@@ -726,7 +726,7 @@ pub mod programs {
     /// <https://github.com/HalFrgrd/flyline>
     async fn flyline(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "flyline";
-        let version = "1.10.0";
+        let version = "1.11.0";
         let file = format!("libflyline-v{version}-{architecture}-unknown-linux-gnu");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
@@ -747,7 +747,7 @@ pub mod programs {
     /// <https://github.com/sinelaw/fresh>
     async fn fresh(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "fresh";
-        let version = "0.5.8";
+        let version = "0.5.9";
         let file = format!("{name}-editor-{architecture}-unknown-linux-musl");
         let archive_type = ArchiveType::TarGz;
         let uri = format!(
