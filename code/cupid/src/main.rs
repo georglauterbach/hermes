@@ -602,7 +602,7 @@ pub mod programs {
     /// <https://github.com/dandavison/delta>
     async fn delta(architecture: Architecture) -> ::anyhow::Result<()> {
         let name = "delta";
-        let version = "0.20.1";
+        let version = "0.21.1";
         let file = format!(
             "{name}-{version}-{architecture}-unknown-linux-{}",
             architecture.link_library()
